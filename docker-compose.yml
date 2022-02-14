@@ -2,19 +2,22 @@ version: '3.8'
 
 services:
 
-  server:
+  serv:
     image: node:17.5
     command: sh -c "npm install"
     ports:
       - 3000:3000
-    working_dir: /server
+    working_dir: /serv
     volumes:
-      - ./:/server
+      - ./:/serv
     environment:
   
-  database:
+  db:
     image: postgres:14.2
-    volumes:
     environment:
+      - POSTGRES_PASSWORD=secret
+    volumes:
+      - postgresdata:/var/lib/postgresql/data
 
 volumes:
+  postgres-data:
