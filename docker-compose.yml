@@ -9,15 +9,17 @@ services:
       - 3000:3000
     working_dir: /serv
     volumes:
-      - ./:/serv
+      - ./pong:/serv
     environment:
   
   db:
     image: postgres:14.2
     environment:
       - POSTGRES_PASSWORD=secret
+      - PGUSER=secret
+
     volumes:
-      - postgresdata:/var/lib/postgresql/data
+      - postgres-data:/var/lib/postgresql/data
 
 volumes:
   postgres-data:
