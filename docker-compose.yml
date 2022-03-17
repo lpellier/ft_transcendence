@@ -2,25 +2,25 @@ version: '3.8'
 
 services:
 
-  serv:
+  server:
     image: node:17.5
     command:  sh -c "npm install
               && npm run start:dev"
     ports:
       - 3001:3001
-    working_dir: /serv
+    working_dir: /server
     volumes:
-      - ./pong:/serv
+      - ./server:/server
     # environment:
   
-#   db:
-#     image: postgres:14.2
-#     environment:
-#       - POSTGRES_PASSWORD=secret
-#       - PGUSER=secret
+  db:
+    image: postgres:14.2
+    environment:
+      - POSTGRES_PASSWORD=secret
+      - PGUSER=secret
 
-#     volumes:
-#       - postgres-data:/var/lib/postgresql/data
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
 
-# volumes:
-#   postgres-data:
+volumes:
+  postgres-data:
