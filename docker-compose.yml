@@ -13,12 +13,21 @@ services:
       - ./server:/server
     # environment:
   
+  client:
+    image: node:17.5
+    command:  sh -c "npm install
+              && npm start"
+    ports:
+      - 3000:3000
+    working_dir: /client
+    volumes:
+      - ./client:/client
+
   db:
     image: postgres:14.2
     environment:
       - POSTGRES_PASSWORD=secret
       - PGUSER=secret
-
     volumes:
       - postgres-data:/var/lib/postgresql/data
 

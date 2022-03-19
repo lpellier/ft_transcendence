@@ -1,2 +1,4 @@
-pong/node_modules
-pong/dist
+server/node_modules
+server/dist
+client/node_modules
+client/dist
