@@ -2,26 +2,26 @@ version: '3.8'
 
 services:
 
-  server:
+  backend:
     image: node:17.5
     command:  sh -c "npm install
               && npm run start:dev"
     ports:
       - 3001:3001
-    working_dir: /server
+    working_dir: /backend
     volumes:
-      - ./server:/server
+      - ./backend:/backend
     # environment:
   
-  client:
+  frontend:
     image: node:17.5
     command:  sh -c "npm install
               && npm start"
     ports:
       - 3000:3000
-    working_dir: /client
+    working_dir: /frontend
     volumes:
-      - ./client:/client
+      - ./frontend:/frontend
 
   postgres:
     image: postgres:14.2
