@@ -25,6 +25,7 @@
     "@nestjs/core": "^8.0.0",
     "@nestjs/passport": "^8.2.1",
     "@nestjs/platform-express": "^8.0.0",
+    "@prisma/client": "^3.11.0",
     "axios": "^0.26.1",
     "passport": "^0.5.2",
     "passport-oauth2": "^1.6.1",

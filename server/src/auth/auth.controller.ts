@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Query, Redirect, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, Redirect, Req, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
 
@@ -12,7 +12,8 @@ export class AuthController {
 
 	@UseGuards(AuthGuard('oauth2'))
 	@Get('auth/callback')
-	signin (@Req() req) {
-		return req.user;
+	async signin (@Req() req) {
+		const user = await this.auth.findOrCreate(req.user);
+		return user;
 	}
 }

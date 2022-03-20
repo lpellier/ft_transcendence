@@ -6,12 +6,10 @@ export class AuthService {
 	constructor(private users: UsersService) {}
 
 	async findOrCreate(profile: any): Promise<any> {
-		console.log(profile)
-		let user = this.users.find(profile.id);
+		let user = await this.users.find(profile.id);
 		if (!user) {
-			user = this.users.create({ id: profile.id, login: profile.login, avatar: profile.image_url });
+			user = await this.users.create({ id: profile.id, username: profile.login, avatar: profile.image_url });
 		}
-		console.log(user);
 		return user;
 	}
 }
