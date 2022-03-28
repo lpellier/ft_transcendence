@@ -14,14 +14,9 @@ export class UsersService {
 			}});
 	}
 
-	async find(id: number) {
-		const user = await this.prisma.user.findUnique({
+	async find(id: number): Promise<User | undefined> {
+		return this.prisma.user.findUnique({
 			where: { id: id },
 		});
-		if (user) {
-			return user;
-		} else {
-			return null;
-		}
 	}
 }

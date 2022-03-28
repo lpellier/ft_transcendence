@@ -17,7 +17,6 @@ export class OAuth2Strategy extends PassportStrategy(Strategy, 'oauth2') {
 	}
 
 	async validate(accessToken): Promise<any> {
-		console.log("Bearer " + accessToken)
 		let profile = await axios({
 			'url': 	'https://api.intra.42.fr/v2/me',
 			'headers': {
@@ -25,6 +24,7 @@ export class OAuth2Strategy extends PassportStrategy(Strategy, 'oauth2') {
 		});
 		if (!profile){
 			return null;
+//			throw new UnauthorizedException();
 		}
 		let user = await this.authService.findOrCreate(profile.data);		
 		return user;
