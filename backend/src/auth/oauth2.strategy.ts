@@ -1,8 +1,7 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { PassportStrategy } from "@nestjs/passport";
 import { Strategy } from "passport-oauth2";
 import { AuthService } from "./auth.service";
-import axios from 'axios';
 
 @Injectable()
 export class OAuth2Strategy extends PassportStrategy(Strategy, 'oauth2') {
@@ -17,16 +16,10 @@ export class OAuth2Strategy extends PassportStrategy(Strategy, 'oauth2') {
 	}
 
 	async validate(accessToken): Promise<any> {
-		let profile = await axios({
-			'url': 	'https://api.intra.42.fr/v2/me',
-			'headers': {
-				'Authorization': "Bearer " + accessToken }
-		});
-		if (!profile){
-			return null;
-//			throw new UnauthorizedException();
+		const user = await this.authService.getUser(accessToken);
+		if (!user) {
+			throw new UnauthorizedException();
 		}
-		let user = await this.authService.findOrCreate(profile.data);		
 		return user;
 	}
 }

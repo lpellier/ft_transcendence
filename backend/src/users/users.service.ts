@@ -14,9 +14,13 @@ export class UsersService {
 			}});
 	}
 
-	async find(id: number): Promise<User | undefined> {
-		return this.prisma.user.findUnique({
-			where: { id: id },
+	async findOrCreate(user: User): Promise<User | undefined> {
+		let u = await this.prisma.user.findUnique({
+			where: { id: user.id },
 		});
+		if (!u) {
+			u = await this.create(user);
+		}
+		return u;
 	}
 }
