@@ -9,6 +9,7 @@ services:
               && npm run start:dev"
     ports:
       - 3001:3001
+    stdin_open: true
     working_dir: /backend
     volumes:
       - ./backend:/backend
