@@ -1,0 +1,9 @@
+.channels {
+	flex: 0.1 1 auto;
+	border: solid gray;
+}
+
+.title-channels {
+	margin: 0;
+	font-size: medium;
+}

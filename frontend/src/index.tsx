@@ -1,9 +1,8 @@
-import React from 'react'
-import {render} from 'react-dom'
-import All_routes from './routes/routes.tsx';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import App from './components/App';
 
-import './styles.css'
-
-const rootElement = document.getElementById("root");
-
-render(<All_routes />, rootElement);
+ReactDOM.render(
+    <App />, 
+    document.getElementById('root')
+);
