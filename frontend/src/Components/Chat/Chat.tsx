@@ -7,47 +7,26 @@ import Channels from './Channels';
 
 import '../../styles/Chat.css';
 
-const SERVER = "http://localhost:8080";
+const SERVER = "http://localhost:3001";
 const socket = socketClient(SERVER);
 
 function Chat() {
 	
-	
 	let [status, setStatus] = useState('waiting for connection');
-	let [user, setUser] = useState('');
-	
+
 	useEffect(() => {
-		socket.on('connection', () => {
+		socket.on('connect', () => {
 			setStatus('connected');
-			socket.on('disconnect', () => {
-				setStatus('disconnected');
-			})
 		})
 	}, [])
 
-	if (user === '')
-    {
-		return (
-			<div>
-				<Banner />
-				<Username user={user} setUser={setUser}/>
-			</div>
-		);
-	}
-	else
-	{
-		return (
-			<div>
-				<Banner />
-				<Username />
-				{status}
-				<div className='chmsg'>
-					<Channels />
-					<Messages currentUser={user} />
-				</div>
-			</div>
-		);
-	}	
+	  console.log(socket.connected)
+
+	return (
+		<div>
+			{status}
+		</div>
+	);	
 }
 export {SERVER};
 export {socket};
