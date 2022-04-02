@@ -4,6 +4,8 @@ import './styles/body.css'
 
 const Root = document.getElementById('root');
 
+
+// const root = ReactDOM.createRoot(document.getElementById('root'))
 ReactDOM.render(
     <All_routes />, 
     Root
