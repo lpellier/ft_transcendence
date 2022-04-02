@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import Banner from './Banner';
-import socketClient  from "socket.io-client";
+import socketClient  from "socket.io";
 import Messages from './Messages';
 import Username from './Username';
 import Channels from './Channels';
 
-import '../../styles/Chat.css';
+import '../styles/App.css';
 
 const SERVER = "http://localhost:8080";
 const socket = socketClient(SERVER);
 
-function Chat() {
+function App() {
 	
 	
 	let [status, setStatus] = useState('waiting for connection');
@@ -39,7 +39,7 @@ function Chat() {
 		return (
 			<div>
 				<Banner />
-				<Username />
+				{/* <Username /> */}
 				{status}
 				<div className='chmsg'>
 					<Channels />
@@ -51,5 +51,5 @@ function Chat() {
 }
 export {SERVER};
 export {socket};
-export default Chat;
+export default App;
 

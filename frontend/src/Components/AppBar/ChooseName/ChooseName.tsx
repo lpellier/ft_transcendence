@@ -15,24 +15,18 @@ function NameButton() {
 	);
 }
 
-function NameInput(props) {
-	const [name, setName] = useState("");
-
-	function handleSubmit( e: any){	
-		e.preventDefault();
-		props.setName(e.target[0].value);
-	}
+function NameInput() {
 
 	return (
 		<Stack direction="row">
-		<form id='ChangeNameForm' onSubmit={handleSubmit} style={{width: '100%'}}>
+		{/* <form id='ChangeNameForm' onSubmit={handleSubmit} style={{width: '100%'}}> */}
 			<TextField 
 				type="text"
 				label="Your name" 
 				variant="standard"
 				style={{width: '50%', justifyContent: 'center'}}
 			/>
-		</form>
+		{/* </form> */}
 		</Stack>
 	);
 }

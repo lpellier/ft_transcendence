@@ -1,11 +1,11 @@
 import React from "react";
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
-import ChooseAvatarButton from './ChooseAvatarButton.tsx'
+import ChooseAvatarButton from './ChooseAvatarButton'
 
 // Avatar importation
 import {CactusAvatar, RobotAvatar, CoffeaAvatar, IceCreamAvatar,
-	OwlAvatar, PenguinAvatar} from '../../Avatars.tsx'
+	OwlAvatar, PenguinAvatar} from '../../Avatars'
 
 function AvatarStack() {
   return (

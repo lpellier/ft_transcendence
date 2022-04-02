@@ -3,7 +3,7 @@ import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
-import ChooseAuth from './ChooseAuth.tsx'
+import ChooseAuth from './ChooseAuth'
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
 
 const style = {

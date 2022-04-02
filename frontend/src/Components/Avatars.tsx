@@ -14,7 +14,7 @@ import Penguin from     "../images/Avatar/Penguin.png"
 const BigAvatar = {border: 2, width: 150, height: 150}
 const SmallAvatar = {border: 2, width: 50, height: 50}
 
-function CreateAvatar(props) {
+function CreateAvatar(props: {img: string, style: any}) {
 	return (
         <IconButton>
             <Avatar src={props.img}  sx={props.style}/>

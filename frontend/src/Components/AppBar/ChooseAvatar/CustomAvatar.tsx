@@ -2,10 +2,10 @@ import React from 'react';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import { ThemeProvider } from '@mui/material/styles';
-import { redTheme, greenTheme } from '../../Themes.tsx'
-import UploadButton from './UploadButton.tsx'
+import { redTheme, greenTheme } from '../../Themes'
+import UploadButton from './UploadButton'
 
-function CustomButton(props) {
+function CustomButton(props: {content:string, theme: any}) {
 	return(
 		<ThemeProvider theme={props.theme}>
 			<Button variant="contained" color="primary">

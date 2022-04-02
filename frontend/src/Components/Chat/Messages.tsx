@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {socket} from './Chat.tsx';
+import {socket} from './Chat';
 import '../../styles/Messages.css';
 
 function Messages(props : {currentUser:string}) {

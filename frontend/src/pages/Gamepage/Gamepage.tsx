@@ -3,7 +3,7 @@ import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
 
-import SearchAppBar from '../../Components/AppBar/AppBar.tsx'
+import SearchAppBar from '../../Components/AppBar/AppBar'
 import Cactus from			"../../images/Avatar/Cactus.png"
 import Penguin from			"../../images/Avatar/Penguin.png"
 

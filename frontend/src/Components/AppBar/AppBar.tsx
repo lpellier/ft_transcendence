@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {Link} from 'react-router-dom';
-import PongMenu from './PongMenu.tsx'
-import {PlayerAvatar} from	'../Avatars.tsx'
+import PongMenu from './PongMenu'
+import {PlayerAvatar} from	'../Avatars'
 import Cactus from			"../../images/Avatar/Cactus.png"
 
 import { styled, alpha } from '@mui/material/styles';
@@ -60,7 +60,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-function AppBarButton(props) {
+function AppBarButton(props: {icon: any, link: string, tooltip: any}) {
 	return (
 		<nav>
 		  <Link to={props.link} style={{ textDecoration: 'none' }}>
@@ -76,7 +76,7 @@ function AppBarButton(props) {
 	  );
 }
 
-function PlayerName(props) {
+function PlayerName(props: {name: string}) {
 	return (
 		<Typography
 		  variant="h6"
@@ -89,7 +89,7 @@ function PlayerName(props) {
 	);
 }
 
-function ProjectName(props) {
+function ProjectName() {
 	return (
 		<Typography
 		  variant="h4"
