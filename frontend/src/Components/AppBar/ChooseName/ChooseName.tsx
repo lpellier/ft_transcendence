@@ -2,9 +2,7 @@ import React, { Component, useState } from "react";
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
-import IconButton from '@mui/material/IconButton';
 import CasinoIcon from '@mui/icons-material/Casino';
-import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 
 function NameButton() {
 	return (
@@ -17,22 +15,24 @@ function NameButton() {
 	);
 }
 
-function NameInput() {
+function NameInput(props) {
 	const [name, setName] = useState("");
+
+	function handleSubmit( e: any){	
+		e.preventDefault();
+		props.setName(e.target[0].value);
+	}
 
 	return (
 		<Stack direction="row">
+		<form id='ChangeNameForm' onSubmit={handleSubmit} style={{width: '100%'}}>
 			<TextField 
-				value={name}
+				type="text"
 				label="Your name" 
 				variant="standard"
 				style={{width: '50%', justifyContent: 'center'}}
-				onChange={(e) => {
-					setName(e.target.value);}}
 			/>
-			<IconButton color="primary" aria-label="upload picture" component="span">
-          		<ThumbUpIcon />
-        	</IconButton>
+		</form>
 		</Stack>
 	);
 }
