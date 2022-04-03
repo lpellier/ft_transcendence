@@ -1,6 +1,13 @@
 import {useEffect, useState} from 'react';
 import {socket} from './Chat';
+
 import Stack from '@mui/material/Stack'
+import Container from '@mui/material/Container'
+
+import Button from '@mui/material/Button'
+import { ThemeProvider } from '@mui/material/styles';
+import SendIcon from '@mui/icons-material/Send';
+import {orangeTheme} from '../Themes'
 
 import '../../styles/Chat/Messages.css';
 
@@ -48,6 +55,7 @@ function Messages(props : {currentUser:string}) {
 	}, [])
 
     return (
+	<Container>
         <Stack className='chat'>
 			<ul className='messages' id='messagebox'>
 				{messages.map(item=> (
@@ -67,7 +75,7 @@ function Messages(props : {currentUser:string}) {
 								}
 							</div>
 						:
-							<div className='flexwrapper'>
+						<div className='flexwrapper'>
 								<div className='newuser'>
 									{item.content}
 								</div>
@@ -79,10 +87,20 @@ function Messages(props : {currentUser:string}) {
             <form className="form" id="form" onSubmit={handleSubmit}>
 				<Stack direction="row" spacing={1}>
 						<input className='input' type="text" />
-						<button className='button'>Miauw</button>
+						<ThemeProvider theme={orangeTheme}>
+							<Button 
+								className='button' 
+								variant="contained"
+								size="small"
+								endIcon={<SendIcon />}
+								>
+								Miauw
+							</Button>
+						</ThemeProvider>
 				</Stack>
             </form>
         </Stack>
+	</Container>
     )
 }
 

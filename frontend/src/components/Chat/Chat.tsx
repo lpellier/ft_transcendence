@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Banner from './Banner';
 import io  from "socket.io-client";
 import Stack from '@mui/material/Stack'
@@ -29,12 +29,12 @@ function App() {
 		return (
 			<Stack>
 				<Banner />
-				{/* <Username /> */}
-				{status}
 				<Stack className='chmsg'>
+					{/* <Username /> */}
+					{status}
 					<Channels />
-					<Messages currentUser={user} />
 				</Stack>
+				<Messages currentUser={user} />
 			</Stack>
 		);
 }

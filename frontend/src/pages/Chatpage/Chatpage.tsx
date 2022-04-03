@@ -13,12 +13,13 @@ const ChatBoxStyle = {
 	backgroundSize: '20%',
     backgroundPosition: 'bottom left',
 	backgroundRepeat: 'no-repeat',
+    filter: 'drop-shadow(20px 20px 1px black)',
 }
 
 export default function Chatpage() {
 
     return(
-            <Stack spacing={10} style={{ alignItems: 'center', justifyContent: 'center' }}>
+            <Stack spacing={6} style={{ alignItems: 'center', justifyContent: 'center' }}>
                 <SearchAppBar />
                 <Box sx={ChatBoxStyle}>
 					<Chat />

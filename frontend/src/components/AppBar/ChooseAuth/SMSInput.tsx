@@ -11,17 +11,12 @@ interface CustomProps {
 }
 
 const TextMaskCustom = React.forwardRef<HTMLElement, CustomProps>(
-//   function TextMaskCustom(props, ref) {
   function TextMaskCustom(props) {
     const { onChange, ...other } = props;
     return (
       <IMaskInput
         {...other}
         mask="(+33) 0 00 00 00 00"
-        definitions={{
-          '#': /[1-9]/,
-        }}
-        // inputRef={ref}
         onAccept={(value: any) => onChange({ target: { name: props.name, value } })}
         overwrite
       />
@@ -36,8 +31,8 @@ interface State {
 
 export default function SMSInput() {
   const [values, setValues] = React.useState<State>({
-    textmask: '(+33)',
-    numberformat: '1320',
+    textmask: '',
+    numberformat: '',
   });
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
