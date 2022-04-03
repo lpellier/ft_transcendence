@@ -7,7 +7,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import WebhookIcon from '@mui/icons-material/Webhook';
 
 
-import {orangeTheme} from '../../Components/Themes.tsx'
+import {orangeTheme} from '../../components/Themes'
 import "./LogIn.css"
 
 const LinkStyle = 	{ textDecoration: 'none',
@@ -15,26 +15,16 @@ const LinkStyle = 	{ textDecoration: 'none',
 					justifyContent: 'center',
 					}
 
-class LogInButton extends Component {
-    constructor() {
-        super();
-
-          this.state = {
-          clicked: false
-        };
-   
-        this.handleClick = this.handleClick.bind(this);
-    }
-
-
-    handleClick() {
+function LogInButton() {
+	
+    function handleClick() {
+		
     }
   
-    render() {
       return (
         <ThemeProvider theme={orangeTheme}>
                 <Button className='Button'
-                    onClick={this.handleClick}
+                    onClick={handleClick}
                     variant="contained"
                     startIcon={<LoginIcon />}
                     size="large"
@@ -44,7 +34,6 @@ class LogInButton extends Component {
                 </Button>
         </ThemeProvider>
       );
-    }
   }
 
   

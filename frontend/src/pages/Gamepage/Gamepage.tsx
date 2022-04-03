@@ -3,7 +3,7 @@ import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
 
-import SearchAppBar from '../../Components/AppBar/AppBar.tsx'
+import SearchAppBar from '../../components/AppBar/AppBar'
 import Cactus from			"../../images/Avatar/Cactus.png"
 import Penguin from			"../../images/Avatar/Penguin.png"
 
@@ -28,7 +28,7 @@ const PlayerBox = {
                     border: '0.4rem solid'
                 }
 
-function Player(props) {
+function Player(props: {ava: any, name: string}) {
     return (
             <Stack spacing={2}>
                 <Avatar src={props.ava}  sx={BigAvatar}/>

@@ -5,7 +5,7 @@ import Box from '@mui/material/Box';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import Modal from '@mui/material/Modal';
 
-import CustomAvatar from './CustomAvatar.tsx';
+import CustomAvatar from './CustomAvatar';
 
 const style = {
   position: 'absolute' as 'absolute',

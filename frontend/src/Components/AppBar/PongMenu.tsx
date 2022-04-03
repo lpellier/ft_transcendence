@@ -8,9 +8,9 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
 
-import ChooseAvatarModal from './ChooseAvatar/Modal.tsx'
-import ChooseNameModal from './ChooseName/Modal.tsx'
-import ChooseAuthModal from './ChooseAuth/Modal.tsx'
+import ChooseAvatarModal from './ChooseAvatar/Modal'
+import ChooseNameModal from './ChooseName/Modal'
+import ChooseAuthModal from './ChooseAuth/Modal'
 
 function LogOutLink() {
   return (

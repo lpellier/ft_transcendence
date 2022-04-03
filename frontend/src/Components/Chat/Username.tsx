@@ -1,9 +1,9 @@
 import React from 'react'
-import { socket } from './Chat.tsx'
+import { socket } from './Chat'
 import TextField from '@mui/material/TextField'
 import Box from '@mui/material/Box'
 import { ThemeProvider } from '@mui/material/styles';
-import {orangeTheme} from '../Themes.tsx'
+import {orangeTheme} from '../Themes'
 
 const UserNameStyle = {
 		padding: '2%',
