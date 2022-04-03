@@ -18,25 +18,14 @@ function App() {
 	
 	console.log(socket.connected)
 	useEffect(() => {
-		socket.on('connect', () => {
+		if (socket.connected) {
 			setStatus('connected');
-			socket.on('disconnect', () => {
-				setStatus('disconnected');
-			})
-		})
+		}
+		else {
+			setStatus('disconnected');
+		}
 	}, [])
 
-	if (user === '')
-    {
-		return (
-			<div>
-				<Banner />
-				<Username user={user} setUser={setUser}/>
-			</div>
-		);
-	}
-	else
-	{
 		return (
 			<div>
 				<Banner />
@@ -48,7 +37,6 @@ function App() {
 				</div>
 			</div>
 		);
-	}	
 }
 export {SERVER};
 export {socket};

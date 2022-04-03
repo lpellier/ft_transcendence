@@ -2,8 +2,8 @@ import React, {Component} from "react";
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 
-import Chat from '../../Components/Chat/Chat'
-import SearchAppBar from '../../Components/AppBar/AppBar'
+import Chat from '../../components/Chat/Chat'
+import SearchAppBar from '../../components/AppBar/AppBar'
 
 const ChatBoxStyle = {	
     width: '80vw',

@@ -2,10 +2,10 @@ import React from "react";
 import Stack from '@mui/material/Stack'
 import Container from '@mui/material/Container'
 
-import SearchAppBar from '../../Components/AppBar/AppBar'
-import FriendBand from '../../Components/FriendBand/FriendBand'
-import PlayerInfoBand from '../../Components/PlayerInfoBand/PlayerInfoBand'
-import StatsBoards from '../../Components/StatsBoards/StatsBoards'
+import SearchAppBar from '../../components/AppBar/AppBar'
+import FriendBand from '../../components/FriendBand/FriendBand'
+import PlayerInfoBand from '../../components/PlayerInfoBand/PlayerInfoBand'
+import StatsBoards from '../../components/StatsBoards/StatsBoards'
 
 
 function StatsPart() {

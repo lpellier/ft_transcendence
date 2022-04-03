@@ -1,7 +1,11 @@
 import { MessageBody, SubscribeMessage, WebSocketGateway, WebSocketServer } from "@nestjs/websockets";
 import { Socket } from "dgram";
 
-@WebSocketGateway()
+@WebSocketGateway({
+	cors: {
+	  origin: 'http://localhost:3000',
+	},
+  })
 export class ChatGateway {
 	@WebSocketServer()
 	server: Socket;
