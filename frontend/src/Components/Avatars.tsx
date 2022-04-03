@@ -22,7 +22,7 @@ function CreateAvatar(props: {img: string, style: any}) {
     );
 }
 
-function PlayerAvatar(props) {
+function PlayerAvatar(props: {img: string}) {
 	return(
 		<IconButton>
 			<Tooltip title="Home" placement="bottom">
