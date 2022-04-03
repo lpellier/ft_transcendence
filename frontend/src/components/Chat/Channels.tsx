@@ -1,5 +1,5 @@
 import React from'react';
-import '../../styles/Channels.css';
+import '../../styles/Chat/Channels.css';
 
 function Channels() {
 	return (

@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import Banner from './Banner';
 import io  from "socket.io-client";
+import Stack from '@mui/material/Stack'
 import Messages from './Messages';
 import Username from './Username';
 import Channels from './Channels';
 
-import '../../styles/Chat.css';
+import '../../styles/Chat/Chat.css';
 
 const SERVER = "http://localhost:3001";
 const socket = io(SERVER);
@@ -26,15 +27,15 @@ function App() {
 	}, [])
 
 		return (
-			<div>
+			<Stack>
 				<Banner />
 				{/* <Username /> */}
 				{status}
-				<div className='chmsg'>
+				<Stack className='chmsg'>
 					<Channels />
 					<Messages currentUser={user} />
-				</div>
-			</div>
+				</Stack>
+			</Stack>
 		);
 }
 export {SERVER};

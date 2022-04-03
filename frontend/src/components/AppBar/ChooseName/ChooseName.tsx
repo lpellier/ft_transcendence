@@ -42,8 +42,7 @@ function NameRandom() {
 	);
 }
 
-export default class ChooseName extends React.Component {
-    render() { 
+export default function ChooseName() {
         return (
 				<Stack spacing={2} style={{justifyContent: 'center'}}>
                     <NameButton />
@@ -51,5 +50,4 @@ export default class ChooseName extends React.Component {
 					<NameRandom />
                 </Stack>
         );
-    }
 }

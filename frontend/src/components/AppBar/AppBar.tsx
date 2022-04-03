@@ -1,4 +1,3 @@
-import * as React from 'react';
 import {Link} from 'react-router-dom';
 import PongMenu from './PongMenu'
 import {PlayerAvatar} from	'../Avatars'

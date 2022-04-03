@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import React from "react";
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
@@ -40,8 +40,7 @@ function Player(props: {ava: any, name: string}) {
 }
 
 
-export default class Gamepage extends React.Component {
-    render() {
+export default function Gamepage() {
         return (
             <Stack spacing={15}>
                 <SearchAppBar />
@@ -52,5 +51,4 @@ export default class Gamepage extends React.Component {
                 </Stack>
             </Stack>
         );
-    }
 }

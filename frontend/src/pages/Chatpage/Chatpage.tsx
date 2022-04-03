@@ -1,4 +1,3 @@
-import React, {Component} from "react";
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 
@@ -10,14 +9,15 @@ const ChatBoxStyle = {
     height: '70vh',
 	border: '3px solid black',
     backgroundColor: 'rgb(120, 110, 220, 0.95)',
-	backgroundImage: 'url("https://cdn.pixabay.com/photo/2019/06/08/14/04/cat-and-butterflies-4260164_960_720.png")',
-	backgroundSize: 'contain',
+	backgroundImage: 'url("https://cdn.pixabay.com/photo/2017/09/13/22/18/stretching-2747269_960_720.png")',
+	backgroundSize: '20%',
+    backgroundPosition: 'bottom left',
 	backgroundRepeat: 'no-repeat',
 }
 
-export default class Chatpage extends React.Component {
-    render() { 
-        return (
+export default function Chatpage() {
+
+    return(
             <Stack spacing={10} style={{ alignItems: 'center', justifyContent: 'center' }}>
                 <SearchAppBar />
                 <Box sx={ChatBoxStyle}>
@@ -26,4 +26,3 @@ export default class Chatpage extends React.Component {
             </Stack>
         );
     }
-}

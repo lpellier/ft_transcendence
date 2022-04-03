@@ -24,13 +24,11 @@ function AvatarStack() {
   );
 }
 
-export default class AvatarList extends React.Component {
-    render() { 
+export default function AvatarList(){
         return (
                 <Box>
                     <AvatarStack />
                 	<ChooseAvatarButton />
                 </Box>
         );
-    }
 }

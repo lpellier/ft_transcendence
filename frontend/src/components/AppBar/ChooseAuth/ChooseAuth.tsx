@@ -7,8 +7,7 @@ import SMSInput from './SMSInput'
 
 const AuthStyle = { textAlign: 'center', font: '1.2em "roboto", sans-serif' }
 
-export default class ChooseAuth extends React.Component {
-    render() { 
+export default function ChooseAuth() {
         return (
                 <Stack spacing={2}>
                     {/* <div style={AuthStyle}> */}
@@ -22,5 +21,4 @@ export default class ChooseAuth extends React.Component {
                     </Stack>
                 </Stack>
         );
-    }
 }

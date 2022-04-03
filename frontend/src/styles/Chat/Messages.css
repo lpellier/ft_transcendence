@@ -1,20 +1,17 @@
 .chat {
-	margin: 0px;
 	padding: 0px;
 	flex: auto;
+	height: 100%;
 }
 
 .form {
-	position: fixed;
-	bottom: 0;
-	left: 0;
-	right: 0;
-	margin: 10px;
-	display: flex;
+	width: 80%;
 }
 
 .input {
-	flex: 10 1 auto;
+	width: 80%;
+	position: relative;
+	justify-content: center;
 }
 
 .button {
@@ -25,11 +22,8 @@
 	list-style-type: none;
 	padding-left: 0%;
 	padding-right: 0%;
-	margin-left: 0%;
-	margin-right: 0%;
 	overflow-y: scroll;
-	height: calc(100vh - 230px);
-	
+	height: 50%;
 }
 
 .flexwrapper {

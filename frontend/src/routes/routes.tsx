@@ -1,4 +1,3 @@
-import React, {Component} from 'react'
 import {
     BrowserRouter,
     Routes,
@@ -10,8 +9,7 @@ import Homepage from '../pages/Homepage/Homepage'
 import Gamepage from '../pages/Gamepage/Gamepage'
 import Chatpage from '../pages/Chatpage/Chatpage'
 
-export default class All_routes extends Component {
-    render() {
+export default function AllRoutes() {
         return (
             <BrowserRouter>
                 <Routes>
@@ -19,8 +17,8 @@ export default class All_routes extends Component {
                     <Route path="home" element={<Homepage />} />
                     <Route path="game" element={<Gamepage />} />
                     <Route path="chat" element={<Chatpage />} />
+                    <Route path="/token"/>
                 </Routes>
             </BrowserRouter>
         );
-    }
 }

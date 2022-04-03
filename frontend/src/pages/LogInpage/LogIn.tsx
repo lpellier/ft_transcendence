@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import React from "react";
 import {Link} from 'react-router-dom';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
@@ -37,8 +37,7 @@ function LogInButton() {
   }
 
   
-  export default class LogIn extends React.Component {
-  render() { 
+  export default function LogIn() {
     return (
         	<div className='text'>
         	    <Stack spacing={10}>
@@ -55,5 +54,4 @@ function LogInButton() {
         	    </Stack>
         	</div>
         );
-    }
 }

@@ -17,8 +17,7 @@ function StatsPart() {
 	);
 }
 
-export default class Homepage extends React.Component {
-    render() { 
+export default function Homepage() {
         return (
 			<Stack spacing={1}>
             	<SearchAppBar />
@@ -30,5 +29,4 @@ export default class Homepage extends React.Component {
 				</Container>
 			</Stack>
         );
-    }
 }

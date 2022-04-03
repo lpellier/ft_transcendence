@@ -1,6 +1,8 @@
-import React, {useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import {socket} from './Chat';
-import '../../styles/Messages.css';
+import Stack from '@mui/material/Stack'
+
+import '../../styles/Chat/Messages.css';
 
 function Messages(props : {currentUser:string}) {
     interface Provider {
@@ -46,7 +48,7 @@ function Messages(props : {currentUser:string}) {
 	}, [])
 
     return (
-        <div className='chat'>
+        <Stack className='chat'>
 			<ul className='messages' id='messagebox'>
 				{messages.map(item=> (
 					<div key={item.id}>
@@ -71,15 +73,16 @@ function Messages(props : {currentUser:string}) {
 								</div>
 							</div>
 						}
-						
 					</div>
 				))}
 			</ul>
             <form className="form" id="form" onSubmit={handleSubmit}>
-				<input className='input' type="text" />
-				<button className='button'>Miauw</button>
+				<Stack direction="row" spacing={1}>
+						<input className='input' type="text" />
+						<button className='button'>Miauw</button>
+				</Stack>
             </form>
-        </div>
+        </Stack>
     )
 }
 
