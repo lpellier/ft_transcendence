@@ -1,34 +1,15 @@
-import React from "react";
 import Stack from '@mui/material/Stack';
-import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
 import ChooseAvatarButton from './ChooseAvatarButton'
-
-// Avatar importation
-import {CactusAvatar, RobotAvatar, CoffeaAvatar, IceCreamAvatar,
-	OwlAvatar, PenguinAvatar} from '../../Avatars'
-
-function AvatarStack() {
-  return (
-        <Stack spacing={1}>
-            <Stack direction="row" spacing={1} style={{justifyContent: 'center'}}>
-              <CactusAvatar />
-              <CoffeaAvatar />
-              <IceCreamAvatar />
-            </Stack>
-            <Stack direction="row" spacing={1} style={{justifyContent: 'center'}}>
-              <PenguinAvatar />
-              <OwlAvatar />
-              <RobotAvatar />
-            </Stack>
-        </Stack>
-  );
-}
+import DotsMobileStepper from './Stepper'
 
 export default function AvatarList(){
         return (
-                <Box>
-                    <AvatarStack />
-                	<ChooseAvatarButton />
-                </Box>
+                <Container>
+                  <Stack spacing={2} style={{justifyContent: 'center'}}>
+                    <DotsMobileStepper />
+                	  <ChooseAvatarButton />
+                  </Stack>
+                </Container>
         );
 }
