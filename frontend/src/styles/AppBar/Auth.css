@@ -1,0 +1,9 @@
+.Title{
+    font-size: xx-large;
+    font-family: sans-serif;
+    color: rgb(150, 50, 200);
+    font-weight: 600;
+    text-align: center;
+    filter: drop-shadow(2px 2px 1px black);
+}
+
