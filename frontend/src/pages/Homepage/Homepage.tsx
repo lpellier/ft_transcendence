@@ -20,7 +20,7 @@ function StatsPart() {
 export default function Homepage() {
         return (
 			<Stack spacing={1}>
-            	<SearchAppBar />
+            	<SearchAppBar image={''}/>
 				<Container style={{width: '100vw'}}>
 					<Stack direction="row" spacing={1}>
 						<FriendBand />

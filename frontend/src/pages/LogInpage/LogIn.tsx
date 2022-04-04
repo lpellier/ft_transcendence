@@ -8,7 +8,7 @@ import WebhookIcon from '@mui/icons-material/Webhook';
 
 
 import {orangeTheme} from '../../components/Themes'
-import "./LogIn.css"
+import "../../styles/LogIn.css"
 
 const LinkStyle = 	{ textDecoration: 'none',
 					display: 'flex',
@@ -17,14 +17,9 @@ const LinkStyle = 	{ textDecoration: 'none',
 
 function LogInButton() {
 	
-    function handleClick() {
-		
-    }
-  
       return (
         <ThemeProvider theme={orangeTheme}>
                 <Button className='Button'
-                    onClick={handleClick}
                     variant="contained"
                     startIcon={<LoginIcon />}
                     size="large"

@@ -1,5 +1,5 @@
 .chat {
-	height: 50vh;
+	height: 58vh;
 }
 
 .form {
@@ -33,14 +33,12 @@
 	padding-left: 0%;
 	padding-right: 0%;
 	overflow-y: scroll;
-	height: 78%;
+	height: 80%;
 }
 
 .flexwrapper {
 	display:flex;
 	flex-direction: column;
-	margin-left: 0.5em;
-	margin-right: 0.5em;
 }
 
 .current li, .current .user{

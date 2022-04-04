@@ -7,7 +7,8 @@ import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import Stack from '@mui/material/Stack';
 
 import {AvatarStackOne, AvatarStackTwo, AvatarStackThree} from './AvatarStacks'
-
+import { ThemeProvider } from '@emotion/react'
+import { orangeTheme } from '../../Themes';
 
 const steps = [
     {
@@ -35,20 +36,22 @@ export default function DotsMobileStepper() {
   };
 
   return (
-    <Stack>
+    <Stack spacing={2}>
+    <ThemeProvider theme={orangeTheme}>
     < MobileStepper
       variant="dots"
       steps={3}
       position="static"
       activeStep={activeStep}
+      style={{ backgroundColor: "transparent" }}
       nextButton={
-        <Button size="small" onClick={handleNext} disabled={activeStep === 2}>
+          <Button size="small" onClick={handleNext} disabled={activeStep === 2}>
           Next
           {theme.direction === 'rtl' ? (
               <KeyboardArrowLeft />
-          ) : (
-              <KeyboardArrowRight />
-              )}
+              ) : (
+                  <KeyboardArrowRight />
+                  )}
         </Button>
       }
       backButton={
@@ -62,6 +65,7 @@ export default function DotsMobileStepper() {
         </Button>
       }
       />
+      </ThemeProvider>
       {steps[activeStep].content}
     </Stack>
   );

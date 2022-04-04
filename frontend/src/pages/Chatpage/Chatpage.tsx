@@ -6,7 +6,10 @@ import SearchAppBar from '../../components/AppBar/AppBar'
 
 const ChatBoxStyle = {	
     width: '80vw',
+    maxWidth: '1200px',
     height: '70vh',
+
+
 	border: '3px solid black',
     backgroundColor: 'rgb(120, 110, 220, 0.95)',
 	backgroundImage: 'url("https://cdn.pixabay.com/photo/2017/09/13/22/18/stretching-2747269_960_720.png")',
@@ -16,14 +19,18 @@ const ChatBoxStyle = {
     filter: 'drop-shadow(20px 20px 1px black)',
 }
 
-export default function Chatpage() {
+const ChatPageStyle = {
+    alignItems: 'center',
+    justifyContent: 'center',
+}
 
+export default function Chatpage() {
     return(
-            <Stack spacing={6} style={{ alignItems: 'center', justifyContent: 'center' }}>
-                <SearchAppBar />
+            <Stack spacing={6} style={ChatPageStyle}>
+                <SearchAppBar image={''}/>
                 <Box sx={ChatBoxStyle}>
 					<Chat />
 				</Box>
             </Stack>
         );
-    }
+}

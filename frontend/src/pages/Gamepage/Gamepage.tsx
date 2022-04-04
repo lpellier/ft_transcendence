@@ -43,7 +43,7 @@ function Player(props: {ava: any, name: string}) {
 export default function Gamepage() {
         return (
             <Stack spacing={15}>
-                <SearchAppBar />
+                <SearchAppBar image={''}/>
                 <Stack direction="row" spacing={4} style={GameStyle}>
                     <Player name={"Play one"} ava={Cactus}/>
                     <Box sx={GameBoxStyle}/>

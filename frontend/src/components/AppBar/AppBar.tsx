@@ -1,7 +1,8 @@
-import {Link} from 'react-router-dom';
+import {Link} from 'react-router-dom'
+import {useState} from 'react'
 import PongMenu from './PongMenu'
+
 import {PlayerAvatar} from	'../Avatars'
-import Cactus from			"../../images/Avatar/Cactus.png"
 
 import { styled, alpha } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
@@ -103,22 +104,25 @@ function ProjectName() {
 	);
 }
 
-function PlayerAvatarBar() {
+function PlayerAvatarBar(props: {image: any}) {
 	return (
 		<nav>
 			<Link to="/home" style={{ textDecoration: 'none' }}>
-				<PlayerAvatar img={Cactus}/>
+				<PlayerAvatar image={props.image}/>
 			</Link>
 	  	</nav>
 	);
 }
 
-export default function SearchAppBar() {
+export default function SearchAppBar(props: {image: any}) {
+
+	const image = useState(props.image);
+
   return (
       <AppBar position="static">
         <Toolbar style={ BarStyle }>
         	<PongMenu />
-			<PlayerAvatarBar />
+			<PlayerAvatarBar image={image}/>
 			<PlayerName name={"Stan"}/>
 			<ProjectName />
 			<Stack direction="row" spacing={2}>
