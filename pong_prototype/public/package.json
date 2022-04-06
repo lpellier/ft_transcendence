@@ -1,0 +1,17 @@
+{
+  "name": "public",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "socket.io-client": "^4.4.1"
+  },
+  "dependencies": {
+    "typescript": "^4.6.3"
+  }
+}
