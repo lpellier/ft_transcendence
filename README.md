@@ -10,21 +10,21 @@ Redirects to 42 API for authentication, then redirects to localhost:3000/auth?to
 ### /users/me   GET 
 Returns object: 
 ```
- {
+{
 	username: string; 
 	avatar: string; 
 	stats: { 
 		wins: int; 
 		losses: int; 
 		level: int; 
-    } 
-    match_history: Match[ 
-        { 
-            winner: string; 
-            loser: string; 
-            ladder: int; 
-        }
-    ] 
+   } 
+   match_history: Match[ 
+   	{
+		winner: string;
+		loser: string;
+		ladder: int; 
+    }
+  ] 
 }
 ```
 
