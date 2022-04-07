@@ -4,6 +4,7 @@ frontend/node_modules
 frontend/dist
 frontend_old/node_modules
 frontend_old/dist
+frontend/public/sketch
 pong_prototype/node_modules
 pong_prototype/dist
 pong_prototype/public/node_modules

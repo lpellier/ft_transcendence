@@ -1,0 +1,34 @@
+.tableau {
+	position: fixed;
+	z-index: 0;
+	display: block;
+	margin: auto;
+	margin-left: 25%;
+}
+
+.p5-button {
+	position: fixed;
+	z-index: 1;
+	display: flex;
+	flex-direction: row;
+}
+/* 
+.button-local {
+	left: 0px;
+	bottom: 200px;
+}
+
+.button-matchmaking {
+	left: 500px;
+	bottom: 200px;
+}
+
+.button-join {
+	left: 700px;
+	bottom: 200px;
+}
+
+.button-create {
+	left: 700px;
+	bottom: 200px;
+} */
