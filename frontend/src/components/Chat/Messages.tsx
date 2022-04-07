@@ -55,7 +55,7 @@ function Messages(props : {currentUser:string}) {
 	}, [])
 
     return (
-	<Container>
+	<Container >
         <Stack className='chat'>
 			<ul className='messages' id='messagebox'>
 				{messages.map(item=> (

@@ -1,20 +1,19 @@
-import React from "react";
 import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography'
 
 import {TFASwitch} from './AuthSwitch'
 import {GoogleAuth} from './AuthSwitch'
 import SMSInput from './SMSInput'
 
-const AuthStyle = { textAlign: 'center', font: '1.2em "roboto", sans-serif' }
+import { ButtonStackStyle, Title } from '../../../styles/tsxStyles/AppBar/AuthStyle'
 
 export default function ChooseAuth() {
         return (
                 <Stack spacing={2}>
-                    {/* <div style={AuthStyle}> */}
-                    <div>
+                    <Typography sx={Title}>
                         Authentication
-                    </div>
-                    <Stack spacing={1}>
+                    </Typography>
+                    <Stack spacing={1} sx={ButtonStackStyle}>
                         <TFASwitch />
                         <GoogleAuth />
                         <SMSInput/>

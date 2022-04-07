@@ -7,10 +7,13 @@ import {Link} from 'react-router-dom';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
+import Paper from '@mui/material/Paper'
 
 import ChooseAvatarModal from './ChooseAvatar/Modal'
 import ChooseNameModal from './ChooseName/Modal'
 import ChooseAuthModal from './ChooseAuth/Modal'
+
+import { IconButtonStyle } from '../../styles/tsxStyles/AppBar/PongMenu'
 
 function LogOutLink() {
   return (
@@ -30,9 +33,11 @@ function LogOutLink() {
 export default function PongMenu() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -45,9 +50,9 @@ export default function PongMenu() {
             edge="start"
             color="inherit"
             aria-label="open drawer"
-            sx={{ mr: 2 }}
+            sx={IconButtonStyle}
             onClick={handleClick}
-          >
+            >
             <MenuIcon />
         </IconButton>
 		</Tooltip>
@@ -55,12 +60,13 @@ export default function PongMenu() {
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
-      >
+        >
+    <Paper style={{backgroundColor: 'rgb(70, 50, 220)'}}>
         <MenuItem  	>
           <ChooseNameModal />
         </MenuItem>
         <MenuItem  >
-          <ChooseAvatarModal />
+          <ChooseAvatarModal img={""}/>
         </MenuItem>
         <MenuItem  >
           <ChooseAuthModal />
@@ -68,6 +74,7 @@ export default function PongMenu() {
         <MenuItem>
          <LogOutLink />
         </MenuItem>
+          </Paper>
       </Menu>
     </div>
   );

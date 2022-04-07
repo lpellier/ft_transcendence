@@ -8,6 +8,7 @@ import LogIn from '../pages/LogInpage/LogIn'
 import Homepage from '../pages/Homepage/Homepage'
 import Gamepage from '../pages/Gamepage/Gamepage'
 import Chatpage from '../pages/Chatpage/Chatpage'
+import Error from '../pages/Error/Error'
 
 export default function AllRoutes() {
         return (
@@ -17,7 +18,7 @@ export default function AllRoutes() {
                     <Route path="home" element={<Homepage />} />
                     <Route path="game" element={<Gamepage />} />
                     <Route path="chat" element={<Chatpage />} />
-                    <Route path="token"/>
+                    <Route path="error" element={<Error />} />
                 </Routes>
             </BrowserRouter>
         );

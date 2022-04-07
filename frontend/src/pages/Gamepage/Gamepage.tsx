@@ -3,9 +3,9 @@ import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
 
-import SearchAppBar from '../../components/AppBar/AppBar'
-import Cactus from			"../../images/Avatar/Cactus.png"
-import Penguin from			"../../images/Avatar/Penguin.png"
+import SearchAppBar from 'components/AppBar/AppBar'
+import Cactus from	"images/Avatar/Cactus.png"
+import Penguin from	"images/Avatar/Penguin.png"
 
 const BigAvatar = {border: 4, width: 100, height: 100}
 

@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import Avatar from '@mui/material/Avatar'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
@@ -44,7 +45,13 @@ function PlayerAvatar(props: {image: any}) {
 }
 
 function CreateAvatar(props: {img: any, style: any}) {
-    const handleClick = () => SearchAppBar(props.img);
+    
+    const [image, setimage] = useState("");
+
+    const handleClick = () => {
+        
+
+    } 
     
     return (
         <IconButton onClick={handleClick}>

@@ -1,6 +1,4 @@
-import React from 'react';
 import '../../styles/Chat/Banner.css'
-import Typography from '@mui/material/Typography'
 import Stack from '@mui/material/Stack'
 
 function Banner() {

@@ -4,10 +4,12 @@ import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import CasinoIcon from '@mui/icons-material/Casino';
 
+import { NameButtonStyle } from '../../../styles/tsxStyles/AppBar/Name' 
+
 function NameButton() {
 	return (
 	<Button disabled 
-	style={{backgroundColor: "purple", color: "white"}}
+	sx={NameButtonStyle}
 	variant="contained"
 	color="secondary">
   Choose New name :

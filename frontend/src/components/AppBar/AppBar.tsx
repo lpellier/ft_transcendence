@@ -4,21 +4,20 @@ import PongMenu from './PongMenu'
 
 import {PlayerAvatar} from	'../Avatars'
 
-import { styled, alpha } from '@mui/material/styles';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import InputBase from '@mui/material/InputBase';
-import SearchIcon from '@mui/icons-material/Search';
-import Button from '@mui/material/Button';
-import Stack from '@mui/material/Stack';
-import ForumIcon from '@mui/icons-material/Forum';
-import GamesIcon from '@mui/icons-material/Games';
-import Tooltip from '@mui/material/Tooltip';
-import WebhookIcon from '@mui/icons-material/Webhook';
+import { styled, alpha } from '@mui/material/styles'
+import AppBar from '@mui/material/AppBar'
+import Toolbar from '@mui/material/Toolbar'
+import Typography from '@mui/material/Typography'
+import InputBase from '@mui/material/InputBase'
+import SearchIcon from '@mui/icons-material/Search'
+import Button from '@mui/material/Button'
+import Stack from '@mui/material/Stack'
+import ForumIcon from '@mui/icons-material/Forum'
+import GamesIcon from '@mui/icons-material/Games'
+import Tooltip from '@mui/material/Tooltip'
+import WebhookIcon from '@mui/icons-material/Webhook'
 
-const BarStyle = { backgroundColor: 'rgb(40, 80, 255)',
-				}
+import { BarStyle } from '../../styles/tsxStyles/AppBar/AppBar'
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -104,6 +103,7 @@ function ProjectName() {
 	);
 }
 
+
 function PlayerAvatarBar(props: {image: any}) {
 	return (
 		<nav>
@@ -116,13 +116,13 @@ function PlayerAvatarBar(props: {image: any}) {
 
 export default function SearchAppBar(props: {image: any}) {
 
-	const image = useState(props.image);
+	const img = useState(props.image);
 
   return (
       <AppBar position="static">
         <Toolbar style={ BarStyle }>
         	<PongMenu />
-			<PlayerAvatarBar image={image}/>
+			<PlayerAvatarBar image={img}/>
 			<PlayerName name={"Stan"}/>
 			<ProjectName />
 			<Stack direction="row" spacing={2}>
