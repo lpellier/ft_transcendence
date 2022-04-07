@@ -1,4 +1,6 @@
-table Users { 
+https://dbdiagram.io/d
+
+```table Users { 
   id        int [pk, increment] 
   username  string 
   avatar    string 
@@ -58,3 +60,4 @@ Ref: "Message"."user_id" < "Users"."id"
 Ref: "Room_Members"."room_id" < "Room"."id" 
 
 Ref: "Room_Members"."user_id" < "Users"."id" 
+```
