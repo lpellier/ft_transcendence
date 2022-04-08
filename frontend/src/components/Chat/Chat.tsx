@@ -14,15 +14,18 @@ const socket = io(SERVER);
 function App() {
 	
 	let [status, setStatus] = useState('waiting for connection');
-	let [user, setUser] = useState('');
+	let [user, setUser] = useState('user');
 	
 	console.log(socket.connected)
 	useEffect(() => {
-		if (socket.connected) {
+		socket.on('connect', () => {
 			setStatus('connected');
-		}
-		else {
-			setStatus('disconnected');
+			socket.on('disconnect', () => {
+				setStatus('disconnected');
+			})
+		})
+		if (socket.connected) {
+			setStatus('connected');	
 		}
 	}, [])
 
