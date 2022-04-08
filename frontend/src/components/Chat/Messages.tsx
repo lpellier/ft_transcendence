@@ -4,11 +4,6 @@ import {socket} from './Chat';
 import Stack from '@mui/material/Stack'
 import Container from '@mui/material/Container'
 
-import Button from '@mui/material/Button'
-import { ThemeProvider } from '@mui/material/styles';
-import SendIcon from '@mui/icons-material/Send';
-import {orangeTheme} from '../Themes'
-
 import '../../styles/Chat/Messages.css';
 
 function Messages(props : {currentUser:string}) {
