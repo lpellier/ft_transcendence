@@ -56,7 +56,7 @@ function Messages(props : {currentUser:string}) {
 
     return (
 	<Container >
-        <Stack className='chat'>
+        <Stack className='chat' spacing={6}>
 			<ul className='messages' id='messagebox'>
 				{messages.map(item=> (
 					<div key={item.id}>
@@ -84,20 +84,11 @@ function Messages(props : {currentUser:string}) {
 					</div>
 				))}
 			</ul>
-            <form className="form" id="form" onSubmit={handleSubmit}>
-				<Stack direction="row" spacing={1}>
-						<input className='input' type="text" />
-						<ThemeProvider theme={orangeTheme}>
-							<Button 
-								className='button' 
-								variant="contained"
-								size="small"
-								endIcon={<SendIcon />}
-								>
-								Miauw
-							</Button>
-						</ThemeProvider>
-				</Stack>
+			<form className="form" id="form" onSubmit={handleSubmit}>
+			<Stack direction='row' spacing={1}>
+				<input className='input' type="text" />
+				<button className='button'>Miauw</button>
+			</Stack>
             </form>
         </Stack>
 	</Container>
