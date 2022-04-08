@@ -1,10 +1,13 @@
-const errorStyle =  {
-    justifyContent: 'center',
+const ContainerStyle =  {
+    height: '100vh',
+    margin: 0,
     alignItems: 'center',
-    display: 'block',
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    width: '50%',
 }
 
-export { errorStyle }
+const TitleStyle =  {
+    textAlign: 'center',
+    color: 'white',
+    fontWeight: 'bold',
+}
+
+export { ContainerStyle, TitleStyle }

@@ -40,7 +40,6 @@ export default function LogIn() {
    			window.location.href = '/home';
       	})
       	.catch((error) => {
-			window.location.href = '/error';
       	});
   })
 
@@ -51,7 +50,11 @@ export default function LogIn() {
 					<WebhookIcon />
 					Pong
 				</div>
-				  	<LogInButton login={useEffect}/>
+				<nav>
+					<a href={AuthAPI} style={LinkStyle}>
+					  	<LogInButton login={useEffect}/>
+					</a>
+				</nav>
         	</Stack>
         );
 }
