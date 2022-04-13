@@ -1,24 +1,23 @@
-import * as React from 'react';
-import {Link} from 'react-router-dom';
+import {Link} from 'react-router-dom'
+import {useState} from 'react'
 import PongMenu from './PongMenu'
+
 import {PlayerAvatar} from	'../Avatars'
-import Cactus from			"../../images/Avatar/Cactus.png"
 
-import { styled, alpha } from '@mui/material/styles';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import InputBase from '@mui/material/InputBase';
-import SearchIcon from '@mui/icons-material/Search';
-import Button from '@mui/material/Button';
-import Stack from '@mui/material/Stack';
-import ForumIcon from '@mui/icons-material/Forum';
-import GamesIcon from '@mui/icons-material/Games';
-import Tooltip from '@mui/material/Tooltip';
-import WebhookIcon from '@mui/icons-material/Webhook';
+import { styled, alpha } from '@mui/material/styles'
+import AppBar from '@mui/material/AppBar'
+import Toolbar from '@mui/material/Toolbar'
+import Typography from '@mui/material/Typography'
+import InputBase from '@mui/material/InputBase'
+import SearchIcon from '@mui/icons-material/Search'
+import Button from '@mui/material/Button'
+import Stack from '@mui/material/Stack'
+import ForumIcon from '@mui/icons-material/Forum'
+import GamesIcon from '@mui/icons-material/Games'
+import Tooltip from '@mui/material/Tooltip'
+import WebhookIcon from '@mui/icons-material/Webhook'
 
-const BarStyle = { backgroundColor: 'rgb(40, 80, 255)',
-				}
+import { BarStyle } from '../../styles/tsxStyles/AppBar/AppBar'
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -104,22 +103,26 @@ function ProjectName() {
 	);
 }
 
-function PlayerAvatarBar() {
+
+function PlayerAvatarBar(props: {image: any}) {
 	return (
 		<nav>
 			<Link to="/home" style={{ textDecoration: 'none' }}>
-				<PlayerAvatar img={Cactus}/>
+				<PlayerAvatar image={props.image}/>
 			</Link>
 	  	</nav>
 	);
 }
 
-export default function SearchAppBar() {
+export default function SearchAppBar(props: {image: any}) {
+
+	const img = useState(props.image);
+
   return (
       <AppBar position="static">
         <Toolbar style={ BarStyle }>
         	<PongMenu />
-			<PlayerAvatarBar />
+			<PlayerAvatarBar image={img}/>
 			<PlayerName name={"Stan"}/>
 			<ProjectName />
 			<Stack direction="row" spacing={2}>

@@ -1,14 +1,16 @@
-import React, {Component} from "react";
+import React from "react";
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
+import Container from '@mui/material/Container';
+// import Item from '@mui/material/Item';
 import { useEffect } from 'react';
 import ReactDOM from "react-dom";
 import "./classes.css"
- 
-import SearchAppBar from '../../components/AppBar/AppBar'
-import Cactus from			"../../images/Avatar/Cactus.png"
-import Penguin from			"../../images/Avatar/Penguin.png"
+
+import SearchAppBar from 'components/AppBar/AppBar'
+import Cactus from	"images/Avatar/Cactus.png"
+import Penguin from	"images/Avatar/Penguin.png"
 
 const BigAvatar = {border: 4, width: 100, height: 100}
 
@@ -103,13 +105,14 @@ export default class Gamepage extends React.Component {
 		let main = document.body.getElementsByTagName("main");
 		let buttons = document.body.getElementsByClassName('p5-button');
 		
+		console.log(buttons);
 		for (let i = main.length - 1; i>=0; i--) {
 			main[i].style["display"] = "block"; 
 		}
 		for (let i = buttons.length - 1; i>=0; i--) {
 			if (wm.get(buttons[i]) == true){
 				// @ts-ignore:next-line
-				buttons[i].style["display"] = "flex";
+				buttons[i].style["display"] = "block";
 			}
 		}
 	}
@@ -122,7 +125,7 @@ export default class Gamepage extends React.Component {
 		}
 		for (let i = buttons.length - 1; i >= 0; i--) {
 			// @ts-ignore:next-line
-			if (buttons[i].style["display"] == "flex")
+			if (buttons[i].style["display"] == "block")
 				wm.set(buttons[i], true);
 			else
 				wm.set(buttons[i], false);
@@ -132,15 +135,26 @@ export default class Gamepage extends React.Component {
 	}
 	render() {
         return (
-			<Stack spacing={15}>
-                <SearchAppBar />
-                <Stack direction="row" spacing={4} style={GameStyle}>
+			<Stack spacing={5}>
+                <SearchAppBar image={''}/>
+				<Container id="canvas-parent">
+					<div id="main-menu-button-grid">
+						<div id="button-create"></div>
+						<div id="main-menu-button-grid2">
+							<div id="button-join"></div>
+							<div id="button-matchmaking"></div>
+						</div>
+						<div id="button-local"></div>
+					</div>
+				</Container>
+				
+                {/* <Stack direction="row" spacing={4} style={GameStyle}> */}
                     {/* <Player name={"Play one"} ava={Cactus}/> */}
                     {/* <Box sx={GameBoxStyle}>
 					</Box> */}
                     {/* <Player name={"Play two"} ava={Penguin}/> */}
-                </Stack>
+                {/* </Stack> */}
             </Stack>
         );
-    }
+	}
 }

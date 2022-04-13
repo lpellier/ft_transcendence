@@ -1,17 +1,46 @@
-.tableau {
-	position: fixed;
-	z-index: 0;
-	display: block;
-	margin: auto;
-	margin-left: 25%;
+#canvas-parent {
+	position: relative;
 }
 
-.p5-button {
-	position: fixed;
-	z-index: 1;
+#main-menu-button-grid {
 	display: flex;
 	flex-direction: row;
+	position: absolute;
+	align-content: center;
+	align-items: center;
+	justify-content: center;
+	gap: 15em;
+
+	bottom: 5em;
 }
+
+#button-create {
+	flex-grow: 1;
+}
+
+#button-local {
+	flex-grow: 1;
+}
+
+#main-menu-button-grid2 {
+	display: flex;
+	flex-direction: column;
+	position: absolute;
+	align-content: center;
+	align-items: center;
+	justify-content: center;
+	flex-grow: 1;
+	gap: 1em;
+}
+
+#button-join {
+	flex-grow: 1;
+}
+
+#button-matchmaking {
+	flex-grow: 1;
+}
+
 /* 
 .button-local {
 	left: 0px;

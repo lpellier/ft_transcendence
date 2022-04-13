@@ -4,10 +4,12 @@ import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import CasinoIcon from '@mui/icons-material/Casino';
 
+import { NameButtonStyle } from '../../../styles/tsxStyles/AppBar/Name' 
+
 function NameButton() {
 	return (
 	<Button disabled 
-	style={{backgroundColor: "purple", color: "white"}}
+	sx={NameButtonStyle}
 	variant="contained"
 	color="secondary">
   Choose New name :
@@ -42,8 +44,7 @@ function NameRandom() {
 	);
 }
 
-export default class ChooseName extends React.Component {
-    render() { 
+export default function ChooseName() {
         return (
 				<Stack spacing={2} style={{justifyContent: 'center'}}>
                     <NameButton />
@@ -51,5 +52,4 @@ export default class ChooseName extends React.Component {
 					<NameRandom />
                 </Stack>
         );
-    }
 }

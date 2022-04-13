@@ -6,21 +6,7 @@ import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import Modal from '@mui/material/Modal';
 
 import CustomAvatar from './CustomAvatar';
-
-const style = {
-  position: 'absolute' as 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: '50%',
-  height: '30%',
-  bgcolor: 'rgb(195, 183, 215, 0.8)',
-  border: '2px solid #000',
-  boxShadow: 24,
-  pt: 2,
-  px: 4,
-  pb: 3,
-};
+import { CustomAvatarStyle } from '../../../styles/tsxStyles/AppBar/Avatar';
 
 export default function ChooseAvatarButton() {
   const [open, setOpen] = React.useState(false);
@@ -31,6 +17,7 @@ export default function ChooseAvatarButton() {
 
   const handleClose = () => {
     setOpen(false);
+
   };
 
   return (
@@ -46,7 +33,7 @@ export default function ChooseAvatarButton() {
         open={open}
         onClose={handleClose}
       >
-        <Box sx={style}>
+        <Box sx={CustomAvatarStyle}>
         	<CustomAvatar />
         </Box>
       </Modal>

@@ -1,26 +1,13 @@
-import * as React from 'react';
-import Modal from '@mui/material/Modal';
-import Button from '@mui/material/Button';
-import Box from '@mui/material/Box';
-import Stack from '@mui/material/Stack';
+import * as React from 'react'
+import Modal from '@mui/material/Modal'
+import Button from '@mui/material/Button'
+import Box from '@mui/material/Box'
+import Stack from '@mui/material/Stack'
 import ChooseAuth from './ChooseAuth'
-import VpnKeyIcon from '@mui/icons-material/VpnKey';
+import VpnKeyIcon from '@mui/icons-material/VpnKey'
 
-const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: '45%',
-    height: '25%',
-    bgcolor: 'rgb(195, 183, 215, 0.8)',
-    border: '3px solid black',
-    boxShadow: 24,
-    pt: 2,
-    px: 4,
-    pb: 3,
-  };
-  
+import {ModalStyle} from '../../../styles/tsxStyles/AppBar/Avatar'
+
 export default function ChooseAuthModal() {
     const [open, setOpen] = React.useState(false);
   
@@ -47,7 +34,7 @@ export default function ChooseAuthModal() {
           aria-labelledby="parent-modal-title"
           aria-describedby="parent-modal-description"
         >
-          <Box sx={style}>
+          <Box sx={ModalStyle}>
               <ChooseAuth/> 
             </Box>
             </Modal>

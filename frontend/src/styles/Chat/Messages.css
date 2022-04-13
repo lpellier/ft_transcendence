@@ -1,0 +1,93 @@
+.chat {
+	height: 58vh;
+}
+
+.form {
+	width: 85%;
+	text-align: center;
+	padding-left: 16%;
+}
+
+.input {
+	width: 70%;
+	height: 3vh;
+	justify-content: center;
+	padding-left: 2%;
+	
+	caret-color: rgb(170, 0, 255);
+	background-color: #E8EDDF;
+	
+	color: #502274;
+	border: 3px solid black;
+	outline: 1px solid black;
+	border-radius: 20px;
+	filter: drop-shadow(5px 5px 1px black)
+}
+
+.button {
+	filter: drop-shadow(8px 8px 2px black);
+	background-color: rgb(230, 90, 0);
+	border: 3px solid black;
+	border-radius: 10px;
+	padding-left: 0.8em;
+	padding-right: 0.8em;
+	padding-top: 0.3em;
+	padding-bottom: 0.3em;
+}
+
+.messages {
+	list-style-type: none;
+	padding-right: 3%;
+	overflow-y: scroll;
+	height: 75%;
+}
+
+.flexwrapper {
+	display:flex;
+	flex-direction: column;
+}
+
+.current li, .current .user{
+	align-self: flex-end;
+}
+
+.current li{
+	border-radius: 0.4em 0.4em 0em 0.4em;
+}
+
+.other li, .other .user{
+	align-self: flex-start;
+}
+
+.other li{
+	border-radius: 0.4em 0.4em 0.4em 0em;
+}
+
+.message li{
+	border: solid 2px black;
+	background-color: rgb(200, 200, 170);
+	color: rgb(30, 80, 200);
+
+	width: fit-content;
+	padding-left: 0.8em;
+	padding-right: 0.8em;
+	padding-top: 0.2em;
+	padding-bottom: 0.2em;
+	max-width: inherit;
+	word-wrap: anywhere;
+	white-space:pre-wrap;
+}
+
+.flex {
+	display: flex;
+	flex-direction: column;
+}
+
+.user {
+	margin-top: 0%;
+}
+
+.newuser {
+	color: gray;
+	align-self: center;
+}

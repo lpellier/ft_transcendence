@@ -65,7 +65,7 @@ class Buttons {
 	}
 
 	show() {
-		this.create_game.attribute("display", "flex");
+		this.create_game.show();
 		this.join.show();
 		this.local.show();
 		this.return.show();
@@ -101,48 +101,16 @@ class Buttons {
 		return "private";
 	}
 
-	addClass() {
-		let setClass : string = "p5-button";
-
-		this.create_game.addClass(setClass);
-		// this.create_game.addClass("tableau");
-		this.create_game.addClass("button-create");
-		this.join.addClass(setClass);
-		// this.join.addClass("tableau");
-		this.join.addClass("button-join");
-		this.local.addClass(setClass);
-		// this.local.addClass("tableau");
-		this.local.addClass("button-local");
-		this.matchmaking.addClass(setClass);
-		// this.matchmaking.addClass("tableau");
-		this.matchmaking.addClass("button-matchmaking");
-		this.return.addClass(setClass);
-		// this.return.addClass("tableau");
-		// this.return.addClass("tableau");
-		this.anyone_can_join.addClass(setClass);
-		// this.anyone_can_join.addClass("tableau");
-		// this.anyone_can_join.addClass("tableau");
-		this.friends_can_join.addClass(setClass);
-		// this.friends_can_join.addClass("tableau");
-		// this.friends_can_join.addClass("tableau");
-		this.invitation_only.addClass(setClass);
-		// this.invitation_only.addClass("tableau");
-		// this.invitation_only.addClass("tableau");
-		this.validate.addClass(setClass);
-		// this.validate.addClass("tableau");
-		// this.validate.addClass("tableau");
-	}
-
 	addParent() {
-		this.create_game.parent(canvas);
-		this.join.parent(canvas);
-		this.local.parent(canvas);
-		this.matchmaking.parent(canvas);
-		this.return.parent(canvas);
-		this.anyone_can_join.parent(canvas);
-		this.friends_can_join.parent(canvas);
-		this.invitation_only.parent(canvas);
-		this.validate.parent(canvas);
+		this.create_game.parent(document.getElementById("button-create"));
+		this.join.parent(document.getElementById("button-join"));
+		this.matchmaking.parent(document.getElementById("button-matchmaking"));
+		this.local.parent(document.getElementById("button-local"));
+		// this.return.parent(document.getElementById("button-parent"));
+		// this.anyone_can_join.parent(document.getElementById("button-parent"));
+		// this.friends_can_join.parent(document.getElementById("button-parent"));
+		// this.invitation_only.parent(document.getElementById("button-parent"));
+		// this.validate.parent(document.getElementById("button-parent"));
 	}
 };
 

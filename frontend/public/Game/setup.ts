@@ -8,6 +8,8 @@
 	
 // TODO the better score is highlighted 
 
+// TODO only left click should work for clicking buttons
+
 const PLAYER_WIDTH : number = 15;
 const PLAYER_HEIGHT : number = 60;
 
@@ -77,7 +79,7 @@ function in_main_menu() {
 	inputs.hide();
 	buttons.local.show();
 	buttons.matchmaking.show();
-	buttons.create_game.attribute("display", "flex");
+	buttons.create_game.show();
 	buttons.join.show();
 }
 
@@ -103,7 +105,7 @@ function startLocal() {
 
 function setup() {
 	canvas = createCanvas(MAP_WIDTH, MAP_HEIGHT);
-	canvas.addClass("tableau");
+	canvas.parent(document.getElementById("canvas-parent"));
 	background(0);
 
 	frameRate(60);

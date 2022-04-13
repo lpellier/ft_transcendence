@@ -48,7 +48,6 @@ function create_buttons() {
 	buttons.create_game.mouseOut(resetButton);
 	
 	buttons.join = createButton("Join game");
-	// buttons.join.position(300, MAP_HEIGHT * 1 / 2 + 50 - 60);
 	buttons.join.style("color", "white");
 	buttons.join.style("font-size", "25px");
 	buttons.join.style("font-family", "PressStart2P-Regular");
@@ -60,7 +59,6 @@ function create_buttons() {
 	buttons.join.mouseOut(resetButton);
 	
 	buttons.matchmaking = createButton("Match making");
-	// buttons.matchmaking.position(300, MAP_HEIGHT * 1 / 2 + 50 + 60);
 	buttons.matchmaking.style("color", "white");
 	buttons.matchmaking.style("font-size", "25px");
 	buttons.matchmaking.style("font-family", "PressStart2P-Regular");
@@ -72,7 +70,6 @@ function create_buttons() {
 	buttons.matchmaking.mouseOut(resetButton);
 	
 	buttons.local = createButton("Play local");
-	// buttons.local.position(525, MAP_HEIGHT * 1 / 2 + 50);
 	buttons.local.style("color", "white");
 	buttons.local.style("font-size", "25px");
 	buttons.local.style("font-family", "PressStart2P-Regular");
@@ -84,7 +81,6 @@ function create_buttons() {
 	buttons.local.mouseOut(resetButton);
 	
 	buttons.return = createButton("");
-	// buttons.return.position(650, 25);
 	buttons.return.style("color", "rgba(0, 0, 0, 0)");
 	buttons.return.style("background-color", "rgba(0, 0, 0, 0)");
 	buttons.return.style("border", "none");
@@ -98,7 +94,6 @@ function create_buttons() {
 	buttons.friends_can_join = createButton("Friends can join");
 	buttons.invitation_only = createButton("Invitation only");
 	
-	// buttons.anyone_can_join.position(50, MAP_HEIGHT * 2 / 5 - 37.5);
 	buttons.anyone_can_join.style("background-color", "rgba(0, 0, 0, 0)");
 	buttons.anyone_can_join.style("border", "none");
 	buttons.anyone_can_join.style("font-size", "20px");
@@ -111,7 +106,6 @@ function create_buttons() {
 	buttons.anyone_can_join.mouseOver(highlightButton);
 	buttons.anyone_can_join.mouseOut(resetButton);
 	
-	// buttons.friends_can_join.position(275, MAP_HEIGHT * 2 / 5 - 37.5);
 	buttons.friends_can_join.style("background-color", "rgba(0, 0, 0, 0)");
 	buttons.friends_can_join.style("border", "none");
 	buttons.friends_can_join.style("font-size", "20px");
@@ -123,7 +117,6 @@ function create_buttons() {
 	buttons.friends_can_join.mouseOver(highlightButton);
 	buttons.friends_can_join.mouseOut(resetButton);
 	
-	// buttons.invitation_only.position(500, MAP_HEIGHT * 2 / 5 - 37.5);
 	buttons.invitation_only.style("background-color", "rgba(0, 0, 0, 0)");
 	buttons.invitation_only.style("border", "none");
 	buttons.invitation_only.style("font-size", "20px");
@@ -136,7 +129,6 @@ function create_buttons() {
 	buttons.invitation_only.mouseOut(resetButton);
 	
 	buttons.validate = createButton('Create');
-	// buttons.validate.position(MAP_WIDTH / 2 - 75, MAP_HEIGHT * 4 / 5);
 	buttons.validate.style("background-color", "black");
 	buttons.validate.style("color", "white");
 	buttons.validate.style("font-size", "20px");
@@ -148,7 +140,7 @@ function create_buttons() {
 	buttons.validate.mousePressed(createGame);
 	
 	buttons.hide();
-	buttons.addClass();
+	buttons.addParent();
 }
 
 function create_input() {
