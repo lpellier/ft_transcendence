@@ -1,5 +1,3 @@
-import { styled } from '@mui/material/styles';
-
 const Title = {
     fontSize: 'xx-large',
     fontFamily: 'sans-serif',

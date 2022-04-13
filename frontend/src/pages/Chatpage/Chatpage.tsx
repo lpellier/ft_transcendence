@@ -6,9 +6,8 @@ import SearchAppBar from 'components/AppBar/AppBar'
 
 const ChatBoxStyle = {	
     width: '80vw',
-    maxWidth: '1200px',
+    minWidth: '320px',
     height: '70vh',
-
 
 	border: '3px solid black',
     backgroundColor: 'rgb(120, 110, 220, 0.95)',
@@ -21,7 +20,6 @@ const ChatBoxStyle = {
 
 const ChatPageStyle = {
     alignItems: 'center',
-    justifyContent: 'center',
 }
 
 export default function Chatpage() {

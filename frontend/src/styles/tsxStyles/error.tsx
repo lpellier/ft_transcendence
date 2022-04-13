@@ -1,13 +1,15 @@
-const ContainerStyle =  {
-    height: '100vh',
-    margin: 0,
+const StackStyle = {
     alignItems: 'center',
+    justifyContent: 'center',
 }
 
-const TitleStyle =  {
-    textAlign: 'center',
+const TitleStyle = {
     color: 'white',
     fontWeight: 'bold',
 }
 
-export { ContainerStyle, TitleStyle }
+const ImageStyle = {
+    width: '70%',
+}
+
+export { StackStyle, TitleStyle, ImageStyle }

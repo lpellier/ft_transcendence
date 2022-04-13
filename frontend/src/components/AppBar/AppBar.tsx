@@ -123,7 +123,7 @@ export default function SearchAppBar(props: {image: any}) {
         <Toolbar style={ BarStyle }>
         	<PongMenu />
 			<PlayerAvatarBar image={img}/>
-			<PlayerName name={"Stan"}/>
+			<PlayerName name={"Mr Roboto"}/>
 			<ProjectName />
 			<Stack direction="row" spacing={2}>
 				<AppBarButton link={'/game'} tooltip={"New Game"} icon={<GamesIcon />}/>

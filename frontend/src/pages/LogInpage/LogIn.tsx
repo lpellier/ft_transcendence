@@ -5,10 +5,10 @@ import { ThemeProvider } from '@mui/styles';
 import WebhookIcon from '@mui/icons-material/Webhook';
 
 import {orangeTheme} from 'components/Themes'
-import {Title, ButtonStyle, LinkStyle} from "../../styles/tsxStyles/LogIn"
+import {Title, ButtonStyle, LinkStyle, IconStyle} from "../../styles/tsxStyles/LogIn"
 
-import React, { useEffect, useState,  } from "react";
-import axios from "axios";
+//import React, { useEffect } from "react";
+//import axios from "axios";
 
 const AuthAPI = "https://api.intra.42.fr/oauth/authorize?client_id=599878db9c7f713d0988e2c1e2672a5d888593be77d49fed8bec54b4b1d404bc&redirect_uri=http%3A%2F%2F127.0.0.1%3A3001%2Fauth%2Fcallback&response_type=code"
 
@@ -32,27 +32,32 @@ function LogInButton(props: {login: any})
 	
 export default function LogIn() {
 
-	useEffect(() => {
+	 function getRequest() {
+	// 	axios{
+	// 		{
+	// 			method: 'get',
+	// 			url: '/',
 
-	axios.get(AuthAPI)
-		.then((result) => {
-			//console.log('success');
-   			window.location.href = '/home';
-      	})
-      	.catch((error) => {
-      	});
-  })
+	// 		}
+	// 		.then((result: any) => {
+	// 			console.log('success');
+	// 			window.location.href = '/home';
+	// 		})
+	// 		.catch((error: any) => {
+	// 		});
+	// 	}
+	 }
 
     return (
         	<Stack spacing={10} sx={Title}>
 				<div>
 					Eneana
-					<WebhookIcon />
+					<WebhookIcon sx={IconStyle}/>
 					Pong
 				</div>
 				<nav>
 					<a href={AuthAPI} style={LinkStyle}>
-					  	<LogInButton login={useEffect}/>
+					  	<LogInButton login={getRequest}/>
 					</a>
 				</nav>
         	</Stack>

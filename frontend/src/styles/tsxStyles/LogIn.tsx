@@ -1,15 +1,17 @@
 const Title = {
-    fontFamily: 'Roboto',
-    fontStyle: 'normal',
     fontWeight: '400',
-    fontSize: '85px',
+    fontSize: '10vw',
     
     color: 'rgb(255, 69, 0)',
     filter: 'drop-shadow(20px 15px 4px black)',
     
     alignItems: 'center',
 	display: 'flex',
-	paddingTop: '34%',
+	paddingTop: '40vh',
+}
+
+const IconStyle = {
+    fontSize: '5vw',
 }
 
 const ButtonStyle = {
@@ -22,4 +24,4 @@ const LinkStyle = {
 	justifyContent: 'center',
 }
 
-export { Title, ButtonStyle, LinkStyle }
+export { Title, ButtonStyle, LinkStyle, IconStyle }

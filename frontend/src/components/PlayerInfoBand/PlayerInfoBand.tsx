@@ -2,23 +2,7 @@ import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import SkillBar from 'react-skillbars';
 
-const BoxSttyle = {	width: '60vw',
-					height: '6vh',
-					textAlign: 'center',
-					alignComponent: 'center',
-					color: 'white', 
-					border: '3px solid black'}
-					
-const SkillBarStyle = { width: '50vh', 
-						paddingTop: '1%'}
-
-const colors = {
-	bar: 'blue',
-	title: {
-	  text: 'white',
-	  background: 'purple'
-	}
-  }
+import {PlayerBarStyle, SkillBarStyle, colors} from "../../styles/tsxStyles/Home";
 
 const skills = [
 	{type: "XX%", level: 85},
@@ -26,7 +10,7 @@ const skills = [
 
 export default function PlayerInfoBand() {
 	return (
-			<Box bgcolor='#7A28CB' sx={BoxSttyle}>
+			<Box sx={PlayerBarStyle}>
 				<Stack>
 					Level XX
 					<div style={SkillBarStyle}>
