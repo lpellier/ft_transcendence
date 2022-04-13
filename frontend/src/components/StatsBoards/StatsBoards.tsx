@@ -1,3 +1,4 @@
+import {useState, useEffect} from 'react'
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 
@@ -6,6 +7,7 @@ import TimelineIcon from '@mui/icons-material/Timeline';
 import MilitaryTechIcon from '@mui/icons-material/MilitaryTech';
 import UpdateIcon from '@mui/icons-material/Update';
 
+import { phoneSize } from 'index';
 import {StatTitle, StatBox} from "../../styles/tsxStyles/Home"
 
 function BoardComponent(props: {icon: any, title: string}) {
@@ -54,6 +56,26 @@ function Matchhistory(){
 }
 
 export default function StatsBoards() {
+	const [width, setWidth] = useState(window.innerWidth);
+
+	useEffect(() => {
+		const handleResizeWindow = () => setWidth(window.innerWidth);
+		 window.addEventListener("resize", handleResizeWindow);
+		 return () => {
+		   window.removeEventListener("resize", handleResizeWindow);
+		 };
+	}, [])
+	
+	if (width <= phoneSize) {
+	  return (
+		<Stack spacing={1}>
+				<Stats />
+				<Trophy />
+				<Leaderboard />
+				<Matchhistory />
+		</Stack>
+	  );
+	}
 	return (
 			<Stack direction="row" spacing={1}>
 				<Stack spacing={1}>

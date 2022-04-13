@@ -7,6 +7,7 @@ import FriendBand from 'components/FriendBand/FriendBand'
 import PlayerInfoBand from 'components/PlayerInfoBand/PlayerInfoBand'
 import StatsBoards from 'components/StatsBoards/StatsBoards'
 
+import { phoneSize } from 'index'
 import {StatsPartStyle, AllHomeStyle} from '../../styles/tsxStyles/Home'
 
 function StatsPart() {
@@ -20,7 +21,6 @@ function StatsPart() {
 
 export default function Homepage() {
 	const [width, setWidth] = useState(window.innerWidth);
-  	const breakpoint = 425;
 
 	useEffect(() => {
 		const handleResizeWindow = () => setWidth(window.innerWidth);
@@ -28,14 +28,11 @@ export default function Homepage() {
 		 return () => {
 		   window.removeEventListener("resize", handleResizeWindow);
 		 };
-	}
-	)
+	}, [])
 	
-
-	if (width < breakpoint) {
+	if (width <= phoneSize) {
 	  return (
 	    <Stack spacing={2}>
-			<h1 style={{color:'white'}}>{width}</h1>
         	<SearchAppBar image={''}/>
 			<Container>
 				<Stack direction="row" spacing={1} sx={AllHomeStyle}>
@@ -47,7 +44,6 @@ export default function Homepage() {
 	}
     return (
 		<Stack spacing={2}>
-			<h1 style={{color:'white'}}>{width}</h1>
         	<SearchAppBar image={''}/>
 			<Container>
 				<Stack direction="row" spacing={1} sx={AllHomeStyle}>

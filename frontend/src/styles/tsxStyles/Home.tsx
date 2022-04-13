@@ -42,7 +42,8 @@ const StatTitle = {
 const StatBox = {
     backgroundColor: 'rgb(211, 172, 223)',
 	color: 'white',
-	border: '3px solid black'
+	border: '3px solid black',
+    height: '10vh',
 }
 
 export {AllHomeStyle, StatsPartStyle,

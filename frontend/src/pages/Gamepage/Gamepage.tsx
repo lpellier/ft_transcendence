@@ -6,7 +6,7 @@ import Container from '@mui/material/Container';
 // import Item from '@mui/material/Item';
 import { useEffect } from 'react';
 import ReactDOM from "react-dom";
-import "./classes.css"
+import "../../styles/Game/Game.css"
 
 import SearchAppBar from 'components/AppBar/AppBar'
 import Cactus from	"images/Avatar/Cactus.png"
@@ -75,7 +75,6 @@ const removeScript = (scriptToremove : string) => {
 	}
 }
 
-
 function removeScripts() {
 	removeScript("./p5/p5.js")
 	removeScript("./Game/sketch/Player.js")
@@ -116,6 +115,7 @@ export default class Gamepage extends React.Component {
 			}
 		}
 	}
+
 	componentWillUnmount() {
 		let main = document.body.getElementsByTagName("main");
 		let buttons = document.body.getElementsByClassName('p5-button');
@@ -137,23 +137,16 @@ export default class Gamepage extends React.Component {
         return (
 			<Stack spacing={5}>
                 <SearchAppBar image={''}/>
-				<Container id="canvas-parent">
-					<div id="main-menu-button-grid">
-						<div id="button-create"></div>
-						<div id="main-menu-button-grid2">
-							<div id="button-join"></div>
-							<div id="button-matchmaking"></div>
+					<div id="canvas-parent">
+						<div id="main-menu-button-grid">
+							<div id="button-create"></div>
+							<div id="main-menu-button-grid2">
+								<div id="button-join"></div>
+								<div id="button-matchmaking"></div>
+							</div>
+							<div id="button-local"></div>
 						</div>
-						<div id="button-local"></div>
 					</div>
-				</Container>
-				
-                {/* <Stack direction="row" spacing={4} style={GameStyle}> */}
-                    {/* <Player name={"Play one"} ava={Cactus}/> */}
-                    {/* <Box sx={GameBoxStyle}>
-					</Box> */}
-                    {/* <Player name={"Play two"} ava={Penguin}/> */}
-                {/* </Stack> */}
             </Stack>
         );
 	}
