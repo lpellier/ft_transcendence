@@ -1,11 +1,8 @@
-import React from "react";
+import React, { createElement } from "react";
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
-import Container from '@mui/material/Container';
-// import Item from '@mui/material/Item';
-import { useEffect } from 'react';
-import ReactDOM from "react-dom";
+
 import "./classes.css"
 
 import SearchAppBar from 'components/AppBar/AppBar'
@@ -56,13 +53,13 @@ function addScript(url : string) : any {
 	script.async = true;
 	script.classList.add("p5-script");
 
-	document.body.appendChild(script);
+	document.head.appendChild(script);
 	return script;
 }
 
 let observer : any = null;
 let canvas : any = null;
-let main_menu_buttons : any = null;
+// let main_menu_buttons : any = null;
 
 class Game extends React.Component {
 	componentDidMount() {
@@ -71,10 +68,17 @@ class Game extends React.Component {
 			canvas = document.getElementById("defaultCanvas0");
 		else if (canvas_parent)
 			canvas_parent.appendChild(canvas);
+
+		// if (main_menu_buttons === null)
+		// 	main_menu_buttons = document.getElementById("main-menu-button-grid");
+		// else if (canvas_parent) {
+		// 	canvas_parent.appendChild(main_menu_buttons);
+		// }
 		
 		if (canvas === null) {
 			observer = new MutationObserver(() => {
 				canvas = document.getElementById("defaultCanvas0");
+				// main_menu_buttons = document.getElementById("main-menu-button-grid");
 				if (canvas) {
 					observer.disconnect();
 					observer = null;
@@ -82,23 +86,31 @@ class Game extends React.Component {
 			});
 			observer.observe(document, {subtree: true, childList: true});
 		}
-		console.log("mounted ", canvas);
-		// if (canvas === null)
-		// 	canvas = document.getElementById("defaultCanvas0");
-		// else
-		// 	document.getElementById("canvas-parent").appendChild(canvas);
+	}
+	componentWillUnmount() {
+		if (observer) {
+			observer.disconnect();
+			observer = null;
+		}
 	}
 	render() {
 		return (
 			<div id="canvas-parent">
 				<div id="main-menu-button-grid">
-						<div id="button-create"/>
-						<div id="main-menu-button-grid2">
-							<div id="button-join"/>
-							<div id="button-matchmaking"/>
-						</div>
-						<div id="button-local"/>
+					<div id="button-create"/>
+					<div id="main-menu-button-grid2">
+						<div id="button-join"/>
+						<div id="button-matchmaking"/>
 					</div>
+					<div id="button-local"/>
+				</div>
+				<div id="create-menu-button-grid">
+					<div id="button-anyone"/>
+					<div id="button-friends"/>
+					<div id="button-invitation"/>
+				</div>
+				<div id="button-validate"/>
+				<div id="button-return"/>
 			</div>
 		);
 	}

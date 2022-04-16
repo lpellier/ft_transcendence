@@ -49,23 +49,45 @@
 	flex-grow: 1;
 }
 
-/* 
-.button-local {
-	left: 0px;
-	bottom: 200px;
+#create-menu-button-grid {
+	display: flex;
+	flex-direction: row;
+	position: absolute;
+	align-content: center;
+	align-items: center;
+	justify-content: center;
+	gap: 2.5em;
+	left: 35px;
+
+	top: 15em;
 }
 
-.button-matchmaking {
-	left: 500px;
-	bottom: 200px;
+#button-return {
+	position: absolute;
+	padding: 0;
+	margin: 0;
+	top: 50px;
+	right: 50px;
 }
 
-.button-join {
-	left: 700px;
-	bottom: 200px;
+#button-anyone {
+	flex-grow: 1;
 }
 
-.button-create {
-	left: 700px;
-	bottom: 200px;
-} */
+#button-friends {
+	flex-grow: 1;
+}
+
+#button-invitation {
+	flex-grow: 1;
+}
+
+#button-validate {
+	position: absolute;
+	padding: 0;
+	bottom: 2em;
+	width: 300px;
+	height: 50px;
+	left: 450px;
+	margin: 0 auto;
+}
