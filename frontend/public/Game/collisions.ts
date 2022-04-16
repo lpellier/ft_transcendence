@@ -48,7 +48,7 @@ function intersect(a : [number, number], b : [number, number], c : [number, numb
 function checkCollisions() {
 	// Implement acceleration here
 	if (game.framesSincePoint == 0)
-		game.pong.speed = 4;
+		game.pong.speed = PONG_BASE_SPEED;
 	else if (game.pong.speed < PONG_MAX_SPEED) {
 		if (game.pong.velocity[0] > 0)
 			game.pong.velocity[0] += 0.0025;

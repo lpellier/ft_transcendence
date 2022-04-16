@@ -35,105 +35,68 @@ function click_invitation() {
 	game.publicity = buttons.click_invitation();
 }
 
+function create_button(title : string) {
+	let button = createButton(title);
+	button.style("color", "white");
+	button.style("font-size", "40px");
+	button.style("font-family", "PressStart2P-Regular");
+	button.style("background-color", "black");
+	button.style("border-radius", "1em");
+	button.size(280, 175);
+	return button;
+}
+
 function create_buttons() {
-	buttons.create_game = createButton("Create a game");
-	buttons.create_game.style("color", "white");
-	buttons.create_game.style("font-size", "25px");
-	buttons.create_game.style("font-family", "PressStart2P-Regular");
-	buttons.create_game.style("background-color", "black");
-	buttons.create_game.style("border-radius", "1em");
-	buttons.create_game.size(175, 100);
+	buttons.create_game = create_button("Create a game");
 	buttons.create_game.mousePressed(createGameMenu);
 	buttons.create_game.mouseOver(highlightButton);
 	buttons.create_game.mouseOut(resetButton);
 	
-	buttons.join = createButton("Join game");
-	buttons.join.style("color", "white");
-	buttons.join.style("font-size", "25px");
-	buttons.join.style("font-family", "PressStart2P-Regular");
-	buttons.join.style("background-color", "black");
-	buttons.join.style("border-radius", "1em");
-	buttons.join.size(175, 100);
+	buttons.join = create_button("Join game");
 	buttons.join.mousePressed(readRoomID);
 	buttons.join.mouseOver(highlightButton);
 	buttons.join.mouseOut(resetButton);
 	
-	buttons.matchmaking = createButton("Match making");
-	buttons.matchmaking.style("color", "white");
-	buttons.matchmaking.style("font-size", "25px");
-	buttons.matchmaking.style("font-family", "PressStart2P-Regular");
-	buttons.matchmaking.style("background-color", "black");
-	buttons.matchmaking.style("border-radius", "1em");
-	buttons.matchmaking.size(175, 100);
+	buttons.matchmaking = create_button("Match making");
 	buttons.matchmaking.mousePressed(matchmaking);
 	buttons.matchmaking.mouseOver(highlightButton);
 	buttons.matchmaking.mouseOut(resetButton);
 	
-	buttons.local = createButton("Play local");
-	buttons.local.style("color", "white");
-	buttons.local.style("font-size", "25px");
-	buttons.local.style("font-family", "PressStart2P-Regular");
-	buttons.local.style("background-color", "black");
-	buttons.local.style("border-radius", "1em");
-	buttons.local.size(175, 100);
+	buttons.local = create_button("Play local");
 	buttons.local.mousePressed(startLocal);
 	buttons.local.mouseOver(highlightButton);
 	buttons.local.mouseOut(resetButton);
 	
-	buttons.return = createButton("");
-	buttons.return.style("color", "rgba(0, 0, 0, 0)");
-	buttons.return.style("background-color", "rgba(0, 0, 0, 0)");
+	buttons.return = create_button("");
 	buttons.return.style("border", "none");
-	buttons.return.style("border-radius", "1em");
 	buttons.return.size(75, 75);
 	buttons.return.mousePressed(in_main_menu);
 	buttons.return.mouseOver(highlightButton);
 	buttons.return.mouseOut(resetButton);
 	
-	buttons.anyone_can_join = createButton("Anyone can join");
-	buttons.friends_can_join = createButton("Friends can join");
-	buttons.invitation_only = createButton("Invitation only");
 	
-	buttons.anyone_can_join.style("background-color", "rgba(0, 0, 0, 0)");
-	buttons.anyone_can_join.style("border", "none");
-	buttons.anyone_can_join.style("font-size", "20px");
-	buttons.anyone_can_join.style("font-family", "PressStart2P-Regular");
-	buttons.anyone_can_join.style("color", "white");
-	buttons.anyone_can_join.style("border-radius", "1em");
+	buttons.anyone_can_join = create_button("Anyone can join");
 	buttons.anyone_can_join.style("outline", "5px solid"); // !
 	buttons.anyone_can_join.size(200, 75);
 	buttons.anyone_can_join.mousePressed(click_anyone);
 	buttons.anyone_can_join.mouseOver(highlightButton);
 	buttons.anyone_can_join.mouseOut(resetButton);
 	
-	buttons.friends_can_join.style("background-color", "rgba(0, 0, 0, 0)");
-	buttons.friends_can_join.style("border", "none");
-	buttons.friends_can_join.style("font-size", "20px");
-	buttons.friends_can_join.style("font-family", "PressStart2P-Regular");
-	buttons.friends_can_join.style("color", "white");
-	buttons.friends_can_join.style("border-radius", "1em");
+	buttons.friends_can_join = create_button("Friends can join");
+	buttons.friends_can_join.style("outline", "5px solid"); // !
 	buttons.friends_can_join.size(200, 75);
 	buttons.friends_can_join.mousePressed(click_friends);
 	buttons.friends_can_join.mouseOver(highlightButton);
 	buttons.friends_can_join.mouseOut(resetButton);
 	
-	buttons.invitation_only.style("background-color", "rgba(0, 0, 0, 0)");
-	buttons.invitation_only.style("border", "none");
-	buttons.invitation_only.style("font-size", "20px");
-	buttons.invitation_only.style("font-family", "PressStart2P-Regular");
-	buttons.invitation_only.style("color", "white");
-	buttons.invitation_only.style("border-radius", "1em");
-	buttons.invitation_only.size(210, 75);
+	buttons.invitation_only = create_button("Invitation only");
+	buttons.invitation_only.style("outline", "5px solid"); // !
+	buttons.invitation_only.size(200, 75);
 	buttons.invitation_only.mousePressed(click_invitation);
 	buttons.invitation_only.mouseOver(highlightButton);
 	buttons.invitation_only.mouseOut(resetButton);
 	
-	buttons.validate = createButton('Create');
-	buttons.validate.style("background-color", "black");
-	buttons.validate.style("color", "white");
-	buttons.validate.style("font-size", "20px");
-	buttons.validate.style("font-family", "PressStart2P-Regular");
-	buttons.validate.style("border-radius", "1em");
+	buttons.validate = create_button('Create');
 	buttons.validate.size(150, 50);
 	buttons.validate.mouseOver(highlightButton);
 	buttons.validate.mouseOut(resetButton);

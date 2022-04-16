@@ -1,17 +1,25 @@
 #canvas-parent {
 	position: relative;
+	margin: auto;
+	padding: 0;
+	width: 1200px;
+	height: 750px;
+	margin-top: 5em;
 }
 
 #main-menu-button-grid {
 	display: flex;
 	flex-direction: row;
 	position: absolute;
+	gap: 25em;
 	align-content: center;
 	align-items: center;
 	justify-content: center;
-	gap: 15em;
 
-	bottom: 5em;
+	width: 960px;
+	height: 390px;
+	margin-left: 120px;
+	bottom: 4em;
 }
 
 #button-create {
@@ -30,7 +38,7 @@
 	align-items: center;
 	justify-content: center;
 	flex-grow: 1;
-	gap: 1em;
+	gap: 2.5em;
 }
 
 #button-join {

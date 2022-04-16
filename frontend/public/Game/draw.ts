@@ -19,7 +19,7 @@ function draw_map() {
 	fill("white");
 	textSize(14);
 	text("Room #" + game.room_id, 16, 25); // room id
-	for (let i : number = 5; i < MAP_HEIGHT; i += 20)
+	for (let i : number = 10; i < MAP_HEIGHT - 10; i += 20)
 		rect(MAP_WIDTH / 2, i, 5, 10); // line in the middle
 	rect(5, 5, MAP_WIDTH - 10, 5); // bounds
 	rect(5, MAP_HEIGHT - 10, MAP_WIDTH - 10, 5); // bounds

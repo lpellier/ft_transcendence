@@ -10,16 +10,19 @@
 
 // TODO only left click should work for clicking buttons
 
-const PLAYER_WIDTH : number = 15;
-const PLAYER_HEIGHT : number = 60;
+// ?TODO set url to room id
 
-const PONG_DIAMETER : number = 10;
-const PONG_MAX_SPEED : number = 7.5;
+const PLAYER_WIDTH : number = 15;
+const PLAYER_HEIGHT : number = 80;
+
+const PONG_DIAMETER : number = 12;
+const PONG_BASE_SPEED : number = 6;
+const PONG_MAX_SPEED : number = 12;
 const PONG_COLOR : string = "white";
 
-const MAP_WIDTH : number = 750;
-const MAP_HEIGHT : number = 500;
-const PLAYER_SPEED : number = 6;
+const MAP_WIDTH : number = 1200;
+const MAP_HEIGHT : number = 750;
+const PLAYER_SPEED : number = 7;
 
 const top_bound : number = 10;
 const bot_bound : number = MAP_HEIGHT - 10;
@@ -100,7 +103,7 @@ function startLocal() {
 	game.players.push(new Player(MAP_WIDTH * 11 / 12, MAP_HEIGHT / 2 - PLAYER_HEIGHT / 2, PLAYER_WIDTH, PLAYER_HEIGHT, "white", 2, "second"));		
 	game.pong = new Pong;
 	game.local = true;
-	game.room_id = "Local";
+	game.room_id = " Local";
 }
 
 function setup() {
@@ -158,7 +161,7 @@ function draw() {
 	if (game.state == "in-menu-create")
 		output_announcement("Game Creation", 40, MAP_WIDTH / 2, MAP_HEIGHT / 5);
 	if (game.state == "in-menu")
-		output_announcement("Pongscendance", 40, MAP_WIDTH / 2, MAP_HEIGHT / 3);
+		output_announcement("Pongscendance", 70, MAP_WIDTH / 2, MAP_HEIGHT / 4);
 	else if (game.state == "in-menu-input") {
 		output_announcement("Enter Room ID", 30, MAP_WIDTH / 2, MAP_HEIGHT * 2 / 5)
 		if (errors.game_full)
