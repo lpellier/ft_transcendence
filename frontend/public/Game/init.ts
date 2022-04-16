@@ -60,8 +60,10 @@ function create_input(title : string) {
 	input.style("font-family", "PressStart2P-Regular");
 	input.style("background-color", "black");
 	input.style("color", "white");
-	input.style("border", "none");
-	input.style("outline", "3px solid white");
+	input.style("border", "3px solid white");
+	input.style("border-radius", "0.5em");
+	
+	// input.style("outline", "3px solid white");
 
 	return input;
 }
