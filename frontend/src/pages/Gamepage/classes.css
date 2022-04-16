@@ -91,3 +91,9 @@
 	left: 450px;
 	margin: 0 auto;
 }
+
+#input-join {
+	position: absolute;
+	top: 25em;
+	left: 298px;
+}

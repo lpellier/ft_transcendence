@@ -218,8 +218,6 @@ class Inputs {
 	}
 
 	addParent() {
-		let setClass : string = "p5-button";
-
-		this.join.addClass(setClass);
+		this.join.parent(document.getElementById("input-join"));
 	}
 };

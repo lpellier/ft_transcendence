@@ -43,7 +43,7 @@ function create_button(title : string, mPressed : any, mOver : any = highlightBu
 	button.style("background-color", "black");
 	button.style("border-radius", "1em");
 	button.size(size_x, size_y); // 280, 175 default
-	
+
 	button.mousePressed(mPressed);
 	button.mouseOver(mOver);
 	button.mouseOut(mOut);
@@ -54,13 +54,14 @@ function create_button(title : string, mPressed : any, mOver : any = highlightBu
 function create_input(title : string) {
 	let input = createInput(title);
 	// input.position(MAP_WIDTH / 2 - 200, MAP_HEIGHT * 2 / 3 - 37.5);
-	input.style("width", "400px");
-	input.style("height", "50px");
-	input.style("font-size", "35px");
+	input.style("width", "600px");
+	input.style("height", "75px");
+	input.style("font-size", "45px");
 	input.style("font-family", "PressStart2P-Regular");
 	input.style("background-color", "black");
 	input.style("color", "white");
-	input.style("outline", "none");
+	input.style("border", "none");
+	input.style("outline", "3px solid white");
 
 	return input;
 }
