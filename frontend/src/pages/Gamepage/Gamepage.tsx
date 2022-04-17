@@ -48,18 +48,17 @@ function addScript(url : string) : any {
 			return ;
 	}
 	const script = document.createElement('script');
-	  
+
 	script.src = url;
 	script.async = true;
 	script.classList.add("p5-script");
 
-	document.head.appendChild(script);
+	document.body.appendChild(script);
 	return script;
 }
 
 let observer : any = null;
 let canvas : any = null;
-// let main_menu_buttons : any = null;
 
 class Game extends React.Component {
 	componentDidMount() {
@@ -69,16 +68,9 @@ class Game extends React.Component {
 		else if (canvas_parent)
 			canvas_parent.appendChild(canvas);
 
-		// if (main_menu_buttons === null)
-		// 	main_menu_buttons = document.getElementById("main-menu-button-grid");
-		// else if (canvas_parent) {
-		// 	canvas_parent.appendChild(main_menu_buttons);
-		// }
-		
 		if (canvas === null) {
 			observer = new MutationObserver(() => {
 				canvas = document.getElementById("defaultCanvas0");
-				// main_menu_buttons = document.getElementById("main-menu-button-grid");
 				if (canvas) {
 					observer.disconnect();
 					observer = null;
@@ -119,7 +111,6 @@ class Game extends React.Component {
 
 export default class Gamepage extends React.Component {	
 	componentDidMount() {
-		addScript("/p5/p5.js");
 		addScript("/Game/sketch/Player.js");
 		addScript("/Game/sketch/Pong.js");
 		addScript("/Game/sketch/Utils.js");
@@ -129,6 +120,7 @@ export default class Gamepage extends React.Component {
 		addScript("/Game/sketch/init.js");
 		addScript("/Game/sketch/draw.js");
 		addScript("/Game/sketch/setup.js");
+		addScript("/p5/p5.js");
 	}
 	render() {
         return (

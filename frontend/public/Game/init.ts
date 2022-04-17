@@ -12,10 +12,12 @@ function createGameMenu() {
 }
 
 function createGame() {
-	socket.emit("matchmaking", game.publicity, false);
+	if (mouseButton == LEFT)
+		socket.emit("matchmaking", game.publicity, false);
 }
 function matchmaking() {
-	socket.emit("matchmaking", "public", true);
+	if (mouseButton == LEFT)
+		socket.emit("matchmaking", "public", true);
 }
 
 function highlightButton() {
@@ -25,14 +27,48 @@ function resetButton() {
 	this.style("color", "white");
 }
 
+function readRoomID() {
+	if (mouseButton == LEFT) {
+		game.state = "in-menu-input";
+		buttons.hide();
+		inputs.join.show();
+		buttons.return.show();
+	}
+}
+
 function click_anyone() {
-	game.publicity = buttons.click_anyone();
+	if (mouseButton == LEFT)
+		game.publicity = buttons.click_anyone();
 }
 function click_friends() {
-	game.publicity = buttons.click_friends();
+	if (mouseButton == LEFT)
+		game.publicity = buttons.click_friends();
 }
 function click_invitation() {
-	game.publicity = buttons.click_invitation();
+	if (mouseButton == LEFT)
+		game.publicity = buttons.click_invitation();
+}
+
+function startLocal() {
+	if (mouseButton == LEFT) {
+		buttons.hide();
+		inputs.hide();
+		game.timer = 4;
+		for (let i = 0; i < 5; i++) {
+			setTimeout(() => {
+				game.timer--;
+				if (game.timer == -1 && game.state == "countdown") {
+					game.state = "in-game";
+				}
+			}, i * 1000);
+		}
+		game.state = "countdown";
+		game.players.push(new Player(MAP_WIDTH / 12, MAP_HEIGHT / 2 - PLAYER_HEIGHT / 2, PLAYER_WIDTH, PLAYER_HEIGHT, "white", 1, "first"));
+		game.players.push(new Player(MAP_WIDTH * 11 / 12, MAP_HEIGHT / 2 - PLAYER_HEIGHT / 2, PLAYER_WIDTH, PLAYER_HEIGHT, "white", 2, "second"));		
+		game.pong = new Pong;
+		game.local = true;
+		game.room_id = " Local";
+	}
 }
 
 function create_button(title : string, mPressed : any, mOver : any = highlightButton, mOut : any = resetButton, size_x : number = 280, size_y : number = 175) {
@@ -62,6 +98,7 @@ function create_input(title : string) {
 	input.style("color", "white");
 	input.style("border", "3px solid white");
 	input.style("border-radius", "0.5em");
+	input.style("outline", "none");
 	
 	// input.style("outline", "3px solid white");
 
