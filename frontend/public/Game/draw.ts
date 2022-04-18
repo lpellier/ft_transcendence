@@ -25,8 +25,14 @@ function draw_map() {
 	rect(5, MAP_HEIGHT - 10, MAP_WIDTH - 10, 5); // bounds
 	textSize(50);
 	textFont(g_font);
+	push();
+	fill((game.score[0] > game.score[1] ? "white" : "#d4d4d4")); // highlight better score
 	text(game.score[0], MAP_WIDTH / 2 - 70, 90); // score
+	pop();
+	push();
+	fill((game.score[1] > game.score[0] ? "white" : "#d4d4d4"));
 	text(game.score[1], MAP_WIDTH / 2 + 35, 90); // score
+	pop();
 	pop();
 }
 

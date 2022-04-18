@@ -3,12 +3,9 @@
 
 // TODO for local button
 	// first a help page to describe inputs needed
-	// need to code the game and calculations client-side (preferably, in a separate file)
 	// something to be able to go back to menu
-	
-// TODO the better score is highlighted 
 
-// TODO only left click should work for clicking buttons
+// TODO only left click should work for clicking buttons // ? need to test
 
 // ?TODO set url to room id
 
