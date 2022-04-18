@@ -1,11 +1,10 @@
-import React from "react";
 import Stack from '@mui/material/Stack'
 import Container from '@mui/material/Container'
 
-import SearchAppBar from '../../components/AppBar/AppBar'
-import FriendBand from '../../components/FriendBand/FriendBand'
-import PlayerInfoBand from '../../components/PlayerInfoBand/PlayerInfoBand'
-import StatsBoards from '../../components/StatsBoards/StatsBoards'
+import SearchAppBar from 'components/AppBar/AppBar'
+import FriendBand from 'components/FriendBand/FriendBand'
+import PlayerInfoBand from 'components/PlayerInfoBand/PlayerInfoBand'
+import StatsBoards from 'components/StatsBoards/StatsBoards'
 
 
 function StatsPart() {
@@ -17,11 +16,10 @@ function StatsPart() {
 	);
 }
 
-export default class Homepage extends React.Component {
-    render() { 
+export default function Homepage() {
         return (
 			<Stack spacing={1}>
-            	<SearchAppBar />
+            	<SearchAppBar image={''}/>
 				<Container style={{width: '100vw'}}>
 					<Stack direction="row" spacing={1}>
 						<FriendBand />
@@ -30,5 +28,4 @@ export default class Homepage extends React.Component {
 				</Container>
 			</Stack>
         );
-    }
 }

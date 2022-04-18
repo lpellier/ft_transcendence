@@ -1,11 +1,13 @@
-import React, {Component} from "react";
+import React, { createElement } from "react";
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
 
-import SearchAppBar from '../../components/AppBar/AppBar'
-import Cactus from			"../../images/Avatar/Cactus.png"
-import Penguin from			"../../images/Avatar/Penguin.png"
+import "./classes.css"
+
+import SearchAppBar from 'components/AppBar/AppBar'
+import Cactus from	"images/Avatar/Cactus.png"
+import Penguin from	"images/Avatar/Penguin.png"
 
 const BigAvatar = {border: 4, width: 100, height: 100}
 
@@ -39,18 +41,99 @@ function Player(props: {ava: any, name: string}) {
     );
 }
 
+function addScript(url : string) : any {
+    let scripts = document.getElementsByTagName("script");
+	for (let i = scripts.length - 1; i >= 0; i--) {
+		if (scripts[i] && scripts[i].getAttribute("src") && scripts[i].getAttribute("src") == url)
+			return ;
+	}
+	const script = document.createElement('script');
 
-export default class Gamepage extends React.Component {
-    render() {
+	script.src = url;
+	script.async = true;
+	script.classList.add("p5-script");
+
+	document.body.appendChild(script);
+	return script;
+}
+
+let observer : any = null;
+let canvas : any = null;
+
+class Game extends React.Component {
+	componentDidMount() {
+		let canvas_parent : any = document.getElementById("canvas-parent");
+		if (canvas === null)
+			canvas = document.getElementById("defaultCanvas0");
+		else if (canvas_parent)
+			canvas_parent.appendChild(canvas);
+
+		if (canvas === null) {
+			observer = new MutationObserver(() => {
+				canvas = document.getElementById("defaultCanvas0");
+				if (canvas) {
+					observer.disconnect();
+					observer = null;
+				}
+			});
+			observer.observe(document, {subtree: true, childList: true});
+		}
+	}
+	componentWillUnmount() {
+		if (observer) {
+			observer.disconnect();
+			observer = null;
+		}
+	}
+	render() {
+		return (
+			<div id="canvas-parent">
+				<div id="main-menu-button-grid">
+					<div id="button-create"/>
+					<div id="main-menu-button-grid2">
+						<div id="button-join"/>
+						<div id="button-matchmaking"/>
+					</div>
+					<div id="button-local"/>
+				</div>
+				<div id="create-menu-button-grid">
+					<div id="button-anyone"/>
+					<div id="button-friends"/>
+					<div id="button-invitation"/>
+				</div>
+				<div id="button-validate"/>
+				<div id="button-return"/>
+				<div id="input-join"/>
+			</div>
+		);
+	}
+}
+
+export default class Gamepage extends React.Component {	
+	componentDidMount() {
+		addScript("/Game/sketch/Player.js");
+		addScript("/Game/sketch/Pong.js");
+		addScript("/Game/sketch/Utils.js");
+		addScript("/Game/sketch/collisions.js");
+		addScript("/Game/sketch/events.js");
+		addScript("/Game/sketch/output.js");
+		addScript("/Game/sketch/init.js");
+		addScript("/Game/sketch/draw.js");
+		addScript("/Game/sketch/setup.js");
+		addScript("/p5/p5.js");
+	}
+	render() {
         return (
-            <Stack spacing={15}>
-                <SearchAppBar />
-                <Stack direction="row" spacing={4} style={GameStyle}>
-                    <Player name={"Play one"} ava={Cactus}/>
-                    <Box sx={GameBoxStyle}/>
-                    <Player name={"Play two"} ava={Penguin}/>
-                </Stack>
+			<Stack spacing={5}>
+                <SearchAppBar image={''}/>
+				<Game/>
+                {/* <Stack direction="row" spacing={4} style={GameStyle}> */}
+                    {/* <Player name={"Play one"} ava={Cactus}/> */}
+                    {/* <Box sx={GameBoxStyle}>
+					</Box> */}
+                    {/* <Player name={"Play two"} ava={Penguin}/> */}
+                {/* </Stack> */}
             </Stack>
         );
-    }
+	}
 }

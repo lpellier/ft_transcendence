@@ -5,6 +5,7 @@ import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import AvatarList from './ChooseAvatar'
 import FaceIcon from '@mui/icons-material/Face';
+import AppSearchBar from '../AppBar'
 
 
 const style = {
@@ -20,11 +21,12 @@ const style = {
   pb: 3,
 };
 
-export default function ChooseAvatarModal() {
+export default function ChooseAvatarModal(props: {img: any}) {
     const [open, setOpen] = React.useState(false);
-  
+
     const handleOpen = () => {
       setOpen(true);
+      AppSearchBar(props.img);
     };
   
     const handleClose = () => {

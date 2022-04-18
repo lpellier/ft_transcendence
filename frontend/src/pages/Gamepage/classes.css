@@ -1,0 +1,99 @@
+#canvas-parent {
+	position: relative;
+	margin: auto;
+	padding: 0;
+	width: 1200px;
+	height: 750px;
+	margin-top: 5em;
+}
+
+#main-menu-button-grid {
+	display: flex;
+	flex-direction: row;
+	position: absolute;
+	gap: 25em;
+	align-content: center;
+	align-items: center;
+	justify-content: center;
+
+	width: 960px;
+	height: 390px;
+	margin-left: 120px;
+	bottom: 4em;
+}
+
+#button-create {
+	flex-grow: 1;
+}
+
+#button-local {
+	flex-grow: 1;
+}
+
+#main-menu-button-grid2 {
+	display: flex;
+	flex-direction: column;
+	position: absolute;
+	align-content: center;
+	align-items: center;
+	justify-content: center;
+	flex-grow: 1;
+	gap: 2.5em;
+}
+
+#button-join {
+	flex-grow: 1;
+}
+
+#button-matchmaking {
+	flex-grow: 1;
+}
+
+#create-menu-button-grid {
+	display: flex;
+	flex-direction: row;
+	position: absolute;
+	align-content: center;
+	align-items: center;
+	justify-content: center;
+	gap: 2.5em;
+	left: 35px;
+
+	top: 15em;
+}
+
+#button-return {
+	position: absolute;
+	padding: 0;
+	margin: 0;
+	top: 50px;
+	right: 50px;
+}
+
+#button-anyone {
+	flex-grow: 1;
+}
+
+#button-friends {
+	flex-grow: 1;
+}
+
+#button-invitation {
+	flex-grow: 1;
+}
+
+#button-validate {
+	position: absolute;
+	padding: 0;
+	bottom: 2em;
+	width: 300px;
+	height: 50px;
+	left: 450px;
+	margin: 0 auto;
+}
+
+#input-join {
+	position: absolute;
+	top: 25em;
+	left: 298px;
+}
