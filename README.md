@@ -7,7 +7,7 @@ Redirects to 42 API for authentication, then redirects to localhost:3000/auth?to
 
 ## Route /users
 
-### /users	GET
+### /users		GET
 Returns list of objects of all users:
 ```
 [
@@ -19,7 +19,7 @@ Returns list of objects of all users:
 ]
 ```
 
-### /users/me   GET 
+### /users/me  		 GET 
 Returns object of self: 
 ```
 {
@@ -29,7 +29,7 @@ Returns object of self:
 }
 ```
 
-### /users/:id	  GET
+### /users/:id 		GET
 Returns object of specified user (username, avatar, stats and match_history, etc.) Verify ~/backend/prisma/schema.prisma for more information. 
 ```
 {
@@ -39,9 +39,10 @@ Returns object of specified user (username, avatar, stats and match_history, etc
 	stats: []
 	...
 }
+```
 
 ## Route /chat
 
-### /chat   GET
+### /chat	GET
 `{ 
 }`
