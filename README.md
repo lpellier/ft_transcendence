@@ -11,11 +11,11 @@ Redirects to 42 API for authentication, then redirects to localhost:3000/auth?to
 Returns list of objects of all users:
 ```
 [
-	{
-		id:	int,
-		username: string,
-		...
-	}
+    {
+        id: int,
+        username:   string,
+        ...
+    }
 ]
 ```
 
@@ -23,9 +23,9 @@ Returns list of objects of all users:
 Returns object of self: 
 ```
 {
-	id:	int,
-	username: string,
-	...
+    id:	int,
+    username: string,
+    ...
 }
 ```
 
@@ -33,11 +33,11 @@ Returns object of self:
 Returns object of specified user (username, avatar, stats and match_history, etc.) Verify ~/backend/prisma/schema.prisma for more information. 
 ```
 {
-	id: int,
-	username: string, 
-	avatar: string,
-	stats: []
-	...
+    id: int,
+    username: string, 
+    avatar: string,
+    stats: []
+    ...
 }
 ```
 
