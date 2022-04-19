@@ -10,7 +10,7 @@ import {Title, ButtonStyle, LinkStyle} from "../../styles/tsxStyles/LogIn"
 import React, { useEffect, useState,  } from "react";
 import axios from "axios";
 
-const AuthAPI = "https://api.intra.42.fr/oauth/authorize?client_id=599878db9c7f713d0988e2c1e2672a5d888593be77d49fed8bec54b4b1d404bc&redirect_uri=http%3A%2F%2F127.0.0.1%3A3001%2Fauth%2Fcallback&response_type=code"
+const AuthAPI = "http://127.0.0.1:3001/auth"
 
 function LogInButton(props: {login: any})
  {

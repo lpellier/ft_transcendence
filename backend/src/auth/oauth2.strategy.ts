@@ -11,7 +11,7 @@ export class OAuth2Strategy extends PassportStrategy(Strategy, 'oauth2') {
 			tokenURL: 'https://api.intra.42.fr/oauth/token',
 			clientID: "599878db9c7f713d0988e2c1e2672a5d888593be77d49fed8bec54b4b1d404bc",
 			clientSecret: "5b9d6472412ea93c768a5db21f17766f43929667aac9ce3415648011ab22e684",
-			callbackURL: "http://127.0.0.1:3001/auth/callback",
+			callbackURL: "http://127.0.0.1:3001/auth",
 		});
 	}
 
