@@ -36,7 +36,7 @@ function preload() {
 	consts.FONT = loadFont("./../assets/PressStart2P-Regular.ttf");
 	consts.RETURN_ICON = loadImage("./../assets/return-button2.png");
 
-	// test_gif = createImg("./../assets/w-key.gif", "w-key-gif");
+	test_gif = createImg("./../assets/w-key.gif", "w-key-gif");
 }
 
 function keyPressed() {
@@ -163,5 +163,5 @@ function draw() {
 			draw_pong();
 		}
 	}
-	// test_gif.position(50, 50);
+	test_gif.position(50, 50);
 }
