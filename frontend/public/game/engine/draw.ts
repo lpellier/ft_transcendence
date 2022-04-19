@@ -61,6 +61,18 @@ function draw_help() {
 	pop();
 }
 
+function draw_input() {
+	keys.w.show();
+	keys.a.show();
+	keys.s.show();
+	keys.d.show();
+
+	keys.up.show();
+	keys.left.show();
+	keys.down.show();
+	keys.right.show();
+}
+
 function draw_background() {
 	background(0);
 }

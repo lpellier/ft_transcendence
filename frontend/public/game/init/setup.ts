@@ -1,7 +1,7 @@
 // TODO for red cross, green mark
 	// should find pixelated versions to be consistent with the rest
 
-// TODO gifs for keys : https://ezgif.com/sprite-cutter - Gerlad's keys
+// TODO gifs for keys : https://ezgif.com/sprite-cutter - Gerald's keys
 
 // TODO for local button
 	// first a help page to describe inputs needed -> 
@@ -18,6 +18,8 @@
 
 // TODO consistency in variable/function naming
 
+// TODO should have nothing but createImg, that kind of thing in preload
+
 let shouldLoad : boolean = false;
 
 let consts : Consts = null;
@@ -25,18 +27,15 @@ let game : Game = null;
 let errors : Errors = null;
 let buttons : Buttons = null;
 let inputs : Inputs = null;
+let keys : Keys = null;
 
 let canvas : any = null;
 let socket : any = null;
 
-let test_gif : any = null;
 
 function preload() {
 	consts = new Consts();
-	consts.FONT = loadFont("./../assets/PressStart2P-Regular.ttf");
-	consts.RETURN_ICON = loadImage("./../assets/return-button2.png");
-
-	test_gif = createImg("./../assets/w-key.gif", "w-key-gif");
+	keys = new Keys();
 }
 
 function keyPressed() {
@@ -154,6 +153,7 @@ function draw() {
 		output_countdown();
 		if (!game.local)
 			draw_help();
+		draw_input();
 		draw_players();
 	}
 	else if (game.state == "in-game") {
@@ -163,5 +163,6 @@ function draw() {
 			draw_pong();
 		}
 	}
-	test_gif.position(50, 50);
+	// keys.w.position(50, 50);
+	// keys.s.position(50, 100);
 }

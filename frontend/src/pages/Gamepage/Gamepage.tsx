@@ -104,6 +104,14 @@ class Game extends React.Component {
 				<div id="button-validate"/>
 				<div id="button-return"/>
 				<div id="input-join"/>
+				<div id="wasd-keys">
+					<div id="a-key"/>
+					<div id="ws-keys">
+						<div id="w-key"/>
+						<div id="s-key"/>	
+					</div>
+					<div id="d-key"/>
+				</div>
 			</div>
 		);
 	}
@@ -114,6 +122,7 @@ export default class Gamepage extends React.Component {
 		addScript("/game/sketch/classes/Buttons.js");
 		addScript("/game/sketch/classes/Consts.js");
 		addScript("/game/sketch/classes/Errors.js");
+		addScript("/game/sketch/classes/Keys.js");
 		addScript("/game/sketch/classes/Game.js");
 		addScript("/game/sketch/classes/Inputs.js");
 		addScript("/game/sketch/classes/Player.js");

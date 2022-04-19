@@ -97,3 +97,26 @@
 	top: 25em;
 	left: 298px;
 }
+
+#wasd-keys {
+	display: flex;
+	flex-direction: row;
+	position: absolute;
+	align-content: center;
+	align-items: center;
+	justify-content: center;
+}
+
+#ws-keys {
+	display: flex;
+	flex-grow: 1;
+	flex-direction: column;
+}
+
+#a-key {
+	flex-grow: 1;
+}
+
+#d-key {
+	flex-grow: 1;
+}

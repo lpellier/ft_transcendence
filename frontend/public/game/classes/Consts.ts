@@ -35,5 +35,8 @@ class Consts {
 		this.BOT_BOUND = this.MAP_HEIGHT - 10;
 		this.LEFT_BOUND = 0;
 		this.RIGHT_BOUND = this.MAP_WIDTH;
+		
+		this.FONT = loadFont("/assets/fonts/PressStart2P-Regular.ttf");
+		this.RETURN_ICON = loadImage("/assets/icons/return-button2.png");
 	}
 }
