@@ -17,8 +17,11 @@ export class UsersService {
 					id:	user.id,
 					username: user.username,
 					avatar: user.avatar,
-				}}
-				);
+          stats: {
+            create: {}
+          }
+				}
+      });
 		}
 		return u;
 	}
@@ -35,7 +38,10 @@ export class UsersService {
     return await this.prisma.user.findUnique({
       where: {
         id: id,
-      }
+      },
+      include: {
+        stats: true,
+      },
     });
   }
 

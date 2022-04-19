@@ -1,9 +1,10 @@
+import { ConfigService } from "@nestjs/config";
 import { MessageBody, SubscribeMessage, WebSocketGateway, WebSocketServer } from "@nestjs/websockets";
 import { Socket } from "dgram";
 
 @WebSocketGateway({
 	cors: {
-	  origin: 'http://localhost:3000',
+	  origin: (new ConfigService).get("FRONT_URL"),
 	},
   })
 export class ChatGateway {

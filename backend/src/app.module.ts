@@ -5,6 +5,6 @@ import { UsersModule } from './users/users.module';
 import { ChatModule } from './chat/chat.module';
 
 @Module({
-  imports: [AuthModule, UsersModule, ConfigModule.forRoot(), ChatModule],
+  imports: [AuthModule, UsersModule, ConfigModule.forRoot({isGlobal: true}), ChatModule],
 })
 export class AppModule {}
