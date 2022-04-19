@@ -13,7 +13,7 @@ import {StatsPartStyle, AllHomeStyle} from '../../styles/tsxStyles/Home'
 function StatsPart() {
 	return(
 		<Stack spacing={1} sx={StatsPartStyle}>
-			<PlayerInfoBand />
+			<PlayerInfoBand level={5}/>
 			<StatsBoards />
 		</Stack>
 	);

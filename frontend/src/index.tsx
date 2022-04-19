@@ -8,7 +8,7 @@ const phoneSize = 425;
 const Root = document.getElementById('root');
 
 ReactDOM.render(
-    <AllRoutes />, 
+    <AllRoutes />,
     Root
 );
 
