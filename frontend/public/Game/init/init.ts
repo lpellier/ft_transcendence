@@ -104,13 +104,3 @@ function create_input(title : string) {
 
 	return input;
 }
-
-function init_g_vars() {
-	game = new Game();
-	inputs = new Inputs();
-	errors = new Errors();
-	buttons = new Buttons();
-	consts = new Consts();
-
-	// socket = io();
-}

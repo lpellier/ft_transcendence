@@ -1,5 +1,8 @@
+// TODO reorder files in GamePage
+// TODO try and remove source mapping
+
 // TODO for red cross, green mark
-	// should find pixelated versions to be coherent with the rest
+	// should find pixelated versions to be consistent with the rest
 
 // TODO for local button
 	// first a help page to describe inputs needed -> 
@@ -14,7 +17,7 @@
 // TODO for example, each pong ball gives a random number of points
 // TODO another with walls in the middle, forcing the player to play around it
 
-// TODO consistency in class/variale/function naming
+// TODO consistency in variable/function naming
 
 let shouldLoad : boolean = false;
 
@@ -28,6 +31,7 @@ let canvas : any = null;
 let socket : any = null;
 
 function preload() {
+	consts = new Consts();
 	consts.G_FONT = loadFont("./../assets/PressStart2P-Regular.ttf");
 	consts.RETURN_ICON = loadImage("./../assets/return-button2.png");
 }
@@ -70,7 +74,12 @@ function setup() {
 	background(0);
 
 	frameRate(60);
-	init_g_vars();
+	game = new Game();
+	inputs = new Inputs();
+	errors = new Errors();
+	buttons = new Buttons();
+
+	// socket = io();
 
 	// listen_start_events();
 	// listen_stop_events();

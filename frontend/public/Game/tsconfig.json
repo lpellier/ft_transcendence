@@ -16,6 +16,9 @@
         }
     },
 	"includes": [
-		"./*"
+		"./classes/*",
+		"./engine/*",
+		"./init/*",
+		"./socket/*"
 	]
 }
