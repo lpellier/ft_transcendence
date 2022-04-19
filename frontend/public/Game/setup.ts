@@ -10,21 +10,30 @@
 
 // TODO only left click should work for clicking buttons
 
-const PLAYER_WIDTH : number = 15;
-const PLAYER_HEIGHT : number = 60;
+// ?TODO set url to room id
 
-const PONG_DIAMETER : number = 10;
-const PONG_MAX_SPEED : number = 7.5;
+// TODO different map ideas, windjammer inspired
+// TODO for example, each pong ball gives a random number of points
+// TODO another with walls in the middle, forcing the player to play around it
+
+const PLAYER_WIDTH : number = 15;
+const PLAYER_HEIGHT : number = 80;
+
+const PONG_DIAMETER : number = 12;
+const PONG_BASE_SPEED : number = 6;
+const PONG_MAX_SPEED : number = 12;
 const PONG_COLOR : string = "white";
 
-const MAP_WIDTH : number = 750;
-const MAP_HEIGHT : number = 500;
-const PLAYER_SPEED : number = 6;
+const MAP_WIDTH : number = 1200;
+const MAP_HEIGHT : number = 750;
+const PLAYER_SPEED : number = 7;
 
 const top_bound : number = 10;
 const bot_bound : number = MAP_HEIGHT - 10;
 const left_bound : number = 0;
 const right_bound : number = MAP_WIDTH;
+
+let shouldLoad : boolean = false;
 
 let canvas : any;
 
@@ -37,13 +46,6 @@ let socket : any = null;
 
 let g_font : any;
 let return_icon : any;
-
-function readRoomID() {
-	game.state = "in-menu-input";
-	buttons.hide();
-	inputs.join.show();
-	buttons.return.show();
-}
 
 function preload() {
 	g_font = loadFont("./../assets/PressStart2P-Regular.ttf");
@@ -70,37 +72,16 @@ function keyPressed() {
 }
 
 function in_main_menu() {
-	game.players = [];
-	game.pong = null;
+	shouldLoad = false;
+	game.reset();
+	errors.set_false();
+	buttons.reset();
+	buttons.create_buttons();
+	inputs.reset();
+	inputs.create_inputs();
 	// if (game.state == "waiting-player")
 	// 	socket.emit("quit")
-	game.state = "in-menu";
-	buttons.hide();
-	inputs.hide();
-	buttons.local.show();
-	buttons.matchmaking.show();
-	buttons.create_game.show();
-	buttons.join.show();
-}
-
-function startLocal() {
-	buttons.hide();
-	inputs.hide();
-	game.timer = 4;
-	for (let i = 0; i < 5; i++) {
-		setTimeout(() => {
-				game.timer--;
-				if (game.timer == -1) {
-					game.state = "in-game";
-				}
-		}, i * 1000);
-	}
-	game.state = "countdown";
-	game.players.push(new Player(MAP_WIDTH / 12, MAP_HEIGHT / 2 - PLAYER_HEIGHT / 2, PLAYER_WIDTH, PLAYER_HEIGHT, "white", 1, "first"));
-	game.players.push(new Player(MAP_WIDTH * 11 / 12, MAP_HEIGHT / 2 - PLAYER_HEIGHT / 2, PLAYER_WIDTH, PLAYER_HEIGHT, "white", 2, "second"));		
-	game.pong = new Pong;
-	game.local = true;
-	game.room_id = "Local";
+	
 }
 
 function setup() {
@@ -110,7 +91,6 @@ function setup() {
 
 	frameRate(60);
 	init_g_vars();
-	in_main_menu();
 
 	// listen_start_events();
 	// listen_stop_events();
@@ -149,18 +129,24 @@ function move_players() {
 }
 
 function draw() {
+	if (!document.getElementById("canvas-parent")) {
+		shouldLoad = true;
+		return ;
+	}
+	else if (shouldLoad)
+		in_main_menu();
 	clear(0, 0, 0, 0);
 	draw_background();
 	if (game.state == "waiting-player" || game.state == "waiting-readiness" || game.state == "countdown" || game.state == "in-game")
 		draw_map();
 	if (game.state == "in-menu-input" || game.state == "waiting-player" || game.state == "in-menu-create")
-		image(return_icon, 650, 25, 75, 75);
+		image(return_icon, 1050, 50, 100, 100);
 	if (game.state == "in-menu-create")
-		output_announcement("Game Creation", 40, MAP_WIDTH / 2, MAP_HEIGHT / 5);
+		output_announcement("Game Creation", 55, MAP_WIDTH / 2, MAP_HEIGHT / 5);
 	if (game.state == "in-menu")
-		output_announcement("Pongscendance", 40, MAP_WIDTH / 2, MAP_HEIGHT / 3);
+		output_announcement("CyberPong 2077", 70, MAP_WIDTH / 2, MAP_HEIGHT / 4);
 	else if (game.state == "in-menu-input") {
-		output_announcement("Enter Room ID", 30, MAP_WIDTH / 2, MAP_HEIGHT * 2 / 5)
+		output_announcement("Enter Room ID", 55, MAP_WIDTH / 2, MAP_HEIGHT * 2 / 5)
 		if (errors.game_full)
 			output_announcement("This game is already full", 20, MAP_WIDTH / 2, MAP_HEIGHT / 2);
 		else if (errors.game_not_found)

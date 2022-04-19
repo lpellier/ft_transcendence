@@ -1,15 +1,20 @@
-class Pong {
-	pos : [number, number];
+import { MAP_WIDTH, MAP_HEIGHT } from "./server";
+
+const PONG_DIAMETER = 10;
+const PONG_COLOR = "white";
+export const PONG_MAX_SPEED = 7.5;
+
+export class Pong {
+	pos : [number, number]
 	velocity : [number, number];
 	diameter : number;
 	speed : number;
-	color : string;
-
+	color : any;
 	constructor() {
 		this.pos = [MAP_WIDTH / 2 - PONG_DIAMETER / 2, MAP_HEIGHT / 2 - PONG_DIAMETER / 2];
 		let random_y = Math.random() < 0.5 ? -1 : 1;
 		let random_x = Math.floor(Math.random() * 2);
-		this.speed = PONG_BASE_SPEED;
+		this.speed = 4;
 		if (random_x == 0)
 			this.velocity = [-this.speed, random_y];
 		else
@@ -25,7 +30,7 @@ class Pong {
 
 	relaunchPong(loser_side : string) {
 		this.pos = [MAP_WIDTH / 2 - PONG_DIAMETER / 2, MAP_HEIGHT / 2 - PONG_DIAMETER / 2];
-		this.speed = PONG_BASE_SPEED;
+		this.speed = 4;
 		let random_y = Math.random() < 0.5 ? -1 : 1;
 
 		// ? Comment allows for testing horizontal collisions
@@ -81,11 +86,5 @@ class Pong {
 		return this.pos[1] + this.diameter + 2;
 	}
 
-	render() {
-		push();
-		noStroke();
-		fill(this.color);
-		rect(this.pos[0], this.pos[1], this.diameter, this.diameter);
-		pop();
-	}
-}
+};
+

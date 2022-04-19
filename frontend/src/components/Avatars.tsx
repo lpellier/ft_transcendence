@@ -37,7 +37,7 @@ function PlayerAvatar(props: {image: string}) {
     return(
         <IconButton>
             <Tooltip title="Home" placement="bottom">
-                <Avatar src={image}  sx={SmallAvatar}/>
+                <Avatar src={""}  sx={SmallAvatar}/>
             </Tooltip>
         </IconButton>
     );
