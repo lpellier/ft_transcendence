@@ -1,7 +1,7 @@
 function output_announcement(msg : string, text_size : number, pos_x : number, pos_y : number) {
 	push();
 	fill("white");
-	textFont(consts.G_FONT);
+	textFont(consts.FONT);
 	noStroke();
 	textSize(text_size);
 	textAlign(CENTER);
@@ -17,7 +17,7 @@ function draw_player_readiness() {
 		fill("white");
 		push();
 		textSize(30);
-		textFont(consts.G_FONT);
+		textFont(consts.FONT);
 		text("P" + player.index, (player.index == 1 ? consts.MAP_WIDTH / 4 : consts.MAP_WIDTH * 3 / 4), consts.MAP_HEIGHT * 2 / 3);
 		pop();
 		if (player.ready == true)

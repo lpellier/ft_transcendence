@@ -15,7 +15,7 @@ class Consts {
 	LEFT_BOUND : number;
 	RIGHT_BOUND : number;
 	
-	G_FONT : any;
+	FONT : any;
 	RETURN_ICON : any;
 
 	constructor() {

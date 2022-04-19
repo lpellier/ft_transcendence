@@ -24,7 +24,7 @@ function draw_map() {
 	rect(5, 5, consts.MAP_WIDTH - 10, 5); // bounds
 	rect(5, consts.MAP_HEIGHT - 10, consts.MAP_WIDTH - 10, 5); // bounds
 	textSize(50);
-	textFont(consts.G_FONT);
+	textFont(consts.FONT);
 	push();
 	fill((game.score[0] > game.score[1] ? "white" : "#d4d4d4")); // highlight better score
 	text(game.score[0], consts.MAP_WIDTH / 2 - 70, 90); // score
