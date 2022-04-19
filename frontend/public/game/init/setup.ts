@@ -20,6 +20,8 @@
 
 // TODO should have nothing but createImg, that kind of thing in preload
 
+// TODO only keys that are used should be moving as gifs
+
 let shouldLoad : boolean = false;
 
 let consts : Consts = null;
