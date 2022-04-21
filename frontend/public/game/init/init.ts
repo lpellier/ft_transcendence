@@ -34,13 +34,17 @@ function resetButton() {
 }
 
 function plusScoreLimit() {
-	game.score_limit++;
-	inputs.score_limit.attribute("value", game.score_limit);
+	if (game.score_limit < 15) {
+		game.score_limit++;
+		inputs.score_limit.attribute("value", game.score_limit);
+	}
 
 }
 function minusScoreLimit() {
-	game.score_limit--;
-	inputs.score_limit.attribute("value", game.score_limit);
+	if (game.score_limit > 1) {
+		game.score_limit--;
+		inputs.score_limit.attribute("value", game.score_limit);
+	}
 }
 
 function readRoomID() {
