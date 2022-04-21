@@ -6,7 +6,6 @@ import Typography from '@mui/material/Typography'
 import './../../styles/Other/SkillBar.css'
 
 const SkillBarContourStyle = {
-	border: "3px solid black",
 	backgroundColor: 'rgb(180, 150, 250)',
 	borderRadius: '20px',
 }
@@ -44,7 +43,7 @@ export default function PlayerInfoBand(props: {level: number}) {
 					<Typography variant="h6">
 						Level {props.level}
 					</Typography>
-					<SkillBar progression={100}/>
+					<SkillBar progression={50}/>
 				</Stack>
 			</Box>
 	);
