@@ -4,16 +4,7 @@ import Stack from '@mui/material/Stack';
 import {PlayerBarStyle} from "../../styles/tsxStyles/Home";
 import Typography from '@mui/material/Typography'
 import './../../styles/Other/SkillBar.css'
-
-const SkillBarContourStyle = {
-	backgroundColor: 'rgb(180, 150, 250)',
-	borderRadius: '20px',
-}
-
-const TitleStyle = {
-	textAlign: 'end',
-	marginRight: '10px',
-}
+import {SkillBarContourStyle, TitleStyle} from './../../styles/tsxStyles/Home'
 
 function SkillBar(props: {progression: number}) {
 	const [length, setLength] = useState(0);

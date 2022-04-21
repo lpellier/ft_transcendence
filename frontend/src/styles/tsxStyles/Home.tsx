@@ -46,6 +46,17 @@ const StatBox = {
     height: '10vh',
 }
 
+const SkillBarContourStyle = {
+	backgroundColor: 'rgb(180, 150, 250)',
+	borderRadius: '20px',
+}
+
+const TitleStyle = {
+	textAlign: 'end',
+	marginRight: '10px',
+}
+
 export {AllHomeStyle, StatsPartStyle,
         PlayerBarStyle, SkillBarStyle, colors,
-        StatTitle, StatBox}
+        StatTitle, StatBox, SkillBarContourStyle,
+        TitleStyle}
