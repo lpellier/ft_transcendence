@@ -82,6 +82,14 @@
 	flex-grow: 1;
 }
 
+#buttons-plus-minus {
+	position: absolute;
+	display: flex;
+	left: 575px;
+	top: 24em;
+	flex-direction: column;
+}
+
 #button-validate {
 	position: absolute;
 	padding: 0;
@@ -96,6 +104,12 @@
 	position: absolute;
 	top: 25em;
 	left: 298px;
+}
+
+#input-score_limit {
+	position: absolute;
+	top: 24.5em;
+	left: 450px;
 }
 
 #wasd-keys {

@@ -8,6 +8,7 @@ class Game {
 	publicity : string;
 	local : boolean;
 	framesSincePoint : number;
+	score_limit : number;
 
 	constructor() {
 		this.reset();
@@ -23,5 +24,6 @@ class Game {
 		this.publicity = "public";
 		this.local = false;
 		this.framesSincePoint = 0;
+		this.score_limit = 10;
 	}
 };
