@@ -1,14 +1,16 @@
 function createGameMenu() {
-	buttons.hide();
-	inputs.hide();
-
-	buttons.return.show();
-	buttons.anyone_can_join.show();
-	buttons.friends_can_join.show();
-	buttons.invitation_only.show();
-	buttons.validate.show();
-
-	game.state = "in-menu-create";
+	if (mouseButton == LEFT) {
+		buttons.hide();
+		inputs.hide();
+	
+		buttons.return.show();
+		buttons.anyone_can_join.show();
+		buttons.friends_can_join.show();
+		buttons.invitation_only.show();
+		buttons.validate.show();
+	
+		game.state = "in-menu-create";
+	}
 }
 
 function createGame() {

@@ -105,12 +105,16 @@ class Game extends React.Component {
 				<div id="button-return"/>
 				<div id="input-join"/>
 				<div id="wasd-keys">
+					<div id="w-key"/>
 					<div id="a-key"/>
-					<div id="ws-keys">
-						<div id="w-key"/>
-						<div id="s-key"/>	
-					</div>
+					<div id="s-key"/>
 					<div id="d-key"/>
+				</div>
+				<div id="arrow-keys">
+					<div id="up-key"/>
+					<div id="left-key"/>
+					<div id="down-key"/>
+					<div id="right-key"/>
 				</div>
 			</div>
 		);

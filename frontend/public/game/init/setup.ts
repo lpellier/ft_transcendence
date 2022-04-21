@@ -1,26 +1,17 @@
 // TODO for red cross, green mark
 	// should find pixelated versions to be consistent with the rest
 
-// TODO gifs for keys : https://ezgif.com/sprite-cutter - Gerald's keys
-
 // TODO for local button
-	// first a help page to describe inputs needed -> 
-	// wasd (zqsd) icons upper left / up.left.down.right icons down right with input needed highlighted
 	// something to be able to go back to menu
 
-// TODO only left click should work for clicking buttons // ? need to test
-
 // ?TODO set url to room id
+// ?TODO define score limit in game creation
 
 // TODO different map ideas, windjammer inspired
 // TODO for example, each pong ball gives a random number of points
 // TODO another with walls in the middle, forcing the player to play around it
 
 // TODO consistency in variable/function naming
-
-// TODO should have nothing but createImg, that kind of thing in preload
-
-// TODO only keys that are used should be moving as gifs
 
 let shouldLoad : boolean = false;
 
@@ -78,6 +69,7 @@ function setup() {
 	background(0);
 
 	frameRate(60);
+	keys.init();
 	game = new Game();
 	inputs = new Inputs();
 	errors = new Errors();
@@ -129,6 +121,7 @@ function draw() {
 	else if (shouldLoad)
 		in_main_menu();
 	clear(0, 0, 0, 0);
+	keys.hide();
 	draw_background();
 	if (game.state == "waiting-player" || game.state == "waiting-readiness" || game.state == "countdown" || game.state == "in-game")
 		draw_map();
@@ -165,6 +158,4 @@ function draw() {
 			draw_pong();
 		}
 	}
-	// keys.w.position(50, 50);
-	// keys.s.position(50, 100);
 }
