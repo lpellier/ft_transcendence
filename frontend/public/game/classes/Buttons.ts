@@ -1,47 +1,3 @@
-class Game {
-	players : Player[];
-	pong : Pong;
-	score : [number, number];
-	timer : number;
-	state : string;
-	room_id : string;
-	publicity : string;
-	local : boolean;
-	framesSincePoint : number;
-
-	constructor() {
-		this.reset();
-	}
-
-	reset() {
-		this.players = [];
-		this.pong = null;
-		this.score = [0, 0];
-		this.timer = 4;
-		this.state = "in-menu";
-		this.room_id = "null";
-		this.publicity = "public";
-		this.local = false;
-		this.framesSincePoint = 0;
-	}
-};
-
-class Errors {
-	game_full : boolean;
-	game_not_found : boolean;
-	game_not_public : boolean;
-
-	constructor() {
-		this.set_false();
-	}
-
-	set_false() {
-		this.game_full = false;
-		this.game_not_found = false;
-		this.game_not_public = false;
-	}
-};
-
 class Buttons {
 	create_game : any;
 	join : any;
@@ -185,39 +141,5 @@ class Buttons {
 		this.friends_can_join.parent(document.getElementById("button-friends"));
 		this.invitation_only.parent(document.getElementById("button-invitation"));
 		this.validate.parent(document.getElementById("button-validate"));
-	}
-};
-
-class Inputs {
-	join : any;
-
-	constructor() {
-		this.reset();
-		this.create_inputs();
-	}
-
-	reset() {
-		if (this.join)
-			this.join.remove();
-		this.join = null;
-	}
-		
-	create_inputs() {
-		this.join = create_input('');
-
-		this.hide();
-		this.addParent();
-	}
-
-	hide() {
-		this.join.hide();
-	}
-
-	show() {
-		this.join.show();
-	}
-
-	addParent() {
-		this.join.parent(document.getElementById("input-join"));
 	}
 };

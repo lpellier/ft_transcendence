@@ -1,55 +1,34 @@
 // TODO for red cross, green mark
-	// should find pixelated versions to be coherent with the rest
+	// should find pixelated versions to be consistent with the rest
 
 // TODO for local button
-	// first a help page to describe inputs needed
-	// need to code the game and calculations client-side (preferably, in a separate file)
 	// something to be able to go back to menu
-	
-// TODO the better score is highlighted 
-
-// TODO only left click should work for clicking buttons
 
 // ?TODO set url to room id
+// ?TODO define score limit in game creation
 
 // TODO different map ideas, windjammer inspired
 // TODO for example, each pong ball gives a random number of points
 // TODO another with walls in the middle, forcing the player to play around it
 
-const PLAYER_WIDTH : number = 15;
-const PLAYER_HEIGHT : number = 80;
-
-const PONG_DIAMETER : number = 12;
-const PONG_BASE_SPEED : number = 6;
-const PONG_MAX_SPEED : number = 12;
-const PONG_COLOR : string = "white";
-
-const MAP_WIDTH : number = 1200;
-const MAP_HEIGHT : number = 750;
-const PLAYER_SPEED : number = 7;
-
-const top_bound : number = 10;
-const bot_bound : number = MAP_HEIGHT - 10;
-const left_bound : number = 0;
-const right_bound : number = MAP_WIDTH;
+// TODO consistency in variable/function naming
 
 let shouldLoad : boolean = false;
 
-let canvas : any;
-
+let consts : Consts = null;
 let game : Game = null;
-let errors : Errors;
-let buttons : Buttons;
-let inputs : Inputs;
+let errors : Errors = null;
+let buttons : Buttons = null;
+let inputs : Inputs = null;
+let keys : Keys = null;
 
+let canvas : any = null;
 let socket : any = null;
 
-let g_font : any;
-let return_icon : any;
 
 function preload() {
-	g_font = loadFont("./../assets/PressStart2P-Regular.ttf");
-	return_icon = loadImage("./../assets/return-button2.png");
+	consts = new Consts();
+	keys = new Keys();
 }
 
 function keyPressed() {
@@ -85,12 +64,18 @@ function in_main_menu() {
 }
 
 function setup() {
-	canvas = createCanvas(MAP_WIDTH, MAP_HEIGHT);
+	canvas = createCanvas(consts.MAP_WIDTH, consts.MAP_HEIGHT);
 	canvas.parent(document.getElementById("canvas-parent"));
 	background(0);
 
 	frameRate(60);
-	init_g_vars();
+	keys.init();
+	game = new Game();
+	inputs = new Inputs();
+	errors = new Errors();
+	buttons = new Buttons();
+
+	// socket = io();
 
 	// listen_start_events();
 	// listen_stop_events();
@@ -136,32 +121,34 @@ function draw() {
 	else if (shouldLoad)
 		in_main_menu();
 	clear(0, 0, 0, 0);
+	keys.hide();
 	draw_background();
 	if (game.state == "waiting-player" || game.state == "waiting-readiness" || game.state == "countdown" || game.state == "in-game")
 		draw_map();
 	if (game.state == "in-menu-input" || game.state == "waiting-player" || game.state == "in-menu-create")
-		image(return_icon, 1050, 50, 100, 100);
+		image(consts.RETURN_ICON, 1050, 50, 100, 100);
 	if (game.state == "in-menu-create")
-		output_announcement("Game Creation", 55, MAP_WIDTH / 2, MAP_HEIGHT / 5);
+		output_announcement("Game Creation", 55, consts.MAP_WIDTH / 2, consts.MAP_HEIGHT / 5);
 	if (game.state == "in-menu")
-		output_announcement("CyberPong 2077", 70, MAP_WIDTH / 2, MAP_HEIGHT / 4);
+		output_announcement("CyberPong 2077", 70, consts.MAP_WIDTH / 2, consts.MAP_HEIGHT / 4);
 	else if (game.state == "in-menu-input") {
-		output_announcement("Enter Room ID", 55, MAP_WIDTH / 2, MAP_HEIGHT * 2 / 5)
+		output_announcement("Enter Room ID", 55, consts.MAP_WIDTH / 2, consts.MAP_HEIGHT * 2 / 5)
 		if (errors.game_full)
-			output_announcement("This game is already full", 20, MAP_WIDTH / 2, MAP_HEIGHT / 2);
+			output_announcement("This game is already full", 20, consts.MAP_WIDTH / 2, consts.MAP_HEIGHT / 2);
 		else if (errors.game_not_found)
-			output_announcement("This game doesn't exist", 20, MAP_WIDTH / 2, MAP_HEIGHT / 2);
+			output_announcement("This game doesn't exist", 20, consts.MAP_WIDTH / 2, consts.MAP_HEIGHT / 2);
 	}
 	else if (game.state == "waiting-player")
-		output_announcement("WAITING FOR ANOTHER PLAYER", 25, MAP_WIDTH / 2, MAP_HEIGHT / 2);
+		output_announcement("WAITING FOR ANOTHER PLAYER", 25, consts.MAP_WIDTH / 2, consts.MAP_HEIGHT / 2);
 	else if (game.state == "waiting-readiness") {
 		draw_player_readiness();
-		output_announcement("PLEASE PRESS SPACE TO START THE GAME", 18, MAP_WIDTH / 2, MAP_HEIGHT / 2);
+		output_announcement("PLEASE PRESS SPACE TO START THE GAME", 18, consts.MAP_WIDTH / 2, consts.MAP_HEIGHT / 2);
 	}
 	else if (game.state == "countdown") {
 		output_countdown();
 		if (!game.local)
 			draw_help();
+		draw_input();
 		draw_players();
 	}
 	else if (game.state == "in-game") {
