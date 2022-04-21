@@ -19,11 +19,11 @@ const TitleStyle = {
 function SkillBar(props: {progression: number}) {
 	const [length, setLength] = useState(0);
 	const totwidth = length + "px";
-	const SkillBox = useRef(null);
+	const SkillBox = useRef();
 
 	useEffect(() => {
-		if (SkillBox.current.offsetWidth !== null)
-			setLength((props.progression / 100) * SkillBox.current.offsetWidth);
+		//@ts-ignore: next-line
+		setLength((props.progression / 100) * SkillBox.current.offsetWidth);
 	});
 
 	return (
