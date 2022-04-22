@@ -103,6 +103,7 @@ class Game extends React.Component {
 				</div>
 				<div id="button-validate"/>
 				<div id="button-return"/>
+				<div id="icon-return"/>
 				<div id="buttons-plus-minus">	
 					<div id="button-plus"/>
 					<div id="button-minus"/>

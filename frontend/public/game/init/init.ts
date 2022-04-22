@@ -27,9 +27,11 @@ function matchmaking() {
 }
 
 function highlightButton() {
+	// @ts-ignore: next-line
 	this.style("color", "#d4d4d4");
 }
 function resetButton() {
+	// @ts-ignore: next-line
 	this.style("color", "white");
 }
 
