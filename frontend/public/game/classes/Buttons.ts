@@ -10,6 +10,9 @@ class Buttons {
 	invitation_only : any;
 	validate : any;
 
+	plus : any;
+	minus : any;
+
 	constructor() {
 		this.reset();
 		this.create_buttons();
@@ -40,6 +43,11 @@ class Buttons {
 		this.validate = create_button('Create', createGame, highlightButton, resetButton, 300, 50);
 		this.validate.style("background-color", "rgba(0, 0, 0, 0)");
 		this.validate.style("font-size", "25px");
+		
+		this.plus = create_button("+", plusScoreLimit, highlightButton, resetButton, 50, 50);
+		this.plus.style("border", "none");
+		this.minus = create_button("-", minusScoreLimit, highlightButton, resetButton, 50, 50);
+		this.minus.style("border", "none");
 		
 		this.hide();
 		this.addParent();
@@ -79,6 +87,13 @@ class Buttons {
 		if (this.validate)
 			this.validate.remove();
 		this.validate = null;
+
+		if (this.plus)
+			this.plus.remove();
+		this.plus = null;
+		if (this.minus)
+			this.minus.remove();
+		this.minus = null;
 	}
 
 	hide() {
@@ -92,6 +107,9 @@ class Buttons {
 		this.friends_can_join.hide();
 		this.invitation_only.hide();
 		this.validate.hide();
+
+		this.plus.hide();
+		this.minus.hide();
 	}
 
 	show() {
@@ -105,6 +123,9 @@ class Buttons {
 		this.friends_can_join.show();
 		this.invitation_only.show();
 		this.validate.show();
+
+		this.plus.show();
+		this.minus.show();	
 	}
 
 	click_anyone() {
@@ -141,5 +162,7 @@ class Buttons {
 		this.friends_can_join.parent(document.getElementById("button-friends"));
 		this.invitation_only.parent(document.getElementById("button-invitation"));
 		this.validate.parent(document.getElementById("button-validate"));
+		this.plus.parent(document.getElementById("button-plus"));
+		this.minus.parent(document.getElementById("button-minus"));
 	}
 };

@@ -1,7 +1,7 @@
 class Errors {
-	game_full : boolean;
-	game_not_found : boolean;
-	game_not_public : boolean;
+	game_full : boolean = false;
+	game_not_found : boolean = false;
+	game_not_public : boolean = false;
 
 	constructor() {
 		this.set_false();

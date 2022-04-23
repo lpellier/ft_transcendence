@@ -24,10 +24,12 @@
 
 #button-create {
 	flex-grow: 1;
+	z-index: 2;
 }
 
 #button-local {
 	flex-grow: 1;
+	z-index: 2;
 }
 
 #main-menu-button-grid2 {
@@ -43,10 +45,12 @@
 
 #button-join {
 	flex-grow: 1;
+	z-index: 2;
 }
 
 #button-matchmaking {
 	flex-grow: 1;
+	z-index: 2;
 }
 
 #create-menu-button-grid {
@@ -66,20 +70,46 @@
 	position: absolute;
 	padding: 0;
 	margin: 0;
+	width: 100px;
+	height: 100px;
 	top: 50px;
 	right: 50px;
+	z-index: 1;
+}
+
+#icon-return {
+	position: absolute;
+	padding: 0;
+	margin: 0;
+	width: 100px;
+	height: 100px; 
+	top: 50px;
+	right: 50px;
+	z-index: 0;
 }
 
 #button-anyone {
 	flex-grow: 1;
+	z-index: 2;
 }
 
 #button-friends {
 	flex-grow: 1;
+	z-index: 2;
 }
 
 #button-invitation {
 	flex-grow: 1;
+	z-index: 2;
+}
+
+#buttons-plus-minus {
+	position: absolute;
+	display: flex;
+	left: 575px;
+	top: 24em;
+	flex-direction: column;
+	z-index: 2;
 }
 
 #button-validate {
@@ -96,6 +126,12 @@
 	position: absolute;
 	top: 25em;
 	left: 298px;
+}
+
+#input-score_limit {
+	position: absolute;
+	top: 24.5em;
+	left: 450px;
 }
 
 #wasd-keys {
