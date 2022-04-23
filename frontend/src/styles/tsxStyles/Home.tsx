@@ -23,18 +23,11 @@ const SkillBarStyle = {
     paddingTop: '1%'
 }
 
-const colors = {
-	bar: 'blue',
-	title: {
-	    text: 'white',
-	    background: 'purple'
-	}
-}
-
 const StatTitle = {
     backgroundColor: 'rgb(122, 40, 203)',
 	textAlign: 'center',
 	border: '3px solid black',
+    paddingLeft: '10%',
 
 	color: 'white',
 }
@@ -43,7 +36,8 @@ const StatBox = {
     backgroundColor: 'rgb(211, 172, 223)',
 	color: 'white',
 	border: '3px solid black',
-    height: '10vh',
+    height: '20vh',
+    overflowY: 'scroll',
 }
 
 const SkillBarContourStyle = {
@@ -57,6 +51,6 @@ const TitleStyle = {
 }
 
 export {AllHomeStyle, StatsPartStyle,
-        PlayerBarStyle, SkillBarStyle, colors,
+        PlayerBarStyle, SkillBarStyle,
         StatTitle, StatBox, SkillBarContourStyle,
         TitleStyle}

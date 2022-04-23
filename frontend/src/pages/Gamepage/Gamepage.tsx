@@ -1,47 +1,13 @@
-import React, { createElement } from "react";
+import React from "react";
 import Stack from '@mui/material/Stack';
-import Box from '@mui/material/Box';
-import Avatar from '@mui/material/Avatar';
-import "../../styles/Game/Game.css"
-
 import SearchAppBar from 'components/AppBar/AppBar'
 
-const BigAvatar = {border: 4, width: 100, height: 100}
-
-const GameStyle = { justifyContent: 'center', 
-                    alignItems: 'center'
-                    }
-
-const GameBoxStyle = {	
-						width: '70vw',
-						height: '60vh',
-                        backgroundColor: 'primary.dark',
-                        '&:hover': {
-                            backgroundColor: 'primary.main',
-                            opacity: [0.9, 0.8, 0.7]}
-                    }
-
-const PlayerBox = {
-                    textAlign: 'center', 
-                    backgroundColor: 'rgb(132,129,203, 0.7)',
-                    border: '0.4rem solid'
-                }
-
-function Player(props: {ava: any, name: string}) {
-    return (
-            <Stack spacing={2}>
-                <Avatar src={props.ava}  sx={BigAvatar}/>
-                <Box sx={PlayerBox}>
-                    {props.name}
-                </Box>
-            </Stack>
-    );
-}
+import "./../../styles/Game/Game.css"
 
 function addScript(url : string) : any {
     let scripts = document.getElementsByTagName("script");
 	for (let i = scripts.length - 1; i >= 0; i--) {
-		if (scripts[i] && scripts[i].getAttribute("src") && scripts[i].getAttribute("src") == url)
+		if (scripts[i] && scripts[i].getAttribute("src") && scripts[i].getAttribute("src") === url)
 			return ;
 	}
 	const script = document.createElement('script');
@@ -102,6 +68,18 @@ class Game extends React.Component {
 				<div id="button-validate"/>
 				<div id="button-return"/>
 				<div id="input-join"/>
+				<div id="wasd-keys">
+					<div id="w-key"/>
+					<div id="a-key"/>
+					<div id="s-key"/>
+					<div id="d-key"/>
+				</div>
+				<div id="arrow-keys">
+					<div id="up-key"/>
+					<div id="left-key"/>
+					<div id="down-key"/>
+					<div id="right-key"/>
+				</div>
 			</div>
 		);
 	}
@@ -109,15 +87,20 @@ class Game extends React.Component {
 
 export default class Gamepage extends React.Component {	
 	componentDidMount() {
-		addScript("/Game/sketch/Player.js");
-		addScript("/Game/sketch/Pong.js");
-		addScript("/Game/sketch/Utils.js");
-		addScript("/Game/sketch/collisions.js");
-		addScript("/Game/sketch/events.js");
-		addScript("/Game/sketch/output.js");
-		addScript("/Game/sketch/init.js");
-		addScript("/Game/sketch/draw.js");
-		addScript("/Game/sketch/setup.js");
+		addScript("/game/sketch/classes/Buttons.js");
+		addScript("/game/sketch/classes/Consts.js");
+		addScript("/game/sketch/classes/Errors.js");
+		addScript("/game/sketch/classes/Keys.js");
+		addScript("/game/sketch/classes/Game.js");
+		addScript("/game/sketch/classes/Inputs.js");
+		addScript("/game/sketch/classes/Player.js");
+		addScript("/game/sketch/classes/Pong.js");
+		addScript("/game/sketch/engine/collisions.js");
+		addScript("/game/sketch/engine/draw.js");
+		addScript("/game/sketch/engine/output.js");
+		addScript("/game/sketch/init/init.js");
+		addScript("/game/sketch/init/setup.js");
+		addScript("/game/sketch/socket/events.js");
 		addScript("/p5/p5.js");
 	}
 	render() {
@@ -125,12 +108,6 @@ export default class Gamepage extends React.Component {
 			<Stack spacing={5}>
                 <SearchAppBar image={''}/>
 				<Game/>
-                {/* <Stack direction="row" spacing={4} style={GameStyle}> */}
-                    {/* <Player name={"Play one"} ava={Cactus}/> */}
-                    {/* <Box sx={GameBoxStyle}>
-					</Box> */}
-                    {/* <Player name={"Play two"} ava={Penguin}/> */}
-                {/* </Stack> */}
             </Stack>
         );
 	}

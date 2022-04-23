@@ -26,15 +26,15 @@ class Player {
 	}
 	
 	move_up() {
-		this.pos[1] -= PLAYER_SPEED;
+		this.pos[1] -= consts.PLAYER_SPEED;
 		if (this.pos[1] < 10) // 10 for boundaries
 			this.pos[1] = 10;
 	}
 
 	move_down() {
-		this.pos[1] += PLAYER_SPEED;
-		if (this.pos[1] + this.height > MAP_HEIGHT - 10) // -10 for boundaries
-			this.pos[1] = MAP_HEIGHT - 10 - this.height;
+		this.pos[1] += consts.PLAYER_SPEED;
+		if (this.pos[1] + this.height > consts.MAP_HEIGHT - 10) // -10 for boundaries
+			this.pos[1] = consts.MAP_HEIGHT - 10 - this.height;
 	}
 
 	left_up() : [number, number] {

@@ -1,14 +1,16 @@
 function createGameMenu() {
-	buttons.hide();
-	inputs.hide();
-
-	buttons.return.show();
-	buttons.anyone_can_join.show();
-	buttons.friends_can_join.show();
-	buttons.invitation_only.show();
-	buttons.validate.show();
-
-	game.state = "in-menu-create";
+	if (mouseButton == LEFT) {
+		buttons.hide();
+		inputs.hide();
+	
+		buttons.return.show();
+		buttons.anyone_can_join.show();
+		buttons.friends_can_join.show();
+		buttons.invitation_only.show();
+		buttons.validate.show();
+	
+		game.state = "in-menu-create";
+	}
 }
 
 function createGame() {
@@ -63,8 +65,8 @@ function startLocal() {
 			}, i * 1000);
 		}
 		game.state = "countdown";
-		game.players.push(new Player(MAP_WIDTH / 12, MAP_HEIGHT / 2 - PLAYER_HEIGHT / 2, PLAYER_WIDTH, PLAYER_HEIGHT, "white", 1, "first"));
-		game.players.push(new Player(MAP_WIDTH * 11 / 12, MAP_HEIGHT / 2 - PLAYER_HEIGHT / 2, PLAYER_WIDTH, PLAYER_HEIGHT, "white", 2, "second"));		
+		game.players.push(new Player(consts.MAP_WIDTH / 12, consts.MAP_HEIGHT / 2 - consts.PLAYER_HEIGHT / 2, consts.PLAYER_WIDTH, consts.PLAYER_HEIGHT, "white", 1, "first"));
+		game.players.push(new Player(consts.MAP_WIDTH * 11 / 12, consts.MAP_HEIGHT / 2 - consts.PLAYER_HEIGHT / 2, consts.PLAYER_WIDTH, consts.PLAYER_HEIGHT, "white", 2, "second"));		
 		game.pong = new Pong;
 		game.local = true;
 		game.room_id = " Local";
@@ -89,7 +91,7 @@ function create_button(title : string, mPressed : any, mOver : any = highlightBu
 
 function create_input(title : string) {
 	let input = createInput(title);
-	// input.position(MAP_WIDTH / 2 - 200, MAP_HEIGHT * 2 / 3 - 37.5);
+	// input.position(consts.MAP_WIDTH / 2 - 200, consts.MAP_HEIGHT * 2 / 3 - 37.5);
 	input.style("width", "600px");
 	input.style("height", "75px");
 	input.style("font-size", "45px");
@@ -103,13 +105,4 @@ function create_input(title : string) {
 	// input.style("outline", "3px solid white");
 
 	return input;
-}
-
-function init_g_vars() {
-	game = new Game();
-	inputs = new Inputs();
-	errors = new Errors();
-	buttons = new Buttons();
-
-	// socket = io();
 }

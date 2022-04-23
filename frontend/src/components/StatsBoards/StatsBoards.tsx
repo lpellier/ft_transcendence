@@ -1,6 +1,7 @@
 import {useState, useEffect} from 'react'
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import TimelineIcon from '@mui/icons-material/Timeline';
@@ -13,9 +14,11 @@ import {StatTitle, StatBox} from "../../styles/tsxStyles/Home"
 function BoardComponent(props: {icon: any, title: string}) {
 	return(
 		<Stack spacing={1}>
-			<Stack sx={StatTitle} spacing={2}>
+			<Stack direction="row" sx={StatTitle} spacing={2}>
 				{props.icon}
-				{props.title}
+				<Typography>
+					{props.title}
+				</Typography>
 			</Stack>
 			<Box sx={StatBox}>
 			</Box>
@@ -24,8 +27,8 @@ function BoardComponent(props: {icon: any, title: string}) {
 }
 
 function Stats(){
-	return ( 
-		<BoardComponent 
+	return (
+		<BoardComponent
 			icon={<TimelineIcon />} 
 			title="Stats" />
 		);

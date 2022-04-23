@@ -101,3 +101,64 @@
 	top: 25em;
 	left: 298px;
 }
+
+#wasd-keys {
+	display: flex;
+	flex-direction: row;
+	position: absolute;
+	width: 240px;
+	height: 150px;
+	flex-wrap: wrap;
+	align-content: center;
+	justify-content: center;
+	top: 5em;
+	left: 10em;
+}
+
+#w-key {
+	width: 240px;
+	margin-left: 70px;
+}
+
+#s-key {
+	flex-grow: 1;
+}
+
+#a-key {
+	flex-grow: 1;
+}
+
+#d-key {
+	flex-grow: 1;
+}
+
+#arrow-keys {
+	display: flex;
+	flex-direction: row;
+	position: absolute;
+	width: 240px;
+	height: 150px;
+	flex-wrap: wrap;
+	align-content: center;
+	justify-content: center;
+	top: 30em;
+	right: 10em;
+}
+
+#up-key {
+	width: 240px;
+	display: flex;
+	justify-content: center;
+}
+
+#left-key {
+	flex-grow: 1;
+}
+
+#down-key {
+	flex-grow: 1;
+}
+
+#right-key {
+	flex-grow: 1;
+}
