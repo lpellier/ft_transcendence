@@ -3,7 +3,7 @@ import AllRoutes from './routes/routes';
 import './styles/body.css'
 
 const tabletSize = 768;
-const phoneSize = 425;
+const phoneSize = 530;
 
 const Root = document.getElementById('root');
 

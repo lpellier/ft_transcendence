@@ -1,5 +1,5 @@
 const AllHomeStyle = {
-    height: '100%',
+    whiteSpace: 'nowrap',
 }
 
 const StatsPartStyle = {
@@ -38,6 +38,7 @@ const StatBox = {
 	border: '3px solid black',
     height: '20vh',
     overflowY: 'scroll',
+    overflow: 'auto',
 }
 
 const SkillBarContourStyle = {
