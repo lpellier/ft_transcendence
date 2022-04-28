@@ -1,8 +1,4 @@
-import { MAP_WIDTH, MAP_HEIGHT } from "./server";
-
-const PONG_DIAMETER = 10;
-const PONG_COLOR = "white";
-export const PONG_MAX_SPEED = 7.5;
+import * as consts from "./Consts"
 
 export class Pong {
 	pos : [number, number]
@@ -11,7 +7,7 @@ export class Pong {
 	speed : number;
 	color : any;
 	constructor() {
-		this.pos = [MAP_WIDTH / 2 - PONG_DIAMETER / 2, MAP_HEIGHT / 2 - PONG_DIAMETER / 2];
+		this.pos = [consts.MAP_WIDTH / 2 - consts.PONG_DIAMETER / 2, consts.MAP_HEIGHT / 2 - consts.PONG_DIAMETER / 2];
 		let random_y = Math.random() < 0.5 ? -1 : 1;
 		let random_x = Math.floor(Math.random() * 2);
 		this.speed = 4;
@@ -19,8 +15,8 @@ export class Pong {
 			this.velocity = [-this.speed, random_y];
 		else
 			this.velocity = [this.speed, random_y];
-		this.diameter = PONG_DIAMETER;
-		this.color = PONG_COLOR;
+		this.diameter = consts.PONG_DIAMETER;
+		this.color = consts.PONG_COLOR;
 	}
 
 	calculateNewPos() {
@@ -29,7 +25,7 @@ export class Pong {
 	}
 
 	relaunchPong(loser_side : string) {
-		this.pos = [MAP_WIDTH / 2 - PONG_DIAMETER / 2, MAP_HEIGHT / 2 - PONG_DIAMETER / 2];
+		this.pos = [consts.MAP_WIDTH / 2 - consts.PONG_DIAMETER / 2, consts.MAP_HEIGHT / 2 - consts.PONG_DIAMETER / 2];
 		this.speed = 4;
 		let random_y = Math.random() < 0.5 ? -1 : 1;
 

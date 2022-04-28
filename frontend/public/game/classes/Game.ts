@@ -19,7 +19,7 @@ class Game {
 		this.pong = null;
 		this.score = [0, 0];
 		this.score_limit = 10;
-		this.timer = 4;
+		this.timer = 3;
 		this.state = "in-menu";
 		this.room_id = "null";
 		this.publicity = "public";

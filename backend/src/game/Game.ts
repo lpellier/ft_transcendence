@@ -1,7 +1,7 @@
-import e = require("express");
+import * as consts from "./Consts"
+import { Server } from "socket.io"
 import { Player } from "./Player";
-import { Pong, PONG_MAX_SPEED } from "./Pong";
-import { MAP_WIDTH, MAP_HEIGHT, g_io } from "./server";
+import { Pong } from "./Pong";
 import * as utils from "./utils";
 
 // const MAX_SPEED : number = 7;
@@ -9,9 +9,9 @@ import * as utils from "./utils";
 // const timeSpeedFactor : number = 0.000001;
 
 const top_bound : number = 10;
-const bot_bound : number = MAP_HEIGHT - 10;
+const bot_bound : number = consts.MAP_HEIGHT - 10;
 const left_bound : number = 0;
-const right_bound : number = MAP_WIDTH;
+const right_bound : number = consts.MAP_WIDTH;
 
 export class Game {
 	room_id : any;
@@ -36,10 +36,10 @@ export class Game {
 		return (this.players.length <= 1);
 	}
 
-	kick_player(id: any) {
+	kick_player(server : Server, id: any) {
 		for (let player of this.players) {
 			if (player.id == id) {
-				g_io.to(this.room_id).emit("player-disconnect", this.players.indexOf(player));
+				server.to(this.room_id).emit("player-disconnect", this.players.indexOf(player));
 				this.players.splice(this.players.indexOf(player), 1);
 				this.reset();
 			}
@@ -76,7 +76,7 @@ export class Game {
 		// Implement acceleration here
 		if (this.framesSincePoint == 0)
 			this.pong.speed = 4;
-		else if (this.pong.speed < PONG_MAX_SPEED) {
+		else if (this.pong.speed < consts.PONG_MAX_SPEED) {
 			if (this.pong.velocity[0] > 0)
 				this.pong.velocity[0] += 0.0025;
 			else
@@ -116,7 +116,7 @@ export class Game {
 		
 		// ? collision with paddles
 		let angle : [boolean, number, string, string] = [false, 0, "x", "side"];
-		if (this.pong.pos[0] < MAP_WIDTH / 2)
+		if (this.pong.pos[0] < consts.MAP_WIDTH / 2)
 			angle = this.collision_paddle(this.players[0], angle);
 		else
 			angle = this.collision_paddle(this.players[1], angle);
@@ -132,7 +132,7 @@ export class Game {
 			}
 			// ? invert velocity indexes for left / right collisions
 			else if (angle[2] == "y") {
-				if (this.pong.pos[0] < MAP_WIDTH / 2)
+				if (this.pong.pos[0] < consts.MAP_WIDTH / 2)
 					this.pong.velocity[0] = this.pong.speed * Math.cos(angle[1]);
 				else
 					this.pong.velocity[0] = this.pong.speed * -Math.cos(angle[1]);

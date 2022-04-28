@@ -4,7 +4,7 @@ function listen_start_events() {
 		game.state = "waiting-player";
 		errors.set_false();
 		buttons.hide();
-		inputs.join.hide()
+		inputs.hide()
 	
 		buttons.return.show();
 	});
@@ -46,10 +46,6 @@ function listen_start_events() {
 function listen_stop_events() {
 	socket.on("player-disconnect", (index : number) => {
 		in_main_menu();
-		game.players = [];
-		game.timer = 3;
-		game.state = "in-menu"; // "your opponent left menu"
-		game.score = [0, 0];
 	});
 
 	socket.on("restart-server", () => {
