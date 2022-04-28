@@ -77,11 +77,16 @@ function setup() {
 	errors = new Errors();
 	buttons = new Buttons();
 
-	// socket = io();
+	// @ts-ignore:next-line
+	socket = io("http://localhost:3001");
 
-	// listen_start_events();
-	// listen_stop_events();
-	// listen_move_events();
+	socket.on("connect", () => {
+		socket.emit("my_id", socket.id);
+	})
+	
+	listen_start_events();
+	listen_stop_events();
+	listen_move_events();
 }
 
 function move_players() {
