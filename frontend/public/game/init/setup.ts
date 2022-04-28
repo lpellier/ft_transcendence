@@ -82,7 +82,9 @@ function setup() {
 
 	socket.on("connect", () => {
 		socket.emit("my_id", socket.id);
-	})
+		let test = socket.emit("test");
+		console.log(test);
+	});
 	
 	listen_start_events();
 	listen_stop_events();
@@ -92,15 +94,15 @@ function setup() {
 function move_players() {
 	if (!game.local) {
 		if (keyIsDown(UP_ARROW) && keyIsDown(32))
-			socket.emit("dash", game.players[0].id, 1);
+			socket.volatile.emit("dash", game.players[0].id, 1);
 		else if (keyIsDown(DOWN_ARROW) && keyIsDown(32))
-			socket.emit("dash", game.players[0].id, -1);
+			socket.volatile.emit("dash", game.players[0].id, -1);
 		if (keyIsDown(UP_ARROW))
-			socket.emit("move_up", game.players[0].id);
+			socket.volatile.emit("move_up", game.players[0].id);
 		else if (keyIsDown(DOWN_ARROW))
-			socket.emit("move_down", game.players[0].id);
+			socket.volatile.emit("move_down", game.players[0].id);
 		else
-			socket.emit("do_nothing", game.players[0].id);
+			socket.volatile.emit("do_nothing", game.players[0].id);
 	}
 	else {
 		if (keyIsDown(UP_ARROW))
@@ -158,7 +160,8 @@ function draw() {
 		output_countdown();
 		if (!game.local)
 			draw_help();
-		draw_input();
+		else
+			draw_input(); // TODO draw input for multiplayer but only on one side
 		draw_players();
 	}
 	else if (game.state == "in-game") {

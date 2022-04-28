@@ -5,6 +5,7 @@ import * as utils from "./utils"
 
 // ? Important
 // TODO find whatever the fuck is wrong with collisions
+// TODO reduce lag -> maybe return of subscribemessage
 
 // ? Not important
 // TODO Finish or remove dash ability
@@ -90,6 +91,11 @@ export class GameGateway {
 		}
 	}
 
+	@SubscribeMessage("test")
+	handleTest() {
+		return "letsgo";
+	}
+
 	@SubscribeMessage("quit")
 	handleQuit(@ConnectedSocket() client : Socket) {
 		for (let game of this.games) {
@@ -128,7 +134,6 @@ export class GameGateway {
 		existing_game.add_player(client.id);
 		this.server.to(existing_game.room_id).emit("waiting_room", existing_game.room_id);
 		start_game_full_rooms(this.games, this.server);
-		console.log(this.games, "\n\n\n\n");
 	}
 
 	// ? if user is searching for a specific room
