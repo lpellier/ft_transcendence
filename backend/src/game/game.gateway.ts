@@ -4,7 +4,6 @@ import { Game } from "./Game"
 import * as utils from "./utils"
 
 // ? Important
-// TODO ball does something weird at start in multiplayer
 
 // Done Movement prediction :
 // ? A player presses the up button and sends this information to the server

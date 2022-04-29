@@ -29,11 +29,11 @@ function draw_map() {
 	textSize(50);
 	textFont(consts.FONT);
 	push();
-	fill((game.score[0] > game.score[1] ? "white" : "#d4d4d4")); // highlight better score
+	fill((game.score[0] > game.score[1] ? "white" : "grey")); // highlight better score
 	text(game.score[0], consts.MAP_WIDTH / 2 - 70, 90); // score
 	pop();
 	push();
-	fill((game.score[1] > game.score[0] ? "white" : "#d4d4d4"));
+	fill((game.score[1] > game.score[0] ? "white" : "grey"));
 	text(game.score[1], consts.MAP_WIDTH / 2 + 35, 90); // score
 	pop();
 	pop();

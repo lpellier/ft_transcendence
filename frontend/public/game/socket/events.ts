@@ -43,7 +43,7 @@ function listen_start_events() {
 
 function listen_stop_events() {
 	socket.on("player-disconnect", (index : number) => {
-		in_main_menu();
+		opponent_left_menu();
 	});
 
 	socket.on("restart-server", () => {

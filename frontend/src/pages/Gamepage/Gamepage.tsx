@@ -122,6 +122,7 @@ class Game extends React.Component {
 					<div id="down-key"/>
 					<div id="right-key"/>
 				</div>
+				<div id="button-opp-left-ok"/>
 			</div>
 		);
 	}

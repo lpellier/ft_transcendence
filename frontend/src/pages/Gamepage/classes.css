@@ -122,6 +122,16 @@
 	margin: 0 auto;
 }
 
+#button-opp-left-ok {
+	position: absolute;
+	padding: 0;
+	bottom: 2em;
+	width: 200px;
+	height: 100px;
+	left: 500px;
+	margin: 0 auto;
+}
+
 #input-join {
 	position: absolute;
 	top: 25em;

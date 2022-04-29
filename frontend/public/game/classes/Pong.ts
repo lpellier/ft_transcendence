@@ -7,13 +7,17 @@ class Pong {
 
 	constructor() {
 		this.pos = [consts.MAP_WIDTH / 2 - consts.PONG_DIAMETER / 2, consts.MAP_HEIGHT / 2 - consts.PONG_DIAMETER / 2];
-		let random_y = Math.random() < 0.5 ? -1 : 1;
-		let random_x = Math.floor(Math.random() * 2);
 		this.speed = consts.PONG_BASE_SPEED;
-		if (random_x == 0)
-			this.velocity = [-this.speed, random_y];
-		else
-			this.velocity = [this.speed, random_y];
+		if (!game.local)
+			this.velocity = [0, 0];
+		else {
+			let random_y = Math.random() < 0.5 ? -1 : 1;
+			let random_x = Math.floor(Math.random() * 2);
+			if (random_x == 0)
+				this.velocity = [-this.speed, random_y];
+			else
+				this.velocity = [this.speed, random_y];
+		}
 		this.diameter = consts.PONG_DIAMETER;
 		this.color = consts.PONG_COLOR;
 	}
