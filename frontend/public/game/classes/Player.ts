@@ -1,11 +1,11 @@
 class Player {
-	pos : [number, number];
-	width : number;
-	height : number;
-	color : string;
-	index : number;
-	id : any;
-	ready : boolean;
+	pos : [number, number] = [0, 0];
+	width : number = consts.PLAYER_WIDTH;
+	height : number = consts.PLAYER_HEIGHT;
+	color : string = "white";
+	index : number = 0;
+	id : string = "0";
+	ready : boolean = false;
 
 	constructor(pos_x : number, pos_y : number, width : number, height : number, color : string, index : number, id : any) {
 		this.pos = [pos_x, pos_y];

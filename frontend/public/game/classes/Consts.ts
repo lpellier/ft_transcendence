@@ -37,6 +37,8 @@ class Consts {
 		this.RIGHT_BOUND = this.MAP_WIDTH;
 		
 		this.FONT = loadFont("/assets/fonts/PressStart2P-Regular.ttf");
-		this.RETURN_ICON = loadImage("/assets/icons/return-button2.png");
+		this.RETURN_ICON = createImg("/assets/icons/return-button2.png", "return-icon");
+		this.RETURN_ICON.size(100, 100);
+		this.RETURN_ICON.parent(document.getElementById("icon-return"));
 	}
 }

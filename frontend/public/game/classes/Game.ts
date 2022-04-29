@@ -2,6 +2,7 @@ class Game {
 	players : Player[];
 	pong : Pong;
 	score : [number, number];
+	score_limit : number;
 	timer : number;
 	state : string;
 	room_id : string;
@@ -17,6 +18,7 @@ class Game {
 		this.players = [];
 		this.pong = null;
 		this.score = [0, 0];
+		this.score_limit = 10;
 		this.timer = 4;
 		this.state = "in-menu";
 		this.room_id = "null";

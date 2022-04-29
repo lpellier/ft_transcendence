@@ -8,7 +8,11 @@ function createGameMenu() {
 		buttons.friends_can_join.show();
 		buttons.invitation_only.show();
 		buttons.validate.show();
-	
+		buttons.plus.show();
+		buttons.minus.show();
+		inputs.score_limit.show();
+		inputs.score_limit.attribute("value", game.score_limit);
+
 		game.state = "in-menu-create";
 	}
 }
@@ -23,16 +27,33 @@ function matchmaking() {
 }
 
 function highlightButton() {
+	// @ts-ignore: next-line
 	this.style("color", "#d4d4d4");
 }
 function resetButton() {
+	// @ts-ignore: next-line
 	this.style("color", "white");
+}
+
+function plusScoreLimit() {
+	if (game.score_limit < 15) {
+		game.score_limit++;
+		inputs.score_limit.attribute("value", game.score_limit);
+	}
+
+}
+function minusScoreLimit() {
+	if (game.score_limit > 1) {
+		game.score_limit--;
+		inputs.score_limit.attribute("value", game.score_limit);
+	}
 }
 
 function readRoomID() {
 	if (mouseButton == LEFT) {
 		game.state = "in-menu-input";
 		buttons.hide();
+		inputs.hide();
 		inputs.join.show();
 		buttons.return.show();
 	}
@@ -92,7 +113,7 @@ function create_button(title : string, mPressed : any, mOver : any = highlightBu
 function create_input(title : string) {
 	let input = createInput(title);
 	// input.position(consts.MAP_WIDTH / 2 - 200, consts.MAP_HEIGHT * 2 / 3 - 37.5);
-	input.style("width", "600px");
+	// input.style("width", "600px");
 	input.style("height", "75px");
 	input.style("font-size", "45px");
 	input.style("font-family", "PressStart2P-Regular");

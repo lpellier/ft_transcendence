@@ -67,7 +67,13 @@ class Game extends React.Component {
 				</div>
 				<div id="button-validate"/>
 				<div id="button-return"/>
+				<div id="icon-return"/>
+				<div id="buttons-plus-minus">	
+					<div id="button-plus"/>
+					<div id="button-minus"/>
+				</div>
 				<div id="input-join"/>
+				<div id="input-score_limit"/>
 				<div id="wasd-keys">
 					<div id="w-key"/>
 					<div id="a-key"/>

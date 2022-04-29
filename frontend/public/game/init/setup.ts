@@ -12,6 +12,10 @@
 // TODO another with walls in the middle, forcing the player to play around it
 
 // TODO consistency in variable/function naming
+// TODO fix return button hitbox
+// TODO should reorder css in multiple files and convert every style attribute in code to css
+
+// TODO speed should be dependent on the angle of the pong ball
 
 let shouldLoad : boolean = false;
 
@@ -24,7 +28,6 @@ let keys : Keys = null;
 
 let canvas : any = null;
 let socket : any = null;
-
 
 function preload() {
 	consts = new Consts();
@@ -59,8 +62,7 @@ function in_main_menu() {
 	inputs.reset();
 	inputs.create_inputs();
 	// if (game.state == "waiting-player")
-	// 	socket.emit("quit")
-	
+	// 	socket.emit("quit")	
 }
 
 function setup() {
@@ -122,13 +124,16 @@ function draw() {
 		in_main_menu();
 	clear(0, 0, 0, 0);
 	keys.hide();
+	consts.RETURN_ICON.hide();
 	draw_background();
 	if (game.state == "waiting-player" || game.state == "waiting-readiness" || game.state == "countdown" || game.state == "in-game")
 		draw_map();
 	if (game.state == "in-menu-input" || game.state == "waiting-player" || game.state == "in-menu-create")
-		image(consts.RETURN_ICON, 1050, 50, 100, 100);
-	if (game.state == "in-menu-create")
+		consts.RETURN_ICON.show();
+	if (game.state == "in-menu-create") {
 		output_announcement("Game Creation", 55, consts.MAP_WIDTH / 2, consts.MAP_HEIGHT / 5);
+		output_announcement("score limit : ", 30, consts.MAP_WIDTH / 5, consts.MAP_HEIGHT * 3 / 5)
+	}
 	if (game.state == "in-menu")
 		output_announcement("CyberPong 2077", 70, consts.MAP_WIDTH / 2, consts.MAP_HEIGHT / 4);
 	else if (game.state == "in-menu-input") {
@@ -157,5 +162,10 @@ function draw() {
 			draw_players();
 			draw_pong();
 		}
+	}
+	else if (game.state == "game-over") {
+		buttons.return.show();
+		consts.RETURN_ICON.show();
+		output_announcement((game.score[0] > game.score[1] ? "Player 1 " : "Player 2 ") + "won the game!", 45, width / 2, height / 2)
 	}
 }
