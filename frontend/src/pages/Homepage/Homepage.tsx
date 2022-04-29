@@ -6,6 +6,7 @@ import SearchAppBar from 'components/AppBar/AppBar'
 import FriendBand from 'components/FriendBand/FriendBand'
 import PlayerInfoBand from 'components/PlayerInfoBand/PlayerInfoBand'
 import StatsBoards from 'components/StatsBoards/StatsBoards'
+import axios from 'axios';
 
 import { phoneSize } from 'index'
 import {StatsPartStyle, AllHomeStyle} from '../../styles/tsxStyles/Home'
@@ -29,11 +30,27 @@ export default function Homepage() {
 		   window.removeEventListener("resize", handleResizeWindow);
 		 };
 	}, [])
+
+	useEffect(() => {
+		axios.get('http://127.0.0.1:3001',
+		{headers: {
+			'Access-Control-Allow-Origin': 'http://127.0.0.1:3000',
+		}
+	})
+		.then(res => {
+			console.log("Get request success")
+			const test_data = res.data;
+			console.log({test_data});
+		})
+		.catch(function (err) {
+			console.log("Homepage Get request failed : ", err)
+		});
+	}, [])
 	
 	if (width <= phoneSize) {
 	  return (
 	    <Stack spacing={2}>
-        	<SearchAppBar image={''}/>
+        	<SearchAppBar image={''} name={''}/>
 			<Container>
 				<Stack direction="row" spacing={1} sx={AllHomeStyle}>
 					<StatsPart />
@@ -44,7 +61,7 @@ export default function Homepage() {
 	}
     return (
 		<Stack spacing={2}>
-        	<SearchAppBar image={''}/>
+        	<SearchAppBar image={''} name={''}/>
 			<Container>
 				<Stack direction="row" spacing={1} sx={AllHomeStyle}>
 					<FriendBand />

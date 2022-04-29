@@ -25,7 +25,7 @@ const ChatPageStyle = {
 export default function Chatpage() {
     return(
             <Stack spacing={6} style={ChatPageStyle}>
-                <SearchAppBar image={''}/>
+                <SearchAppBar image={''} name={''}/>
                 <Box sx={ChatBoxStyle}>
 					<Chat />
 				</Box>

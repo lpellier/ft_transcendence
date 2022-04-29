@@ -4,26 +4,26 @@ import {
     Route,
     Navigate
 } from "react-router-dom";
-import Cookies from "universal-cookie";
+import {token} from 'index';
 
 import LogIn from '../pages/LogInpage/LogIn'
 import Homepage from '../pages/Homepage/Homepage'
 import Gamepage from '../pages/Gamepage/Gamepage'
 import Chatpage from '../pages/Chatpage/Chatpage'
 import Error from '../pages/Error/Error'
-import { jsx } from "@emotion/react";
-
-const cookies = new Cookies();
-const token = cookies.get("TOKEN");
 
 type Props = {children: JSX.Element}
 
 function ProtectedRoute({children} : Props) {
     if (token) {
-        return (<>{children}</>)
+        console.log("Token value : ", {token});
+        return (
+        <>{children}</>)
     }
     else {
-        return (<Navigate replace to="/" />)
+        return (
+        console.log("No token found : Access denied"),
+        <Navigate replace to="/" />)
     }
 }
 

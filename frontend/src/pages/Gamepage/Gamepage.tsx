@@ -109,10 +109,11 @@ export default class Gamepage extends React.Component {
 		addScript("/game/sketch/socket/events.js");
 		addScript("/p5/p5.js");
 	}
+
 	render() {
         return (
 			<Stack spacing={5}>
-                <SearchAppBar image={''}/>
+                <SearchAppBar name={''} image={''}/>
 				<Game/>
             </Stack>
         );

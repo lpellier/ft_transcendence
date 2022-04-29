@@ -86,7 +86,7 @@ function PlayerAvatarBar(props: {image: any}) {
 	);
 }
 
-export default function SearchAppBar(props: {image: any}) {
+export default function SearchAppBar(props: {image: any, name: string}) {
 	const [width, setWidth] = useState(window.innerWidth);
 	const img = useState(props.image);
 
@@ -116,7 +116,7 @@ export default function SearchAppBar(props: {image: any}) {
 			<Toolbar style={ BarStyle }>
 				<PongMenu />
 				<PlayerAvatarBar image={img}/>
-				<PlayerName name={"Mr Roboto"}/>
+				<PlayerName name={props.name}/>
 				<Stack direction="row" spacing={2}>
 					<ProjectName />
 					<AppBarButton link={'/game'} tooltip={"New Game"} icon={<GamesIcon />}/>
