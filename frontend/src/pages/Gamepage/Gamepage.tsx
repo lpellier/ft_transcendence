@@ -53,7 +53,7 @@ function addScript(url : string) : any {
 	script.async = true;
 	script.classList.add("p5-script");
 
-	document.body.appendChild(script);
+	document.head.appendChild(script);
 	return script;
 }
 
@@ -129,6 +129,7 @@ class Game extends React.Component {
 
 export default class Gamepage extends React.Component {	
 	componentDidMount() {
+		addScript("https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.0/socket.io.js");
 		addScript("/game/sketch/classes/Buttons.js");
 		addScript("/game/sketch/classes/Consts.js");
 		addScript("/game/sketch/classes/Errors.js");

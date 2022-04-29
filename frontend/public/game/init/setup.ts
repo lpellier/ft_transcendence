@@ -25,6 +25,7 @@ let errors : Errors = null;
 let buttons : Buttons = null;
 let inputs : Inputs = null;
 let keys : Keys = null;
+let player_input : number[] = [];
 
 let canvas : any = null;
 let socket : any = null;
@@ -37,23 +38,25 @@ function preload() {
 function keyPressed() {
 	if (game == null)
 		return;
-	// if (game.state == "waiting-readiness" && key == ' ') 
-	// 	socket.emit("switch_readiness", game.players[0].id);
+	if (game.state == "waiting-readiness" && key == ' ') 
+		socket.emit("switch_readiness", game.players[0].id);
 	// if (game.state == "in-game" && key == 'R')
 	// 	socket.emit("restart_game", game.room_id);
-	// if (game.state == "in-menu-input" && keyCode == ENTER) {
-	// 	if (inputs.join.value()[0] == '#')
-	// 		inputs.join.value(inputs.join.value().slice(1));
-	// 	socket.emit("find_game", inputs.join.value());
-	// }
-	// if (game.state == "in-menu-create" && keyCode == ENTER) {
-	// 	if (inputs.join.value()[0] == '#')
-	// 		inputs.join.value(inputs.join.value().slice(1));
-	// 	socket.emit("find_game", inputs.join.value());
-	// }
+	if (game.state == "in-menu-input" && keyCode == ENTER) {
+		if (inputs.join.value()[0] == '#')
+			inputs.join.value(inputs.join.value().slice(1));
+		socket.emit("find_game", inputs.join.value());
+	}
+	if (game.state == "in-menu-create" && keyCode == ENTER) {
+		if (inputs.join.value()[0] == '#')
+			inputs.join.value(inputs.join.value().slice(1));
+		socket.emit("find_game", inputs.join.value());
+	}
 }
 
 function in_main_menu() {
+	if (game.state == "waiting-player")
+		socket.emit("quit")	
 	shouldLoad = false;
 	game.reset();
 	errors.set_false();
@@ -61,8 +64,6 @@ function in_main_menu() {
 	buttons.create_buttons();
 	inputs.reset();
 	inputs.create_inputs();
-	// if (game.state == "waiting-player")
-	// 	socket.emit("quit")	
 }
 
 function setup() {
@@ -77,11 +78,16 @@ function setup() {
 	errors = new Errors();
 	buttons = new Buttons();
 
-	// socket = io();
+	// @ts-ignore:next-line
+	socket = io("http://localhost:3001");
 
-	// listen_start_events();
-	// listen_stop_events();
-	// listen_move_events();
+	socket.on("connect", () => {
+		socket.emit("my_id", socket.id);
+	});
+
+	listen_start_events();
+	listen_stop_events();
+	listen_move_events();
 }
 
 function move_players() {
@@ -90,12 +96,14 @@ function move_players() {
 		// 	socket.emit("dash", game.players[0].id, 1);
 		// else if (keyIsDown(DOWN_ARROW) && keyIsDown(32))
 		// 	socket.emit("dash", game.players[0].id, -1);
-		// if (keyIsDown(UP_ARROW))
-		// 	socket.emit("move_up", game.players[0].id);
-		// else if (keyIsDown(DOWN_ARROW))
-		// 	socket.emit("move_down", game.players[0].id);
-		// else
-		// 	socket.emit("do_nothing", game.players[0].id);
+		if (keyIsDown(UP_ARROW)) {
+			player_input.push(1);
+			socket.emit("move_up", game.players[0].id);
+		}
+		else if (keyIsDown(DOWN_ARROW)) {
+			player_input.push(-1);
+			socket.emit("move_down", game.players[0].id);
+		}
 	}
 	else {
 		if (keyIsDown(UP_ARROW))
@@ -153,7 +161,8 @@ function draw() {
 		output_countdown();
 		if (!game.local)
 			draw_help();
-		draw_input();
+		else
+			draw_input(); // TODO draw input for multiplayer but only on one side
 		draw_players();
 	}
 	else if (game.state == "in-game") {

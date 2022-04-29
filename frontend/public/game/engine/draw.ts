@@ -6,10 +6,6 @@ function draw_players() {
 
 function draw_pong() {
 	game.pong.render();
-	push();
-	fill('red');
-	rect(game.pong.pos[0], game.pong.pos[1], 2, 2);
-	pop();
 }
 
 function draw_map() {
@@ -18,6 +14,7 @@ function draw_map() {
 	noStroke();
 	fill("white");
 	textSize(14);
+	textFont(consts.FONT);
 	text("Room #" + game.room_id, 16, 25); // room id
 	for (let i : number = consts.TOP_BOUND; i < consts.BOT_BOUND; i += 20)
 		rect(consts.MAP_WIDTH / 2, i, 5, 10); // line in the middle
