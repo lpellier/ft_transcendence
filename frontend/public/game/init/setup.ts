@@ -1,6 +1,3 @@
-// TODO for red cross, green mark
-	// should find pixelated versions to be consistent with the rest
-
 // TODO for local button
 	// pause by pressing escape -> removing sound or quitting to menu
 
@@ -16,6 +13,8 @@
 // TODO should reorder css in multiple files and convert every style attribute in code to css
 
 // TODO speed should be dependent on the angle of the pong ball
+
+// TODO hitbox issue between buttons opponent left ok and validate
 
 // ! issue : countdown still counts down when someone leaves during 
 // ! it meaning that when going back to menu, pong psition is updated but it has been removed

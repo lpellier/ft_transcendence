@@ -74,6 +74,8 @@ function listen_move_events() {
 		p2_state : [string, [number, number], [number, number]], 
 		score : [number, number]
 	) => {
+		if (game.state != "in-game")
+			return ;
 		game.score = score;
 		game.pong.pos = pong_state[0];
 		game.pong.velocity = pong_state[1];

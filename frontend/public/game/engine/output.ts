@@ -28,7 +28,6 @@ function draw_player_readiness() {
 			player.index == 1 ? icon_p1 = consts.CROSS_ICON : icon_p2 = consts.CROSS_ICON2;
 		pop();
 	}
-	console.log(icon_p1 == icon_p2);
 	if (icon_p1.parent() != document.getElementById("icon-player_one"))
 		icon_p1.parent(document.getElementById("icon-player_one"));
 	icon_p1.show();
