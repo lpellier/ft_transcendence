@@ -1,4 +1,5 @@
 function draw_players() {
+	
 	for (let i : number = 0; i < game.players.length; i++) {
 		game.players[i].render();
 	}
@@ -6,10 +7,6 @@ function draw_players() {
 
 function draw_pong() {
 	game.pong.render();
-	push();
-	fill('red');
-	rect(game.pong.pos[0], game.pong.pos[1], 2, 2);
-	pop();
 }
 
 function draw_map() {

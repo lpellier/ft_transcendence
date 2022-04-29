@@ -25,6 +25,7 @@ let errors : Errors = null;
 let buttons : Buttons = null;
 let inputs : Inputs = null;
 let keys : Keys = null;
+let player_input : number[] = [];
 
 let canvas : any = null;
 let socket : any = null;
@@ -39,8 +40,8 @@ function keyPressed() {
 		return;
 	if (game.state == "waiting-readiness" && key == ' ') 
 		socket.emit("switch_readiness", game.players[0].id);
-	if (game.state == "in-game" && key == 'R')
-		socket.emit("restart_game", game.room_id);
+	// if (game.state == "in-game" && key == 'R')
+	// 	socket.emit("restart_game", game.room_id);
 	if (game.state == "in-menu-input" && keyCode == ENTER) {
 		if (inputs.join.value()[0] == '#')
 			inputs.join.value(inputs.join.value().slice(1));
@@ -82,10 +83,8 @@ function setup() {
 
 	socket.on("connect", () => {
 		socket.emit("my_id", socket.id);
-		let test = socket.emit("test");
-		console.log(test);
 	});
-	
+
 	listen_start_events();
 	listen_stop_events();
 	listen_move_events();
@@ -93,16 +92,18 @@ function setup() {
 
 function move_players() {
 	if (!game.local) {
-		if (keyIsDown(UP_ARROW) && keyIsDown(32))
-			socket.volatile.emit("dash", game.players[0].id, 1);
-		else if (keyIsDown(DOWN_ARROW) && keyIsDown(32))
-			socket.volatile.emit("dash", game.players[0].id, -1);
-		if (keyIsDown(UP_ARROW))
-			socket.volatile.emit("move_up", game.players[0].id);
-		else if (keyIsDown(DOWN_ARROW))
-			socket.volatile.emit("move_down", game.players[0].id);
-		else
-			socket.volatile.emit("do_nothing", game.players[0].id);
+		// if (keyIsDown(UP_ARROW) && keyIsDown(32))
+		// 	socket.emit("dash", game.players[0].id, 1);
+		// else if (keyIsDown(DOWN_ARROW) && keyIsDown(32))
+		// 	socket.emit("dash", game.players[0].id, -1);
+		if (keyIsDown(UP_ARROW)) {
+			player_input.push(1);
+			socket.emit("move_up", game.players[0].id);
+		}
+		else if (keyIsDown(DOWN_ARROW)) {
+			player_input.push(-1);
+			socket.emit("move_down", game.players[0].id);
+		}
 	}
 	else {
 		if (keyIsDown(UP_ARROW))

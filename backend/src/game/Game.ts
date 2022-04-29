@@ -15,12 +15,13 @@ const right_bound : number = consts.MAP_WIDTH;
 
 export class Game {
 	room_id : any;
-	state : any;
+	state : string;
 	score : [number, number];
 	players : Player[];
 	pong : Pong;
 	framesSincePoint : number;
 	publicity : string;
+	intervalId : any;
 
 	constructor(room_id: any) {
 		this.room_id = room_id;
@@ -33,6 +34,7 @@ export class Game {
 	}
 
 	space_available() {
+
 		return (this.players.length <= 1);
 	}
 

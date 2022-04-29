@@ -5,7 +5,13 @@ import * as utils from "./utils"
 
 // ? Important
 // TODO find whatever the fuck is wrong with collisions
-// TODO reduce lag -> maybe return of subscribemessage
+// TODO Movement prediction :
+// ? A player presses the up button and sends this information to the server
+// ? We should draw the final render state before even receiving a response from the server
+// ? to reduce lag and then check when the server returns if both render states are equal
+
+// ? In case multiple presses are made, we should make a list of all unresolved actions
+// ? and check that each one was correct
 
 // ? Not important
 // TODO Finish or remove dash ability
@@ -83,17 +89,14 @@ export class GameGateway {
 				for (const player of game.players) {
 					if (player.id == client.id) {
 						this.server.to(game.room_id).emit("player-disconnect");
+						clearInterval(game.intervalId);
 						this.games.splice(this.games.indexOf(game), 1);
+						console.log(client.id, "just disconnected -", this.clients.length, this.clients.length == 1 ? "user  total" : "users total");
+						return ;
 					}
 				}
 			}
-			console.log(client.id, "just disconnected -", this.clients.length, "users total");
 		}
-	}
-
-	@SubscribeMessage("test")
-	handleTest() {
-		return "letsgo";
 	}
 
 	@SubscribeMessage("quit")
@@ -102,6 +105,7 @@ export class GameGateway {
 			for (let player of game.players) {
 				if (player.id == client.id) {
 					this.server.to(game.room_id).emit("player-disconnect");
+					clearInterval(game.intervalId);
 					this.games.splice(this.games.indexOf(game), 1);
 					return ;
 				}
@@ -113,7 +117,7 @@ export class GameGateway {
 	@SubscribeMessage('my_id')
 	getConnection(@MessageBody() client_id : string) {
 		this.clients.push(client_id);
-		console.log(client_id, "just connected    -", this.clients.length, "users total");
+		console.log(client_id, "just connected    -", this.clients.length, this.clients.length == 1 ? "user  total" : "users total");
 	}
 
 	@SubscribeMessage('matchmaking')
@@ -168,11 +172,20 @@ export class GameGateway {
 				if (player.id == client.id && game.state == "await_readiness") {
 					if (game.players[0].ready && game.players[1].ready) {
 						game.state = "game_started"
+						let test = this.server;
 						for (let i = 1; i < 5; i++) {
 							setTimeout(() => {
-									this.server.to(game.room_id).emit("countdown-server");
+								this.server.to(game.room_id).emit("countdown-server");
+								if (i == 4) {
+									game.intervalId = setInterval(function() {
+										game.pong.calculateNewPos();
+										game.checkCollisions();
+										test.to(game.room_id).emit("updated_pos", game.pong.pos, game.players[0].id, game.players[0].pos, game.players[1].id, game.players[1].pos, game.score);
+									}, 17);
+								}
 							}, i * 1000);
 						}
+						return ;
 					}
 				}
 			}
@@ -201,7 +214,7 @@ export class GameGateway {
 				if (player.id == client_id) {
 					player.ready = !player.ready;
 					this.server.to(game.room_id).emit("switch_readiness-server", client_id);
-					break;
+					return ;
 				}
 			}
 		}
@@ -214,14 +227,7 @@ export class GameGateway {
 				for (const player of game.players) {
 					if (player.id == client_id) {
 						player.move_up(game);
-						if (game.players[0].move_read && game.players[1].move_read) {
-							game.players[0].move_read = false;
-							game.players[1].move_read = false;
-							game.pong.calculateNewPos();
-							game.checkCollisions();
-							this.server.to(game.room_id).emit("updated_pos", game.pong.pos, game.players[0].id, game.players[0].pos, game.players[1].id, game.players[1].pos, game.score);
-						}
-						break;
+						return ;
 					}
 				}
 			}
@@ -235,14 +241,7 @@ export class GameGateway {
 				for (const player of game.players) {
 					if (player.id == client_id) {
 						player.move_down(game);
-						if (game.players[0].move_read && game.players[1].move_read) {
-							game.players[0].move_read = false;
-							game.players[1].move_read = false;
-							game.pong.calculateNewPos();
-							game.checkCollisions();
-							this.server.to(game.room_id).emit("updated_pos", game.pong.pos, game.players[0].id, game.players[0].pos, game.players[1].id, game.players[1].pos, game.score);
-						}
-						break;
+						return ;
 					}
 				}
 			}
@@ -257,36 +256,7 @@ export class GameGateway {
 				for (const player of game.players) {
 					if (player.id == data[0]) {
 						player.dash(data[1]);
-						if (game.players[0].move_read && game.players[1].move_read) {
-							game.players[0].move_read = false;
-							game.players[1].move_read = false;
-							game.pong.calculateNewPos();
-							game.checkCollisions();
-							this.server.to(game.room_id).emit("updated_pos", game.pong.pos, game.players[0].id, game.players[0].pos, game.players[1].id, game.players[1].pos, game.score);
-						}
-						break;
-					}
-				}
-			}
-		}
-	}
-
-	@SubscribeMessage("do_nothing")
-	handleNothing(@MessageBody() id : string) {
-		for (const game of this.games) {
-			if (game.players.length == 2 && game.state == "game_started") {
-				for (const player of game.players) {
-					if (player.id == id) {
-						if (!player.move_read)
-							player.move_read = true;
-						if (game.players[0].move_read && game.players[1].move_read) {
-							game.players[0].move_read = false;
-							game.players[1].move_read = false;
-							game.pong.calculateNewPos();
-							game.checkCollisions();
-							this.server.to(game.room_id).emit("updated_pos", game.pong.pos, game.players[0].id, game.players[0].pos, game.players[1].id, game.players[1].pos, game.score);
-						}
-						break;
+						return ;
 					}
 				}
 			}

@@ -9,7 +9,6 @@ export class Player {
 	index : number;
 	id : any;
 	ready : boolean;
-	move_read : boolean;
 
 	constructor(color: any, index : number, id : any) {
 		this.pos = [(index == 1 ? consts.MAP_WIDTH / 12 : consts.MAP_WIDTH * 11 / 12), consts.MAP_HEIGHT / 2 - consts.PLAYER_HEIGHT / 2];
@@ -20,7 +19,6 @@ export class Player {
 		this.index = index;
 		this.id = id;
 		this.ready = false;
-		this.move_read = false;
 	}
 
 	reset(players_len : number) {
@@ -28,7 +26,6 @@ export class Player {
 			this.index = 1;
 		this.pos = [consts.MAP_WIDTH / 12, consts.MAP_HEIGHT / 2 - consts.PLAYER_HEIGHT / 2];
 		this.ready = false;
-		this.move_read = false;
 		this.velocity = [0, consts.PLAYER_SPEED];
 	}
 
@@ -66,40 +63,31 @@ export class Player {
 	}
 
 	move_up(game : any) {
-		if (!this.move_read) {
-			this.move_read = true;
-			this.velocity[1] = -consts.PLAYER_SPEED;
-			this.pos[1] += this.velocity[1];
-			if (this.pos[1] < 10) // 10 for boundaries
-				this.pos[1] = 10;
-		}
+		this.velocity[1] = -consts.PLAYER_SPEED;
+		this.pos[1] += this.velocity[1];
+		if (this.pos[1] < 10) // 10 for boundaries
+			this.pos[1] = 10;
 	}
 
 	move_down(game : any) {
-		if (!this.move_read) {
-			this.move_read = true;
-			this.velocity[1] = consts.PLAYER_SPEED;
+		this.velocity[1] = consts.PLAYER_SPEED;
+		this.pos[1] += this.velocity[1];
+		if (this.pos[1] + this.height > consts.MAP_HEIGHT - 10) // -10 for boundaries
+			this.pos[1] = consts.MAP_HEIGHT - 10 - this.height;
+	}
+
+	dash(direction : number) {
+		if (direction == -1) {
+			this.velocity[1] = consts.PLAYER_SPEED * 3;
 			this.pos[1] += this.velocity[1];
 			if (this.pos[1] + this.height > consts.MAP_HEIGHT - 10) // -10 for boundaries
 				this.pos[1] = consts.MAP_HEIGHT - 10 - this.height;
 		}
-	}
-
-	dash(direction : number) {
-		if (!this.move_read) {
-			this.move_read = true;
-			if (direction == -1) {
-				this.velocity[1] = consts.PLAYER_SPEED * 3;
-				this.pos[1] += this.velocity[1];
-				if (this.pos[1] + this.height > consts.MAP_HEIGHT - 10) // -10 for boundaries
-					this.pos[1] = consts.MAP_HEIGHT - 10 - this.height;
-			}
-			else {
-				this.velocity[1] = -consts.PLAYER_SPEED * 3;
-				this.pos[1] += this.velocity[1];
-				if (this.pos[1] < 10) // 10 for boundaries
-					this.pos[1] = 10;
-			}
+		else {
+			this.velocity[1] = -consts.PLAYER_SPEED * 3;
+			this.pos[1] += this.velocity[1];
+			if (this.pos[1] < 10) // 10 for boundaries
+				this.pos[1] = 10;
 		}
 	}
 
