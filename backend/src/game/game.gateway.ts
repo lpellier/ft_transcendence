@@ -15,7 +15,6 @@ import * as utils from "./utils"
 
 // ? Not important
 // TODO Finish or remove dash ability
-// TODO your opponent left menu
 
 // TODO adding options and probably sounds
 

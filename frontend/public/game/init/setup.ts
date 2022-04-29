@@ -149,6 +149,9 @@ function draw() {
 	clear(0, 0, 0, 0);
 	keys.hide();
 	consts.RETURN_ICON.hide();
+	consts.MARK_ICON.hide();
+	consts.CROSS_ICON.hide();
+	consts.CROSS_ICON2.hide();
 	draw_background();
 	if (game.state == "waiting-player" || game.state == "waiting-readiness" || game.state == "countdown" || game.state == "in-game")
 		draw_map();
@@ -173,7 +176,7 @@ function draw() {
 		output_announcement("WAITING FOR ANOTHER PLAYER", 25, consts.MAP_WIDTH / 2, consts.MAP_HEIGHT / 2);
 	else if (game.state == "waiting-readiness") {
 		draw_player_readiness();
-		output_announcement("PLEASE PRESS SPACE TO START THE GAME", 18, consts.MAP_WIDTH / 2, consts.MAP_HEIGHT / 2);
+		output_announcement("PLEASE PRESS SPACE TO START THE GAME", 25, consts.MAP_WIDTH / 2, consts.MAP_HEIGHT / 2);
 	}
 	else if (game.state == "countdown") {
 		output_countdown();

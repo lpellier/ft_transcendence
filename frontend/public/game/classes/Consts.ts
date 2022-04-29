@@ -17,6 +17,9 @@ class Consts {
 	
 	FONT : any;
 	RETURN_ICON : any;
+	CROSS_ICON : any;
+	CROSS_ICON2 : any;
+	MARK_ICON : any;
 
 	constructor() {
 		this.PLAYER_WIDTH = 15;
@@ -37,8 +40,18 @@ class Consts {
 		this.RIGHT_BOUND = this.MAP_WIDTH;
 		
 		this.FONT = loadFont("/assets/fonts/PressStart2P-Regular.ttf");
+		
 		this.RETURN_ICON = createImg("/assets/icons/return-button2.png", "return-icon");
 		this.RETURN_ICON.size(100, 100);
 		this.RETURN_ICON.parent(document.getElementById("icon-return"));
+		
+		this.CROSS_ICON = createImg("/assets/icons/red-cross.png", "cross-icon");
+		this.CROSS_ICON.size(75, 75);
+
+		this.CROSS_ICON2 = createImg("/assets/icons/red-cross.png", "cross-icon");
+		this.CROSS_ICON2.size(75, 75);
+		
+		this.MARK_ICON = createImg("/assets/icons/green-mark.png", "mark-icon");
+		this.MARK_ICON.size(90, 75);
 	}
 }
