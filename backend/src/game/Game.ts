@@ -77,7 +77,7 @@ export class Game {
 	checkCollisions() {
 		// Implement acceleration here
 		if (this.framesSincePoint == 0)
-			this.pong.speed = 4;
+			this.pong.speed = consts.PONG_BASE_SPEED;
 		else if (this.pong.speed < consts.PONG_MAX_SPEED) {
 			if (this.pong.velocity[0] > 0)
 				this.pong.velocity[0] += 0.0025;

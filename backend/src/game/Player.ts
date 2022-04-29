@@ -62,18 +62,22 @@ export class Player {
 		}
 	}
 
-	move_up(game : any) {
-		this.velocity[1] = -consts.PLAYER_SPEED;
+	calculateNewPos() {
 		this.pos[1] += this.velocity[1];
 		if (this.pos[1] < 10) // 10 for boundaries
 			this.pos[1] = 10;
+		if (this.pos[1] + this.height > consts.MAP_HEIGHT - 10) // -10 for boundaries
+			this.pos[1] = consts.MAP_HEIGHT - 10 - this.height;
+	}
+
+	move_up(game : any) {
+		this.velocity[1] = -consts.PLAYER_SPEED;
+		this.calculateNewPos();
 	}
 
 	move_down(game : any) {
 		this.velocity[1] = consts.PLAYER_SPEED;
-		this.pos[1] += this.velocity[1];
-		if (this.pos[1] + this.height > consts.MAP_HEIGHT - 10) // -10 for boundaries
-			this.pos[1] = consts.MAP_HEIGHT - 10 - this.height;
+		this.calculateNewPos();
 	}
 
 	dash(direction : number) {

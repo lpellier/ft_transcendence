@@ -70,17 +70,26 @@ function listen_move_events() {
 		}
 	});
 
-	socket.on("updated_pos", (pong_pos : [number, number], p1_id : string, p1_pos : [number, number], p2_id : string, p2_pos : [number, number], score : [number, number]) => {
-		game.pong.pos = pong_pos;
-		if (p1_id == socket.id) {
-			game.players[0].pos = p1_pos;
-			game.players[1].pos = p2_pos;
-			game.score = score;
+	socket.on("updated_pos", (
+		pong_state : [[number, number], [number, number]], 
+		p1_state : [string, [number, number], [number, number]], 
+		p2_state : [string, [number, number], [number, number]], 
+		score : [number, number]
+	) => {
+		game.score = score;
+		game.pong.pos = pong_state[0];
+		game.pong.velocity = pong_state[1];
+		if (p1_state[0] == socket.id) {
+			game.players[0].pos = p1_state[1];
+			game.players[0].velocity = p1_state[2];
+			game.players[1].pos = p2_state[1];
+			game.players[1].velocity = p2_state[2];
 		}
-		else if (p2_id == socket.id) {
-			game.players[0].pos = p2_pos;
-			game.players[1].pos = p1_pos;
-			game.score = score;
+		else if (p2_state[0] == socket.id) {
+			game.players[0].pos = p2_state[1];
+			game.players[0].velocity = p2_state[2];
+			game.players[1].pos = p1_state[1];
+			game.players[1].velocity = p1_state[2];
 		}
 	});
 }

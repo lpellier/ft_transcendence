@@ -10,7 +10,7 @@ export class Pong {
 		this.pos = [consts.MAP_WIDTH / 2 - consts.PONG_DIAMETER / 2, consts.MAP_HEIGHT / 2 - consts.PONG_DIAMETER / 2];
 		let random_y = Math.random() < 0.5 ? -1 : 1;
 		let random_x = Math.floor(Math.random() * 2);
-		this.speed = 4;
+		this.speed = consts.PONG_BASE_SPEED;
 		if (random_x == 0)
 			this.velocity = [-this.speed, random_y];
 		else
@@ -26,7 +26,7 @@ export class Pong {
 
 	relaunchPong(loser_side : string) {
 		this.pos = [consts.MAP_WIDTH / 2 - consts.PONG_DIAMETER / 2, consts.MAP_HEIGHT / 2 - consts.PONG_DIAMETER / 2];
-		this.speed = 4;
+		this.speed = consts.PONG_BASE_SPEED;
 		let random_y = Math.random() < 0.5 ? -1 : 1;
 
 		// ? Comment allows for testing horizontal collisions

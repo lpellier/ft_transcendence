@@ -81,6 +81,8 @@ export class GameGateway {
 	clients : string[] = [];
 	games : Game[] = [];
 
+	timestep : number = 100;; // ms
+
 	handleDisconnect(client : Socket) {
 		let index = -1;
 		if ((index = this.clients.indexOf(client.id)) != -1) {
@@ -180,8 +182,12 @@ export class GameGateway {
 									game.intervalId = setInterval(function() {
 										game.pong.calculateNewPos();
 										game.checkCollisions();
-										test.to(game.room_id).emit("updated_pos", game.pong.pos, game.players[0].id, game.players[0].pos, game.players[1].id, game.players[1].pos, game.score);
-									}, 17);
+										test.to(game.room_id).emit("updated_pos", 
+										[game.pong.pos, game.pong.velocity], 
+										[game.players[0].id, game.players[0].pos, game.players[0].velocity], 
+										[game.players[1].id, game.players[1].pos, game.players[1].velocity], 
+										game.score);
+									}, this.timestep);
 								}
 							}, i * 1000);
 						}

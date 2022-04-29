@@ -1,5 +1,4 @@
 function draw_players() {
-	
 	for (let i : number = 0; i < game.players.length; i++) {
 		game.players[i].render();
 	}
