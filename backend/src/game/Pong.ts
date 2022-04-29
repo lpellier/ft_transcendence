@@ -1,4 +1,5 @@
 import * as consts from "./Consts"
+import { Game } from "./Game"
 
 export class Pong {
 	pos : [number, number]
@@ -19,9 +20,10 @@ export class Pong {
 		this.color = consts.PONG_COLOR;
 	}
 
-	calculateNewPos() {
+	calculateNewPos(game : Game) {
 		this.pos[0] += this.velocity[0];
 		this.pos[1] += this.velocity[1];
+		game.checkCollisions();
 	}
 
 	relaunchPong(loser_side : string) {
@@ -70,8 +72,8 @@ export class Pong {
 		return [this.c_x(), this.pos[1] + this.diameter];
 	}
 
-	ball_moves(x : number, y : number) : [number, number] {
-		return [x + this.velocity[0], y + this.velocity[1]];
+	ball_moves(pos : [number, number]) : [number, number] {
+		return [pos[0] + this.velocity[0], pos[1] + this.velocity[1]];
 	}
 	
 	c_x() : number {

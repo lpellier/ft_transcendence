@@ -2,7 +2,7 @@
 	// should find pixelated versions to be consistent with the rest
 
 // TODO for local button
-	// something to be able to go back to menu
+	// pause by pressing escape -> removing sound or quitting to menu
 
 // ?TODO set url to room id
 // ?TODO define score limit in game creation
@@ -104,6 +104,8 @@ function move_players() {
 			player_input.push(-1);
 			socket.emit("move_down", game.players[0].id);
 		}
+		else
+			socket.emit("move_null", game.players[0].id);
 	}
 	else {
 		if (keyIsDown(UP_ARROW))
@@ -119,7 +121,6 @@ function move_players() {
 			return ;
 		}
 		game.pong.calculateNewPos();
-		checkCollisions();
 	}
 }
 

@@ -21,6 +21,7 @@ class Pong {
 	calculateNewPos() {
 		this.pos[0] += this.velocity[0];
 		this.pos[1] += this.velocity[1];
+		checkCollisions();
 	}
 
 	relaunchPong(loser_side : string) {
@@ -69,8 +70,8 @@ class Pong {
 		return [this.c_x(), this.pos[1] + this.diameter];
 	}
 
-	ball_moves(x : number, y : number) : [number, number] {
-		return [x + this.velocity[0], y + this.velocity[1]];
+	ball_moves(pos : [number, number]) : [number, number] {
+		return [pos[0] + this.velocity[0], pos[1] + this.velocity[1]];
 	}
 	
 	c_x() : number {

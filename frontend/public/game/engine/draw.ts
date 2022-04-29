@@ -1,10 +1,16 @@
 function draw_players() {
+	if (!game.local) // ? prediction for other player based on his movement
+		game.players[1].calculateNewPos();
+	
 	for (let i : number = 0; i < game.players.length; i++) {
 		game.players[i].render();
 	}
 }
 
 function draw_pong() {
+	if (!game.local)
+		game.pong.calculateNewPos();
+
 	game.pong.render();
 }
 

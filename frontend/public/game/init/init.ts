@@ -76,8 +76,8 @@ function startLocal() {
 	if (mouseButton == LEFT) {
 		buttons.hide();
 		inputs.hide();
-		game.timer = 3;
-		for (let i = 0; i < 4; i++) {
+		game.timer = 4;
+		for (let i = 0; i < 5; i++) {
 			setTimeout(() => {
 				game.timer--;
 				if (game.timer == -1 && game.state == "countdown") {
@@ -90,7 +90,7 @@ function startLocal() {
 		game.players.push(new Player(consts.MAP_WIDTH * 11 / 12, consts.MAP_HEIGHT / 2 - consts.PLAYER_HEIGHT / 2, consts.PLAYER_WIDTH, consts.PLAYER_HEIGHT, "white", 2, "second"));		
 		game.pong = new Pong;
 		game.local = true;
-		game.room_id = " Local";
+		game.room_id = "Local";
 	}
 }
 
