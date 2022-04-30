@@ -1,0 +1,8 @@
+#canvas-parent {
+	position: relative;
+	margin: auto;
+	padding: 0;
+	width: 1200px;
+	height: 750px;
+	margin-top: 5em;
+}

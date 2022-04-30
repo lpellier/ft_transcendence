@@ -12,18 +12,17 @@ function createGameMenu() {
 		buttons.minus.show();
 		inputs.score_limit.show();
 		inputs.score_limit.attribute("value", game.score_limit);
-
 		game.state = "in-menu-create";
 	}
 }
 
 function createGame() {
 	if (mouseButton == LEFT)
-		socket.emit("matchmaking", game.publicity, false);
+		socket.emit("matchmaking", game.publicity, false, game.score_limit);
 }
 function matchmaking() {
 	if (mouseButton == LEFT)
-		socket.emit("matchmaking", "public", true);
+		socket.emit("matchmaking", "public", true, 10);
 }
 
 function highlightButton() {

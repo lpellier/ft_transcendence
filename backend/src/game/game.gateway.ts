@@ -25,6 +25,8 @@ import * as utils from "./utils"
 // TODO windjammers remake ?
 // TODO players can move horizontally (?)
 
+// TODO prediction or no prediction < that is the question
+
 // ? How to create a game of pong
 // ? First, server sends page to which clients can connect
 // ? clients connected are separeted into rooms, there can only be two clients per room
@@ -80,7 +82,7 @@ export class GameGateway {
 	clients : string[] = [];
 	games : Game[] = [];
 
-	timestep : number = 100; // ms
+	timestep : number = 17; // ms
 
 	handleDisconnect(client : Socket) {
 		let index = -1;
@@ -106,7 +108,6 @@ export class GameGateway {
 		for (let game of this.games) {
 			for (let player of game.players) {
 				if (player.id == client.id) {
-					this.server.to(game.room_id).emit("player-disconnect");
 					clearInterval(game.updateInterval);
 					clearInterval(game.ballUpdateInterval);
 					this.games.splice(this.games.indexOf(game), 1);
@@ -126,7 +127,7 @@ export class GameGateway {
 	@SubscribeMessage('matchmaking')
 	handleMatchmaking(
 		@ConnectedSocket() client : Socket,
-		@MessageBody() data : [string, boolean]
+		@MessageBody() data : [string, boolean, number]
 	) {
 		let existing_game : Game;
 		if (data[0] == "public" && data[1])
@@ -137,9 +138,11 @@ export class GameGateway {
 			existing_game = this.games[this.games.length - 1];
 		}
 		existing_game.publicity = data[0];
+		if (existing_game.score_limit == 0)
+			existing_game.score_limit = data[2];
 		client.join(existing_game.room_id);
 		existing_game.add_player(client.id);
-		this.server.to(existing_game.room_id).emit("waiting_room", existing_game.room_id);
+		this.server.to(existing_game.room_id).emit("waiting_room", existing_game.room_id, existing_game.score_limit);
 		start_game_full_rooms(this.games, this.server);
 	}
 
@@ -181,8 +184,15 @@ export class GameGateway {
 								this.server.to(game.room_id).emit("countdown-server");
 								if (i == 4) {
 									game.updateInterval = setInterval(() => {
-										for (let i = 0; i < 6; i++)
-											game.pong.calculateNewPos(game);
+										for (let i = 0; i < 1; i++) {
+											if (game.pong.calculateNewPos(game)) {
+												test.to(game.room_id).emit("game-over");
+												clearInterval(game.updateInterval);
+												clearInterval(game.ballUpdateInterval);
+												this.games.splice(this.games.indexOf(game), 1);
+												return ;
+											}
+										}
 										test.to(game.room_id).emit("updated_pos", 
 											[game.pong.pos, game.pong.velocity], 
 											[game.players[0].id, game.players[0].pos, game.players[0].velocity], 

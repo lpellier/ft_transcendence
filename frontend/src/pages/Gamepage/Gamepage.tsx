@@ -2,7 +2,10 @@ import React from "react";
 import Stack from '@mui/material/Stack';
 import SearchAppBar from 'components/AppBar/AppBar'
 
-import "./classes.css"
+import "./../../styles/Game/canvas.css"
+import "./../../styles/Game/buttons.css"
+import "./../../styles/Game/icons.css"
+import "./../../styles/Game/inputs.css"
 
 // import Box from '@mui/material/Box';
 // import Avatar from '@mui/material/Avatar';

@@ -1,0 +1,89 @@
+#icon-return {
+	position: absolute;
+	padding: 0;
+	margin: 0;
+	width: 100px;
+	height: 100px; 
+	top: 50px;
+	right: 50px;
+	z-index: 0;
+}
+
+#icon-player_one {
+	position: absolute;
+	width: 100px;
+	height: 100px;
+	left: 350px;
+	top: 445px;
+	z-index: 0;
+}
+
+#icon-player_two {
+	position: absolute;
+	width: 120px;
+	height: 100px;
+	left: 950px;
+	top: 445px;
+	z-index: 0;
+}
+
+#wasd-keys {
+	display: flex;
+	flex-direction: row;
+	position: absolute;
+	width: 240px;
+	height: 150px;
+	flex-wrap: wrap;
+	align-content: center;
+	justify-content: center;
+	top: 5em;
+	left: 10em;
+}
+
+#w-key {
+	width: 240px;
+	margin-left: 70px;
+}
+
+#s-key {
+	flex-grow: 1;
+}
+
+#a-key {
+	flex-grow: 1;
+}
+
+#d-key {
+	flex-grow: 1;
+}
+
+#arrow-keys {
+	display: flex;
+	flex-direction: row;
+	position: absolute;
+	width: 240px;
+	height: 150px;
+	flex-wrap: wrap;
+	align-content: center;
+	justify-content: center;
+	top: 30em;
+	right: 10em;
+}
+
+#up-key {
+	width: 240px;
+	display: flex;
+	justify-content: center;
+}
+
+#left-key {
+	flex-grow: 1;
+}
+
+#down-key {
+	flex-grow: 1;
+}
+
+#right-key {
+	flex-grow: 1;
+}

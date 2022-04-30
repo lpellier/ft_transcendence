@@ -1,7 +1,8 @@
 function listen_start_events() {
-	socket.on("waiting_room", (r_id : string) => {
+	socket.on("waiting_room", (r_id : string, score_limit : number) => {
 		game.room_id = r_id;
 		game.state = "waiting-player";
+		game.score_limit = score_limit;
 		errors.set_false();
 		buttons.hide();
 		inputs.hide()
@@ -50,7 +51,11 @@ function listen_stop_events() {
 		game.timer = 3;
 		game.state = "in-game";
 		game.score = [0, 0];
-	})
+	});
+
+	socket.on("game-over", () => {
+		game.state = "game-over";
+	});
 }
 
 function listen_move_events() {

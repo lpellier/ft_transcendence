@@ -64,36 +64,38 @@ function checkCollisions() {
 	game.framesSincePoint++;
 
 	// ? collision with bounds
-	if (game.pong.velocity[1] > 0 && game.pong.pos[1] + game.pong.diameter > consts.BOT_BOUND) {
-		game.pong.pos[1] = consts.BOT_BOUND - game.pong.diameter;
-		game.pong.velocity[1] = -game.pong.velocity[1];
-		return ;
-	}
-	else if (game.pong.velocity[1] < 0 && game.pong.pos[1] < consts.TOP_BOUND) {
-		game.pong.pos[1] = consts.TOP_BOUND;
-		game.pong.velocity[1] = -game.pong.velocity[1];
-		return;
-	}
-	else if (game.pong.velocity[0] > 0 && game.pong.pos[0] + game.pong.diameter > consts.RIGHT_BOUND) {
-		game.pong.relaunchPong("right");
-		game.score[0]++;
-		if (game.score[0] >= game.score_limit)
-			game.state = "game-over";
-		game.framesSincePoint = 0;
-		return ;
-	}
-	else if (game.pong.velocity[0] < 0 && game.pong.pos[0] < consts.LEFT_BOUND) {
-		game.pong.relaunchPong("left");
-		game.score[1]++;
-		if (game.score[1] >= game.score_limit)
-			game.state = "game-over";
-		game.framesSincePoint = 0;
-		return ;
+	if (game.local) {
+		if (game.pong.velocity[1] > 0 && game.pong.pos[1] + game.pong.diameter > consts.BOT_BOUND) {
+			game.pong.pos[1] = consts.BOT_BOUND - game.pong.diameter;
+			game.pong.velocity[1] = -game.pong.velocity[1];
+			return ;
+		}
+		else if (game.pong.velocity[1] < 0 && game.pong.pos[1] < consts.TOP_BOUND) {
+			game.pong.pos[1] = consts.TOP_BOUND;
+			game.pong.velocity[1] = -game.pong.velocity[1];
+			return;
+		}
+		else if (game.pong.velocity[0] > 0 && game.pong.pos[0] + game.pong.diameter > consts.RIGHT_BOUND) {
+			game.pong.relaunchPong("right");
+			game.score[0]++;
+			if (game.score[0] >= game.score_limit)
+				game.state = "game-over";
+			game.framesSincePoint = 0;
+			return ;
+		}
+		else if (game.pong.velocity[0] < 0 && game.pong.pos[0] < consts.LEFT_BOUND) {
+			game.pong.relaunchPong("left");
+			game.score[1]++;
+			if (game.score[1] >= game.score_limit)
+				game.state = "game-over";
+			game.framesSincePoint = 0;
+			return ;
+		}
 	}
 	
 	let player = (game.pong.pos[0] < consts.MAP_WIDTH / 2 ? game.players[0] : game.players[1]);
 
-	if (player.distanceTo(game.pong.pos) > 50)
+	if (player.distanceTo(game.pong.pos) > 100)
 		return ;
 
 	// ? collision with paddles

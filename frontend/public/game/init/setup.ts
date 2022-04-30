@@ -1,7 +1,7 @@
 // TODO for local button
+	// create game menu but locally
 	// pause by pressing escape -> removing sound or quitting to menu
 
-// ?TODO set url to room id
 // ?TODO define score limit in game creation
 
 // TODO different map ideas, windjammer inspired
@@ -10,15 +10,10 @@
 
 // TODO consistency in variable/function naming
 // TODO fix return button hitbox
-// TODO should reorder css in multiple files and convert every style attribute in code to css
 
 // TODO speed should be dependent on the angle of the pong ball
 
 // TODO hitbox issue between buttons opponent left ok and validate
-
-
-// ! issue : countdown still counts down when someone leaves during 
-// ! it meaning that when going back to menu, pong psition is updated but it has been removed
 
 let shouldLoad : boolean = false;
 
@@ -85,6 +80,7 @@ function setup() {
 	canvas = createCanvas(consts.MAP_WIDTH, consts.MAP_HEIGHT);
 	canvas.parent(document.getElementById("canvas-parent"));
 	background(0);
+	rectMode(CENTER)
 
 	frameRate(60);
 	keys.init();
@@ -140,13 +136,13 @@ function move_players() {
 }
 
 function draw() {
+	clear(0, 0, 0, 0);
 	if (!document.getElementById("canvas-parent")) {
 		shouldLoad = true;
 		return ;
 	}
 	else if (shouldLoad)
 		in_main_menu();
-	clear(0, 0, 0, 0);
 	keys.hide();
 	consts.RETURN_ICON.hide();
 	consts.MARK_ICON.hide();
