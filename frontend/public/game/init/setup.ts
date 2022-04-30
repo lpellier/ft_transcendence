@@ -16,6 +16,7 @@
 
 // TODO hitbox issue between buttons opponent left ok and validate
 
+
 // ! issue : countdown still counts down when someone leaves during 
 // ! it meaning that when going back to menu, pong psition is updated but it has been removed
 
