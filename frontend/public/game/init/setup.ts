@@ -1,8 +1,5 @@
-// TODO for red cross, green mark
-	// should find pixelated versions to be consistent with the rest
-
 // TODO for local button
-	// something to be able to go back to menu
+	// pause by pressing escape -> removing sound or quitting to menu
 
 // ?TODO set url to room id
 // ?TODO define score limit in game creation
@@ -16,6 +13,12 @@
 // TODO should reorder css in multiple files and convert every style attribute in code to css
 
 // TODO speed should be dependent on the angle of the pong ball
+
+// TODO hitbox issue between buttons opponent left ok and validate
+
+
+// ! issue : countdown still counts down when someone leaves during 
+// ! it meaning that when going back to menu, pong psition is updated but it has been removed
 
 let shouldLoad : boolean = false;
 
@@ -58,12 +61,24 @@ function in_main_menu() {
 	if (game.state == "waiting-player")
 		socket.emit("quit")	
 	shouldLoad = false;
+	loop();
 	game.reset();
 	errors.set_false();
 	buttons.reset();
 	buttons.create_buttons();
 	inputs.reset();
 	inputs.create_inputs();
+}
+
+function go_to_main_menu() {
+	if (mouseButton == LEFT)
+		in_main_menu();
+}
+
+function opponent_left_menu() {
+	game.state = "opponent-left-menu";
+	buttons.hide();
+	buttons.opponent_left_ok.show();
 }
 
 function setup() {
@@ -104,6 +119,8 @@ function move_players() {
 			player_input.push(-1);
 			socket.emit("move_down", game.players[0].id);
 		}
+		else
+			socket.emit("move_null", game.players[0].id);
 	}
 	else {
 		if (keyIsDown(UP_ARROW))
@@ -119,7 +136,6 @@ function move_players() {
 			return ;
 		}
 		game.pong.calculateNewPos();
-		checkCollisions();
 	}
 }
 
@@ -133,6 +149,9 @@ function draw() {
 	clear(0, 0, 0, 0);
 	keys.hide();
 	consts.RETURN_ICON.hide();
+	consts.MARK_ICON.hide();
+	consts.CROSS_ICON.hide();
+	consts.CROSS_ICON2.hide();
 	draw_background();
 	if (game.state == "waiting-player" || game.state == "waiting-readiness" || game.state == "countdown" || game.state == "in-game")
 		draw_map();
@@ -142,6 +161,8 @@ function draw() {
 		output_announcement("Game Creation", 55, consts.MAP_WIDTH / 2, consts.MAP_HEIGHT / 5);
 		output_announcement("score limit : ", 30, consts.MAP_WIDTH / 5, consts.MAP_HEIGHT * 3 / 5)
 	}
+	if (game.state == "opponent-left-menu")
+		output_announcement("Your opponent left", 55, consts.MAP_WIDTH / 2, consts.MAP_HEIGHT / 2);
 	if (game.state == "in-menu")
 		output_announcement("CyberPong 2077", 70, consts.MAP_WIDTH / 2, consts.MAP_HEIGHT / 4);
 	else if (game.state == "in-menu-input") {
@@ -155,7 +176,7 @@ function draw() {
 		output_announcement("WAITING FOR ANOTHER PLAYER", 25, consts.MAP_WIDTH / 2, consts.MAP_HEIGHT / 2);
 	else if (game.state == "waiting-readiness") {
 		draw_player_readiness();
-		output_announcement("PLEASE PRESS SPACE TO START THE GAME", 18, consts.MAP_WIDTH / 2, consts.MAP_HEIGHT / 2);
+		output_announcement("PLEASE PRESS SPACE TO START THE GAME", 25, consts.MAP_WIDTH / 2, consts.MAP_HEIGHT / 2);
 	}
 	else if (game.state == "countdown") {
 		output_countdown();

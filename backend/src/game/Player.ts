@@ -29,37 +29,10 @@ export class Player {
 		this.velocity = [0, consts.PLAYER_SPEED];
 	}
 
-	distanceTo(point : [number, number]) : boolean {
+	distanceTo(point : [number, number]) : number {
 		let dist : number = Math.sqrt(Math.pow((point[0] - (this.pos[0] + this.width / 2)), 2) + Math.pow((point[1] - (this.pos[1] + this.height / 2)), 2));
 
-		if (dist < 50)
-			return true;
-		return false;
-	}
-
-	checkCollisions(game : any) {
-		if (this.distanceTo([game.pong.pos[0] + game.pong.diameter / 2, game.pong.pos[1] + game.pong.diameter / 2])) {
-			let angle : [boolean, number, string, string] = [false, 0, "y", "middle"];
-			angle = game.collision_paddle(this, angle);
-			if (angle[0] == true) {
-				// ? for bot / top collisions
-				if (angle[2] == "x") {
-					if (angle[3] == "top")
-						game.pong.velocity[1] = game.pong.speed * -Math.cos(angle[1]);
-					else if (angle[3] == "bot")
-						game.pong.velocity[1] = game.pong.speed * Math.cos(angle[1]);
-					game.pong.velocity[0] = game.pong.speed * -Math.sin(angle[1]);
-				}
-				// ? invert velocity indexes for left / right collisions
-				else if (angle[2] == "y") {
-					if (game.pong.pos[0] < consts.MAP_WIDTH / 2)
-						game.pong.velocity[0] = game.pong.speed * Math.cos(angle[1]);
-					else
-						game.pong.velocity[0] = game.pong.speed * -Math.cos(angle[1]);
-					game.pong.velocity[1] = game.pong.speed * -Math.sin(angle[1]);	
-				}
-			}
-		}
+		return dist;
 	}
 
 	calculateNewPos() {
@@ -70,12 +43,12 @@ export class Player {
 			this.pos[1] = consts.MAP_HEIGHT - 10 - this.height;
 	}
 
-	move_up(game : any) {
+	move_up() {
 		this.velocity[1] = -consts.PLAYER_SPEED;
 		this.calculateNewPos();
 	}
 
-	move_down(game : any) {
+	move_down() {
 		this.velocity[1] = consts.PLAYER_SPEED;
 		this.calculateNewPos();
 	}

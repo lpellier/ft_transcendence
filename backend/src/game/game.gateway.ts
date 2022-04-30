@@ -4,8 +4,8 @@ import { Game } from "./Game"
 import * as utils from "./utils"
 
 // ? Important
-// TODO find whatever the fuck is wrong with collisions
-// TODO Movement prediction :
+
+// Done Movement prediction :
 // ? A player presses the up button and sends this information to the server
 // ? We should draw the final render state before even receiving a response from the server
 // ? to reduce lag and then check when the server returns if both render states are equal
@@ -15,7 +15,6 @@ import * as utils from "./utils"
 
 // ? Not important
 // TODO Finish or remove dash ability
-// TODO your opponent left menu
 
 // TODO adding options and probably sounds
 
@@ -81,7 +80,7 @@ export class GameGateway {
 	clients : string[] = [];
 	games : Game[] = [];
 
-	timestep : number = 100;; // ms
+	timestep : number = 100; // ms
 
 	handleDisconnect(client : Socket) {
 		let index = -1;
@@ -91,7 +90,8 @@ export class GameGateway {
 				for (const player of game.players) {
 					if (player.id == client.id) {
 						this.server.to(game.room_id).emit("player-disconnect");
-						clearInterval(game.intervalId);
+						clearInterval(game.updateInterval);
+						clearInterval(game.ballUpdateInterval);
 						this.games.splice(this.games.indexOf(game), 1);
 						console.log(client.id, "just disconnected -", this.clients.length, this.clients.length == 1 ? "user  total" : "users total");
 						return ;
@@ -107,7 +107,8 @@ export class GameGateway {
 			for (let player of game.players) {
 				if (player.id == client.id) {
 					this.server.to(game.room_id).emit("player-disconnect");
-					clearInterval(game.intervalId);
+					clearInterval(game.updateInterval);
+					clearInterval(game.ballUpdateInterval);
 					this.games.splice(this.games.indexOf(game), 1);
 					return ;
 				}
@@ -179,14 +180,14 @@ export class GameGateway {
 							setTimeout(() => {
 								this.server.to(game.room_id).emit("countdown-server");
 								if (i == 4) {
-									game.intervalId = setInterval(function() {
-										game.pong.calculateNewPos();
-										game.checkCollisions();
+									game.updateInterval = setInterval(() => {
+										for (let i = 0; i < 6; i++)
+											game.pong.calculateNewPos(game);
 										test.to(game.room_id).emit("updated_pos", 
-										[game.pong.pos, game.pong.velocity], 
-										[game.players[0].id, game.players[0].pos, game.players[0].velocity], 
-										[game.players[1].id, game.players[1].pos, game.players[1].velocity], 
-										game.score);
+											[game.pong.pos, game.pong.velocity], 
+											[game.players[0].id, game.players[0].pos, game.players[0].velocity], 
+											[game.players[1].id, game.players[1].pos, game.players[1].velocity], 
+											game.score);
 									}, this.timestep);
 								}
 							}, i * 1000);
@@ -232,7 +233,7 @@ export class GameGateway {
 			if (game.players.length == 2 && game.state == "game_started") {
 				for (const player of game.players) {
 					if (player.id == client_id) {
-						player.move_up(game);
+						player.move_up();
 						return ;
 					}
 				}
@@ -246,7 +247,21 @@ export class GameGateway {
 			if (game.players.length == 2 && game.state == "game_started") {
 				for (const player of game.players) {
 					if (player.id == client_id) {
-						player.move_down(game);
+						player.move_down();
+						return ;
+					}
+				}
+			}
+		}
+	}
+
+	@SubscribeMessage("move_null")
+	handleMoveNull(@MessageBody() client_id : string) {
+		for (const game of this.games) {
+			if (game.players.length == 2 && game.state == "game_started") {
+				for (const player of game.players) {
+					if (player.id == client_id) {
+						player.velocity[1] = 0;
 						return ;
 					}
 				}

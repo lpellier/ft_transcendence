@@ -23,12 +23,10 @@ function listen_start_events() {
 			if (socket.id == id_p1) {
 				game.players.push(new Player(consts.MAP_WIDTH / 12, consts.MAP_HEIGHT / 2 - consts.PLAYER_HEIGHT / 2, consts.PLAYER_WIDTH, consts.PLAYER_HEIGHT, "white", 1, id_p1));
 				game.players.push(new Player(consts.MAP_WIDTH * 11 / 12, consts.MAP_HEIGHT / 2 - consts.PLAYER_HEIGHT / 2, consts.PLAYER_WIDTH, consts.PLAYER_HEIGHT, "white", 2, id_p2));
-				console.log("i'm player 1");
 			}
 			else if (socket.id == id_p2) {
 				game.players.push(new Player(consts.MAP_WIDTH * 11 / 12, consts.MAP_HEIGHT / 2 - consts.PLAYER_HEIGHT / 2, consts.PLAYER_WIDTH, consts.PLAYER_HEIGHT, "white", 2, id_p2));
 				game.players.push(new Player(consts.MAP_WIDTH / 12, consts.MAP_HEIGHT / 2 - consts.PLAYER_HEIGHT / 2, consts.PLAYER_WIDTH, consts.PLAYER_HEIGHT, "white", 1, id_p1));
-				console.log("i'm player 2");
 			}
 			game.pong = new Pong;
 		}
@@ -45,7 +43,7 @@ function listen_start_events() {
 
 function listen_stop_events() {
 	socket.on("player-disconnect", (index : number) => {
-		in_main_menu();
+		opponent_left_menu();
 	});
 
 	socket.on("restart-server", () => {
@@ -76,6 +74,8 @@ function listen_move_events() {
 		p2_state : [string, [number, number], [number, number]], 
 		score : [number, number]
 	) => {
+		if (game.state != "in-game")
+			return ;
 		game.score = score;
 		game.pong.pos = pong_state[0];
 		game.pong.velocity = pong_state[1];
