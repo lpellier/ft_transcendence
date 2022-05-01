@@ -80,7 +80,6 @@ function setup() {
 	canvas = createCanvas(consts.MAP_WIDTH, consts.MAP_HEIGHT);
 	canvas.parent(document.getElementById("canvas-parent"));
 	background(0);
-	rectMode(CENTER)
 
 	frameRate(60);
 	keys.init();

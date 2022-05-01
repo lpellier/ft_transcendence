@@ -82,7 +82,7 @@ export class GameGateway {
 	clients : string[] = [];
 	games : Game[] = [];
 
-	timestep : number = 17; // ms
+	timestep : number = 100; // ms
 
 	handleDisconnect(client : Socket) {
 		let index = -1;
