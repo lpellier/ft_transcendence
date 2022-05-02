@@ -8,8 +8,10 @@ import PlayerInfoBand from 'components/PlayerInfoBand/PlayerInfoBand'
 import StatsBoards from 'components/StatsBoards/StatsBoards'
 import axios from 'axios';
 
-import { phoneSize } from 'index'
+import { phoneSize, token } from 'index'
 import {StatsPartStyle, AllHomeStyle} from '../../styles/tsxStyles/Home'
+
+import {User} from 'interfaces'
 
 function StatsPart() {
 	return(
@@ -21,7 +23,9 @@ function StatsPart() {
 }
 
 export default function Homepage() {
+
 	const [width, setWidth] = useState(window.innerWidth);
+	const [user, setUser] = useState<User>();
 
 	useEffect(() => {
 		const handleResizeWindow = () => setWidth(window.innerWidth);
@@ -32,15 +36,16 @@ export default function Homepage() {
 	}, [])
 
 	useEffect(() => {
-		axios.get('http://127.0.0.1:3001',
+		axios.get('http://127.0.0.1:3001/users/me',
 		{headers: {
-			'Access-Control-Allow-Origin': 'http://127.0.0.1:3000',
+			'Authorization': token,
 		}
 	})
 		.then(res => {
 			console.log("Get request success")
 			const test_data = res.data;
-			console.log({test_data});
+			setUser(test_data)
+			console.log(user);
 		})
 		.catch(function (err) {
 			console.log("Homepage Get request failed : ", err)
@@ -50,7 +55,7 @@ export default function Homepage() {
 	if (width <= phoneSize) {
 	  return (
 	    <Stack spacing={2}>
-        	<SearchAppBar image={''} name={''}/>
+        	<SearchAppBar image={''}/>
 			<Container>
 				<Stack direction="row" spacing={1} sx={AllHomeStyle}>
 					<StatsPart />
@@ -61,7 +66,7 @@ export default function Homepage() {
 	}
     return (
 		<Stack spacing={2}>
-        	<SearchAppBar image={''} name={''}/>
+        	<SearchAppBar image={''}/>
 			<Container>
 				<Stack direction="row" spacing={1} sx={AllHomeStyle}>
 					<FriendBand />

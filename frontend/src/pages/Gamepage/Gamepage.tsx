@@ -113,7 +113,7 @@ export default class Gamepage extends React.Component {
 	render() {
         return (
 			<Stack spacing={5}>
-                <SearchAppBar name={''} image={''}/>
+                <SearchAppBar image={''}/>
 				<Game/>
             </Stack>
         );
