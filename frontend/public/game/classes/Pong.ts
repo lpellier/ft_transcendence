@@ -7,13 +7,17 @@ class Pong {
 
 	constructor() {
 		this.pos = [consts.MAP_WIDTH / 2 - consts.PONG_DIAMETER / 2, consts.MAP_HEIGHT / 2 - consts.PONG_DIAMETER / 2];
-		let random_y = Math.random() < 0.5 ? -1 : 1;
-		let random_x = Math.floor(Math.random() * 2);
 		this.speed = consts.PONG_BASE_SPEED;
-		if (random_x == 0)
-			this.velocity = [-this.speed, random_y];
-		else
-			this.velocity = [this.speed, random_y];
+		if (!game.local)
+			this.velocity = [0, 0];
+		else {
+			let random_y = Math.random() < 0.5 ? -1 : 1;
+			let random_x = Math.floor(Math.random() * 2);
+			if (random_x == 0)
+				this.velocity = [-this.speed, random_y];
+			else
+				this.velocity = [this.speed, random_y];
+		}
 		this.diameter = consts.PONG_DIAMETER;
 		this.color = consts.PONG_COLOR;
 	}
@@ -21,6 +25,7 @@ class Pong {
 	calculateNewPos() {
 		this.pos[0] += this.velocity[0];
 		this.pos[1] += this.velocity[1];
+		checkCollisions();
 	}
 
 	relaunchPong(loser_side : string) {
@@ -69,8 +74,8 @@ class Pong {
 		return [this.c_x(), this.pos[1] + this.diameter];
 	}
 
-	ball_moves(x : number, y : number) : [number, number] {
-		return [x + this.velocity[0], y + this.velocity[1]];
+	ball_moves(pos : [number, number]) : [number, number] {
+		return [pos[0] + this.velocity[0], pos[1] + this.velocity[1]];
 	}
 	
 	c_x() : number {
