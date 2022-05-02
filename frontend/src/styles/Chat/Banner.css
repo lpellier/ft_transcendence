@@ -1,7 +1,7 @@
 .banner {
 	height: 7vh;
 	background-color: rgb(150, 130, 250, 0.7);
-	padding-right: 2%;
+	padding-right: 2vw;
 
 	border-bottom: solid 3px black;
 	justify-content: flex-end;

@@ -2,7 +2,6 @@ import { useState } from 'react'
 import Avatar from '@mui/material/Avatar'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
-import SearchAppBar from './AppBar/AppBar'
 
 // Avatar images importation
 
@@ -32,7 +31,7 @@ import Sloth from       "../images/Avatar/Sloth.png"
 const BigAvatar = {border: 2, width: 150, height: 150}
 const SmallAvatar = {border: 2, width: 50, height: 50}
 
-function PlayerAvatar(props: {image: any}) {
+function PlayerAvatar(props: {image: string}) {
     const image = props.image;
 
     return(
@@ -169,7 +168,7 @@ function EasterEggAvatar() {
 }
 
 export {CreateAvatar, PlayerAvatar, CactusAvatar, RobotAvatar, CoffeaAvatar, IceCreamAvatar,
-		OwlAvatar, PenguinAvatar}
-export {PandaAvatar, FoxAvatar, CatAvatar, DogAvatar, HambeargurAvatar, 
-        RamenAvatar, TacosAvatar, PenmericanAvatar}
-export {MouseAvatar, PteroAvatar, EasterEggAvatar, SlothAvatar}
+		OwlAvatar, PenguinAvatar,
+        PandaAvatar, FoxAvatar, CatAvatar, DogAvatar, HambeargurAvatar, 
+        RamenAvatar, TacosAvatar, PenmericanAvatar,
+        MouseAvatar, PteroAvatar, EasterEggAvatar, SlothAvatar}

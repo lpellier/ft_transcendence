@@ -8,7 +8,7 @@ import Channels from './Channels';
 
 import '../../styles/Chat/Chat.css';
 
-const SERVER = "http://localhost:3001";
+const SERVER = "http://127.0.0.1:3001";
 const socket = io(SERVER);
 
 function App() {

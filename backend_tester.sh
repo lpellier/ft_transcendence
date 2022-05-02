@@ -7,5 +7,5 @@ while [ true ]; do
 	if [ -z route ]; then
 		break
 	fi
-	curl -H "Authorization: Bearer ${TOKEN}" "http://localhost:3001/$route"
+	curl -H "Authorization: Bearer ${TOKEN}" "http://127.0.0.1:3001/$route"
 done

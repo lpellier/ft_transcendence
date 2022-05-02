@@ -1,5 +1,9 @@
 #canvas-parent {
 	position: relative;
+	justify-content: center;
+	display: flex;
+	min-width: fit-content;
+	min-height: fit-content;
 	margin: auto;
 	padding: 0;
 	width: 1200px;

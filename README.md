@@ -3,7 +3,7 @@
 ## Route /auth
 
 ### /auth 		GET 
-Redirects to 42 API for authentication, then redirects to localhost:3000/auth?token=<TOKEN> 
+Redirects to 42 API for authentication, then redirects to 127.0.0.1:3000/auth?token=<TOKEN> 
 
 ## Route /users
 
