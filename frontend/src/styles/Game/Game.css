@@ -92,6 +92,24 @@
 	z-index: 0;
 }
 
+#icon-player_one {
+	position: absolute;
+	width: 100px;
+	height: 100px;
+	left: 350px;
+	top: 445px;
+	z-index: 0;
+}
+
+#icon-player_two {
+	position: absolute;
+	width: 120px;
+	height: 100px;
+	left: 950px;
+	top: 445px;
+	z-index: 0;
+}
+
 #button-anyone {
 	flex-grow: 1;
 	z-index: 2;
@@ -123,6 +141,18 @@
 	width: 300px;
 	height: 50px;
 	left: 450px;
+	z-index: 1;
+	margin: 0 auto;
+}
+
+#button-opp-left-ok {
+	position: absolute;
+	padding: 0;
+	bottom: 2em;
+	width: 200px;
+	height: 100px;
+	left: 500px;
+	z-index: 0;
 	margin: 0 auto;
 }
 

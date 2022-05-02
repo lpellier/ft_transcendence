@@ -13,6 +13,8 @@ class Buttons {
 	plus : any;
 	minus : any;
 
+	opponent_left_ok : any;
+
 	constructor() {
 		this.reset();
 		this.create_buttons();
@@ -23,7 +25,7 @@ class Buttons {
 		this.join = create_button("Join game", readRoomID);
 		this.matchmaking = create_button("Match making", matchmaking);
 		this.local = create_button("Play local", startLocal);
-		this.return = create_button("", in_main_menu, highlightButton, resetButton, 100, 100);
+		this.return = create_button("", go_to_main_menu, highlightButton, resetButton, 100, 100);
 		this.return.style("border", "none");
 		this.return.style("background-color", "rgba(0, 0, 0, 0)");
 		
@@ -49,6 +51,9 @@ class Buttons {
 		this.minus = create_button("-", minusScoreLimit, highlightButton, resetButton, 50, 50);
 		this.minus.style("border", "none");
 		
+		this.opponent_left_ok = create_button("OK", go_to_main_menu, highlightButton, resetButton, 200, 100);
+		this.opponent_left_ok.style("border", "none");
+
 		this.hide();
 		this.addParent();
 	
@@ -94,6 +99,9 @@ class Buttons {
 		if (this.minus)
 			this.minus.remove();
 		this.minus = null;
+		if (this.opponent_left_ok)
+			this.opponent_left_ok.remove();
+		this.opponent_left_ok = null;
 	}
 
 	hide() {
@@ -110,22 +118,8 @@ class Buttons {
 
 		this.plus.hide();
 		this.minus.hide();
-	}
 
-	show() {
-		this.create_game.show();
-		this.join.show();
-		this.local.show();
-		this.return.show();
-		this.matchmaking.show();
-
-		this.anyone_can_join.show();
-		this.friends_can_join.show();
-		this.invitation_only.show();
-		this.validate.show();
-
-		this.plus.show();
-		this.minus.show();	
+		this.opponent_left_ok.hide();
 	}
 
 	click_anyone() {
@@ -164,5 +158,6 @@ class Buttons {
 		this.validate.parent(document.getElementById("button-validate"));
 		this.plus.parent(document.getElementById("button-plus"));
 		this.minus.parent(document.getElementById("button-minus"));
+		this.opponent_left_ok.parent(document.getElementById("button-opp-left-ok"));
 	}
 };

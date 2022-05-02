@@ -90,7 +90,7 @@ function startLocal() {
 		game.players.push(new Player(consts.MAP_WIDTH * 11 / 12, consts.MAP_HEIGHT / 2 - consts.PLAYER_HEIGHT / 2, consts.PLAYER_WIDTH, consts.PLAYER_HEIGHT, "white", 2, "second"));		
 		game.pong = new Pong;
 		game.local = true;
-		game.room_id = " Local";
+		game.room_id = "Local";
 	}
 }
 
@@ -112,8 +112,6 @@ function create_button(title : string, mPressed : any, mOver : any = highlightBu
 
 function create_input(title : string) {
 	let input = createInput(title);
-	// input.position(consts.MAP_WIDTH / 2 - 200, consts.MAP_HEIGHT * 2 / 3 - 37.5);
-	// input.style("width", "600px");
 	input.style("height", "75px");
 	input.style("font-size", "45px");
 	input.style("font-family", "PressStart2P-Regular");
@@ -122,8 +120,6 @@ function create_input(title : string) {
 	input.style("border", "3px solid white");
 	input.style("border-radius", "0.5em");
 	input.style("outline", "none");
-	
-	// input.style("outline", "3px solid white");
 
 	return input;
 }

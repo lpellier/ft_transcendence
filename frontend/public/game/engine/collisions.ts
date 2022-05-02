@@ -91,12 +91,14 @@ function checkCollisions() {
 		return ;
 	}
 	
+	let player = (game.pong.pos[0] < consts.MAP_WIDTH / 2 ? game.players[0] : game.players[1]);
+
+	if (player.distanceTo(game.pong.pos) > 50)
+		return ;
+
 	// ? collision with paddles
 	let angle : [boolean, number, string, string] = [false, 0, "x", "side"];
-	if (game.pong.pos[0] < consts.MAP_WIDTH / 2)
-		angle = collision_paddle(game.players[0], angle);
-	else
-		angle = collision_paddle(game.players[1], angle);
+	angle = collision_paddle(player, angle);
 	
 	if (angle[0] == true) {
 		// ? for bot / top collisions
@@ -129,49 +131,49 @@ function collision_paddle(player : Player, angle : [boolean, number, string, str
 	// ** CHECKING SIDE OF PADDLE ** //
 	if (angle[0] == false)
 		angle = intersect(pong_points_hit[1],
-			game.pong.ball_moves(pong_points_hit[1][0], pong_points_hit[1][1]),
+			game.pong.ball_moves(pong_points_hit[1]),
 			paddle_side_hit[0], paddle_side_hit[1], "y", "side");
 
 	if (angle[0] == false)
 		angle = intersect(pong_points_hit[0],
-			game.pong.ball_moves(pong_points_hit[0][0], pong_points_hit[0][1]),
+			game.pong.ball_moves(pong_points_hit[0]),
 			paddle_side_hit[0], paddle_side_hit[1], "y", "side");
 
 	if (angle[0] == false)
 		angle = intersect(pong_points_hit[2],
-			game.pong.ball_moves(pong_points_hit[2][0], pong_points_hit[2][1]),
+			game.pong.ball_moves(pong_points_hit[2]),
 			paddle_side_hit[0], paddle_side_hit[1], "y", "side");
 
 	// ** CHECKING BOTTOM OF PADDLE ** //
 	if (angle[0] == false)
 		angle = intersect(game.pong.up(),
-			game.pong.ball_moves(game.pong.c_x(), game.pong.pos[1]),
+			game.pong.ball_moves(game.pong.up()),
 			player.left_down(), player.right_down(), "x", "bot");
 
 	if (angle[0] == false)
 		angle = intersect(game.pong.left_up(),
-			game.pong.ball_moves(game.pong.pos[0], game.pong.pos[1]),
+			game.pong.ball_moves(game.pong.left_up()),
 			player.left_down(), player.right_down(), "x", "bot");
 	
 	if (angle[0] == false)
 		angle = intersect(game.pong.right_up(),
-			game.pong.ball_moves(game.pong.pos[0] + game.pong.diameter, game.pong.pos[1]),
+			game.pong.ball_moves(game.pong.right_up()),
 			player.left_down(), player.right_down(), "x", "bot");
 
 	// ** CHECKING TOP OF PADDLE ** //
 	if (angle[0] == false)
 		angle = intersect(game.pong.down(),
-			game.pong.ball_moves(game.pong.c_x(), game.pong.pos[1] + game.pong.diameter),
+			game.pong.ball_moves(game.pong.down()),
 			player.left_up(), player.right_up(), "x", "top");
 
 	if (angle[0] == false)
 		angle = intersect(game.pong.left_down(),
-			game.pong.ball_moves(game.pong.pos[0], game.pong.pos[1] + game.pong.diameter),
+			game.pong.ball_moves(game.pong.left_down()),
 			player.left_up(), player.right_up(), "x", "top");
 	
 	if (angle[0] == false)
 		angle = intersect(game.pong.right_down(),
-			game.pong.ball_moves(game.pong.pos[0] + game.pong.diameter, game.pong.pos[1] + game.pong.diameter),
+			game.pong.ball_moves(game.pong.right_down()),
 			player.left_up(), player.right_up(), "x", "top");
 
 	return angle;

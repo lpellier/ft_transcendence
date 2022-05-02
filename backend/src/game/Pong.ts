@@ -1,8 +1,5 @@
-import { MAP_WIDTH, MAP_HEIGHT } from "./server";
-
-const PONG_DIAMETER = 10;
-const PONG_COLOR = "white";
-export const PONG_MAX_SPEED = 7.5;
+import * as consts from "./Consts"
+import { Game } from "./Game"
 
 export class Pong {
 	pos : [number, number]
@@ -11,26 +8,27 @@ export class Pong {
 	speed : number;
 	color : any;
 	constructor() {
-		this.pos = [MAP_WIDTH / 2 - PONG_DIAMETER / 2, MAP_HEIGHT / 2 - PONG_DIAMETER / 2];
+		this.pos = [consts.MAP_WIDTH / 2 - consts.PONG_DIAMETER / 2, consts.MAP_HEIGHT / 2 - consts.PONG_DIAMETER / 2];
 		let random_y = Math.random() < 0.5 ? -1 : 1;
 		let random_x = Math.floor(Math.random() * 2);
-		this.speed = 4;
+		this.speed = consts.PONG_BASE_SPEED;
 		if (random_x == 0)
 			this.velocity = [-this.speed, random_y];
 		else
 			this.velocity = [this.speed, random_y];
-		this.diameter = PONG_DIAMETER;
-		this.color = PONG_COLOR;
+		this.diameter = consts.PONG_DIAMETER;
+		this.color = consts.PONG_COLOR;
 	}
 
-	calculateNewPos() {
+	calculateNewPos(game : Game) {
 		this.pos[0] += this.velocity[0];
 		this.pos[1] += this.velocity[1];
+		game.checkCollisions();
 	}
 
 	relaunchPong(loser_side : string) {
-		this.pos = [MAP_WIDTH / 2 - PONG_DIAMETER / 2, MAP_HEIGHT / 2 - PONG_DIAMETER / 2];
-		this.speed = 4;
+		this.pos = [consts.MAP_WIDTH / 2 - consts.PONG_DIAMETER / 2, consts.MAP_HEIGHT / 2 - consts.PONG_DIAMETER / 2];
+		this.speed = consts.PONG_BASE_SPEED;
 		let random_y = Math.random() < 0.5 ? -1 : 1;
 
 		// ? Comment allows for testing horizontal collisions
@@ -74,8 +72,8 @@ export class Pong {
 		return [this.c_x(), this.pos[1] + this.diameter];
 	}
 
-	ball_moves(x : number, y : number) : [number, number] {
-		return [x + this.velocity[0], y + this.velocity[1]];
+	ball_moves(pos : [number, number]) : [number, number] {
+		return [pos[0] + this.velocity[0], pos[1] + this.velocity[1]];
 	}
 	
 	c_x() : number {
