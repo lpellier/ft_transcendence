@@ -31,7 +31,11 @@ export class UsersService {
   // }
 
   async findAll() {
-    return await this.prisma.user.findMany();
+    return await this.prisma.user.findMany({
+      include: {
+        stats: true,
+      },
+    });
   }
 
   async findOne(id: number) {
