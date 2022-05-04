@@ -82,7 +82,7 @@ export class GameGateway {
 	clients : string[] = [];
 	games : Game[] = [];
 
-	timestep : number = 17; // ms
+	timestep : number = 20; // ms
 
 	handleDisconnect(client : Socket) {
 		let index = -1;
@@ -184,14 +184,12 @@ export class GameGateway {
 								this.server.to(game.room_id).emit("countdown-server");
 								if (i == 4) {
 									game.updateInterval = setInterval(() => {
-										for (let i = 0; i < 1; i++) {
-											if (game.pong.calculateNewPos(game)) {
-												test.to(game.room_id).emit("game-over");
-												clearInterval(game.updateInterval);
-												clearInterval(game.ballUpdateInterval);
-												this.games.splice(this.games.indexOf(game), 1);
-												return ;
-											}
+										if (game.pong.calculateNewPos(game)) {
+											test.to(game.room_id).emit("game-over");
+											clearInterval(game.updateInterval);
+											clearInterval(game.ballUpdateInterval);
+											this.games.splice(this.games.indexOf(game), 1);
+											return ;
 										}
 										test.to(game.room_id).emit("updated_pos", 
 											[game.pong.pos, game.pong.velocity], 

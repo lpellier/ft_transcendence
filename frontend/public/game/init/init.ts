@@ -73,6 +73,7 @@ function click_invitation() {
 
 function startLocal() {
 	if (mouseButton == LEFT) {
+		game.local = true;
 		buttons.hide();
 		inputs.hide();
 		game.timer = 4;
@@ -87,8 +88,7 @@ function startLocal() {
 		game.state = "countdown";
 		game.players.push(new Player(consts.MAP_WIDTH / 12, consts.MAP_HEIGHT / 2 - consts.PLAYER_HEIGHT / 2, consts.PLAYER_WIDTH, consts.PLAYER_HEIGHT, "white", 1, "first"));
 		game.players.push(new Player(consts.MAP_WIDTH * 11 / 12, consts.MAP_HEIGHT / 2 - consts.PLAYER_HEIGHT / 2, consts.PLAYER_WIDTH, consts.PLAYER_HEIGHT, "white", 2, "second"));		
-		game.pong = new Pong;
-		game.local = true;
+		game.pong = new Pong();
 		game.room_id = "Local";
 	}
 }

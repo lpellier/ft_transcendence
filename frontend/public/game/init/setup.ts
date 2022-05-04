@@ -2,11 +2,11 @@
 	// create game menu but locally
 	// pause by pressing escape -> removing sound or quitting to menu
 
-// ?TODO define score limit in game creation
-
 // TODO different map ideas, windjammer inspired
 // TODO for example, each pong ball gives a random number of points
 // TODO another with walls in the middle, forcing the player to play around it
+
+// TODO power ups : resize paddle depending on malus/bonus
 
 // TODO consistency in variable/function naming
 // TODO fix return button hitbox
@@ -14,6 +14,8 @@
 // TODO speed should be dependent on the angle of the pong ball
 
 // TODO hitbox issue between buttons opponent left ok and validate
+
+// TODO when players goes to homepage, shuold find a way to tell the other player that he left
 
 let shouldLoad : boolean = false;
 
