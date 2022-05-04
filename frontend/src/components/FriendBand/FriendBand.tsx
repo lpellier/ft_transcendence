@@ -1,13 +1,13 @@
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 
-const HeadBoxStyle = { width: '30vw',
-					height: '6vh',
-					color: 'white', 
-					border: '3px solid black',
-				}
+const HeadBoxStyle = {
+						color: 'white', 
+						border: '3px solid black',
+					}
 
-const BoxStyle = {	height: '74vh',
+const BoxStyle = {	
+					height: '74vh',
 					color: 'white', 
 					border: '3px solid black',
 				}

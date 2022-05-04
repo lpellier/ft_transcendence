@@ -1,38 +1,40 @@
+import {useEffect, useState, useRef} from 'react'
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
-import SkillBar from 'react-skillbars';
+import {PlayerBarStyle} from "../../styles/tsxStyles/Home";
+import Typography from '@mui/material/Typography'
+import './../../styles/Other/SkillBar.css'
+import {SkillBarContourStyle, TitleStyle} from './../../styles/tsxStyles/Home'
 
-const BoxSttyle = {	width: '60vw',
-					height: '6vh',
-					textAlign: 'center',
-					alignComponent: 'center',
-					color: 'white', 
-					border: '3px solid black'}
-					
-const SkillBarStyle = { width: '50vh', 
-						paddingTop: '1%'}
+function SkillBar(props: {progression: number}) {
+	const [length, setLength] = useState(0);
+	const totwidth = length + "px";
+	const SkillBox = useRef();
 
-const colors = {
-	bar: 'blue',
-	title: {
-	  text: 'white',
-	  background: 'purple'
-	}
-  }
+	useEffect(() => {
+		//@ts-ignore: next-line
+		setLength((props.progression / 100) * SkillBox.current.offsetWidth);
+	});
 
-const skills = [
-	{type: "XX%", level: 85},
-  ];
-
-export default function PlayerInfoBand() {
 	return (
-			<Box bgcolor='#7A28CB' sx={BoxSttyle}>
-				<Stack>
-					Level XX
-					<div style={SkillBarStyle}>
-						<SkillBar skills={skills} colors={colors}
-						height={20}/>
-					</div>
+		<Box ref={SkillBox} sx={SkillBarContourStyle} >
+			<div style={{width: totwidth}} className="SkillBar">
+					<Typography variant="subtitle2" sx={TitleStyle}>
+						{props.progression}%
+					</Typography>
+			</div>
+		</Box>
+	);
+}
+
+export default function PlayerInfoBand(props: {level: number}) {
+	return (
+			<Box sx={PlayerBarStyle}>
+				<Stack spacing={2}>
+					<Typography variant="h6">
+						Level {props.level}
+					</Typography>
+					<SkillBar progression={50}/>
 				</Stack>
 			</Box>
 	);

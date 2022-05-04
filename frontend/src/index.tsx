@@ -1,10 +1,19 @@
 import ReactDOM from 'react-dom';
 import AllRoutes from './routes/routes';
+import Cookies from "universal-cookie";
 import './styles/body.css'
+
+const cookies = new Cookies();
+const token = cookies.get("Authorization");
+
+const tabletSize = 768;
+const phoneSize = 530;
 
 const Root = document.getElementById('root');
 
 ReactDOM.render(
-    <AllRoutes />, 
+    <AllRoutes />,
     Root
 );
+
+export {tabletSize, phoneSize, token}
