@@ -18,7 +18,6 @@ function Messages(user: User) {
     }
 	
 	let [messages, setMessages] = useState<Provider[]>([]);
-	let [sentMessages, setSentMessages] = useState([]);
 
 	const addMessage = (newMessage:string, user:string, type:boolean) => setMessages(state => [...state, {id: state.length, content: newMessage, user: user, type: type}])
 	console.log(user.username)
