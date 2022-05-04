@@ -1,11 +1,11 @@
 function draw_players() {
-	if (!game.local) { // ? prediction for other player based on his movement
-		game.players[1].calculateNewPos();
-		if (player_input.length > 0) { // ? Prediction based on input not yet processed
-			(player_input[0] == 1 ? game.players[0].move_up() : (player_input[0] == -1 ? game.players[0].move_down() : 0));
-			player_input.splice(0, 1);
-		}
-	}
+	// if (!game.local) { // ? prediction for other player based on his movement
+	// 	game.players[1].calculateNewPos();
+	// 	if (player_input.length > 0) { // ? Prediction based on input not yet processed
+	// 		(player_input[0] == 1 ? game.players[0].move_up() : (player_input[0] == -1 ? game.players[0].move_down() : 0));
+	// 		player_input.splice(0, 1);
+	// 	}
+	// }
 
 	for (let i : number = 0; i < game.players.length; i++) {
 		game.players[i].render();
