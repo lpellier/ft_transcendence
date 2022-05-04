@@ -20,10 +20,6 @@ class Player {
 	}
 	
 	render() {
-		if (player_input.length > 0) { // ? Prediction based on input not yet processed
-			(player_input[0] == 1 ? this.move_up() : (player_input[0] == -1 ? this.move_down() : 0));
-			player_input.splice(0, 1);
-		}
 		push();
 		noStroke();
 		fill(this.color);

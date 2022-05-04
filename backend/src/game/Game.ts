@@ -17,6 +17,7 @@ export class Game {
 	room_id : string;
 	state : string;
 	score : [number, number];
+	score_limit : number;
 	players : Player[];
 	pong : Pong;
 	framesSincePoint : number;
@@ -29,6 +30,7 @@ export class Game {
 		this.state = 'waiting_room';
 		this.players = [];
 		this.score = [0, 0];
+		this.score_limit = 0;
 		this.pong = new Pong();
 		this.framesSincePoint = 0;
 		this.publicity = "public";
@@ -74,7 +76,7 @@ export class Game {
 	// ? left bound : 0
 	// ? right bound : MAP_WIDTH
 
-	checkCollisions() {
+	checkCollisions() : boolean {
 		// Implement acceleration here
 		if (this.framesSincePoint == 0)
 			this.pong.speed = consts.PONG_BASE_SPEED;
@@ -96,30 +98,34 @@ export class Game {
 		if (this.pong.velocity[1] > 0 && this.pong.pos[1] + this.pong.diameter > bot_bound) {
 			this.pong.pos[1] = bot_bound - this.pong.diameter;
 			this.pong.velocity[1] = -this.pong.velocity[1];
-			return ;
+			return false;
 		}
 		else if (this.pong.velocity[1] < 0 && this.pong.pos[1] < top_bound) {
 			this.pong.pos[1] = top_bound;
 			this.pong.velocity[1] = -this.pong.velocity[1];
-			return;
+			return false;
 		}
 		else if (this.pong.velocity[0] > 0 && this.pong.pos[0] + this.pong.diameter > right_bound) {
 			this.pong.relaunchPong("right");
 			this.score[0]++;
+			if (this.score[0] >= this.score_limit)
+				return true;
 			this.framesSincePoint = 0;
-			return ;
+			return false;
 		}
 		else if (this.pong.velocity[0] < 0 && this.pong.pos[0] < left_bound) {
 			this.pong.relaunchPong("left");
 			this.score[1]++;
+			if (this.score[1] >= this.score_limit)
+				return true;
 			this.framesSincePoint = 0;
-			return ;
+			return false;
 		}
 		
 		let player = (this.pong.pos[0] < consts.MAP_WIDTH / 2 ? this.players[0] : this.players[1]);
 
 		if (player.distanceTo(this.pong.pos) > 50)
-			return ;
+			return false;
 
 		// ? collision with paddles
 		let angle : [boolean, number, string, string] = [false, 0, "x", "side"];
@@ -143,6 +149,7 @@ export class Game {
 				this.pong.velocity[1] = this.pong.speed * -Math.sin(angle[1]);	
 			}
 		}
+		return false;
 	}
 
 	collision_paddle(player : Player, angle : [boolean, number, string, string]) : [boolean, number, string, string] {

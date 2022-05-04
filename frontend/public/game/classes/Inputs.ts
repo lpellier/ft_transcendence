@@ -19,6 +19,7 @@ class Inputs {
 	create_inputs() {
 		this.join = create_input('');
 		this.join.size(600, 75);
+		
 		this.score_limit = create_input('');
 		this.score_limit.size(100, 75);
 		this.score_limit.attribute("disabled", "true");
@@ -30,11 +31,6 @@ class Inputs {
 	hide() {
 		this.join.hide();
 		this.score_limit.hide();
-	}
-
-	show() {
-		this.join.show();
-		this.score_limit.show();
 	}
 
 	addParent() {

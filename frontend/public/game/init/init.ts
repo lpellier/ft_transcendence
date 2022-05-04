@@ -12,18 +12,17 @@ function createGameMenu() {
 		buttons.minus.show();
 		inputs.score_limit.show();
 		inputs.score_limit.attribute("value", game.score_limit);
-
 		game.state = "in-menu-create";
 	}
 }
 
 function createGame() {
 	if (mouseButton == LEFT)
-		socket.emit("matchmaking", game.publicity, false);
+		socket.emit("matchmaking", game.publicity, false, game.score_limit);
 }
 function matchmaking() {
 	if (mouseButton == LEFT)
-		socket.emit("matchmaking", "public", true);
+		socket.emit("matchmaking", "public", true, 10);
 }
 
 function highlightButton() {
@@ -74,6 +73,7 @@ function click_invitation() {
 
 function startLocal() {
 	if (mouseButton == LEFT) {
+		game.local = true;
 		buttons.hide();
 		inputs.hide();
 		game.timer = 4;
@@ -88,8 +88,7 @@ function startLocal() {
 		game.state = "countdown";
 		game.players.push(new Player(consts.MAP_WIDTH / 12, consts.MAP_HEIGHT / 2 - consts.PLAYER_HEIGHT / 2, consts.PLAYER_WIDTH, consts.PLAYER_HEIGHT, "white", 1, "first"));
 		game.players.push(new Player(consts.MAP_WIDTH * 11 / 12, consts.MAP_HEIGHT / 2 - consts.PLAYER_HEIGHT / 2, consts.PLAYER_WIDTH, consts.PLAYER_HEIGHT, "white", 2, "second"));		
-		game.pong = new Pong;
-		game.local = true;
+		game.pong = new Pong();
 		game.room_id = "Local";
 	}
 }

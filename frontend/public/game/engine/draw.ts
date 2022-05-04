@@ -1,16 +1,20 @@
 function draw_players() {
-	if (!game.local) // ? prediction for other player based on his movement
-		game.players[1].calculateNewPos();
-	
+	// if (!game.local) { // ? prediction for other player based on his movement
+	// 	game.players[1].calculateNewPos();
+	// 	if (player_input.length > 0) { // ? Prediction based on input not yet processed
+	// 		(player_input[0] == 1 ? game.players[0].move_up() : (player_input[0] == -1 ? game.players[0].move_down() : 0));
+	// 		player_input.splice(0, 1);
+	// 	}
+	// }
+
 	for (let i : number = 0; i < game.players.length; i++) {
 		game.players[i].render();
 	}
 }
 
 function draw_pong() {
-	if (!game.local)
-		game.pong.calculateNewPos();
-
+	// if (!game.local)
+	// 	game.pong.calculateNewPos();
 	game.pong.render();
 }
 
@@ -20,7 +24,7 @@ function draw_map() {
 	noStroke();
 	fill("white");
 	textSize(14);
-	textFont(consts.FONT);
+	textFont(consts.FONT); 
 	text("Room #" + game.room_id, 16, 25); // room id
 	for (let i : number = consts.TOP_BOUND; i < consts.BOT_BOUND; i += 20)
 		rect(consts.MAP_WIDTH / 2, i, 5, 10); // line in the middle
@@ -30,7 +34,10 @@ function draw_map() {
 	textFont(consts.FONT);
 	push();
 	fill((game.score[0] > game.score[1] ? "white" : "grey")); // highlight better score
-	text(game.score[0], consts.MAP_WIDTH / 2 - 70, 90); // score
+	if (game.score[0].toString().length > 1)
+		text(game.score[0], consts.MAP_WIDTH / 2 - 120, 90); // score
+	else
+		text(game.score[0], consts.MAP_WIDTH / 2 - 70, 90); // score
 	pop();
 	push();
 	fill((game.score[1] > game.score[0] ? "white" : "grey"));

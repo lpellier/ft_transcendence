@@ -1,3 +1,4 @@
+import { ConsoleLogger } from "@nestjs/common";
 import * as consts from "./Consts"
 import { Game } from "./Game"
 
@@ -20,10 +21,10 @@ export class Pong {
 		this.color = consts.PONG_COLOR;
 	}
 
-	calculateNewPos(game : Game) {
+	calculateNewPos(game : Game) : boolean {
 		this.pos[0] += this.velocity[0];
 		this.pos[1] += this.velocity[1];
-		game.checkCollisions();
+		return game.checkCollisions();
 	}
 
 	relaunchPong(loser_side : string) {

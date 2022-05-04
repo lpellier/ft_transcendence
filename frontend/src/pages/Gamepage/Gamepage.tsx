@@ -2,7 +2,10 @@ import React from "react";
 import Stack from '@mui/material/Stack';
 import SearchAppBar from 'components/AppBar/AppBar'
 
-import "./../../styles/Game/Game.css"
+import "./../../styles/Game/canvas.css"
+import "./../../styles/Game/buttons.css"
+import "./../../styles/Game/icons.css"
+import "./../../styles/Game/inputs.css"
 
 function addScript(url : string) : any {
     let scripts = document.getElementsByTagName("script");

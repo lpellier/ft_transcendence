@@ -3,28 +3,6 @@ import { Socket, Server } from "socket.io";
 import { Game } from "./Game"
 import * as utils from "./utils"
 
-// ? Important
-
-// Done Movement prediction :
-// ? A player presses the up button and sends this information to the server
-// ? We should draw the final render state before even receiving a response from the server
-// ? to reduce lag and then check when the server returns if both render states are equal
-
-// ? In case multiple presses are made, we should make a list of all unresolved actions
-// ? and check that each one was correct
-
-// ? Not important
-// TODO Finish or remove dash ability
-
-// TODO adding options and probably sounds
-
-// TODO server should send constants like map width and height itself in case of changing things
-// TODO Games should have map heights and width constants in their class, because it might be different for other people
-
-// ? Maybe but probably no
-// TODO windjammers remake ?
-// TODO players can move horizontally (?)
-
 // ? How to create a game of pong
 // ? First, server sends page to which clients can connect
 // ? clients connected are separeted into rooms, there can only be two clients per room
@@ -80,7 +58,7 @@ export class GameGateway {
 	clients : string[] = [];
 	games : Game[] = [];
 
-	timestep : number = 100; // ms
+	timestep : number = 20; // ms
 
 	handleDisconnect(client : Socket) {
 		let index = -1;
@@ -106,7 +84,6 @@ export class GameGateway {
 		for (let game of this.games) {
 			for (let player of game.players) {
 				if (player.id == client.id) {
-					this.server.to(game.room_id).emit("player-disconnect");
 					clearInterval(game.updateInterval);
 					clearInterval(game.ballUpdateInterval);
 					this.games.splice(this.games.indexOf(game), 1);
@@ -126,7 +103,7 @@ export class GameGateway {
 	@SubscribeMessage('matchmaking')
 	handleMatchmaking(
 		@ConnectedSocket() client : Socket,
-		@MessageBody() data : [string, boolean]
+		@MessageBody() data : [string, boolean, number]
 	) {
 		let existing_game : Game;
 		if (data[0] == "public" && data[1])
@@ -137,9 +114,11 @@ export class GameGateway {
 			existing_game = this.games[this.games.length - 1];
 		}
 		existing_game.publicity = data[0];
+		if (existing_game.score_limit == 0)
+			existing_game.score_limit = data[2];
 		client.join(existing_game.room_id);
 		existing_game.add_player(client.id);
-		this.server.to(existing_game.room_id).emit("waiting_room", existing_game.room_id);
+		this.server.to(existing_game.room_id).emit("waiting_room", existing_game.room_id, existing_game.score_limit);
 		start_game_full_rooms(this.games, this.server);
 	}
 
@@ -181,12 +160,20 @@ export class GameGateway {
 								this.server.to(game.room_id).emit("countdown-server");
 								if (i == 4) {
 									game.updateInterval = setInterval(() => {
-										for (let i = 0; i < 6; i++)
-											game.pong.calculateNewPos(game);
-										test.to(game.room_id).emit("updated_pos", 
-											[game.pong.pos, game.pong.velocity], 
-											[game.players[0].id, game.players[0].pos, game.players[0].velocity], 
-											[game.players[1].id, game.players[1].pos, game.players[1].velocity], 
+										if (game.pong.calculateNewPos(game)) {
+											test.to(game.room_id).emit("game-over");
+											clearInterval(game.updateInterval);
+											clearInterval(game.ballUpdateInterval);
+											this.games.splice(this.games.indexOf(game), 1);
+											return ;
+										}
+										test.to(game.room_id).emit("updated_pos",
+											// [game.pong.pos, game.pong.velocity], 
+											// [game.players[0].id, game.players[0].pos, game.players[0].velocity], 
+											// [game.players[1].id, game.players[1].pos, game.players[1].velocity], 
+											game.pong.pos,
+											[game.players[0].id, game.players[0].pos],
+											[game.players[1].id, game.players[1].pos],
 											game.score);
 									}, this.timestep);
 								}
