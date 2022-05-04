@@ -3,30 +3,6 @@ import { Socket, Server } from "socket.io";
 import { Game } from "./Game"
 import * as utils from "./utils"
 
-// ? Important
-
-// Done Movement prediction :
-// ? A player presses the up button and sends this information to the server
-// ? We should draw the final render state before even receiving a response from the server
-// ? to reduce lag and then check when the server returns if both render states are equal
-
-// ? In case multiple presses are made, we should make a list of all unresolved actions
-// ? and check that each one was correct
-
-// ? Not important
-// TODO Finish or remove dash ability
-
-// TODO adding options and probably sounds
-
-// TODO server should send constants like map width and height itself in case of changing things
-// TODO Games should have map heights and width constants in their class, because it might be different for other people
-
-// ? Maybe but probably no
-// TODO windjammers remake ?
-// TODO players can move horizontally (?)
-
-// TODO prediction or no prediction < that is the question
-
 // ? How to create a game of pong
 // ? First, server sends page to which clients can connect
 // ? clients connected are separeted into rooms, there can only be two clients per room
@@ -191,10 +167,13 @@ export class GameGateway {
 											this.games.splice(this.games.indexOf(game), 1);
 											return ;
 										}
-										test.to(game.room_id).emit("updated_pos", 
-											[game.pong.pos, game.pong.velocity], 
-											[game.players[0].id, game.players[0].pos, game.players[0].velocity], 
-											[game.players[1].id, game.players[1].pos, game.players[1].velocity], 
+										test.to(game.room_id).emit("updated_pos",
+											// [game.pong.pos, game.pong.velocity], 
+											// [game.players[0].id, game.players[0].pos, game.players[0].velocity], 
+											// [game.players[1].id, game.players[1].pos, game.players[1].velocity], 
+											game.pong.pos,
+											[game.players[0].id, game.players[0].pos],
+											[game.players[1].id, game.players[1].pos],
 											game.score);
 									}, this.timestep);
 								}

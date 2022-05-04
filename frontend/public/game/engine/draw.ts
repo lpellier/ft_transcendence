@@ -13,8 +13,8 @@ function draw_players() {
 }
 
 function draw_pong() {
-	if (!game.local)
-		game.pong.calculateNewPos();
+	// if (!game.local)
+	// 	game.pong.calculateNewPos();
 	game.pong.render();
 }
 

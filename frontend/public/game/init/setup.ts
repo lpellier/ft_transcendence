@@ -1,21 +1,23 @@
+
+// TODO consistency in variable/function naming
+// TODO speed should be dependent on the angle of the pong ball
+// TODO hitbox issue between buttons opponent left ok and validate
+// TODO when players goes to homepage, shuold find a way to tell the other player that he left
+// TODO Finish or remove dash ability
 // TODO for local button
 	// create game menu but locally
 	// pause by pressing escape -> removing sound or quitting to menu
 
+// TODO add AI
+
 // TODO different map ideas, windjammer inspired
 // TODO for example, each pong ball gives a random number of points
 // TODO another with walls in the middle, forcing the player to play around it
-
 // TODO power ups : resize paddle depending on malus/bonus
+// TODO adding options and probably sounds
 
-// TODO consistency in variable/function naming
-// TODO fix return button hitbox
-
-// TODO speed should be dependent on the angle of the pong ball
-
-// TODO hitbox issue between buttons opponent left ok and validate
-
-// TODO when players goes to homepage, shuold find a way to tell the other player that he left
+// TODO server should send constants like map width and height itself in case of changing things
+// TODO Games should have map heights and width constants in their class, because it might be different for other people
 
 let shouldLoad : boolean = false;
 
@@ -58,7 +60,6 @@ function in_main_menu() {
 	if (game.state == "waiting-player")
 		socket.emit("quit")	
 	shouldLoad = false;
-	loop();
 	game.reset();
 	errors.set_false();
 	buttons.reset();

@@ -74,28 +74,41 @@ function listen_move_events() {
 	});
 
 	socket.on("updated_pos", (
-		pong_state : [[number, number], [number, number]], 
-		p1_state : [string, [number, number], [number, number]], 
-		p2_state : [string, [number, number], [number, number]], 
+		// pong_state : [[number, number], [number, number]], 
+		// p1_state : [string, [number, number], [number, number]], 
+		// p2_state : [string, [number, number], [number, number]], 
+		// score : [number, number]
+		pong_pos : [number, number],
+		p1_state : [string, [number, number]],
+		p2_state : [string, [number, number]],
 		score : [number, number]
 	) => {
 		if (game.state != "in-game")
 			return ;
 		game.score = score;
-		game.pong.pos = pong_state[0];
-		game.pong.velocity = pong_state[1];
+		game.pong.pos = pong_pos;
 		if (p1_state[0] == socket.id) {
 			game.players[0].pos = p1_state[1];
-			game.players[0].velocity = p1_state[2];
 			game.players[1].pos = p2_state[1];
-			game.players[1].velocity = p2_state[2];
 		}
 		else if (p2_state[0] == socket.id) {
 			game.players[0].pos = p2_state[1];
-			game.players[0].velocity = p2_state[2];
 			game.players[1].pos = p1_state[1];
-			game.players[1].velocity = p1_state[2];
 		}
+		// game.pong.pos = pong_state[0]; // ? only need velocity if i plan on doing predictions
+		// game.pong.velocity = pong_state[1];
+		// if (p1_state[0] == socket.id) {
+		// 	game.players[0].pos = p1_state[1];
+		// 	game.players[0].velocity = p1_state[2];
+		// 	game.players[1].pos = p2_state[1];
+		// 	game.players[1].velocity = p2_state[2];
+		// }
+		// else if (p2_state[0] == socket.id) {
+		// 	game.players[0].pos = p2_state[1];
+		// 	game.players[0].velocity = p2_state[2];
+		// 	game.players[1].pos = p1_state[1];
+		// 	game.players[1].velocity = p1_state[2];
+		// }
 	});
 }
 
