@@ -14,7 +14,7 @@ model User {
   id          	Int     @id
   username    	String  @unique
   avatar		String
-  Stats			Stats?
+  stats			Stats?
   winHistory	Match[] @relation("win")
   lossHistory	Match[] @relation("loss")
 }

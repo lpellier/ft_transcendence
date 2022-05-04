@@ -2,34 +2,39 @@ version: '3.8'
 
 services:
 
+  postgres:
+    image: postgres:14.2
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=secret
+
   backend:
-    image: node:17.5
-    command:  sh -c "npm install
-              && npx prisma migrate dev
-              && npm run start:dev"
+    depends_on:
+      - postgres
+    image: node:lts
+    volumes:
+      - ./backend:/backend
+    working_dir: /backend
     ports:
       - 3001:3001
     stdin_open: true
-    working_dir: /backend
-    volumes:
-      - ./backend:/backend
+    restart: always
+    command:  sh -c "npm install
+              && npx prisma migrate dev
+              && npm run start:dev"
   
   frontend:
-    image: node:17.5
-    command:  sh -c "npm install
-              && npm start"
-    ports:
-      - 3000:3000
-    working_dir: /frontend
+    image: node:lts
     volumes:
       - ./frontend:/frontend
+    working_dir: /frontend
+    ports:
+      - 3000:3000
+    command:  sh -c "npm install
+              && npm start"
 
-  postgres:
-    image: postgres:14.2
-    environment:
-      - POSTGRES_PASSWORD=secret
-    volumes:
-      - postgres-data:/var/lib/postgresql/data
 
 volumes:
   postgres-data:

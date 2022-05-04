@@ -17,8 +17,11 @@ export class UsersService {
 					id:	user.id,
 					username: user.username,
 					avatar: user.avatar,
-				}}
-				);
+          stats: {
+            create: {}
+          }
+				}
+      });
 		}
 		return u;
 	}
@@ -28,14 +31,21 @@ export class UsersService {
   // }
 
   async findAll() {
-    return await this.prisma.user.findMany();
+    return await this.prisma.user.findMany({
+      include: {
+        stats: true,
+      },
+    });
   }
 
   async findOne(id: number) {
     return await this.prisma.user.findUnique({
       where: {
         id: id,
-      }
+      },
+      include: {
+        stats: true,
+      },
     });
   }
 
