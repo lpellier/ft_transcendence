@@ -34,7 +34,10 @@ function draw_map() {
 	textFont(consts.FONT);
 	push();
 	fill((game.score[0] > game.score[1] ? "white" : "grey")); // highlight better score
-	text(game.score[0], consts.MAP_WIDTH / 2 - 70, 90); // score
+	if (game.score[0].toString().length > 1)
+		text(game.score[0], consts.MAP_WIDTH / 2 - 120, 90); // score
+	else
+		text(game.score[0], consts.MAP_WIDTH / 2 - 70, 90); // score
 	pop();
 	push();
 	fill((game.score[1] > game.score[0] ? "white" : "grey"));
