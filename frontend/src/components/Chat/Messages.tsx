@@ -6,7 +6,10 @@ import Container from '@mui/material/Container'
 
 import '../../styles/Chat/Messages.css';
 
-function Messages(props : {currentUser:string}) {
+import {User} from 'interfaces'
+// import {user} from '../../pages/Homepage/Homepage'
+
+function Messages(user: User) {
     interface Provider {
         id:number;
         content: string;
@@ -15,23 +18,22 @@ function Messages(props : {currentUser:string}) {
     }
 	
 	let [messages, setMessages] = useState<Provider[]>([]);
-	// let [sentMessages, setSentMessages] = useState([]);
+	let [sentMessages, setSentMessages] = useState([]);
 
 	const addMessage = (newMessage:string, user:string, type:boolean) => setMessages(state => [...state, {id: state.length, content: newMessage, user: user, type: type}])
-
+	console.log(user.username)
 	function handleSubmit(e: any) {
 		e.preventDefault();
 		const message = e.target[0].value;
-		// addMessage(message);
+		// addMessage(message, user.username, true);
 		if (message)
-			socket.emit('chat message', message)
+			socket.emit('chat message', message, user.username)
 		e.target[0].value = '';
 	}
 
 	useEffect(() => {
-		socket.on('chat message', (msg, username) => {
-			addMessage(msg, username, true);
-			console.log(msg);
+		socket.on('chat message', (msg) => {
+			addMessage(msg[0], msg[1], true);
 			let objDiv = document.getElementById('messagebox');
             if (objDiv != null)
                 objDiv.scrollTop = objDiv.scrollHeight;
@@ -41,7 +43,6 @@ function Messages(props : {currentUser:string}) {
 	useEffect(() => {
 		socket.on('new user', (username) => {
 			let msg = username + " has entered the discussion";
-			console.log(msg);
 			addMessage(msg, username, false);
 			let objDiv = document.getElementById('messagebox');
             if (objDiv != null)
@@ -57,7 +58,7 @@ function Messages(props : {currentUser:string}) {
 					<div key={item.id}>
 						{item.type ?
 							<div className='flexwrapper' >
-								{item.user === props.currentUser ?
+								{item.user === user.username ?
 								<div className='message current flex'>
 									<li className=''>{item.content}</li> 
 									<div className='user'>{item.user}</div>

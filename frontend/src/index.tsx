@@ -1,7 +1,8 @@
 import ReactDOM from 'react-dom';
 import AllRoutes from './routes/routes';
 import Cookies from "universal-cookie";
-import './styles/body.css'
+import './styles/body.css';
+
 
 const cookies = new Cookies();
 const token = cookies.get("Authorization");
