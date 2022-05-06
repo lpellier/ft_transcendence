@@ -29,9 +29,9 @@ class Consts {
 
 		this.PONG_DIAMETER = 12;
 		this.PONG_BASE_SPEED = 6;
-		this.PONG_MAX_SPEED = 17;
+		this.PONG_MAX_SPEED = 14;
 		this.PONG_ACCELERATION = 0.0025;
-		this.PONG_ACCELERATION_ACUTE_ANGLE = 0.75;
+		this.PONG_ACCELERATION_ACUTE_ANGLE = 0.25;
 		this.PONG_COLOR = "white";
 
 		this.MAP_WIDTH = 1200;

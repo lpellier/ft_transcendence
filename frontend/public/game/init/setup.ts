@@ -1,6 +1,9 @@
 
 // ? Coding consistency : snake_case for variables | camelCase for functions
 
+// TODO change collision in back -> there was a +2 instead of / 2
+// TODO maybe reimagine collisions with new line intersect function to try and have a more efficient system
+
 // TODO Finish or remove dash ability
 // TODO for local button
 	// create game menu but locally
@@ -12,11 +15,13 @@
 // TODO for example, each pong ball gives a random number of points
 // TODO another with walls in the middle, forcing the player to play around it
 // TODO another where the goaling zone is reduced and changes depending on who scored last
+// TODO inverted input
 // TODO power ups : resize paddle depending on malus/bonus
+// TODO black hole teleport ball
 // TODO adding options and probably sounds
 
 // TODO server should send constants like map width and height itself in case of changing things
-// TODO Games should have map heights and width constants in their class, because it might be different for other people
+// TODO Games should have map heights and width constants in their class, because it might be different for other maps
 
 // TODO When done with collisions, should copy the code back for local
 
@@ -85,6 +90,7 @@ function setup() {
 	canvas = createCanvas(consts.MAP_WIDTH, consts.MAP_HEIGHT);
 	canvas.parent(document.getElementById("canvas-parent"));
 	background(0);
+	textFont(consts.FONT);
 
 	frameRate(60);
 	keys.init();
@@ -139,8 +145,18 @@ function movePlayers() {
 	}
 }
 
+function hideIcons() {
+	keys.hide();
+	consts.RETURN_ICON.hide();
+	consts.MARK_ICON.hide();
+	consts.CROSS_ICON.hide();
+	consts.CROSS_ICON2.hide();
+}
+
 function draw() {
 	clear(0, 0, 0, 0);
+	hideIcons();
+	background(0);
 	if (!document.getElementById("canvas-parent")) {
 		socket.emit("quit-ongoing-game");
 		should_load = true;
@@ -148,14 +164,8 @@ function draw() {
 	}
 	else if (should_load)
 		inMainMenu();
-	keys.hide();
-	consts.RETURN_ICON.hide();
-	consts.MARK_ICON.hide();
-	consts.CROSS_ICON.hide();
-	consts.CROSS_ICON2.hide();
-	drawBackground();
 	if (game.state === "waiting-player" || game.state === "waiting-readiness" || game.state === "countdown" || game.state === "in-game")
-		drawMap();
+		game.map.render();
 	if (game.state === "in-menu-input" || game.state === "waiting-player" || game.state === "in-menu-create")
 		consts.RETURN_ICON.show();
 	if (game.state === "in-menu-create") {
@@ -188,13 +198,15 @@ function draw() {
 			drawHelp();
 		else
 			drawInput(); // TODO draw input for multiplayer but only on one side
-		drawPlayers();
+		for (let i : number = 0; i < game.players.length; i++)
+			game.players[i].render();
 	}
 	else if (game.state === "in-game") {
 		movePlayers();
 		if (game.state === "in-game") {
-			drawPlayers();
-			drawPong();
+			for (let i : number = 0; i < game.players.length; i++)
+				game.players[i].render();
+			game.pong.render();
 		}
 	}
 	else if (game.state === "game-over") {

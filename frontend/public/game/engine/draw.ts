@@ -1,50 +1,16 @@
-function drawPlayers() {
-	// if (!game.local) { // ? prediction for other player based on his movement
-	// 	game.players[1].calculateNewPos();
-	// 	if (player_input.length > 0) { // ? Prediction based on input not yet processed
-	// 		(player_input[0] === 1 ? game.players[0].move_up() : (player_input[0] === -1 ? game.players[0].move_down() : 0));
-	// 		player_input.splice(0, 1);
-	// 	}
-	// }
+// function drawPlayers() { // ? if i put predictions, i should keep this
+// 	// if (!game.local) { // ? prediction for other player based on his movement
+// 	// 	game.players[1].calculateNewPos();
+// 	// 	if (player_input.length > 0) { // ? Prediction based on input not yet processed
+// 	// 		(player_input[0] === 1 ? game.players[0].move_up() : (player_input[0] === -1 ? game.players[0].move_down() : 0));
+// 	// 		player_input.splice(0, 1);
+// 	// 	}
+// 	// }
 
-	for (let i : number = 0; i < game.players.length; i++) {
-		game.players[i].render();
-	}
-}
-
-function drawPong() {
-	// if (!game.local)
-	// 	game.pong.calculateNewPos();
-	game.pong.render();
-}
-
-function drawMap() {
-	background(0);
-	push();
-	noStroke();
-	fill("white");
-	textSize(14);
-	textFont(consts.FONT); 
-	text("Room #" + game.room_id, 16, 25); // room id
-	for (let i : number = consts.TOP_BOUND; i < consts.BOT_BOUND; i += 20)
-		rect(consts.MAP_WIDTH / 2, i, 5, 10); // line in the middle
-	rect(5, 5, consts.MAP_WIDTH - 10, 5); // bounds
-	rect(5, consts.MAP_HEIGHT - 10, consts.MAP_WIDTH - 10, 5); // bounds
-	textSize(50);
-	textFont(consts.FONT);
-	push();
-	fill((game.score[0] > game.score[1] ? "white" : "grey")); // highlight better score
-	if (game.score[0].toString().length > 1)
-		text(game.score[0], consts.MAP_WIDTH / 2 - 120, 90); // score
-	else
-		text(game.score[0], consts.MAP_WIDTH / 2 - 70, 90); // score
-	pop();
-	push();
-	fill((game.score[1] > game.score[0] ? "white" : "grey"));
-	text(game.score[1], consts.MAP_WIDTH / 2 + 35, 90); // score
-	pop();
-	pop();
-}
+// 	// for (let i : number = 0; i < game.players.length; i++) {
+// 	// 	game.players[i].render();
+// 	// }
+// }
 
 // ? for draw help
 let arrow_anim : number = 0;
@@ -81,8 +47,4 @@ function drawInput() {
 	keys.left.show();
 	keys.down.show();
 	keys.right.show();
-}
-
-function drawBackground() {
-	background(0);
 }

@@ -24,7 +24,7 @@ class Pong {
 
 	calculateNewPos() {
 		this.pos[0] += this.velocity[0];
-		this.pos[1] += this.velocity[1];
+	this.pos[1] += this.velocity[1]
 		checkCollisions();
 	}
 
@@ -34,7 +34,7 @@ class Pong {
 		let random_y = Math.random() < 0.5 ? -1 : 1;
 
 		// ? Comment allows for testing horizontal collisions
-		// this.pos = random_y === 1 ? [65, 450] : [60, 50];
+		// this.pos = random_y === 1 ? [consts.MAP_WIDTH / 12 + consts.PLAYER_WIDTH / 2, 700] : [consts.MAP_WIDTH / 12 + consts.PLAYER_WIDTH / 2, 700];
 		// this.velocity = random_y === 1 ? [0, -this.speed] : [0, this.speed];
 		if (loser_side === "left")
 			this.velocity = [-this.speed, random_y];
@@ -79,11 +79,11 @@ class Pong {
 	}
 	
 	cX() : number {
-		return this.pos[0] + this.diameter / 2 ;
+		return this.pos[0] + this.diameter / 2;
 	}
 
 	cY() : number {
-		return this.pos[1] + this.diameter + 2;
+		return this.pos[1] + this.diameter / 2;
 	}
 
 	render() {

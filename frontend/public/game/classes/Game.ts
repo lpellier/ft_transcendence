@@ -9,6 +9,7 @@ class Game {
 	publicity : string;
 	local : boolean;
 	frames_since_point : number;
+	map : GameMap;
 
 	constructor() {
 		this.reset();
@@ -25,5 +26,7 @@ class Game {
 		this.publicity = "public";
 		this.local = false;
 		this.frames_since_point = 0;
+		this.map = new GameMap(1200, 750, []);
+		this.map.defaultMap();
 	}
 };

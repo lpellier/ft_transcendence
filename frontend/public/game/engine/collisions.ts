@@ -18,6 +18,29 @@ function intercept(x1 : number, y1 : number, x2 : number, y2 : number, x3 : numb
 	return [-1,-1];
 }
 
+function linesIntersect(a : [number, number], b : [number, number], c : [number, number], d : [number, number]) : boolean {
+	let cmp : [number, number] = [c[0] - a[0], c[1] - a[1]];
+	let r : [number, number] = [b[0] - a[0], b[1] - a[1]];
+	let s : [number, number] = [d[0] - c[0], d[1] - c[1]];
+
+	let cmpxr : number = cmp[0] * r[1] - cmp[1] * r[0];
+	let cmpxs : number = cmp[0] * s[1] - cmp[1] * s[0];
+	let rxs : number = r[0] * s[1] - r[1] * s[0];
+
+	if (cmpxr == 0)
+		return ((c[0] - a[0] < 0) != (c[0] - b[0] < 0)) ||
+			((c[1] - a[1] < 0) != (c[1] - b[1] < 0));
+
+	if (rxs == 0)
+		return false;
+	
+	let rxsr : number = 1 / rxs;
+	let t : number = cmpxs * rxsr;
+	let u : number = cmpxr * rxsr;
+
+	return (t >= 0) && (t <= 1) && (u >= 0) && (u <= 1);
+}
+
 function intersect(a : [number, number], b : [number, number], c : [number, number], d : [number, number], axis : string, side : string) : [boolean, number, string, string] {
 	if (ccw(a, c, d) != ccw(b, c, d) && ccw(a, b, c) != ccw(a, b, d)) {
 		// if ball trajectory crosses middle of paddle, sent back horizontally
@@ -46,7 +69,6 @@ function intersect(a : [number, number], b : [number, number], c : [number, numb
 // ? right bound : consts.MAP_WIDTH
 
 function checkCollisions() {
-	// Implement acceleration here
 	if (game.frames_since_point === 0)
 		game.pong.speed = consts.PONG_BASE_SPEED;
 	else if (game.pong.speed < consts.PONG_MAX_SPEED) {
@@ -65,17 +87,16 @@ function checkCollisions() {
 
 	// ? collision with bounds
 	if (game.local) {
-		if (game.pong.velocity[1] > 0 && game.pong.pos[1] + game.pong.diameter > consts.BOT_BOUND) {
-			game.pong.pos[1] = consts.BOT_BOUND - game.pong.diameter;
-			game.pong.velocity[1] = -game.pong.velocity[1];
-			return ;
+		for (const wall of game.map.walls) {
+			if (linesIntersect([game.pong.cX(), game.pong.cY()], [game.pong.cX() + game.pong.velocity[0], game.pong.cY() + game.pong.velocity[1]], wall[2], wall[3])) {
+				game.pong.velocity[1] *= -1;
+				game.pong.pos[1] = wall[3][1];
+				if (game.map.walls.indexOf(wall) == 1)
+					game.pong.pos[1] -= game.pong.diameter;
+				return ;
+			}
 		}
-		else if (game.pong.velocity[1] < 0 && game.pong.pos[1] < consts.TOP_BOUND) {
-			game.pong.pos[1] = consts.TOP_BOUND;
-			game.pong.velocity[1] = -game.pong.velocity[1];
-			return;
-		}
-		else if (game.pong.velocity[0] > 0 && game.pong.pos[0] + game.pong.diameter > consts.RIGHT_BOUND) {
+		if (game.pong.velocity[0] > 0 && game.pong.pos[0] + game.pong.diameter > consts.RIGHT_BOUND) {
 			game.pong.relaunchPong("right");
 			game.score[0]++;
 			if (game.score[0] >= game.score_limit)
