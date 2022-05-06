@@ -1,8 +1,8 @@
-function draw_players() {
+function drawPlayers() {
 	// if (!game.local) { // ? prediction for other player based on his movement
 	// 	game.players[1].calculateNewPos();
 	// 	if (player_input.length > 0) { // ? Prediction based on input not yet processed
-	// 		(player_input[0] == 1 ? game.players[0].move_up() : (player_input[0] == -1 ? game.players[0].move_down() : 0));
+	// 		(player_input[0] === 1 ? game.players[0].move_up() : (player_input[0] === -1 ? game.players[0].move_down() : 0));
 	// 		player_input.splice(0, 1);
 	// 	}
 	// }
@@ -12,13 +12,13 @@ function draw_players() {
 	}
 }
 
-function draw_pong() {
+function drawPong() {
 	// if (!game.local)
 	// 	game.pong.calculateNewPos();
 	game.pong.render();
 }
 
-function draw_map() {
+function drawMap() {
 	background(0);
 	push();
 	noStroke();
@@ -50,7 +50,7 @@ function draw_map() {
 let arrow_anim : number = 0;
 let grow : boolean = true;
 
-function draw_help() {
+function drawHelp() {
 	let index = game.players[0].index;
 	let arrow_width = 25 + arrow_anim;
 	if (grow)
@@ -64,14 +64,14 @@ function draw_help() {
 	push();
 	fill("white");
 	noStroke();
-	if (index == 1)
+	if (index === 1)
 		triangle(consts.MAP_WIDTH / 6, consts.MAP_HEIGHT / 2, consts.MAP_WIDTH / 6 + arrow_width, consts.MAP_HEIGHT / 2 + arrow_width, consts.MAP_WIDTH / 6 + arrow_width, consts.MAP_HEIGHT / 2 - arrow_width);
 	else
 		triangle(consts.MAP_WIDTH * 5 / 6, consts.MAP_HEIGHT / 2, consts.MAP_WIDTH * 5 / 6 - arrow_width, consts.MAP_HEIGHT / 2 + arrow_width, consts.MAP_WIDTH * 5 / 6 - arrow_width, consts.MAP_HEIGHT / 2 - arrow_width);
 	pop();
 }
 
-function draw_input() {
+function drawInput() {
 	keys.w.show();
 	keys.a.show();
 	keys.s.show();
@@ -83,6 +83,6 @@ function draw_input() {
 	keys.right.show();
 }
 
-function draw_background() {
+function drawBackground() {
 	background(0);
 }

@@ -25,15 +25,15 @@ function intercept(x1 : number, y1 : number, x2 : number, y2 : number, x3 : numb
 export function intersect(a : [number, number], b : [number, number], c : [number, number], d : [number, number], axis : string, side : string) : [boolean, number, string, string] {
 	if (ccw(a, c, d) != ccw(b, c, d) && ccw(a, b, c) != ccw(a, b, d)) {
 		// if ball trajectory crosses middle of paddle, sent back horizontally
-		if (a[1] == b[1])
+		if (a[1] === b[1])
 			return ([true, 0, axis, side]);
 		const pt : [number, number] = intercept(a[0], a[1], b[0], b[1], c[0], c[1], d[0], d[1]);
 		let relative : number;
-		if (axis == "y") {
+		if (axis === "y") {
 			relative = (c[1] + (d[1] - c[1]) / 2) - pt[1]; // middle of paddle minus hitpoint for relative intersection on y axis
 			relative /= ((d[1] - c[1]) / 2);
 		}
-		else if (axis == "x") {
+		else if (axis === "x") {
 			relative = (c[0] + (d[0] - c[0]) / 2) - pt[0]; // middle of paddle minus hitpoint for relative intersection on x axis
 			relative /= ((d[0] - c[0]) / 2);
 		}

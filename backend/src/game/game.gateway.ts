@@ -25,9 +25,9 @@ import * as utils from "./utils"
  * @returns game if one with 1 or less players in it
  * @returns null otherwise
  */
- function existing_empty_game(games : Game[]) : Game {
+ function existingEmptyGame(games : Game[]) : Game {
 	for (const game of games) {
-		if (game.space_available() && game.publicity == "public") // should check if game accepts friends and if user is one
+		if (game.spaceAvailable() && game.publicity === "public") // should check if game accepts friends and if user is one
 			return game;
 	}
 	return null;
@@ -36,10 +36,10 @@ import * as utils from "./utils"
 /**
  * loops over every game and sends a signal to ask for players's readiness
  */
- function start_game_full_rooms(games : Game[], server : Server) {
+ function startGameFullRooms(games : Game[], server : Server) {
 	// starts every game that has 2 players after a connection
 	for (const game of games) {
-		if (game.players.length == 2 && game.state == "waiting_room") {
+		if (game.players.length === 2 && game.state === "waiting_room") {
 			game.state = "await_readiness";
 			server.to(game.room_id).emit("await_readiness", game.players[0].id, game.players[1].id);
 		}
@@ -66,12 +66,12 @@ export class GameGateway {
 			this.clients.splice(index, 1);
 			for (let game of this.games) {
 				for (const player of game.players) {
-					if (player.id == client.id) {
+					if (player.id === client.id) {
 						this.server.to(game.room_id).emit("player-disconnect");
-						clearInterval(game.updateInterval);
-						clearInterval(game.ballUpdateInterval);
+						clearInterval(game.update_interval);
+						clearInterval(game.ball_update_interval);
 						this.games.splice(this.games.indexOf(game), 1);
-						console.log(client.id, "just disconnected -", this.clients.length, this.clients.length == 1 ? "user  total" : "users total");
+						console.log(client.id, "just disconnected -", this.clients.length, this.clients.length === 1 ? "user  total" : "users total");
 						return ;
 					}
 				}
@@ -83,9 +83,9 @@ export class GameGateway {
 	handleQuit(@ConnectedSocket() client : Socket) {
 		for (let game of this.games) {
 			for (let player of game.players) {
-				if (player.id == client.id) {
-					clearInterval(game.updateInterval);
-					clearInterval(game.ballUpdateInterval);
+				if (player.id === client.id) {
+					clearInterval(game.update_interval);
+					clearInterval(game.ball_update_interval);
 					this.games.splice(this.games.indexOf(game), 1);
 					return ;
 				}
@@ -97,7 +97,7 @@ export class GameGateway {
 	@SubscribeMessage('my_id')
 	getConnection(@MessageBody() client_id : string) {
 		this.clients.push(client_id);
-		console.log(client_id, "just connected    -", this.clients.length, this.clients.length == 1 ? "user  total" : "users total");
+		console.log(client_id, "just connected    -", this.clients.length, this.clients.length === 1 ? "user  total" : "users total");
 	}
 
 	@SubscribeMessage('matchmaking')
@@ -106,20 +106,20 @@ export class GameGateway {
 		@MessageBody() data : [string, boolean, number]
 	) {
 		let existing_game : Game;
-		if (data[0] == "public" && data[1])
-			existing_game = existing_empty_game(this.games);
+		if (data[0] === "public" && data[1])
+			existing_game = existingEmptyGame(this.games);
 		
-		if (existing_game == null) {
+		if (existing_game === null) {
 			this.games.push(new Game(utils.random_room_id()));
 			existing_game = this.games[this.games.length - 1];
 		}
 		existing_game.publicity = data[0];
-		if (existing_game.score_limit == 0)
+		if (existing_game.score_limit === 0)
 			existing_game.score_limit = data[2];
 		client.join(existing_game.room_id);
-		existing_game.add_player(client.id);
+		existing_game.addPlayer(client.id);
 		this.server.to(existing_game.room_id).emit("waiting_room", existing_game.room_id, existing_game.score_limit);
-		start_game_full_rooms(this.games, this.server);
+		startGameFullRooms(this.games, this.server);
 	}
 
 	// ? if user is searching for a specific room
@@ -130,11 +130,11 @@ export class GameGateway {
 	) {
 		let found : boolean = false;
 		for (let game of this.games) {
-			if (game.room_id == room_id) {
+			if (game.room_id === room_id) {
 				found = true;
 				if (game.players.length < 2) {
 					client.join(game.room_id);
-					game.add_player(client.id);
+					game.addPlayer(client.id);
 					this.server.to(game.room_id).emit("waiting_room", game.room_id);
 					game.state = "await_readiness";
 					this.server.to(game.room_id).emit("await_readiness", game.players[0].id, game.players[1].id);						
@@ -151,19 +151,19 @@ export class GameGateway {
 	handleCountdown(@ConnectedSocket() client : Socket) {
 		for (let game of this.games) {
 			for (const player of game.players) {
-				if (player.id == client.id && game.state == "await_readiness") {
+				if (player.id === client.id && game.state === "await_readiness") {
 					if (game.players[0].ready && game.players[1].ready) {
 						game.state = "game_started"
 						let test = this.server;
 						for (let i = 1; i < 5; i++) {
 							setTimeout(() => {
 								this.server.to(game.room_id).emit("countdown-server");
-								if (i == 4) {
-									game.updateInterval = setInterval(() => {
+								if (i === 4) {
+									game.update_interval = setInterval(() => {
 										if (game.pong.calculateNewPos(game)) {
 											test.to(game.room_id).emit("game-over");
-											clearInterval(game.updateInterval);
-											clearInterval(game.ballUpdateInterval);
+											clearInterval(game.update_interval);
+											clearInterval(game.ball_update_interval);
 											this.games.splice(this.games.indexOf(game), 1);
 											return ;
 										}
@@ -189,10 +189,10 @@ export class GameGateway {
 	@SubscribeMessage("restart_game")
 	handleRestart(@MessageBody() room_id : string) {
 		for (let game of this.games) {
-			if (game.room_id == room_id) {
+			if (game.room_id === room_id) {
 				game.score = [0, 0];
 				game.pong.relaunchPong("left");
-				game.framesSincePoint = 0;
+				game.frames_since_point = 0;
 				this.server.to(room_id).emit("restart-server");
 			}
 		}
@@ -205,7 +205,7 @@ export class GameGateway {
 	) {
 		for (const game of this.games) {
 			for (const player of game.players) {
-				if (player.id == client_id) {
+				if (player.id === client_id) {
 					player.ready = !player.ready;
 					this.server.to(game.room_id).emit("switch_readiness-server", client_id);
 					return ;
@@ -217,10 +217,10 @@ export class GameGateway {
 	@SubscribeMessage("move_up")
 	handleMoveUp(@MessageBody() client_id : string) {
 		for (const game of this.games) {
-			if (game.players.length == 2 && game.state == "game_started") {
+			if (game.players.length === 2 && game.state === "game_started") {
 				for (const player of game.players) {
-					if (player.id == client_id) {
-						player.move_up();
+					if (player.id === client_id) {
+						player.moveUp();
 						return ;
 					}
 				}
@@ -231,10 +231,10 @@ export class GameGateway {
 	@SubscribeMessage("move_down")
 	handleMoveDown(@MessageBody() client_id : string) {
 		for (const game of this.games) {
-			if (game.players.length == 2 && game.state == "game_started") {
+			if (game.players.length === 2 && game.state === "game_started") {
 				for (const player of game.players) {
-					if (player.id == client_id) {
-						player.move_down();
+					if (player.id === client_id) {
+						player.moveDown();
 						return ;
 					}
 				}
@@ -245,9 +245,9 @@ export class GameGateway {
 	@SubscribeMessage("move_null")
 	handleMoveNull(@MessageBody() client_id : string) {
 		for (const game of this.games) {
-			if (game.players.length == 2 && game.state == "game_started") {
+			if (game.players.length === 2 && game.state === "game_started") {
 				for (const player of game.players) {
-					if (player.id == client_id) {
+					if (player.id === client_id) {
 						player.velocity[1] = 0;
 						return ;
 					}
@@ -260,9 +260,9 @@ export class GameGateway {
 	@SubscribeMessage("dash")
 	handleDash(@MessageBody() data : [string, number]) {
 		for (const game of this.games) {
-			if (game.players.length == 2 && game.state == "game_started") {
+			if (game.players.length === 2 && game.state === "game_started") {
 				for (const player of game.players) {
-					if (player.id == data[0]) {
+					if (player.id === data[0]) {
 						player.dash(data[1]);
 						return ;
 					}

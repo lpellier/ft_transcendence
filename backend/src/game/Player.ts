@@ -11,7 +11,7 @@ export class Player {
 	ready : boolean;
 
 	constructor(color: any, index : number, id : any) {
-		this.pos = [(index == 1 ? consts.MAP_WIDTH / 12 : consts.MAP_WIDTH * 11 / 12), consts.MAP_HEIGHT / 2 - consts.PLAYER_HEIGHT / 2];
+		this.pos = [(index === 1 ? consts.MAP_WIDTH / 12 : consts.MAP_WIDTH * 11 / 12), consts.MAP_HEIGHT / 2 - consts.PLAYER_HEIGHT / 2];
 		this.velocity = [0, consts.PLAYER_SPEED];
 		this.width = consts.PLAYER_WIDTH;
 		this.height = consts.PLAYER_HEIGHT;
@@ -22,7 +22,7 @@ export class Player {
 	}
 
 	reset(players_len : number) {
-		if (players_len == 1)
+		if (players_len === 1)
 			this.index = 1;
 		this.pos = [consts.MAP_WIDTH / 12, consts.MAP_HEIGHT / 2 - consts.PLAYER_HEIGHT / 2];
 		this.ready = false;
@@ -43,18 +43,18 @@ export class Player {
 			this.pos[1] = consts.MAP_HEIGHT - 10 - this.height;
 	}
 
-	move_up() {
+	moveUp() {
 		this.velocity[1] = -consts.PLAYER_SPEED;
 		this.calculateNewPos();
 	}
 
-	move_down() {
+	moveDown() {
 		this.velocity[1] = consts.PLAYER_SPEED;
 		this.calculateNewPos();
 	}
 
 	dash(direction : number) {
-		if (direction == -1) {
+		if (direction === -1) {
 			this.velocity[1] = consts.PLAYER_SPEED * 3;
 			this.pos[1] += this.velocity[1];
 			if (this.pos[1] + this.height > consts.MAP_HEIGHT - 10) // -10 for boundaries
@@ -68,19 +68,19 @@ export class Player {
 		}
 	}
 
-	left_up() : [number, number] {
+	leftUp() : [number, number] {
 		return [this.pos[0], this.pos[1]];
 	}
 
-	left_down() : [number, number] {
+	leftDown() : [number, number] {
 		return [this.pos[0], this.pos[1] + this.height]
 	}
 
-	right_up() : [number, number] {
+	rightUp() : [number, number] {
 		return [this.pos[0] + this.width, this.pos[1]];
 	}
 
-	right_down() : [number, number] {
+	rightDown() : [number, number] {
 		return [this.pos[0] + this.width, this.pos[1] + this.height];
 	}
 };

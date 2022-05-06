@@ -41,29 +41,29 @@ class Player {
 		return dist;
 	}
 
-	move_up() {
+	moveUp() {
 		this.velocity[1] = -consts.PLAYER_SPEED;
 		this.calculateNewPos();
 	}
 
-	move_down() {
+	moveDown() {
 		this.velocity[1] = consts.PLAYER_SPEED;
 		this.calculateNewPos();
 	}
 
-	left_up() : [number, number] {
+	leftUp() : [number, number] {
 		return [this.pos[0], this.pos[1]];
 	}
 
-	left_down() : [number, number] {
+	leftDown() : [number, number] {
 		return [this.pos[0], this.pos[1] + this.height]
 	}
 
-	right_up() : [number, number] {
+	rightUp() : [number, number] {
 		return [this.pos[0] + this.width, this.pos[1]];
 	}
 
-	right_down() : [number, number] {
+	rightDown() : [number, number] {
 		return [this.pos[0] + this.width, this.pos[1] + this.height];
 	}
 }
