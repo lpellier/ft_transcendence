@@ -13,6 +13,7 @@
 // TODO different map ideas, windjammer inspired
 // TODO for example, each pong ball gives a random number of points
 // TODO another with walls in the middle, forcing the player to play around it
+// TODO another where the goaling zone is reduced and changes depending on who scored last
 // TODO power ups : resize paddle depending on malus/bonus
 // TODO adding options and probably sounds
 
