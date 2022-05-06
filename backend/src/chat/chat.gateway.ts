@@ -1,4 +1,4 @@
-import { MessageBody, SubscribeMessage, WebSocketGateway, WebSocketServer } from "@nestjs/websockets";
+import { MessageBody, ConnectedSocket, SubscribeMessage, WebSocketGateway, WebSocketServer } from "@nestjs/websockets";
 import { Socket } from "dgram";
 
 @WebSocketGateway({
@@ -11,7 +11,12 @@ export class ChatGateway {
 	server: Socket;
 
 	@SubscribeMessage('chat message')
-	handlemessage(@MessageBody() message: string) {
-		this.server.emit('chat message', message, "user")
+	handlemessage(@MessageBody() message: string, user: string) {
+		this.server.emit('chat message', message, user)
 	}
+
+	@SubscribeMessage('new username')
+	handleSetUsername(@MessageBody() user: string) {
+		this.server.emit('new user', user)
+	  }
 }

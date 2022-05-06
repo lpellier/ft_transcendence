@@ -14,7 +14,7 @@ function SkillBar(props: {progression: number}) {
 	useEffect(() => {
 		//@ts-ignore: next-line
 		setLength((props.progression / 100) * SkillBox.current.offsetWidth);
-	});
+	}, [props.progression]);
 
 	return (
 		<Box ref={SkillBox} sx={SkillBarContourStyle} >
