@@ -12,6 +12,7 @@ function createGameMenu() {
 		buttons.minus.show();
 		inputs.score_limit.show();
 		inputs.score_limit.attribute("value", game.score_limit);
+		buttons.opponent_left_ok.parent().style["z-index"] = 0; // deal with buttons overlapping
 		game.state = "in-menu-create";
 	}
 }

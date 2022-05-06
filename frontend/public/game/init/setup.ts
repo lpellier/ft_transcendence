@@ -1,7 +1,7 @@
 
 // ? Coding consistency : snake_case for variables | camelCase for functions
 
-// TODO hitbox issue between buttons opponent left ok and validate
+// TODO no "opponent left" menu during player readiness menu, should just kick disconnected player and wait for another one
 // TODO when players goes to homepage, shuold find a way to tell the other player that he left
 // TODO Finish or remove dash ability
 // TODO for local button
@@ -79,6 +79,7 @@ function goToMainMenu() {
 function opponentLeftMenu() {
 	game.state = "opponent-left-menu";
 	buttons.hide();
+	buttons.opponent_left_ok.parent().style["z-index"] = 2; // deal with buttons overlapping
 	buttons.opponent_left_ok.show();
 }
 
