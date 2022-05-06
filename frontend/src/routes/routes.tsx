@@ -16,7 +16,7 @@ type Props = {children: JSX.Element}
 
 function ProtectedRoute({children} : Props) {
     if (token) {
-        console.log("Token value : ", {token});
+        // console.log("Token value : ", {token}); // ? je me suis permis de commenter
         return (
         <>{children}</>)
     }

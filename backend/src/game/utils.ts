@@ -1,5 +1,13 @@
-export function random_room_id() {
-	return (Math.random().toString(36).substring(2, 8));
+export function randomRoomId() {
+	let room_id : string = Math.random().toString(36).substring(2, 8);
+	let i : number = -1;
+	while ((i = room_id.indexOf("O")) != -1)
+		room_id = room_id.replace("O", "o");
+	while ((i = room_id.indexOf("l")) != -1)
+		room_id = room_id.replace("l", "2");
+	while ((i = room_id.indexOf("1")) != -1)
+		room_id = room_id.replace("1", "p");
+	return (room_id);
 }
 
 function ccw(a : [number, number], b : [number, number], c : [number, number]) {

@@ -38,6 +38,7 @@ class Game extends React.Component {
 			observer = new MutationObserver(() => {
 				canvas = document.getElementById("defaultCanvas0");
 				if (canvas) {
+					canvas_parent.appendChild(canvas);
 					observer.disconnect();
 					observer = null;
 				}
@@ -52,6 +53,7 @@ class Game extends React.Component {
 			observer = null;
 		}
 	}
+
 	render() {
 		return (
 			<div id="canvas-parent">

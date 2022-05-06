@@ -120,7 +120,7 @@ export class Game {
 		
 		let player = (this.pong.pos[0] < consts.MAP_WIDTH / 2 ? this.players[0] : this.players[1]);
 
-		if (player.distanceTo(this.pong.pos) > 50)
+		if (player.distanceTo(this.pong.pos) > 75)
 			return false;
 
 		// ? collision with paddles

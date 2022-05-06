@@ -48,7 +48,7 @@ import * as utils from "./utils"
 
 @WebSocketGateway({
 	cors: {
-		origin: "http://localhost:3000"
+		origin: "http://127.0.0.1:3000"
 	}
 })
 export class GameGateway {
@@ -79,8 +79,22 @@ export class GameGateway {
 		}
 	}
 
-	@SubscribeMessage("quit")
-	handleQuit(@ConnectedSocket() client : Socket) {
+	@SubscribeMessage("quit-ongoing-game")
+	handleQuitOngoing(@ConnectedSocket() client : Socket) {
+		for (let game of this.games) {
+			for (let player of game.players) {
+				if (player.id === client.id) {
+					this.server.to(game.room_id).emit("player-disconnect");
+					clearInterval(game.update_interval);
+					clearInterval(game.ball_update_interval);
+					this.games.splice(this.games.indexOf(game), 1);
+					return ;
+				}
+			}
+		}
+	}
+	@SubscribeMessage("quit-own-game")
+	handleQuitOwn(@ConnectedSocket() client : Socket) {
 		for (let game of this.games) {
 			for (let player of game.players) {
 				if (player.id === client.id) {
@@ -105,12 +119,12 @@ export class GameGateway {
 		@ConnectedSocket() client : Socket,
 		@MessageBody() data : [string, boolean, number]
 	) {
-		let existing_game : Game;
+		let existing_game : Game = null;
 		if (data[0] === "public" && data[1])
 			existing_game = existingEmptyGame(this.games);
 		
 		if (existing_game === null) {
-			this.games.push(new Game(utils.random_room_id()));
+			this.games.push(new Game(utils.randomRoomId()));
 			existing_game = this.games[this.games.length - 1];
 		}
 		existing_game.publicity = data[0];

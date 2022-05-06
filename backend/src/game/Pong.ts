@@ -10,15 +10,11 @@ export class Pong {
 	color : any;
 	constructor() {
 		this.pos = [consts.MAP_WIDTH / 2 - consts.PONG_DIAMETER / 2, consts.MAP_HEIGHT / 2 - consts.PONG_DIAMETER / 2];
-		let random_y = Math.random() < 0.5 ? -1 : 1;
-		let random_x = Math.floor(Math.random() * 2);
-		this.speed = consts.PONG_BASE_SPEED;
-		if (random_x === 0)
-			this.velocity = [-this.speed, random_y];
-		else
-			this.velocity = [this.speed, random_y];
 		this.diameter = consts.PONG_DIAMETER;
 		this.color = consts.PONG_COLOR;
+
+		let side = Math.random() < 0.5 ? "left" : "right";
+		this.relaunchPong(side);
 	}
 
 	calculateNewPos(game : Game) : boolean {
@@ -33,7 +29,7 @@ export class Pong {
 		let random_y = Math.random() < 0.5 ? -1 : 1;
 
 		// ? Comment allows for testing horizontal collisions
-		// this.pos = random_y === 1 ? [65, 450] : [60, 50];
+		// this.pos = random_y === 1 ? [consts.MAP_WIDTH / 12 + consts.PLAYER_WIDTH / 2, 50] : [consts.MAP_WIDTH / 12 + consts.PLAYER_WIDTH / 2, 50];
 		// this.velocity = random_y === 1 ? [0, -this.speed] : [0, this.speed];
 		if (loser_side === "left")
 			this.velocity = [-this.speed, random_y];

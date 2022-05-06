@@ -95,7 +95,7 @@ function checkCollisions() {
 	
 	let player = (game.pong.pos[0] < consts.MAP_WIDTH / 2 ? game.players[0] : game.players[1]);
 
-	if (player.distanceTo(game.pong.pos) > 50)
+	if (player.distanceTo(game.pong.pos) > 75)
 		return ;
 
 	// ? collision with paddles

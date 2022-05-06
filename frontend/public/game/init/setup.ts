@@ -1,8 +1,6 @@
 
 // ? Coding consistency : snake_case for variables | camelCase for functions
 
-// TODO no "opponent left" menu during player readiness menu, should just kick disconnected player and wait for another one
-// TODO when players goes to homepage, shuold find a way to tell the other player that he left
 // TODO Finish or remove dash ability
 // TODO for local button
 	// create game menu but locally
@@ -61,7 +59,7 @@ function keyPressed() {
 
 function inMainMenu() {
 	if (game.state === "waiting-player")
-		socket.emit("quit")	
+		socket.emit("quit-own-game");
 	should_load = false;
 	game.reset();
 	errors.set_false();
@@ -96,7 +94,7 @@ function setup() {
 	buttons = new Buttons();
 
 	// @ts-ignore:next-line
-	socket = io("http://localhost:3001");
+	socket = io("http://127.0.0.1:3001");
 
 	socket.on("connect", () => {
 		socket.emit("my_id", socket.id);
@@ -144,6 +142,7 @@ function movePlayers() {
 function draw() {
 	clear(0, 0, 0, 0);
 	if (!document.getElementById("canvas-parent")) {
+		socket.emit("quit-ongoing-game");
 		should_load = true;
 		return ;
 	}
@@ -174,8 +173,11 @@ function draw() {
 		else if (errors.game_not_found)
 			outputAnnouncement("This game doesn't exist", 20, consts.MAP_WIDTH / 2, consts.MAP_HEIGHT / 2);
 	}
-	else if (game.state === "waiting-player")
+	else if (game.state === "waiting-player") {
+		buttons.return.show();
+		consts.RETURN_ICON.show();
 		outputAnnouncement("WAITING FOR ANOTHER PLAYER", 25, consts.MAP_WIDTH / 2, consts.MAP_HEIGHT / 2);
+	}
 	else if (game.state === "waiting-readiness") {
 		drawPlayerReadiness();
 		outputAnnouncement("PLEASE PRESS SPACE TO START THE GAME", 25, consts.MAP_WIDTH / 2, consts.MAP_HEIGHT / 2);
