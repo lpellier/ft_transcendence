@@ -78,7 +78,15 @@ export class Pong {
 	}
 
 	cY() : number {
-		return this.pos[1] + this.diameter + 2;
+		return this.pos[1] + this.diameter / 2;
+	}
+
+	center() : [number, number] {
+		return [this.cX(), this.cY()];
+	}
+
+	centerNextFrame() : [number, number] {
+		return [this.cX() + this.velocity[0], this.cY() + this.velocity[1]];
 	}
 
 };

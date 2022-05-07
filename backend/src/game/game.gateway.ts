@@ -71,7 +71,7 @@ export class GameGateway {
 						clearInterval(game.update_interval);
 						clearInterval(game.ball_update_interval);
 						this.games.splice(this.games.indexOf(game), 1);
-						console.log(client.id, "just disconnected -", this.clients.length, this.clients.length === 1 ? "user  total" : "users total");
+						// console.log(client.id, "just disconnected -", this.clients.length, this.clients.length === 1 ? "user  total" : "users total");
 						return ;
 					}
 				}
@@ -111,7 +111,7 @@ export class GameGateway {
 	@SubscribeMessage('my_id')
 	getConnection(@MessageBody() client_id : string) {
 		this.clients.push(client_id);
-		console.log(client_id, "just connected    -", this.clients.length, this.clients.length === 1 ? "user  total" : "users total");
+		// console.log(client_id, "just connected    -", this.clients.length, this.clients.length === 1 ? "user  total" : "users total");
 	}
 
 	@SubscribeMessage('matchmaking')
@@ -182,9 +182,6 @@ export class GameGateway {
 											return ;
 										}
 										test.to(game.room_id).emit("updated_pos",
-											// [game.pong.pos, game.pong.velocity], 
-											// [game.players[0].id, game.players[0].pos, game.players[0].velocity], 
-											// [game.players[1].id, game.players[1].pos, game.players[1].velocity], 
 											game.pong.pos,
 											[game.players[0].id, game.players[0].pos],
 											[game.players[1].id, game.players[1].pos],

@@ -1,9 +1,6 @@
 
 // ? Coding consistency : snake_case for variables | camelCase for functions
 
-// TODO change collision in back -> there was a +2 instead of / 2
-// TODO maybe reimagine collisions with new line intersect function to try and have a more efficient system
-
 // TODO Finish or remove dash ability
 // TODO for local button
 	// create game menu but locally
