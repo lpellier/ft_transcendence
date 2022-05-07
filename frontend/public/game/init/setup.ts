@@ -1,6 +1,8 @@
 
 // ? Coding consistency : snake_case for variables | camelCase for functions | PascalCase for classes
 
+// TODO server should send constants like map width and height itself in case of changing things
+// TODO Games should have map heights and width constants in their class, because it might be different for other maps
 // TODO draw input for multiplayer but only on one side
 // TODO for local button
 	// create game menu but locally
@@ -17,8 +19,6 @@
 // TODO black hole teleport ball
 // TODO adding options and probably sounds
 
-// TODO server should send constants like map width and height itself in case of changing things
-// TODO Games should have map heights and width constants in their class, because it might be different for other maps
 
 let should_load : boolean = false;
 
