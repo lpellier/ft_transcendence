@@ -266,19 +266,4 @@ export class GameGateway {
 			}
 		}
 	}
-
-	// ? Dash implementation
-	@SubscribeMessage("dash")
-	handleDash(@MessageBody() data : [string, number]) {
-		for (const game of this.games) {
-			if (game.players.length === 2 && game.state === "game_started") {
-				for (const player of game.players) {
-					if (player.id === data[0]) {
-						player.dash(data[1]);
-						return ;
-					}
-				}
-			}
-		}
-	}
 }

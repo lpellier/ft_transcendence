@@ -1,7 +1,7 @@
 
-// ? Coding consistency : snake_case for variables | camelCase for functions
+// ? Coding consistency : snake_case for variables | camelCase for functions | PascalCase for classes
 
-// TODO Finish or remove dash ability
+// TODO draw input for multiplayer but only on one side
 // TODO for local button
 	// create game menu but locally
 	// pause by pressing escape -> removing sound or quitting to menu
@@ -19,8 +19,6 @@
 
 // TODO server should send constants like map width and height itself in case of changing things
 // TODO Games should have map heights and width constants in their class, because it might be different for other maps
-
-// TODO When done with collisions, should copy the code back for local
 
 let should_load : boolean = false;
 
@@ -110,10 +108,6 @@ function setup() {
 
 function movePlayers() {
 	if (!game.local) {
-		// if (keyIsDown(UP_ARROW) && keyIsDown(32))
-		// 	socket.emit("dash", game.players[0].id, 1);
-		// else if (keyIsDown(DOWN_ARROW) && keyIsDown(32))
-		// 	socket.emit("dash", game.players[0].id, -1);
 		if (keyIsDown(UP_ARROW)) {
 			player_input.push(1);
 			socket.emit("move_up", game.players[0].id);
@@ -130,14 +124,21 @@ function movePlayers() {
 			game.players[1].moveUp();
 		else if (keyIsDown(DOWN_ARROW))
 			game.players[1].moveDown();
+		else
+			game.players[1].velocity[1] = 0;
+
 		if (keyIsDown(87))
 			game.players[0].moveUp();
 		else if (keyIsDown(83))
 			game.players[0].moveDown();
-		else if (keyIsDown(27)) {
+		else
+			game.players[0].velocity[1] = 0;
+		
+		if (keyIsDown(27)) {
 			inMainMenu();
 			return ;
 		}
+
 		game.pong.calculateNewPos();
 	}
 }
@@ -194,7 +195,7 @@ function draw() {
 		if (!game.local)
 			drawHelp();
 		else
-			drawInput(); // TODO draw input for multiplayer but only on one side
+			drawInput();
 		for (let i : number = 0; i < game.players.length; i++)
 			game.players[i].render();
 	}

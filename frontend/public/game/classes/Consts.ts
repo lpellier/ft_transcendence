@@ -26,6 +26,7 @@ class Consts {
 	constructor() {
 		this.PLAYER_WIDTH = 15;
 		this.PLAYER_HEIGHT = 80;
+		this.PLAYER_SPEED = 7;
 
 		this.PONG_DIAMETER = 12;
 		this.PONG_BASE_SPEED = 6;
@@ -36,7 +37,6 @@ class Consts {
 
 		this.MAP_WIDTH = 1200;
 		this.MAP_HEIGHT = 750;
-		this.PLAYER_SPEED = 7;
 
 		this.TOP_BOUND = 10;
 		this.BOT_BOUND = this.MAP_HEIGHT - 10;
