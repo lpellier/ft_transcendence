@@ -9,25 +9,33 @@ import Channels from './Channels';
 import '../../styles/Chat/Chat.css';
 
 import {token} from 'index'
-import {User} from 'interfaces'
+import {User, Room} from 'interfaces'
 
-const SERVER = "http://127.0.0.1:3001";
-const socket = io(SERVER);
 
-function App() {
+function Chat() {
+	const SERVER = "http://127.0.0.1:3001";
+	const socket = io(SERVER, {
+		withCredentials:true,
+	});
 	
 	let [status, setStatus] = useState('waiting for connection');
 	let [user, setUser] = useState<User>({avatar: "", id: -1, username: ""});
+	let [current_room, setCurrentRoom] = useState<Room> ({id: 1, name: "global chat"});
 
 	useEffect(() => {
 		socket.on('connect', () => {
 			setStatus('connected');
+			console.log("socket->",current_room);
+			// socket.emit('join room', current_room);
 			socket.on('disconnect', () => {
 				setStatus('disconnected');
 			})
+			
 		})
 		if (socket.connected) {
 			setStatus('connected');	
+			console.log("if-> ",current_room);
+			// socket.emit('join room', current_room);
 		}
 		axios.get('http://127.0.0.1:3001/users/me',{
 		headers: {
@@ -37,13 +45,17 @@ function App() {
 		.then(res => {
 			console.log("Get request success")
 			const test_data = res.data;
-			socket.emit('new user', test_data.username);
-			setUser(test_data)
+			// socket.emit('new user', test_data.username);
+			setUser(test_data);
 		})
 		.catch(function (err) {
 			console.log("Get request failed : ", err)
 		});
 	}, [])
+
+	useEffect(() => {
+		socket.emit('join room', current_room);
+	}, [current_room])
 
 		return (
 			<Stack>
@@ -51,14 +63,13 @@ function App() {
 				<Stack className='chmsg'>
 					{/* <Username /> */}
 					{status}
-					<Channels />
+					<Channels current_room={current_room} setCurrentRoom = {setCurrentRoom} />
 				</Stack>
-				<Messages {...user}/>
+				<Messages user={user} current_room={current_room}/>
 			</Stack>
 		);
 }
-export {SERVER};
-export {socket};
-export default App;
+
+export default Chat;
 
 
