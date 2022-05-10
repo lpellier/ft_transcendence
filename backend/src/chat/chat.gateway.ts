@@ -5,6 +5,7 @@ import { User, Room} from '../interfaces'
 @WebSocketGateway({
 	cors: {
 	  origin: (new ConfigService).get("FRONT_URL"),
+	  credentials: true
 	},
   })
 export class ChatGateway {
