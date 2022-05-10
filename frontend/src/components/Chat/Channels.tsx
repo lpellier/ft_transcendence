@@ -1,20 +1,15 @@
 import '../../styles/Chat/Channels.css';
-import io  from "socket.io-client";
+// import io  from "socket.io-client";
 
 
 import {useState} from 'react'
 import {Room} from 'interfaces'
-
+import {socket} from './Chat'
 
 function Channels(props : {current_room: Room, setCurrentRoom: React.Dispatch<React.SetStateAction<Room>>}) {
 
 	let [clicked, setClicked] = useState<number>(0);
 	let [rooms, setRooms] = useState<Room[]>([{id: props.current_room.id, name: props.current_room.name}]);
-	
-	const SERVER = "http://127.0.0.1:3001";
-	const socket = io(SERVER, {
-		withCredentials:true,
-	});
 
 	const addRoom = (newRoom: string) => setRooms(state => [...state, {id: state.length, name: newRoom}])
 
@@ -24,17 +19,17 @@ function Channels(props : {current_room: Room, setCurrentRoom: React.Dispatch<Re
 	}
 
 	function handleListClick(clicked_room: Room) {
-		// console.log(e);
+		console.log(clicked_room);
 
 		props.setCurrentRoom(clicked_room);
-		socket.emit('connection', props.current_room);
+		socket.emit('join room', clicked_room.id.toString());
 	}
 
 	function handleSubmit(e:any) {
 		e.preventDefault();
 		const room = e.target[0].value;
-		console.log(e);
-		console.log("room = ",room);
+		// console.log(e);
+		// console.log("room = ", room);
 		if (room)
 			addRoom(room);
 		setClicked(0);

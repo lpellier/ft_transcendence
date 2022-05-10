@@ -13,19 +13,22 @@ export class ChatGateway {
 	server: Socket;
 
 	@SubscribeMessage('join room')
-	handleConnection(@ConnectedSocket() client : Socket, @MessageBody() room: Room ) {
+	handleJoinRoom(@ConnectedSocket() client : Socket, @MessageBody() room_id: string ) {
 		
-		let room_id: string
 		// if (room !== undefined)
 			// room_id = room.id.toString();
 		// console.log("room  = ",room_id)
-		console.log("room = ", room);
-		client.join("a room");
+		// console.log("backend room = ", room);
+		client.join(room_id);
 	}
 
 	@SubscribeMessage('chat message')
-	handlemessage(@ConnectedSocket() client : Socket, @MessageBody() message: string, user: User, room: Room) {
-		this.server.to(room.id.toString()).emit('chat message', message, user)
+	handlemessage(@MessageBody() data: any) {
+		const message:string = data[0];
+		const user:User = data[1];
+		const room: Room = data[2];
+		// console.log("chat message:", message, ", room: ", room.id.toString());
+		this.server.to(room.id.toString()).emit('chat message', message, user, room)
 		// this.server.emit('chat message', message, user);
 	}
 

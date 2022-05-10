@@ -11,32 +11,37 @@ import '../../styles/Chat/Chat.css';
 import {token} from 'index'
 import {User, Room} from 'interfaces'
 
+const SERVER = "http://127.0.0.1:3001";
+export const socket = io(SERVER, {
+	withCredentials:true,
+});
+
 
 function Chat() {
-	const SERVER = "http://127.0.0.1:3001";
-	const socket = io(SERVER, {
-		withCredentials:true,
-	});
 	
 	let [status, setStatus] = useState('waiting for connection');
 	let [user, setUser] = useState<User>({avatar: "", id: -1, username: ""});
-	let [current_room, setCurrentRoom] = useState<Room> ({id: 1, name: "global chat"});
-
+	let [current_room, setCurrentRoom] = useState<Room> ({id: 0, name: "global chat"});
+	
 	useEffect(() => {
 		socket.on('connect', () => {
 			setStatus('connected');
-			console.log("socket->",current_room);
-			// socket.emit('join room', current_room);
+			// console.log("socket->",current_room);
+			socket.emit('join room', current_room.id.toString());
 			socket.on('disconnect', () => {
 				setStatus('disconnected');
 			})
-			
 		})
-		if (socket.connected) {
-			setStatus('connected');	
-			console.log("if-> ",current_room);
-			// socket.emit('join room', current_room);
+		if (socket.connected)
+		{
+			setStatus('connected');
+			socket.emit('join room', current_room.id.toString());	
+			if (!socket.connected)
+				setStatus('disconnected');
 		}
+	}, [])
+
+	useEffect(() => {
 		axios.get('http://127.0.0.1:3001/users/me',{
 		headers: {
 			'Authorization': token,
@@ -52,10 +57,6 @@ function Chat() {
 			console.log("Get request failed : ", err)
 		});
 	}, [])
-
-	useEffect(() => {
-		socket.emit('join room', current_room);
-	}, [current_room])
 
 		return (
 			<Stack>
