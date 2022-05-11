@@ -2,15 +2,10 @@
 	display: flex;
 	flex-direction: row;
 	position: absolute;
-	gap: 25em;
+	gap: 30vw;
 	align-content: center;
 	align-items: center;
 	justify-content: center;
-
-	width: 960px;
-	height: 390px;
-	margin-left: 120px;
-	bottom: 4em;
 }
 
 #button-create {
@@ -31,7 +26,7 @@
 	align-items: center;
 	justify-content: center;
 	flex-grow: 1;
-	gap: 2.5em;
+	gap: 3vh;
 }
 
 #button-join {
@@ -51,20 +46,17 @@
 	align-content: center;
 	align-items: center;
 	justify-content: center;
-	gap: 2.5em;
-	left: 35px;
-
-	top: 15em;
+	gap: 1vw;
+	top: 30%;
+	left: 6%;
 }
 
 #button-return {
 	position: absolute;
 	padding: 0;
 	margin: 0;
-	width: 100px;
-	height: 100px;
-	top: 50px;
-	right: 50px;
+	top: 1%;
+	right: 1%;
 	z-index: 1;
 }
 
@@ -86,8 +78,8 @@
 #buttons-plus-minus {
 	position: absolute;
 	display: flex;
-	left: 575px;
-	top: 24em;
+	left: 46%;
+	top: 52%;
 	flex-direction: column;
 	z-index: 2;
 }
@@ -95,21 +87,15 @@
 #button-validate {
 	position: absolute;
 	padding: 0;
-	bottom: 2em;
-	width: 300px;
-	height: 50px;
-	left: 450px;
+	bottom: 5%;
+	left: 36%;
 	z-index: 1;
-	margin: 0 auto;
 }
 
 #button-opp-left-ok {
 	position: absolute;
 	padding: 0;
-	bottom: 2em;
-	width: 200px;
-	height: 100px;
-	left: 500px;
+	bottom: 5%;
+	left: 38%;
 	z-index: 0;
-	margin: 0 auto;
 }

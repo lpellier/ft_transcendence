@@ -21,38 +21,41 @@ class Buttons {
 	}
 	
 	createButtons() {
-		this.create_game = createCustomButton("Create a game", createGameMenu);
+		this.create_game = createCustomButton("Create game", createGameMenu);
 		this.join = createCustomButton("Join game", readRoomID);
 		this.matchmaking = createCustomButton("Match making", matchmaking);
 		this.local = createCustomButton("Play local", startLocal);
-		this.return = createCustomButton("", goToMainMenu, highlightButton, resetButton, 100, 100);
+		this.return = createCustomButton("", goToMainMenu, highlightButton, resetButton, consts.medium_square_diameter, consts.medium_square_diameter);
 		this.return.style("border", "none");
 		this.return.style("background-color", "rgba(0, 0, 0, 0)");
 		
-		this.anyone_can_join = createCustomButton("Anyone can join", clickAnyone, highlightButton, resetButton, 350, 75);
+		this.anyone_can_join = createCustomButton("Anyone can join", clickAnyone, highlightButton, resetButton, consts.medium_width, consts.medium_height);
 		this.anyone_can_join.style("background-color", "rgba(0, 0, 0, 0)");
-		this.anyone_can_join.style("font-size", "25px");
+		this.anyone_can_join.style("font-size", consts.medium_font_size.toString() + "px");
 		this.anyone_can_join.style("outline", "5px solid");
 		this.anyone_can_join.style("border", "none");
-		this.friends_can_join = createCustomButton("Friends can join", clickFriends, highlightButton, resetButton, 350, 75);
+		this.friends_can_join = createCustomButton("Friends can join", clickFriends, highlightButton, resetButton, consts.medium_width, consts.medium_height);
 		this.friends_can_join.style("background-color", "rgba(0, 0, 0, 0)");
-		this.friends_can_join.style("font-size", "25px");
+		this.friends_can_join.style("font-size", consts.medium_font_size.toString() + "px");
 		this.friends_can_join.style("border", "none");
-		this.invitation_only = createCustomButton("Invitation only", clickInvitation, highlightButton, resetButton, 350, 75);
+		this.invitation_only = createCustomButton("Invitation only", clickInvitation, highlightButton, resetButton, consts.medium_width, consts.medium_height);
 		this.invitation_only.style("background-color", "rgba(0, 0, 0, 0)");
-		this.invitation_only.style("font-size", "25px");
+		this.invitation_only.size(consts.medium_width, consts.medium_height);
 		this.invitation_only.style("border", "none");
-		this.validate = createCustomButton('Create', createGame, highlightButton, resetButton, 300, 50);
+		this.invitation_only.style("font-size", consts.medium_font_size.toString() + "px");
+		this.validate = createCustomButton('Create', createGame, highlightButton, resetButton, consts.medium_width, consts.medium_height);
 		this.validate.style("background-color", "rgba(0, 0, 0, 0)");
-		this.validate.style("font-size", "25px");
+		this.validate.style("font-size", consts.medium_font_size.toString() + "px");
 		
-		this.plus = createCustomButton("+", plusScoreLimit, highlightButton, resetButton, 50, 50);
+		this.plus = createCustomButton("+", plusScoreLimit, highlightButton, resetButton, consts.small_square_diameter, consts.small_square_diameter);
 		this.plus.style("border", "none");
-		this.minus = createCustomButton("-", minusScoreLimit, highlightButton, resetButton, 50, 50);
+		this.plus.style("font-size", consts.small_font_size.toString() + "px");
+		this.minus = createCustomButton("-", minusScoreLimit, highlightButton, resetButton, consts.small_square_diameter, consts.small_square_diameter);
 		this.minus.style("border", "none");
 		
-		this.opponent_left_ok = createCustomButton("OK", goToMainMenu, highlightButton, resetButton, 200, 100);
+		this.opponent_left_ok = createCustomButton("OK", goToMainMenu, highlightButton, resetButton);
 		this.opponent_left_ok.style("border", "none");
+		this.minus.style("font-size", consts.small_font_size.toString() + "px");
 
 		this.hide();
 		this.addParent();
@@ -61,6 +64,36 @@ class Buttons {
 		this.matchmaking.show();
 		this.create_game.show();
 		this.join.show();
+	}
+
+	resize() {
+		this.create_game.size(consts.std_width, consts.std_height);
+		this.create_game.style("font-size", consts.std_font_size.toString() + "px");
+		this.join.size(consts.std_width, consts.std_height);
+		this.join.style("font-size", consts.std_font_size.toString() + "px");
+		this.matchmaking.size(consts.std_width, consts.std_height);
+		this.matchmaking.style("font-size", consts.std_font_size.toString() + "px");
+		this.local.size(consts.std_width, consts.std_height);
+		this.local.style("font-size", consts.std_font_size.toString() + "px");
+		this.opponent_left_ok.size(consts.std_width, consts.std_height);
+		this.opponent_left_ok.style("font-size", consts.std_font_size.toString() + "px");
+	
+		this.anyone_can_join.size(consts.medium_width, consts.medium_height);
+		this.anyone_can_join.style("font-size", consts.medium_font_size.toString() + "px");
+		this.friends_can_join.size(consts.medium_width, consts.medium_height);
+		this.friends_can_join.style("font-size", consts.medium_font_size.toString() + "px");
+		this.invitation_only.size(consts.medium_width, consts.medium_height);
+		this.invitation_only.style("font-size", consts.medium_font_size.toString() + "px");
+		this.validate.size(consts.medium_width, consts.medium_height);
+		this.validate.style("font-size", consts.medium_font_size.toString() + "px");
+	
+		this.plus.size(consts.small_square_diameter, consts.small_square_diameter);
+		this.plus.style("font-size", consts.small_font_size.toString() + "px");
+		this.minus.size(consts.small_square_diameter, consts.small_square_diameter);
+		this.minus.style("font-size", consts.small_font_size.toString() + "px");
+	
+		this.return.size(consts.medium_square_diameter, consts.medium_square_diameter);
+		this.return.style("font-size", consts.medium_font_size.toString() + "px");
 	}
 
 	reset() {

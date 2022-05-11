@@ -22,12 +22,12 @@ function listenStartEvents() {
 		if (game.players.length === 0) {
 			game.state = "waiting-readiness"
 			if (socket.id === id_p1) {
-				game.players.push(new Player(consts.MAP_WIDTH / 12, consts.MAP_HEIGHT / 2 - consts.PLAYER_HEIGHT / 2, consts.PLAYER_WIDTH, consts.PLAYER_HEIGHT, "white", 1, id_p1));
-				game.players.push(new Player(consts.MAP_WIDTH * 11 / 12, consts.MAP_HEIGHT / 2 - consts.PLAYER_HEIGHT / 2, consts.PLAYER_WIDTH, consts.PLAYER_HEIGHT, "white", 2, id_p2));
+				game.players.push(new Player(1, id_p1));
+				game.players.push(new Player(2, id_p2));
 			}
 			else if (socket.id === id_p2) {
-				game.players.push(new Player(consts.MAP_WIDTH * 11 / 12, consts.MAP_HEIGHT / 2 - consts.PLAYER_HEIGHT / 2, consts.PLAYER_WIDTH, consts.PLAYER_HEIGHT, "white", 2, id_p2));
-				game.players.push(new Player(consts.MAP_WIDTH / 12, consts.MAP_HEIGHT / 2 - consts.PLAYER_HEIGHT / 2, consts.PLAYER_WIDTH, consts.PLAYER_HEIGHT, "white", 1, id_p1));
+				game.players.push(new Player(2, id_p2));
+				game.players.push(new Player(1, id_p1));
 			}
 			game.pong = new Pong;
 		}

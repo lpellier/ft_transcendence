@@ -6,7 +6,7 @@ class Pong {
 	color : string;
 
 	constructor() {
-		this.pos = [consts.MAP_WIDTH / 2 - consts.PONG_DIAMETER / 2, consts.MAP_HEIGHT / 2 - consts.PONG_DIAMETER / 2];
+		this.pos = [consts.WIDTH / 2 - consts.PONG_DIAMETER / 2, consts.HEIGHT / 2 - consts.PONG_DIAMETER / 2];
 		this.diameter = consts.PONG_DIAMETER;
 		this.color = consts.PONG_COLOR;
 
@@ -20,13 +20,20 @@ class Pong {
 		checkCollisions();
 	}
 
+	resize() {
+		let proportionnal_x : number = this.pos[0] / consts.OLD_WIDTH;
+		let proportionnal_y : number = this.pos[1] / consts.OLD_HEIGHT;
+		this.diameter = consts.PONG_DIAMETER;
+		this.pos = [consts.WIDTH * proportionnal_x, consts.HEIGHT * proportionnal_y];
+	}
+
 	relaunchPong(loser_side : string) {
-		this.pos = [consts.MAP_WIDTH / 2 - consts.PONG_DIAMETER / 2, consts.MAP_HEIGHT / 2 - consts.PONG_DIAMETER / 2];
+		this.pos = [consts.WIDTH / 2 - consts.PONG_DIAMETER / 2, consts.HEIGHT / 2 - consts.PONG_DIAMETER / 2];
 		this.speed = consts.PONG_BASE_SPEED;
 		let random_y = Math.random() < 0.5 ? -1 : 1;
 
 		// ? Comment allows for testing horizontal collisions
-		// this.pos = random_y === 1 ? [consts.MAP_WIDTH / 12 + consts.PLAYER_WIDTH / 2, 50] : [consts.MAP_WIDTH / 12 + consts.PLAYER_WIDTH / 2, 50];
+		// this.pos = random_y === 1 ? [consts.WIDTH / 12 + consts.PLAYER_WIDTH / 2, 50] : [consts.WIDTH / 12 + consts.PLAYER_WIDTH / 2, 50];
 		// this.velocity = random_y === 1 ? [0, -this.speed] : [0, this.speed];
 		if (loser_side === "left")
 			this.velocity = [-this.speed, random_y];

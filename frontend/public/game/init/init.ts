@@ -89,17 +89,17 @@ function startLocal() {
 			}, i * 1000);
 		}
 		game.state = "countdown";
-		game.players.push(new Player(consts.MAP_WIDTH / 12, consts.MAP_HEIGHT / 2 - consts.PLAYER_HEIGHT / 2, consts.PLAYER_WIDTH, consts.PLAYER_HEIGHT, "white", 1, "first"));
-		game.players.push(new Player(consts.MAP_WIDTH * 11 / 12, consts.MAP_HEIGHT / 2 - consts.PLAYER_HEIGHT / 2, consts.PLAYER_WIDTH, consts.PLAYER_HEIGHT, "white", 2, "second"));		
+		game.players.push(new Player(1, "first"));
+		game.players.push(new Player(2, "second"));		
 		game.pong = new Pong();
 		game.room_id = "Local";
 	}
 }
 
-function createCustomButton(title : string, mPressed : any, mOver : any = highlightButton, mOut : any = resetButton, size_x : number = 280, size_y : number = 175) {
+function createCustomButton(title : string, mPressed : any, mOver : any = highlightButton, mOut : any = resetButton, size_x : number = consts.std_width, size_y : number = consts.std_height) {
 	let button = createButton(title);
 	button.style("color", "white");
-	button.style("font-size", "40px");
+	button.style("font-size", (Math.sqrt(Math.pow(size_x, 2) + Math.pow(size_y, 2)) / 8).toString() + "px");
 	button.style("font-family", "PressStart2P-Regular");
 	button.style("background-color", "black");
 	button.style("border-radius", "1em");
@@ -114,8 +114,8 @@ function createCustomButton(title : string, mPressed : any, mOver : any = highli
 
 function createCustomInput(title : string) {
 	let input = createInput(title);
-	input.style("height", "75px");
-	input.style("font-size", "45px");
+	input.style("height", (consts.HEIGHT / 10).toString() + "px");
+	input.style("font-size", consts.std_font_size.toString() + "px");
 	input.style("font-family", "PressStart2P-Regular");
 	input.style("background-color", "black");
 	input.style("color", "white");

@@ -17,9 +17,9 @@ export class UsersService {
 					id:	user.id,
 					username: user.username,
 					avatar: user.avatar,
-          stats: {
-            create: {}
-          }
+        //   stats: {
+        //     create: {}
+        //   }
 				}
       });
 		}
@@ -33,7 +33,7 @@ export class UsersService {
   async findAll() {
     return await this.prisma.user.findMany({
       include: {
-        stats: true,
+        // stats: true,
       },
     });
   }
@@ -44,7 +44,7 @@ export class UsersService {
         id: id,
       },
       include: {
-        stats: true,
+        // stats: true,
       },
     });
   }

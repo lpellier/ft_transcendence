@@ -26,7 +26,6 @@ class Game {
 		this.publicity = "public";
 		this.local = false;
 		this.frames_since_point = 0;
-		this.map = new GameMap(1200, 750, []);
-		this.map.defaultMap();
+		this.map = new GameMap(1);
 	}
 };

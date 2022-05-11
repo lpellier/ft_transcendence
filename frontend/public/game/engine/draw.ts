@@ -31,9 +31,9 @@ function drawHelp() {
 	fill("white");
 	noStroke();
 	if (index === 1)
-		triangle(consts.MAP_WIDTH / 6, consts.MAP_HEIGHT / 2, consts.MAP_WIDTH / 6 + arrow_width, consts.MAP_HEIGHT / 2 + arrow_width, consts.MAP_WIDTH / 6 + arrow_width, consts.MAP_HEIGHT / 2 - arrow_width);
+		triangle(consts.WIDTH / 6, consts.HEIGHT / 2, consts.WIDTH / 6 + arrow_width, consts.HEIGHT / 2 + arrow_width, consts.WIDTH / 6 + arrow_width, consts.HEIGHT / 2 - arrow_width);
 	else
-		triangle(consts.MAP_WIDTH * 5 / 6, consts.MAP_HEIGHT / 2, consts.MAP_WIDTH * 5 / 6 - arrow_width, consts.MAP_HEIGHT / 2 + arrow_width, consts.MAP_WIDTH * 5 / 6 - arrow_width, consts.MAP_HEIGHT / 2 - arrow_width);
+		triangle(consts.WIDTH * 5 / 6, consts.HEIGHT / 2, consts.WIDTH * 5 / 6 - arrow_width, consts.HEIGHT / 2 + arrow_width, consts.WIDTH * 5 / 6 - arrow_width, consts.HEIGHT / 2 - arrow_width);
 	pop();
 }
 

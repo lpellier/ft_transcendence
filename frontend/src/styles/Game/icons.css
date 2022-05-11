@@ -2,88 +2,73 @@
 	position: absolute;
 	padding: 0;
 	margin: 0;
-	width: 100px;
-	height: 100px; 
-	top: 50px;
-	right: 50px;
+	top: 1%;
+	right: 1%;
 	z-index: 0;
 }
 
 #icon-player_one {
 	position: absolute;
-	width: 100px;
-	height: 100px;
-	left: 350px;
-	top: 445px;
+	left: 30%;
+	bottom: 32%;
 	z-index: 0;
 }
 
 #icon-player_two {
 	position: absolute;
-	width: 120px;
-	height: 100px;
-	left: 950px;
-	top: 445px;
+	right: 30%;
+	bottom: 32%;
 	z-index: 0;
 }
 
-#wasd-keys {
-	display: flex;
-	flex-direction: row;
-	position: absolute;
-	width: 240px;
-	height: 150px;
-	flex-wrap: wrap;
-	align-content: center;
-	justify-content: center;
-	top: 5em;
-	left: 10em;
-}
-
 #w-key {
-	width: 240px;
-	margin-left: 70px;
+	position: absolute;
+	top: 16%;
+	left: 21%;
 }
 
 #s-key {
-	flex-grow: 1;
+	position: absolute;
+	top: 25%;
+	left: 22%;
 }
 
 #a-key {
-	flex-grow: 1;
+	position: absolute;
+	top: 25%;
+	left: 15%;
 }
 
 #d-key {
-	flex-grow: 1;
-}
-
-#arrow-keys {
-	display: flex;
-	flex-direction: row;
 	position: absolute;
-	width: 240px;
-	height: 150px;
-	flex-wrap: wrap;
-	align-content: center;
-	justify-content: center;
-	top: 30em;
-	right: 10em;
+	top: 25%;
+	left: 29%;
 }
 
 #up-key {
-	width: 240px;
-	display: flex;
-	justify-content: center;
+	position: absolute;
+	bottom: 34%;
+	right: 22%;
+	z-index: 5;
 }
 
 #left-key {
-	flex-grow: 1;
+	position: absolute;
+	bottom: 25%;
+	right: 29%;
+	z-index: 5;
 }
 
 #down-key {
-	flex-grow: 1;
+	position: absolute;
+	bottom: 25%;
+	right: 22%;
+	z-index: 5;
 }
 
 #right-key {
-	flex-grow: 1;
+	position: absolute;
+	bottom: 25%;
+	right: 15%;
+	z-index: 5;
 }
