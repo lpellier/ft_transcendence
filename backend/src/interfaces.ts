@@ -1,4 +1,3 @@
-
 interface User {
     avatar: string,
     id: number,
