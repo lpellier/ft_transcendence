@@ -17,6 +17,8 @@ function createGameMenu() {
 	}
 }
 
+// matchmaking args : publicity, matchamking_boolean, score_limit, map_index
+
 function createGame() {
 	if (mouseButton === LEFT)
 		socket.emit("matchmaking", game.publicity, false, game.score_limit);

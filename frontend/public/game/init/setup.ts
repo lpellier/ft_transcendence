@@ -1,5 +1,6 @@
 
 // ? Coding consistency : snake_case for variables | camelCase for functions | PascalCase for classes
+// ? Map indexes : 1 (normal map)
 
 // TODO server should send constants like map width and height itself in case of changing things
 // TODO Games should have map heights and width constants in their class, because it might be different for other maps
