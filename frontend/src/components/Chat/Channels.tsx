@@ -1,5 +1,7 @@
 import '../../styles/Chat/Channels.css';
 // import io  from "socket.io-client";
+import Stack from '@mui/material/Stack'
+
 
 
 import {useState} from 'react'
@@ -9,7 +11,7 @@ import {socket} from './Chat'
 function Channels(props : {current_room: Room, setCurrentRoom: React.Dispatch<React.SetStateAction<Room>>}) {
 
 	let [clicked, setClicked] = useState<number>(0);
-	let [rooms, setRooms] = useState<Room[]>([{id: props.current_room.id, name: props.current_room.name}]);
+	let [rooms, setRooms] = useState<Room[]>([{id: 0, name: "global chat"}]);
 
 	const addRoom = (newRoom: string) => setRooms(state => [...state, {id: state.length, name: newRoom}])
 
@@ -19,9 +21,9 @@ function Channels(props : {current_room: Room, setCurrentRoom: React.Dispatch<Re
 	}
 
 	function handleListClick(clicked_room: Room) {
-		console.log(clicked_room);
 
 		props.setCurrentRoom(clicked_room);
+
 		socket.emit('join room', clicked_room.id.toString());
 	}
 
@@ -30,37 +32,47 @@ function Channels(props : {current_room: Room, setCurrentRoom: React.Dispatch<Re
 		const room = e.target[0].value;
 		// console.log(e);
 		// console.log("room = ", room);
+		rooms.map( item => (
+			console.log("item = ",item)
+		))
 		if (room)
 			addRoom(room);
 		setClicked(0);
 	}
 
 	return (
-		<div className='channels'>
-			{/* <div className='title-channels'>Channels</div> */}
-			<form onClick={handleClick}>
-				<button>Create Room</button>
-			</form>
-			<div>
-				{clicked ?
-					<form onSubmit={handleSubmit}>
-						<input type="text" placeholder='Room name'/>
-					</form>
-					:
-					<div/>
-				}
-			</div>
+		<Stack className='channels' justifyContent='space-between'>
 			<div className="dropdown">
 				<button className="dropbtn">{props.current_room.name}</button>
 				<div className="dropdown-content">
 					{rooms.map(room => (
-						<button key={room.id} onClick={() => handleListClick(room)}>
-							{room.name}
-						</button>
+						<div key={room.id}>
+							{room.name != props.current_room.name ?
+								<button className="dropdown-content"  onClick={() => handleListClick(room)}>
+									{room.name}
+								</button>
+								:
+								<div/>
+							}
+						</div>
 					))}
 				</div>
 			</div>
-		</div>
+			<div>
+				<form onClick={handleClick}>
+					<button>Create Room</button>
+				</form>
+				<div>
+					{clicked ?
+						<form onSubmit={handleSubmit}>
+							<input type="text" placeholder='Room name'/>
+						</form>
+						:
+						<div/>
+					}
+				</div>
+			</div>
+		</Stack>
 	);
 }
 

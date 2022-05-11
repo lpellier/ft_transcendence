@@ -2,3 +2,12 @@
 	width: 77vw;
 	padding: 1em;
 }
+
+.chatBox {
+	display: flex;
+	flex-direction: column;
+}
+
+.channels {
+	width: 10vw;
+}

@@ -22,6 +22,7 @@ function Chat() {
 	let [status, setStatus] = useState('waiting for connection');
 	let [user, setUser] = useState<User>({avatar: "", id: -1, username: ""});
 	let [current_room, setCurrentRoom] = useState<Room> ({id: 0, name: "global chat"});
+
 	
 	useEffect(() => {
 		socket.on('connect', () => {
@@ -61,12 +62,11 @@ function Chat() {
 		return (
 			<Stack>
 				<Banner />
-				<Stack className='chmsg'>
-					{/* <Username /> */}
-					{status}
+				{status}
+				<Stack direction='row' spacing='2' className='chmsg'>
 					<Channels current_room={current_room} setCurrentRoom = {setCurrentRoom} />
+					<Messages user={user} current_room={current_room}/>
 				</Stack>
-				<Messages user={user} current_room={current_room}/>
 			</Stack>
 		);
 }
