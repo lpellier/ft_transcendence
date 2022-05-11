@@ -1,5 +1,5 @@
 function createGameMenu() {
-	if (mouseButton == LEFT) {
+	if (mouseButton === LEFT) {
 		buttons.hide();
 		inputs.hide();
 	
@@ -12,16 +12,19 @@ function createGameMenu() {
 		buttons.minus.show();
 		inputs.score_limit.show();
 		inputs.score_limit.attribute("value", game.score_limit);
+		buttons.opponent_left_ok.parent().style["z-index"] = 0; // deal with buttons overlapping
 		game.state = "in-menu-create";
 	}
 }
 
+// matchmaking args : publicity, matchamking_boolean, score_limit, map_index
+
 function createGame() {
-	if (mouseButton == LEFT)
+	if (mouseButton === LEFT)
 		socket.emit("matchmaking", game.publicity, false, game.score_limit);
 }
 function matchmaking() {
-	if (mouseButton == LEFT)
+	if (mouseButton === LEFT)
 		socket.emit("matchmaking", "public", true, 10);
 }
 
@@ -49,7 +52,7 @@ function minusScoreLimit() {
 }
 
 function readRoomID() {
-	if (mouseButton == LEFT) {
+	if (mouseButton === LEFT) {
 		game.state = "in-menu-input";
 		buttons.hide();
 		inputs.hide();
@@ -58,21 +61,21 @@ function readRoomID() {
 	}
 }
 
-function click_anyone() {
-	if (mouseButton == LEFT)
-		game.publicity = buttons.click_anyone();
+function clickAnyone() {
+	if (mouseButton === LEFT)
+		game.publicity = buttons.clickAnyone();
 }
-function click_friends() {
-	if (mouseButton == LEFT)
-		game.publicity = buttons.click_friends();
+function clickFriends() {
+	if (mouseButton === LEFT)
+		game.publicity = buttons.clickFriends();
 }
-function click_invitation() {
-	if (mouseButton == LEFT)
-		game.publicity = buttons.click_invitation();
+function clickInvitation() {
+	if (mouseButton === LEFT)
+		game.publicity = buttons.clickInvitation();
 }
 
 function startLocal() {
-	if (mouseButton == LEFT) {
+	if (mouseButton === LEFT) {
 		game.local = true;
 		buttons.hide();
 		inputs.hide();
@@ -80,7 +83,7 @@ function startLocal() {
 		for (let i = 0; i < 5; i++) {
 			setTimeout(() => {
 				game.timer--;
-				if (game.timer == -1 && game.state == "countdown") {
+				if (game.timer === -1 && game.state === "countdown") {
 					game.state = "in-game";
 				}
 			}, i * 1000);
@@ -93,7 +96,7 @@ function startLocal() {
 	}
 }
 
-function create_button(title : string, mPressed : any, mOver : any = highlightButton, mOut : any = resetButton, size_x : number = 280, size_y : number = 175) {
+function createCustomButton(title : string, mPressed : any, mOver : any = highlightButton, mOut : any = resetButton, size_x : number = 280, size_y : number = 175) {
 	let button = createButton(title);
 	button.style("color", "white");
 	button.style("font-size", "40px");
@@ -109,7 +112,7 @@ function create_button(title : string, mPressed : any, mOver : any = highlightBu
 	return button;
 }
 
-function create_input(title : string) {
+function createCustomInput(title : string) {
 	let input = createInput(title);
 	input.style("height", "75px");
 	input.style("font-size", "45px");

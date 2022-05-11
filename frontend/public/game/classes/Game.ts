@@ -8,7 +8,8 @@ class Game {
 	room_id : string;
 	publicity : string;
 	local : boolean;
-	framesSincePoint : number;
+	frames_since_point : number;
+	map : GameMap;
 
 	constructor() {
 		this.reset();
@@ -24,6 +25,8 @@ class Game {
 		this.room_id = "null";
 		this.publicity = "public";
 		this.local = false;
-		this.framesSincePoint = 0;
+		this.frames_since_point = 0;
+		this.map = new GameMap(1200, 750, []);
+		this.map.defaultMap();
 	}
 };

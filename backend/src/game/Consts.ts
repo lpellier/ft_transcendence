@@ -3,7 +3,9 @@ export const PLAYER_HEIGHT : number = 80;
 
 export const PONG_DIAMETER : number = 12;
 export const PONG_BASE_SPEED : number = 6;
-export const PONG_MAX_SPEED : number = 12;
+export const PONG_MAX_SPEED : number = 14;
+export const PONG_ACCELERATION : number = 0.0025;
+export const PONG_ACCELERATION_ACUTE_ANGLE : number = 0.25;
 export const PONG_COLOR : string = "white";
 
 export const MAP_WIDTH : number = 1200;

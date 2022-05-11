@@ -38,6 +38,7 @@ class Game extends React.Component {
 			observer = new MutationObserver(() => {
 				canvas = document.getElementById("defaultCanvas0");
 				if (canvas) {
+					canvas_parent.appendChild(canvas);
 					observer.disconnect();
 					observer = null;
 				}
@@ -52,6 +53,7 @@ class Game extends React.Component {
 			observer = null;
 		}
 	}
+
 	render() {
 		return (
 			<div id="canvas-parent">
@@ -107,6 +109,7 @@ export default class Gamepage extends React.Component {
 		addScript("/game/sketch/classes/Game.js");
 		addScript("/game/sketch/classes/Inputs.js");
 		addScript("/game/sketch/classes/Player.js");
+		addScript("/game/sketch/classes/GameMap.js");
 		addScript("/game/sketch/classes/Pong.js");
 		addScript("/game/sketch/engine/collisions.js");
 		addScript("/game/sketch/engine/draw.js");

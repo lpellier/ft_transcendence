@@ -17,10 +17,10 @@ class Inputs {
 	}
 		
 	create_inputs() {
-		this.join = create_input('');
+		this.join = createCustomInput('');
 		this.join.size(600, 75);
 		
-		this.score_limit = create_input('');
+		this.score_limit = createCustomInput('');
 		this.score_limit.size(100, 75);
 		this.score_limit.attribute("disabled", "true");
 

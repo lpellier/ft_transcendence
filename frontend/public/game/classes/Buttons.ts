@@ -17,41 +17,41 @@ class Buttons {
 
 	constructor() {
 		this.reset();
-		this.create_buttons();
+		this.createButtons();
 	}
 	
-	create_buttons() {
-		this.create_game = create_button("Create a game", createGameMenu);
-		this.join = create_button("Join game", readRoomID);
-		this.matchmaking = create_button("Match making", matchmaking);
-		this.local = create_button("Play local", startLocal);
-		this.return = create_button("", go_to_main_menu, highlightButton, resetButton, 100, 100);
+	createButtons() {
+		this.create_game = createCustomButton("Create a game", createGameMenu);
+		this.join = createCustomButton("Join game", readRoomID);
+		this.matchmaking = createCustomButton("Match making", matchmaking);
+		this.local = createCustomButton("Play local", startLocal);
+		this.return = createCustomButton("", goToMainMenu, highlightButton, resetButton, 100, 100);
 		this.return.style("border", "none");
 		this.return.style("background-color", "rgba(0, 0, 0, 0)");
 		
-		this.anyone_can_join = create_button("Anyone can join", click_anyone, highlightButton, resetButton, 350, 75);
+		this.anyone_can_join = createCustomButton("Anyone can join", clickAnyone, highlightButton, resetButton, 350, 75);
 		this.anyone_can_join.style("background-color", "rgba(0, 0, 0, 0)");
 		this.anyone_can_join.style("font-size", "25px");
 		this.anyone_can_join.style("outline", "5px solid");
 		this.anyone_can_join.style("border", "none");
-		this.friends_can_join = create_button("Friends can join", click_friends, highlightButton, resetButton, 350, 75);
+		this.friends_can_join = createCustomButton("Friends can join", clickFriends, highlightButton, resetButton, 350, 75);
 		this.friends_can_join.style("background-color", "rgba(0, 0, 0, 0)");
 		this.friends_can_join.style("font-size", "25px");
 		this.friends_can_join.style("border", "none");
-		this.invitation_only = create_button("Invitation only", click_invitation, highlightButton, resetButton, 350, 75);
+		this.invitation_only = createCustomButton("Invitation only", clickInvitation, highlightButton, resetButton, 350, 75);
 		this.invitation_only.style("background-color", "rgba(0, 0, 0, 0)");
 		this.invitation_only.style("font-size", "25px");
 		this.invitation_only.style("border", "none");
-		this.validate = create_button('Create', createGame, highlightButton, resetButton, 300, 50);
+		this.validate = createCustomButton('Create', createGame, highlightButton, resetButton, 300, 50);
 		this.validate.style("background-color", "rgba(0, 0, 0, 0)");
 		this.validate.style("font-size", "25px");
 		
-		this.plus = create_button("+", plusScoreLimit, highlightButton, resetButton, 50, 50);
+		this.plus = createCustomButton("+", plusScoreLimit, highlightButton, resetButton, 50, 50);
 		this.plus.style("border", "none");
-		this.minus = create_button("-", minusScoreLimit, highlightButton, resetButton, 50, 50);
+		this.minus = createCustomButton("-", minusScoreLimit, highlightButton, resetButton, 50, 50);
 		this.minus.style("border", "none");
 		
-		this.opponent_left_ok = create_button("OK", go_to_main_menu, highlightButton, resetButton, 200, 100);
+		this.opponent_left_ok = createCustomButton("OK", goToMainMenu, highlightButton, resetButton, 200, 100);
 		this.opponent_left_ok.style("border", "none");
 
 		this.hide();
@@ -122,7 +122,7 @@ class Buttons {
 		this.opponent_left_ok.hide();
 	}
 
-	click_anyone() {
+	clickAnyone() {
 		this.anyone_can_join.style("outline", "5px solid");
 		this.friends_can_join.style("outline", "none");
 		this.invitation_only.style("outline", "none");
@@ -130,7 +130,7 @@ class Buttons {
 		return "public";
 	}
 
-	click_friends() {
+	clickFriends() {
 		this.anyone_can_join.style("outline", "none");
 		this.friends_can_join.style("outline", "5px solid");
 		this.invitation_only.style("outline", "none");
@@ -138,7 +138,7 @@ class Buttons {
 		return "private/friends";
 	}
 
-	click_invitation() {
+	clickInvitation() {
 		this.anyone_can_join.style("outline", "none");
 		this.friends_can_join.style("outline", "none");
 		this.invitation_only.style("outline", "5px solid");

@@ -1,44 +1,41 @@
-export function random_room_id() {
-	return (Math.random().toString(36).substring(2, 8));
+export function randomRoomId() {
+	let room_id : string = Math.random().toString(36).substring(2, 8);
+	let i : number = -1;
+	while ((i = room_id.indexOf("O")) != -1)
+		room_id = room_id.replace("O", "o");
+	while ((i = room_id.indexOf("l")) != -1)
+		room_id = room_id.replace("l", "2");
+	while ((i = room_id.indexOf("1")) != -1)
+		room_id = room_id.replace("1", "p");
+	return (room_id);
 }
 
-function ccw(a : [number, number], b : [number, number], c : [number, number]) {
-	return (c[1] - a[1]) * (b[0] - a[0]) > (b[1] - a[1]) * (c[0] - a[0]);
+// Returns 1 if the lines intersect, otherwise 0. In addition, if the lines 
+// intersect the intersection point may be stored in the floats i[0] and i[1].
+export function getLineIntersection(p0 : [number, number], p1 : [number, number], p2 : [number, number], p3 : [number, number]) : [number, number, string] {
+	let s1 : [number, number] = [p1[0] - p0[0], p1[1] - p0[1]];
+	let s2 : [number, number] = [p3[0] - p2[0], p3[1] - p2[1]];
+
+	let s : number = (-s1[1] * (p0[0] - p2[0]) + s1[0] * (p0[1] - p2[1])) / (-s2[0] * s1[1] + s1[0] * s2[1]);
+	let t : number = ( s2[0] * (p0[1] - p2[1]) - s2[1] * (p0[0] - p2[0])) / (-s2[0] * s1[1] + s1[0] * s2[1]);
+
+	let i : [number, number, string] = [-1, -1, "side"];
+    if (s >= 0 && s <= 1 && t >= 0 && t <= 1)
+    {
+        // Collision detected
+        i[0] = p0[0] + (t * s1[0]);
+        i[1] = p0[1] + (t * s1[1]);
+        return i;
+    }
+
+    return i; // No collision
 }
 
-function intercept(x1 : number, y1 : number, x2 : number, y2 : number, x3 : number, y3 : number, x4 : number, y4 : number) : [number, number] {
-	let denom = ((y4-y3) * (x2-x1)) - ((x4-x3) * (y2-y1));
-	if (denom != 0) {
-	  let ua = (((x4-x3) * (y1-y3)) - ((y4-y3) * (x1-x3))) / denom;
-	  if ((ua >= 0) && (ua <= 1)) {
-		let ub = (((x2-x1) * (y1-y3)) - ((y2-y1) * (x1-x3))) / denom;
-		if ((ub >= 0) && (ub <= 1)) {
-		  let x = x1 + (ua * (x2-x1));
-		  let y = y1 + (ua * (y2-y1));
-		  return [x, y];
-		}
-	  }
-	}
-	return null;
-}
+export function relativeIntersection(intersection_point : [number, number, string], p1 : [number, number], p2 : [number, number]) : number {
+	let middle : [number, number] = [p1[0] + (p2[0] - p1[0]) / 2 - intersection_point[0], p1[1] + (p2[1] - p1[1]) / 2 - intersection_point[1]];
 
-export function intersect(a : [number, number], b : [number, number], c : [number, number], d : [number, number], axis : string, side : string) : [boolean, number, string, string] {
-	if (ccw(a, c, d) != ccw(b, c, d) && ccw(a, b, c) != ccw(a, b, d)) {
-		// if ball trajectory crosses middle of paddle, sent back horizontally
-		if (a[1] == b[1])
-			return ([true, 0, axis, side]);
-		const pt : [number, number] = intercept(a[0], a[1], b[0], b[1], c[0], c[1], d[0], d[1]);
-		let relative : number;
-		if (axis == "y") {
-			relative = (c[1] + (d[1] - c[1]) / 2) - pt[1]; // middle of paddle minus hitpoint for relative intersection on y axis
-			relative /= ((d[1] - c[1]) / 2);
-		}
-		else if (axis == "x") {
-			relative = (c[0] + (d[0] - c[0]) / 2) - pt[0]; // middle of paddle minus hitpoint for relative intersection on x axis
-			relative /= ((d[0] - c[0]) / 2);
-		}
-		let bounce_angle = relative * ((5 * Math.PI) / 12);
-		return [true, bounce_angle, axis, side];
-	}
-	return [false, 0, axis, side];
+	if (intersection_point[2] === "side")
+		return middle[1] / ((p2[1] - p1[1]) / 2) * ((5 * Math.PI) / 12);
+	else
+		return middle[0] / ((p2[0] - p1[0]) / 2) * ((5 * Math.PI) / 12);
 }
