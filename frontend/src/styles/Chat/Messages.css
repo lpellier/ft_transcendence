@@ -3,13 +3,14 @@
 }
 
 .form {
-	width: 85%;
+	width: 100%;
 	text-align: center;
-	padding-left: 16%;
+	padding-left: 0%;
+	padding-top: 0;
 }
 
 .input {
-	width: 70%;
+	width: 80%;
 	height: 3vh;
 	justify-content: center;
 	padding-left: 2%;
@@ -37,9 +38,11 @@
 
 .messages {
 	list-style-type: none;
-	padding-right: 3%;
+	padding-right: 0%;
 	overflow-y: scroll;
 	height: 75%;
+	-ms-overflow-style: none;
+    scrollbar-width: none;
 }
 
 .flexwrapper {

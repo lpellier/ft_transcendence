@@ -17,7 +17,7 @@ function Messages(props : {user: User, current_room: Room}) {
 	
 	let [messages, setMessages] = useState<Message[]>([]);
 
-	const addMessage = (newMessage:string, user:User, room:Room, type:boolean) => setMessages(state => [...state, {id: state.length, content: newMessage, user: {avatar:user.avatar, id: user.id, username: user.username}, room: {id: room.id, name: room.name} ,type: type}])
+	const addMessage = (newMessage:string, user:User, room:Room, type:boolean) => setMessages(state => [...state, {id: state.length, content: newMessage, user: {avatar:user.avatar, id: user.id, username: user.username}, room: {id: room.id, name: room.name} ,type: type}]);
 	
 	
 	function handleSubmit(e: any) {
@@ -54,7 +54,7 @@ function Messages(props : {user: User, current_room: Room}) {
 
     return (
 	<Container >
-        <Stack className='chat' spacing={6}>
+        <Stack className='chat' spacing={2} justifyContent='space-between'>
 			<ul className='messages' id='messagebox'>
 				{messages.map(item=> (
 					<div key={item.id}>
@@ -89,10 +89,10 @@ function Messages(props : {user: User, current_room: Room}) {
 				))}
 			</ul>
 			<form className="form" id="form" onSubmit={handleSubmit}>
-			<Stack direction='row' spacing={1}>
-				<input className='input' type="text" />
-				<button className='button'>Miauw</button>
-			</Stack>
+				<Stack direction='row' spacing={1} justifyContent='space-between'>
+					<input className='input' type="text" />
+					<button className='button'>Miauw</button>
+				</Stack>
             </form>
         </Stack>
 	</Container>
