@@ -1,13 +1,13 @@
 class Buttons {
 	create_game : any;
 	join : any;
-	local : any;
 	return : any;
 	matchmaking : any;
 
 	anyone_can_join : any;
-	friends_can_join : any;
 	invitation_only : any;
+	local : any;
+	ai : any;
 	validate : any;
 
 	plus : any;
@@ -24,7 +24,6 @@ class Buttons {
 		this.create_game = createCustomButton("Create game", createGameMenu);
 		this.join = createCustomButton("Join game", readRoomID);
 		this.matchmaking = createCustomButton("Match making", matchmaking);
-		this.local = createCustomButton("Play local", startLocal);
 		this.return = createCustomButton("", goToMainMenu, highlightButton, resetButton, consts.medium_square_diameter, consts.medium_square_diameter);
 		this.return.style("border", "none");
 		this.return.style("background-color", "rgba(0, 0, 0, 0)");
@@ -34,15 +33,18 @@ class Buttons {
 		this.anyone_can_join.style("font-size", consts.medium_font_size.toString() + "px");
 		this.anyone_can_join.style("outline", "5px solid");
 		this.anyone_can_join.style("border", "none");
-		this.friends_can_join = createCustomButton("Friends can join", clickFriends, highlightButton, resetButton, consts.medium_width, consts.medium_height);
-		this.friends_can_join.style("background-color", "rgba(0, 0, 0, 0)");
-		this.friends_can_join.style("font-size", consts.medium_font_size.toString() + "px");
-		this.friends_can_join.style("border", "none");
 		this.invitation_only = createCustomButton("Invitation only", clickInvitation, highlightButton, resetButton, consts.medium_width, consts.medium_height);
 		this.invitation_only.style("background-color", "rgba(0, 0, 0, 0)");
-		this.invitation_only.size(consts.medium_width, consts.medium_height);
 		this.invitation_only.style("border", "none");
 		this.invitation_only.style("font-size", consts.medium_font_size.toString() + "px");
+		this.local = createCustomButton("Play local", clickLocal, highlightButton, resetButton, consts.medium_width, consts.medium_height);
+		this.local.style("background-color", "rgba(0, 0, 0, 0)");
+		this.local.style("font-size", consts.medium_font_size.toString() + "px");
+		this.local.style("border", "none");
+		this.ai = createCustomButton("vs AI", clickAi, highlightButton, resetButton, consts.medium_width, consts.medium_height);
+		this.ai.style("background-color", "rgba(0, 0, 0, 0)");
+		this.ai.style("font-size", consts.medium_font_size.toString() + "px");
+		this.ai.style("border", "none");
 		this.validate = createCustomButton('Create', createGame, highlightButton, resetButton, consts.medium_width, consts.medium_height);
 		this.validate.style("background-color", "rgba(0, 0, 0, 0)");
 		this.validate.style("font-size", consts.medium_font_size.toString() + "px");
@@ -60,7 +62,6 @@ class Buttons {
 		this.hide();
 		this.addParent();
 	
-		this.local.show();
 		this.matchmaking.show();
 		this.create_game.show();
 		this.join.show();
@@ -73,17 +74,17 @@ class Buttons {
 		this.join.style("font-size", consts.std_font_size.toString() + "px");
 		this.matchmaking.size(consts.std_width, consts.std_height);
 		this.matchmaking.style("font-size", consts.std_font_size.toString() + "px");
-		this.local.size(consts.std_width, consts.std_height);
-		this.local.style("font-size", consts.std_font_size.toString() + "px");
 		this.opponent_left_ok.size(consts.std_width, consts.std_height);
 		this.opponent_left_ok.style("font-size", consts.std_font_size.toString() + "px");
 	
 		this.anyone_can_join.size(consts.medium_width, consts.medium_height);
 		this.anyone_can_join.style("font-size", consts.medium_font_size.toString() + "px");
-		this.friends_can_join.size(consts.medium_width, consts.medium_height);
-		this.friends_can_join.style("font-size", consts.medium_font_size.toString() + "px");
 		this.invitation_only.size(consts.medium_width, consts.medium_height);
 		this.invitation_only.style("font-size", consts.medium_font_size.toString() + "px");
+		this.local.size(consts.medium_width, consts.medium_height);
+		this.local.style("font-size", consts.medium_font_size.toString() + "px");
+		this.ai.size(consts.medium_width, consts.medium_height);
+		this.ai.style("font-size", consts.medium_font_size.toString() + "px");
 		this.validate.size(consts.medium_width, consts.medium_height);
 		this.validate.style("font-size", consts.medium_font_size.toString() + "px");
 	
@@ -106,9 +107,6 @@ class Buttons {
 		if (this.matchmaking)
 			this.matchmaking.remove();
 		this.matchmaking = null;
-		if (this.local)
-			this.local.remove();
-		this.local = null;
 		if (this.return)
 			this.return.remove();
 		this.return = null;
@@ -116,12 +114,15 @@ class Buttons {
 		if (this.anyone_can_join)
 			this.anyone_can_join.remove();
 		this.anyone_can_join = null;
-		if (this.friends_can_join)
-			this.friends_can_join.remove();
-		this.friends_can_join = null;
 		if (this.invitation_only)
 			this.invitation_only.remove();
 		this.invitation_only = null;
+		if (this.local)
+			this.local.remove();
+		this.local = null;
+		if (this.ai)
+			this.ai.remove();
+		this.ai = null;
 		if (this.validate)
 			this.validate.remove();
 		this.validate = null;
@@ -140,13 +141,13 @@ class Buttons {
 	hide() {
 		this.create_game.hide();
 		this.join.hide();
-		this.local.hide();
 		this.return.hide();
 		this.matchmaking.hide();
 	
 		this.anyone_can_join.hide();
-		this.friends_can_join.hide();
 		this.invitation_only.hide();
+		this.local.hide();
+		this.ai.hide();
 		this.validate.hide();
 
 		this.plus.hide();
@@ -157,24 +158,34 @@ class Buttons {
 
 	clickAnyone() {
 		this.anyone_can_join.style("outline", "5px solid");
-		this.friends_can_join.style("outline", "none");
+		this.local.style("outline", "none");
 		this.invitation_only.style("outline", "none");
+		
+		this.ai.hide();
+		this.ai.style("outline", "none");
+		game.ai = false;
 
 		return "public";
 	}
 
-	clickFriends() {
+	clickLocal() {
 		this.anyone_can_join.style("outline", "none");
-		this.friends_can_join.style("outline", "5px solid");
+		this.local.style("outline", "5px solid");
 		this.invitation_only.style("outline", "none");
 
-		return "private/friends";
+		this.ai.show();
+		
+		return "local";
 	}
 
 	clickInvitation() {
 		this.anyone_can_join.style("outline", "none");
-		this.friends_can_join.style("outline", "none");
+		this.local.style("outline", "none");
 		this.invitation_only.style("outline", "5px solid");
+
+		this.ai.hide();
+		this.ai.style("outline", "none");
+		game.ai = false;
 
 		return "private";
 	}
@@ -183,11 +194,11 @@ class Buttons {
 		this.create_game.parent(document.getElementById("button-create"));
 		this.join.parent(document.getElementById("button-join"));
 		this.matchmaking.parent(document.getElementById("button-matchmaking"));
-		this.local.parent(document.getElementById("button-local"));
 		this.return.parent(document.getElementById("button-return"));
 		this.anyone_can_join.parent(document.getElementById("button-anyone"));
-		this.friends_can_join.parent(document.getElementById("button-friends"));
+		this.local.parent(document.getElementById("button-local"));
 		this.invitation_only.parent(document.getElementById("button-invitation"));
+		this.ai.parent(document.getElementById("button-ai"));
 		this.validate.parent(document.getElementById("button-validate"));
 		this.plus.parent(document.getElementById("button-plus"));
 		this.minus.parent(document.getElementById("button-minus"));

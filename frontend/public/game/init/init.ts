@@ -5,7 +5,7 @@ function createGameMenu() {
 	
 		buttons.return.show();
 		buttons.anyone_can_join.show();
-		buttons.friends_can_join.show();
+		buttons.local.show();
 		buttons.invitation_only.show();
 		buttons.validate.show();
 		buttons.plus.show();
@@ -20,8 +20,12 @@ function createGameMenu() {
 // matchmaking args : publicity, matchamking_boolean, score_limit, map_index
 
 function createGame() {
-	if (mouseButton === LEFT)
-		socket.emit("matchmaking", game.publicity, false, game.score_limit);
+	if (mouseButton === LEFT) {
+		if (game.publicity === "local")
+			startLocal();
+		else
+			socket.emit("matchmaking", game.publicity, false, game.score_limit);
+	}
 }
 function matchmaking() {
 	if (mouseButton === LEFT)
@@ -65,13 +69,27 @@ function clickAnyone() {
 	if (mouseButton === LEFT)
 		game.publicity = buttons.clickAnyone();
 }
-function clickFriends() {
-	if (mouseButton === LEFT)
-		game.publicity = buttons.clickFriends();
-}
 function clickInvitation() {
 	if (mouseButton === LEFT)
 		game.publicity = buttons.clickInvitation();
+}
+function clickLocal() {
+	if (mouseButton === LEFT)
+		game.publicity = buttons.clickLocal();
+}
+
+function clickAi() {
+	if (mouseButton === LEFT) {
+		if (game.ai) {
+			// @ts-ignore : next-line
+			this.style("outline", "none");
+		}
+		else {
+			// @ts-ignore : next-line
+			this.style("outline", "5px solid");
+		}
+		game.ai = !game.ai;
+	}
 }
 
 function startLocal() {

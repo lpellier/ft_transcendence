@@ -22,6 +22,7 @@ class Inputs {
 		
 		this.score_limit = createCustomInput('');
 		this.score_limit.attribute("disabled", "true");
+		this.score_limit.style("text-align", "center");
 		this.score_limit.size(consts.WIDTH / 12, consts.HEIGHT / 10);
 		this.hide();
 		this.addParent();

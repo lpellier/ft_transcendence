@@ -2,31 +2,17 @@
 	display: flex;
 	flex-direction: row;
 	position: absolute;
-	gap: 30vw;
+	gap: 3vw;
 	align-content: center;
 	align-items: center;
 	justify-content: center;
+	left: 9%;
+	bottom: 20%;
 }
 
 #button-create {
 	flex-grow: 1;
 	z-index: 2;
-}
-
-#button-local {
-	flex-grow: 1;
-	z-index: 2;
-}
-
-#main-menu-button-grid2 {
-	display: flex;
-	flex-direction: column;
-	position: absolute;
-	align-content: center;
-	align-items: center;
-	justify-content: center;
-	flex-grow: 1;
-	gap: 3vh;
 }
 
 #button-join {
@@ -65,7 +51,7 @@
 	z-index: 2;
 }
 
-#button-friends {
+#button-local {
 	flex-grow: 1;
 	z-index: 2;
 }
@@ -75,11 +61,18 @@
 	z-index: 2;
 }
 
+#button-ai {
+	position: absolute;
+	padding: 0;
+	top: 50%;
+	right: 6%;
+}
+
 #buttons-plus-minus {
 	position: absolute;
 	display: flex;
 	left: 46%;
-	top: 52%;
+	top: 50%;
 	flex-direction: column;
 	z-index: 2;
 }

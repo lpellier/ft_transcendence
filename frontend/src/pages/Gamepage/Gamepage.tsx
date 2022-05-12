@@ -59,17 +59,15 @@ class Game extends React.Component {
 			<div id="canvas-parent">
 				<div id="main-menu-button-grid">
 					<div id="button-create"/>
-					<div id="main-menu-button-grid2">
-						<div id="button-join"/>
-						<div id="button-matchmaking"/>
-					</div>
-					<div id="button-local"/>
+					<div id="button-join"/>
+					<div id="button-matchmaking"/>
 				</div>
 				<div id="create-menu-button-grid">
 					<div id="button-anyone"/>
-					<div id="button-friends"/>
 					<div id="button-invitation"/>
+					<div id="button-local"/>
 				</div>
+				<div id="button-ai"/>
 				<div id="button-validate"/>
 				<div id="button-return"/>
 				<div id="icon-return"/>

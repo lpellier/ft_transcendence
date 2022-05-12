@@ -2,33 +2,6 @@
 // ? Coding consistency : snake_case for variables | camelCase for functions | PascalCase for classes
 // ? Map indexes : 1 (normal map)
 
-// TODO responsive game
-// ? Buttons
-	// ? Positionning
-	// // ? Size
-// ? Keys
-	// ? Positionning
-	// // ? Size
-// ? Icons
-	// ? Positionning
-	// // ? Size
-// ? Map
-	// ? Positionning
-	// // ? Size
-// ? Players, Pong
-	// ? Positionning
-	// // ? Size
-// ? Inputs
-	// ? Positionning
-	// // ? Size
-// ? Outputs
-	// ? Positionning
-	// // ? Size
-
-// TODO bigger size for overall input bar
-
-// TODO if width and height under specific threshold, maybe output a message to resize the window
-
 // TODO draw input for multiplayer but only on one side
 // TODO local mode : pause by pressing escape -> removing sound or quitting to menu
 // TODO adding options and probably sounds
@@ -38,9 +11,9 @@
 // TODO in menu creation, local button if checked, ai button appears and can be checked aswell
 // TODO in menu creation, button to go to map page and choose a map
 
-// TODO key animation not playing on safari
+// TODO key animation not playing on safari, responsiveness not working on safari...
 
-// TODO add switch classic/themed mode
+// TODO add switch classic/themed mode 1977 / 2077
 // ? classic mode has no power-ups and is retro-themed
 // ? themed mode has power ups and should be coherent within a specific theme (to be defined)
 // ? CYBERPUNK themed so futuristic shit idk
@@ -60,19 +33,6 @@
 // ? inverted input
 // ? black hole teleport ball
 
-class Parents {
-	main_menu_button_grid : any;
-
-	constructor() {
-		this.main_menu_button_grid = document.getElementById("main-menu-button-grid");
-	}
-
-	resize() {
-		this.main_menu_button_grid.style["bottom"] = (consts.HEIGHT / 4).toString() + "px";
-		this.main_menu_button_grid.style["left"] = (consts.WIDTH / 13).toString() + "px";
-	}
-}
-
 let should_load : boolean = false;
 
 let consts : Consts = null;
@@ -81,7 +41,6 @@ let errors : Errors = null;
 let buttons : Buttons = null;
 let inputs : Inputs = null;
 let keys : Keys = null;
-let parents : Parents = null;
 let player_input : number[] = [];
 
 let canvas : any = null;
@@ -162,7 +121,6 @@ function setup() {
 	listenStopEvents();
 	listenMoveEvents();
 	
-	parents = new Parents();
 	resizeEverything();
 }
 
@@ -187,22 +145,25 @@ function movePlayers() {
 		else
 			game.players[1].velocity[1] = 0;
 		
-		// ? chaser ai code
-		let player_pos = game.players[0].pos[1] + game.players[0].height / 2;
-		let pos_diff = player_pos - game.pong.cY();
-		if (pos_diff > 10)
-			game.players[0].moveUp();
-		else if (pos_diff < -10)
-			game.players[0].moveDown();
-		else
-			game.players[0].velocity[1] = 0;
-		
-		// if (keyIsDown(87))
-		// 	game.players[0].moveUp();
-		// else if (keyIsDown(83))
-		// 	game.players[0].moveDown();
-		// else
-		// 	game.players[0].velocity[1] = 0;
+		if (game.ai) {
+			// ? chaser ai code
+			let player_pos = game.players[0].pos[1] + game.players[0].height / 2;
+			let pos_diff = player_pos - game.pong.cY();
+			if (pos_diff > 10)
+				game.players[0].moveUp();
+			else if (pos_diff < -10)
+				game.players[0].moveDown();
+			else
+				game.players[0].velocity[1] = 0;
+		}
+		else {
+			if (keyIsDown(87))
+				game.players[0].moveUp();
+			else if (keyIsDown(83))
+				game.players[0].moveDown();
+			else
+				game.players[0].velocity[1] = 0;
+		}
 		
 		if (keyIsDown(80)) {
 			inMainMenu();
@@ -223,7 +184,6 @@ function hideIcons() {
 
 function resizeEverything() {
 	consts.resize();
-	parents.resize();
 	for (let player of game.players)
 		if (player)	
 			player.resize();
@@ -234,8 +194,6 @@ function resizeEverything() {
 	buttons.resize();
 	keys.resize();
 	inputs.resize();
-
-	// TODO if width and height under specific threshold, maybe output a message to resize the window
 }
 
 function windowResized() {
@@ -263,12 +221,12 @@ function draw() {
 		consts.RETURN_ICON.show();
 	if (game.state === "in-menu-create") {
 		outputAnnouncement("Game Creation", consts.std_font_size, consts.WIDTH / 2, consts.HEIGHT / 5);
-		outputAnnouncement("score limit : ", consts.medium_font_size, consts.WIDTH / 5, consts.HEIGHT * 3 / 5)
+		outputAnnouncement("score limit   ", consts.medium_font_size, consts.WIDTH * 1.20 / 5, consts.HEIGHT * 2.9 / 5)
 	}
 	if (game.state === "opponent-left-menu")
 		outputAnnouncement("Your opponent left", consts.std_font_size, consts.WIDTH / 2, consts.HEIGHT / 2);
 	if (game.state === "in-menu")
-		outputAnnouncement("CyberPong 2077", consts.std_font_size * 1.5, consts.WIDTH / 2, consts.HEIGHT / 4);
+		outputAnnouncement("CyberPong 1977", consts.std_font_size * 1.5, consts.WIDTH / 2, consts.HEIGHT / 4);
 	else if (game.state === "in-menu-input") {
 		outputAnnouncement("Enter Room ID", consts.std_font_size, consts.WIDTH / 2, consts.HEIGHT * 2 / 5)
 		if (errors.game_full)
