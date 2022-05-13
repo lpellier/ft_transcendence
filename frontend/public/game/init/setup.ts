@@ -2,16 +2,12 @@
 // ? Coding consistency : snake_case for variables | camelCase for functions | PascalCase for classes
 // ? Map indexes : 1 (normal map)
 
-// TODO draw input for multiplayer but only on one side
 // TODO local mode : pause by pressing escape -> removing sound or quitting to menu
 // TODO adding options and probably sounds
 
-// TODO weird collision when paddle right next to bound and ball hits the bottom part of paddle
-
-// TODO in menu creation, local button if checked, ai button appears and can be checked aswell
 // TODO in menu creation, button to go to map page and choose a map
 
-// TODO key animation not playing on safari, responsiveness not working on safari...
+// TODO key animation not playing on safari
 
 // TODO add switch classic/themed mode 1977 / 2077
 // ? classic mode has no power-ups and is retro-themed
@@ -51,49 +47,6 @@ function preload() {
 	keys = new Keys();
 }
 
-function keyPressed() {
-	if (game === null)
-		return;
-	if (game.state === "waiting-readiness" && key === ' ') 
-		socket.emit("switch_readiness", game.players[0].id);
-	// if (game.state === "in-game" && key === 'R')
-	// 	socket.emit("restart_game", game.room_id);
-	if (game.state === "in-menu-input" && keyCode === ENTER) {
-		if (inputs.join.value()[0] === '#')
-			inputs.join.value(inputs.join.value().slice(1));
-		socket.emit("find_game", inputs.join.value());
-	}
-	if (game.state === "in-menu-create" && keyCode === ENTER) {
-		if (inputs.join.value()[0] === '#')
-			inputs.join.value(inputs.join.value().slice(1));
-		socket.emit("find_game", inputs.join.value());
-	}
-}
-
-function inMainMenu() {
-	if (game.state === "waiting-player")
-		socket.emit("quit-own-game");
-	should_load = false;
-	game.reset();
-	errors.set_false();
-	buttons.reset();
-	buttons.createButtons();
-	inputs.reset();
-	inputs.create_inputs();
-}
-
-function goToMainMenu() {
-	if (mouseButton === LEFT)
-		inMainMenu();
-}
-
-function opponentLeftMenu() {
-	game.state = "opponent-left-menu";
-	buttons.hide();
-	buttons.opponent_left_ok.parent().style["z-index"] = 2; // deal with buttons overlapping
-	buttons.opponent_left_ok.show();
-}
-
 function setup() {
 	
 	keys.init();
@@ -124,56 +77,6 @@ function setup() {
 	resizeEverything();
 }
 
-function movePlayers() {
-	if (!game.local) {
-		if (keyIsDown(UP_ARROW)) {
-			player_input.push(1);
-			socket.emit("move_up", game.players[0].id);
-		}
-		else if (keyIsDown(DOWN_ARROW)) {
-			player_input.push(-1);
-			socket.emit("move_down", game.players[0].id);
-		}
-		else
-			socket.emit("move_null", game.players[0].id);
-	}
-	else {
-		if (keyIsDown(UP_ARROW))
-			game.players[1].moveUp();
-		else if (keyIsDown(DOWN_ARROW))
-			game.players[1].moveDown();
-		else
-			game.players[1].velocity[1] = 0;
-		
-		if (game.ai) {
-			// ? chaser ai code
-			let player_pos = game.players[0].pos[1] + game.players[0].height / 2;
-			let pos_diff = player_pos - game.pong.cY();
-			if (pos_diff > 10)
-				game.players[0].moveUp();
-			else if (pos_diff < -10)
-				game.players[0].moveDown();
-			else
-				game.players[0].velocity[1] = 0;
-		}
-		else {
-			if (keyIsDown(87))
-				game.players[0].moveUp();
-			else if (keyIsDown(83))
-				game.players[0].moveDown();
-			else
-				game.players[0].velocity[1] = 0;
-		}
-		
-		if (keyIsDown(80)) {
-			inMainMenu();
-			return ;
-		}
-
-		game.pong.calculateNewPos();
-	}
-}
-
 function hideIcons() {
 	keys.hide();
 	consts.RETURN_ICON.hide();
@@ -182,32 +85,11 @@ function hideIcons() {
 	consts.CROSS_ICON2.hide();
 }
 
-function resizeEverything() {
-	consts.resize();
-	for (let player of game.players)
-		if (player)	
-			player.resize();
-	if (game.pong)
-		game.pong.resize();
-	if (game.map)
-		game.map.resize();
-	buttons.resize();
-	keys.resize();
-	inputs.resize();
-}
-
-function windowResized() {
-	noLoop();
-	resizeEverything();
-
-	resizeCanvas(consts.WIDTH, consts.HEIGHT);
-	loop();
-}
-
 function draw() {
 	clear(0, 0, 0, 0);
 	hideIcons();
 	background(0);
+	console.log(frameRate());
 	if (!document.getElementById("canvas-parent")) {
 		socket.emit("quit-ongoing-game");
 		should_load = true;
@@ -247,8 +129,7 @@ function draw() {
 		outputCountdown();
 		if (!game.local)
 			drawHelp();
-		else
-			drawInput();
+		drawInput();
 		for (let i : number = 0; i < game.players.length; i++)
 			game.players[i].render();
 	}

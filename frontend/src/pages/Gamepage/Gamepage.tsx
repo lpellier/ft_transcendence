@@ -115,6 +115,9 @@ export default class Gamepage extends React.Component {
 		addScript("/game/sketch/init/init.js");
 		addScript("/game/sketch/init/setup.js");
 		addScript("/game/sketch/socket/events.js");
+		addScript("/game/sketch/engine/input.js");
+		addScript("/game/sketch/engine/menus.js");
+		addScript("/game/sketch/engine/button_functions.js");
 		addScript("/p5/p5.js");
 	}
 

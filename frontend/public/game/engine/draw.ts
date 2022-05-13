@@ -38,13 +38,23 @@ function drawHelp() {
 }
 
 function drawInput() {
-	keys.w.show();
-	keys.a.show();
-	keys.s.show();
-	keys.d.show();
+	if (game.players[0].index == 2) {
+		keys.up.show();
+		keys.left.show();
+		keys.down.show();
+		keys.right.show();
+	}
+	else {
+		keys.w.show();
+		keys.a.show();
+		keys.s.show();
+		keys.d.show();
+	}
 
-	keys.up.show();
-	keys.left.show();
-	keys.down.show();
-	keys.right.show();
+	if ((game.local && !game.ai)) {
+		keys.up.show();
+		keys.left.show();
+		keys.down.show();
+		keys.right.show();
+	}
 }

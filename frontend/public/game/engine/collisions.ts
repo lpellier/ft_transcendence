@@ -71,6 +71,8 @@ function checkCollisions() {
 			return ;
 		}
 	}
+	if (game.pong.pos[1] < consts.TOP_BOUND || game.pong.pos[1] > consts.BOT_BOUND)
+		game.pong.velocity[1] *= -1;
 	if (game.pong.velocity[0] > 0 && game.pong.pos[0] + game.pong.diameter > consts.RIGHT_BOUND) {
 		game.pong.relaunchPong("right");
 		game.score[0]++;
