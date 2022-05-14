@@ -28,6 +28,12 @@ export class UsersController {
   findOne(@Param('id') id: string) {
     return this.usersService.findOne(+id);
   }
+  
+  @Post('me')
+  updateMe(@Req() req,  @Body() username: string) {
+    console.log("!!! updateme username = ", username)
+    return this.usersService.updateOne(req.user.id, username);
+  }
 
   // @Patch(':id')
   // update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
