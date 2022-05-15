@@ -49,14 +49,15 @@ export class UsersService {
     });
   }
 
-  async updateOne(id: number, newusername: string) {
+  async updateOne(id: number, data : any) {
     return await this.prisma.user.update({
       where: {
         id: id,
       },
-      data: {
-        username: newusername,
-      }
+      data: data,
+      // data: {
+      //   username: newusername,
+      // }
     });
   }
 

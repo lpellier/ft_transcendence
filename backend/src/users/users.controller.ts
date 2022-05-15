@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req } from '@nestjs/common';
+import { Controller, Get, Post, Put, Body, Patch, Param, Delete, UseGuards, Req } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -28,11 +28,11 @@ export class UsersController {
   findOne(@Param('id') id: string) {
     return this.usersService.findOne(+id);
   }
-  
-  @Post('me')
-  updateMe(@Req() req,  @Body() username: string) {
-    console.log("!!! updateme username = ", username)
-    return this.usersService.updateOne(req.user.id, username);
+
+  @Put('me')
+  updateMe(@Req() req,  @Body() data: any) {
+    console.log("!!! updateme data = ", data.username);
+    return this.usersService.updateOne(req.user.id, data);
   }
 
   // @Patch(':id')
