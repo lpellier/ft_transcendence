@@ -30,11 +30,6 @@ function Channels(props : {current_room: Room, setCurrentRoom: React.Dispatch<Re
 	function handleSubmit(e:any) {
 		e.preventDefault();
 		const room = e.target[0].value;
-		// console.log(e);
-		// console.log("room = ", room);
-		rooms.map( item => (
-			console.log("item = ",item)
-		))
 		if (room)
 			addRoom(room);
 		setClicked(0);
@@ -47,7 +42,7 @@ function Channels(props : {current_room: Room, setCurrentRoom: React.Dispatch<Re
 				<div className="dropdown-content">
 					{rooms.map(room => (
 						<div key={room.id}>
-							{room.name != props.current_room.name ?
+							{room.name !== props.current_room.name ?
 								<button className="dropdown-content"  onClick={() => handleListClick(room)}>
 									{room.name}
 								</button>
