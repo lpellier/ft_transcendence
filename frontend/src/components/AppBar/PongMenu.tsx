@@ -19,6 +19,8 @@ import ChooseAuthModal from './ChooseAuth/Modal'
 import { phoneSize } from 'index'
 import { IconButtonStyle } from '../../styles/tsxStyles/AppBar/PongMenu'
 
+import {User} from 'interfaces'
+
 function LogOutLink() {
   return (
     <nav>
@@ -95,7 +97,7 @@ function PhoneButton() {
   );
 }
 
-export default function PongMenu() {
+export default function PongMenu(props: {user: User}) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [width, setWidth] = useState(window.innerWidth);
   const open = Boolean(anchorEl);
@@ -138,7 +140,7 @@ export default function PongMenu() {
     <Paper style={{backgroundColor: 'rgb(70, 50, 220)'}}>
         {width <= phoneSize && <PhoneButton/>}
         <MenuItem>
-          <ChooseNameModal />
+          <ChooseNameModal user={props.user}/>
         </MenuItem>
         <MenuItem>
           <ChooseAvatarModal img={""}/>
