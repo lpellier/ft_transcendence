@@ -97,7 +97,7 @@ function PhoneButton() {
   );
 }
 
-export default function PongMenu(props: {user: User}) {
+export default function PongMenu(props: {user: User, setUser: React.Dispatch<React.SetStateAction<User>>}) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [width, setWidth] = useState(window.innerWidth);
   const open = Boolean(anchorEl);
@@ -140,7 +140,7 @@ export default function PongMenu(props: {user: User}) {
     <Paper style={{backgroundColor: 'rgb(70, 50, 220)'}}>
         {width <= phoneSize && <PhoneButton/>}
         <MenuItem>
-          <ChooseNameModal user={props.user}/>
+          <ChooseNameModal user={props.user} setUser={props.setUser}/>
         </MenuItem>
         <MenuItem>
           <ChooseAvatarModal img={""}/>

@@ -121,14 +121,14 @@ export default function SearchAppBar(props: {image: string}) {
 		.catch(function (err) {
 			console.log("Get request failed : ", err)
 		});
-	}, [user])
+	}, [])
 
 	if (width <= phoneSize)
 	{
 		return(
 			<AppBar position="static">
 			<Toolbar style={ BarStyle }>
-				<PongMenu user = {user}/>
+				<PongMenu user = {user} setUser={setUser}/>
 				<ProjectName />
 			</Toolbar>
 		  </AppBar>
@@ -139,7 +139,7 @@ export default function SearchAppBar(props: {image: string}) {
 		return(
 			<AppBar position="static">
 			<Toolbar style={ BarStyle }>
-				<PongMenu user = {user}/>
+				<PongMenu user = {user} setUser={setUser} />
 				<PlayerAvatarBar image={user.avatar}/>
 				<PlayerName name={""}/>
 				<Stack direction="row" spacing={2}>
@@ -154,7 +154,7 @@ export default function SearchAppBar(props: {image: string}) {
   return (
       <AppBar position="static">
         <Toolbar style={ BarStyle }>
-        	<PongMenu user = {user}/>
+        	<PongMenu user = {user} setUser={setUser}/>
 			<PlayerAvatarBar image={user.avatar}/>
 			<PlayerName name={user.username}/>
 			<ProjectName />
