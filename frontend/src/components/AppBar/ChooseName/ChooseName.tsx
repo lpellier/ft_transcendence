@@ -22,21 +22,24 @@ function NameButton() {
 	);
 }
 
-function NameInput(props: {user: User, setUser: React.Dispatch<React.SetStateAction<User>>}) {
+function NameInput(props: {user: User}) {
 
 	let [new_username, setNewUsername] = useState(props.user.username);
 
 	function handleSubmit(e: any)
 	{
-		e.preventDefault();
-		props.setUser({id: props.user.id, username: e.target[0].value, avatar: props.user.avatar});
+		setNewUsername(e.target[0].value);
 		e.target[0].value = "";
 	}
 
 	useEffect(() => {
 
 		axios.put('http://127.0.0.1:3001/users/me',
-			props.user,
+			{
+				id: props.user.id,
+				username: new_username,
+				avatar: props.user.avatar
+			},
 			{
 			headers: {
 				'Authorization': token,
@@ -46,7 +49,7 @@ function NameInput(props: {user: User, setUser: React.Dispatch<React.SetStateAct
 		.catch(function (err) {
 			console.log("Get request failed : ", err)
 		});
-	}, [props.user])
+	}, [new_username])
 
 
 	return (
@@ -75,12 +78,12 @@ function NameRandom() {
 	);
 }
 
-export default function ChooseName(props: {user: User, setUser: React.Dispatch<React.SetStateAction<User>>}) {
+export default function ChooseName(props: {user: User}) {
 
         return (
 				<Stack spacing={2} style={{justifyContent: 'center'}}>
                     <NameButton />
-					<NameInput user={props.user} setUser={props.setUser}/>
+					<NameInput user={props.user}/>
 					<NameRandom />
                 </Stack>
         );

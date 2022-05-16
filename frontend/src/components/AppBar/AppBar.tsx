@@ -128,7 +128,7 @@ export default function SearchAppBar(props: {image: string}) {
 		return(
 			<AppBar position="static">
 			<Toolbar style={ BarStyle }>
-				<PongMenu user = {user} setUser={setUser}/>
+				<PongMenu user = {user} />
 				<ProjectName />
 			</Toolbar>
 		  </AppBar>
@@ -139,7 +139,7 @@ export default function SearchAppBar(props: {image: string}) {
 		return(
 			<AppBar position="static">
 			<Toolbar style={ BarStyle }>
-				<PongMenu user = {user} setUser={setUser} />
+				<PongMenu user = {user} />
 				<PlayerAvatarBar image={user.avatar}/>
 				<PlayerName name={""}/>
 				<Stack direction="row" spacing={2}>
@@ -154,7 +154,7 @@ export default function SearchAppBar(props: {image: string}) {
   return (
       <AppBar position="static">
         <Toolbar style={ BarStyle }>
-        	<PongMenu user = {user} setUser={setUser}/>
+        	<PongMenu user = {user}/>
 			<PlayerAvatarBar image={user.avatar}/>
 			<PlayerName name={user.username}/>
 			<ProjectName />
