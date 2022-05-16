@@ -58,19 +58,21 @@ function Messages(props : {user: User, current_room: Room}) {
 			<ul className='messages' id='messagebox'>
 				{messages.map(item=> (
 					<div key={item.id}>
-						{item.room.id == props.current_room.id ?
+						{item.room.id === props.current_room.id ?
 							<div>
 								{item.type ?
 									<div className='flexwrapper' >
 										{item.user.id === props.user.id ?
 										<div className='message current flex'>
 											<li className=''>{item.content}</li> 
-											<div className='user'>{item.user.username}</div>
+											<div className='user'><img className='avatar' src={item.user.avatar}/>{item.user.username}</div>
+											
 										</div>
 										:
 										<div className='message other flex'>
 											<li className=''>{item.content}</li>
-											<div className='user' >{item.user.username}</div>
+											<div className='user' ><img className='avatar' src={item.user.avatar}/>{item.user.username}</div>
+											
 										</div>
 										}
 									</div>
