@@ -16,10 +16,18 @@ export class ChatService {
         rooms: true
       }
     });
-    return user.rooms
+    return user.rooms;
   }
   async getUsersInRoom(id: number) {
-
+    let room = await this.prisma.room.findUnique({
+      where:{
+        id: id
+      },
+      include:{
+        users: true
+      }
+    })
+    return room.users;
   }
   // create(createChatDto: CreateChatDto) {
   //   return 'This action adds a new chat';
