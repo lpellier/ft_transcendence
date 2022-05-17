@@ -46,7 +46,7 @@ model Room {
   id         Int       @id @default(autoincrement())
   name       String
   messages   Message[]
-  users      User[]
+  users      User[] @relation(references: [id])
 }
 
 model Message {

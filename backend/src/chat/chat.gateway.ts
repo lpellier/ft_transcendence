@@ -1,5 +1,6 @@
 import { ConfigService } from "@nestjs/config";
 import { MessageBody, ConnectedSocket, SubscribeMessage, WebSocketGateway, WebSocketServer } from "@nestjs/websockets";
+import { Prisma, PrismaClient } from "@prisma/client";
 import { Socket } from "socket.io";
 import { ChatService } from './chat.service';
 import { CreateRoomDto } from './dto/create-room.dto';
@@ -12,28 +13,26 @@ import { UpdateRoomDto } from './dto/update-room.dto';
 	}
 })
 export class ChatGateway {
-  constructor(private readonly chatService: ChatService) {}
+	constructor(private readonly chatService: ChatService) {}
 
-  @WebSocketServer()
+	@WebSocketServer()
 	server: Socket;
 
 	@SubscribeMessage('create room') 
 	handleCreateRoom(@MessageBody()  createRoomDto: CreateRoomDto) {
-		// TODO add new room to database
+		return this.chatService.createRoom(createRoomDto);
 	}
-
-	// @SubscribeMessage('create correlation')
-	// handleCreateCorrelation(@MessageBody() data: any) {
-	// 	//TODO add new user/room correlation
-	// }
 
 	@SubscribeMessage('join room')
 	handleJoinRoom(@ConnectedSocket() client : Socket, @MessageBody() room_id: string ) {
-		client.join(room_id);
+		this.chatService.joinRoom(client, room_id);
+		// client.join(room_id);
 	}
 
 	@SubscribeMessage('chat message')
 	handlemessage(@MessageBody() data: any) {
+		this.chatService.storeMessage(data);
+
 		const content:string = data[0];
 		const user = data[1];
 		const room = data[2];

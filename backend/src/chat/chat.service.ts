@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 // import { CreateChatDto } from './dto/create-chat.dto';
 // import { UpdateChatDto } from './dto/update-chat.dto';
 import { PrismaClient } from '@prisma/client';
+import { CreateRoomDto } from './dto/create-room.dto';
 
 @Injectable()
 export class ChatService {
@@ -29,6 +30,15 @@ export class ChatService {
     })
     return room.users;
   }
+
+  async createRoom(createRoomDto: CreateRoomDto) {
+    this.prisma.room;
+  }
+
+  async joinRoom() {}
+
+  async storeMessage() {}
+  
   // create(createChatDto: CreateChatDto) {
   //   return 'This action adds a new chat';
   // }
