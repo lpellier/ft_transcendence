@@ -24,9 +24,9 @@ export class ChatGateway {
 	}
 
 	@SubscribeMessage('join room')
-	handleJoinRoom(@ConnectedSocket() client : Socket, @MessageBody() room_id: string ) {
-		this.chatService.joinRoom(client, room_id);
-		// client.join(room_id);
+	handleJoinRoom(@ConnectedSocket() client : Socket, @MessageBody() id: string, room_id: string ) {
+		this.chatService.joinRoom(client, id, room_id);
+		// need user id
 	}
 
 	@SubscribeMessage('chat message')

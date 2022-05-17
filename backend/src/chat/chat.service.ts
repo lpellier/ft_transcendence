@@ -32,10 +32,29 @@ export class ChatService {
   }
 
   async createRoom(createRoomDto: CreateRoomDto) {
-    this.prisma.room;
+    const room = await this.prisma.room.create({
+      data: {
+        name: createRoomDto.name
+      }
+    });
+    return room.id;
   }
 
-  async joinRoom() {}
+  async joinRoom(client, user_id, room_id) {
+    client.join(room_id);
+    const room = await this.prisma.room.update({
+      where: {
+        id: room_id
+      },
+      data: {
+        users: {
+          connect: {
+            id: user_id
+          }          
+        }
+      }
+    });
+  }
 
   async storeMessage() {}
   

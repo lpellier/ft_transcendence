@@ -15,7 +15,7 @@ model User {
   username    	String  @unique
   avatar		    String
   stats			    Stats?
-  rooms         Room[]
+  rooms         Room[] @relation(references: [id])
   messages      Message[]
   winHistory	  Match[] @relation("win")
   lossHistory	  Match[] @relation("loss")
@@ -46,7 +46,7 @@ model Room {
   id         Int       @id @default(autoincrement())
   name       String
   messages   Message[]
-  users      User[] @relation(references: [id])
+  users      User[] 
 }
 
 model Message {
