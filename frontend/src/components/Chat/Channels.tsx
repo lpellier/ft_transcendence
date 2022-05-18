@@ -28,16 +28,25 @@ function Channels(props : {user: User, current_room: Room, setCurrentRoom: React
 		props.setCurrentRoom(clicked_room);
 	}
 
-	async function handleSubmit(e:any) {
+	function handleSubmit(e:any) {
 		e.preventDefault();
 		const room_name = e.target[0].value;
 		if (room_name)
 		{
 			socket.emit('create room', room_name);
 			socket.emit('add user to room', props.user.id);
-			setRoomChange(roomChange + 1)
 		}
 	}
+
+
+	useEffect(() => {
+		socket.on('create room', (room_id: number) => {
+			rooms.map(room => (
+				socket.emit('join room', room.id)
+			))
+			setRoomChange(room_id);
+		})
+	})
 
 	useEffect(() => {
 		axios.get('http://127.0.0.1:3001/rooms',{
@@ -53,29 +62,7 @@ function Channels(props : {user: User, current_room: Room, setCurrentRoom: React
 			.catch(function (err) {
 				console.log("Get request failed : ", err)
 		});
-		rooms.map(room => (
-			socket.emit('join room', room.id)
-		))
 	}, [roomChange])
-
-	useEffect(() => {
-		axios.get('http://127.0.0.1:3001/users',{
-			headers: {
-				'Authorization': token,
-			}
-			})
-			.then(res => {
-				console.log("Get request success")
-				const test_data = res.data;
-				setRooms(test_data);
-			})
-			.catch(function (err) {
-				console.log("Get request failed : ", err)
-		});
-		rooms.map(room => (
-			socket.emit('join room', room.id)
-		))
-	})
 
 	return (
 		<Stack className='channels' justifyContent='space-between'>

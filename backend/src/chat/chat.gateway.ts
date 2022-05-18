@@ -7,6 +7,8 @@ import { ChatService } from './chat.service';
 import { AddUserDto } from "./dto/add-user.dto";
 import { CreateRoomDto } from './dto/create-room.dto';
 import { UpdateRoomDto } from './dto/update-room.dto';
+import { CreateMessageDto } from "./dto/create-message.dto";
+
 
 @WebSocketGateway({
   cors: {
@@ -38,16 +40,10 @@ export class ChatGateway {
 	}
 
 	@SubscribeMessage('chat message')
-	handlemessage(@MessageBody() data: any) {
-		this.chatService.storeMessage(data);
-
-		const message:string = data[0];
-		const user = data[1];
-		const room = data[2];
+	handlemessage(@MessageBody() createMessageDto: CreateMessageDto) {
+		this.chatService.storeMessage(createMessageDto);
 		
-		// TODO add new message to database
-
-		this.server.to(room.id.toString()).emit('chat message', message, user, room)
+		this.server.to(createMessageDto.room.toString()).emit('chat message', createMessageDto)
 	}
 
 	@SubscribeMessage('get rooms')

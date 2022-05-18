@@ -1,5 +1,7 @@
 import {useEffect, useState} from 'react';
 import {socket} from './Chat';
+import axios from 'axios';
+import {token} from 'index';
 // import io  from "socket.io-client";
 
 
@@ -16,10 +18,20 @@ import {User, Message, Room} from 'interfaces'
 function Messages(props : {user: User, current_room: Room}) {
 	
 	let [messages, setMessages] = useState<Message[]>([]);
+	let [users, setUsers] = useState<User[]>([]);
 
-	const addMessage = (newMessage: Message) => setMessages(state => [...state, {id: newMessage.id, content: newMessage.content, user: {avatar:newMessage.user.avatar, id: newMessage.user.id, name: newMessage.user.name}, room: {id: newMessage.room.id, name: newMessage.room.name} ,type: newMessage.type}]);
+	const addMessage = (newMessage: Message) => setMessages(state => [...state, {id: state.length, content: newMessage.content, userId: newMessage.userId, roomId: newMessage.roomId ,type: newMessage.type}]);
 	
+	useEffect(() => {
+		socket.emit('get users', props.current_room.id)
+	}, [])
 	
+	useEffect(() => {
+		socket.on('get users', (users_list) => {
+			setUsers(users_list);
+		})
+	}, [])
+
 	function handleSubmit(e: any) {
 		e.preventDefault();
 		const message = e.target[0].value;
@@ -30,7 +42,7 @@ function Messages(props : {user: User, current_room: Room}) {
 
 	useEffect(() => {
 		socket.on('chat message', (msg) => {
-			addMessage(msg)	;
+			addMessage(msg);
 			let objDiv = document.getElementById('messagebox');
             if (objDiv != null)
                 objDiv.scrollTop = objDiv.scrollHeight;
@@ -40,7 +52,7 @@ function Messages(props : {user: User, current_room: Room}) {
 	// useEffect(() => {
 	// 	socket.on('new user', (username) => {
 	// 		let msg = username + " has entered the discussion";
-	// 		addMessage(msg, username, props.current_room, false);
+	// 		addMessage(msg,);
 	// 		let objDiv = document.getElementById('messagebox');
     //         if (objDiv != null)
     //             objDiv.scrollTop = objDiv.scrollHeight;
@@ -53,20 +65,20 @@ function Messages(props : {user: User, current_room: Room}) {
 			<ul className='messages' id='messagebox'>
 				{messages.map(item=> (
 					<div key={item.id}>
-						{item.room.id === props.current_room.id ?
+						{item.roomId === props.current_room.id ?
 							<div>
 								{item.type ?
 									<div className='flexwrapper' >
-										{item.user.id === props.user.id ?
+										{item.userId === props.user.id ?
 										<div className='message current flex'>
 											<li className=''>{item.content}</li> 
-											<div className='user'><img className='avatar' src={item.user.avatar}/>{item.user.username}</div>
+											<div className='user'><img className='avatar' src={users.find(user => user.id == item.id)?.avatar}/>{users.find(user => user.id == item.id)?.name}</div>
 											
 										</div>
 										:
 										<div className='message other flex'>
 											<li className=''>{item.content}</li>
-											<div className='user' ><img className='avatar' src={item.user.avatar}/>{item.user.username}</div>
+											<div className='user' ><img className='avatar' src={users.find(user => user.id == item.id)?.avatar}/>{users.find(user => user.id == item.id)?.name}</div>
 											
 										</div>
 										}

@@ -24,7 +24,7 @@ function NameButton() {
 
 function NameInput(props: {user: User}) {
 
-	let [new_username, setNewUsername] = useState(props.user.username);
+	let [new_username, setNewUsername] = useState(props.user.name);
 
 	function handleSubmit(e: any)
 	{
@@ -37,7 +37,7 @@ function NameInput(props: {user: User}) {
 		axios.put('http://127.0.0.1:3001/users/me',
 			{
 				id: props.user.id,
-				username: new_username,
+				name: new_username,
 				avatar: props.user.avatar
 			},
 			{
