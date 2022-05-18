@@ -8,6 +8,34 @@ import { CreateRoomDto } from './dto/create-room.dto';
 export class ChatService {
   constructor(private readonly prisma: PrismaClient) {}
 
+  async createRoom(createRoomDto: CreateRoomDto) {
+    const room = await this.prisma.room.create({
+      data: {
+        name: createRoomDto.name
+      }
+    });
+    return room.id;
+  }
+
+  async addUserToRoom(userId, roomId) {
+    const room = await this.prisma.room.update({
+      where: {
+        id: roomId
+      },
+      data: {
+        users: {
+          connect: {
+            id: userId
+          }          
+        }
+      }
+    });
+  }
+
+  async storeMessage(data) {
+    return data;
+  }
+  
   async getRoomsForUser(id: number) {
     let user = await this.prisma.user.findUnique({
       where: {
@@ -31,33 +59,6 @@ export class ChatService {
     return room.users;
   }
 
-  async createRoom(createRoomDto: CreateRoomDto) {
-    const room = await this.prisma.room.create({
-      data: {
-        name: createRoomDto.name
-      }
-    });
-    return room.id;
-  }
-
-  async joinRoom(client, user_id, room_id) {
-    client.join(room_id);
-    const room = await this.prisma.room.update({
-      where: {
-        id: room_id
-      },
-      data: {
-        users: {
-          connect: {
-            id: user_id
-          }          
-        }
-      }
-    });
-  }
-
-  async storeMessage() {}
-  
   // create(createChatDto: CreateChatDto) {
   //   return 'This action adds a new chat';
   // }

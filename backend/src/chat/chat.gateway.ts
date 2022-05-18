@@ -3,6 +3,7 @@ import { MessageBody, ConnectedSocket, SubscribeMessage, WebSocketGateway, WebSo
 import { Prisma, PrismaClient } from "@prisma/client";
 import { Socket } from "socket.io";
 import { ChatService } from './chat.service';
+import { AddUserDto } from "./dto/add-user.dto";
 import { CreateRoomDto } from './dto/create-room.dto';
 import { UpdateRoomDto } from './dto/update-room.dto';
 
@@ -23,9 +24,15 @@ export class ChatGateway {
 		return this.chatService.createRoom(createRoomDto);
 	}
 
+	@SubscribeMessage('add user to room')
+	handleAddUserToRoom(@MessageBody() addUserDto: AddUserDto) {
+		this.chatService.addUserToRoom(addUserDto.userId, addUserDto.roomId);
+		// need user id
+	}
+
 	@SubscribeMessage('join room')
-	handleJoinRoom(@ConnectedSocket() client : Socket, @MessageBody() id: string, room_id: string ) {
-		this.chatService.joinRoom(client, id, room_id);
+	handleJoinRoom(@ConnectedSocket() client : Socket, @MessageBody() room_id: string ) {
+		client.join(room_id);
 		// need user id
 	}
 
