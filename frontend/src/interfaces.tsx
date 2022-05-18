@@ -2,7 +2,7 @@
 interface User {
     avatar: string,
     id: number,
-    username: string,
+    name: string,
 }
 
 interface Room {

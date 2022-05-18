@@ -64,7 +64,7 @@ function Chat() {
 				<Banner />
 				{status}
 				<Stack direction='row' spacing='2' className='chmsg'>
-					<Channels current_room={current_room} setCurrentRoom = {setCurrentRoom} />
+					<Channels user={user} current_room={current_room} setCurrentRoom = {setCurrentRoom} />
 					<Messages user={user} current_room={current_room}/>
 				</Stack>
 			</Stack>

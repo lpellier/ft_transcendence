@@ -17,40 +17,35 @@ function Messages(props : {user: User, current_room: Room}) {
 	
 	let [messages, setMessages] = useState<Message[]>([]);
 
-	const addMessage = (newMessage:string, user:User, room:Room, type:boolean) => setMessages(state => [...state, {id: state.length, content: newMessage, user: {avatar:user.avatar, id: user.id, username: user.username}, room: {id: room.id, name: room.name} ,type: type}]);
+	const addMessage = (newMessage: Message) => setMessages(state => [...state, {id: newMessage.id, content: newMessage.content, user: {avatar:newMessage.user.avatar, id: newMessage.user.id, name: newMessage.user.name}, room: {id: newMessage.room.id, name: newMessage.room.name} ,type: newMessage.type}]);
 	
 	
 	function handleSubmit(e: any) {
 		e.preventDefault();
 		const message = e.target[0].value;
-		// console.log("submit message room_id = ", props.current_room.id);
-		// addMessage(message, user.username, true);
 		if (message)
-			socket.emit('chat message', message, props.user, props.current_room);
+			socket.emit('chat message', message, props.user.id, props.current_room.id);
 		e.target[0].value = '';
 	}
 
 	useEffect(() => {
-		socket.on('chat message', (msg, user, room) => {
-			// console.log(msg);
-			// console.log(user);
-			// console.log("recieved message room_id = ", room);
-			addMessage(msg, user, room, true)	;
+		socket.on('chat message', (msg) => {
+			addMessage(msg)	;
 			let objDiv = document.getElementById('messagebox');
             if (objDiv != null)
                 objDiv.scrollTop = objDiv.scrollHeight;
 		})
 	}, [])
 
-	useEffect(() => {
-		socket.on('new user', (username) => {
-			let msg = username + " has entered the discussion";
-			addMessage(msg, username, props.current_room, false);
-			let objDiv = document.getElementById('messagebox');
-            if (objDiv != null)
-                objDiv.scrollTop = objDiv.scrollHeight;
-		})
-	})
+	// useEffect(() => {
+	// 	socket.on('new user', (username) => {
+	// 		let msg = username + " has entered the discussion";
+	// 		addMessage(msg, username, props.current_room, false);
+	// 		let objDiv = document.getElementById('messagebox');
+    //         if (objDiv != null)
+    //             objDiv.scrollTop = objDiv.scrollHeight;
+	// 	})
+	// })
 
     return (
 	<Container >
