@@ -40,13 +40,13 @@ export class ChatGateway {
 	handlemessage(@MessageBody() data: any) {
 		this.chatService.storeMessage(data);
 
-		const content:string = data[0];
+		const message:string = data[0];
 		const user = data[1];
 		const room = data[2];
 		
 		// TODO add new message to database
 
-		this.server.to(room.id.toString()).emit('chat message', content, user, room)
+		this.server.to(room.id.toString()).emit('chat message', message, user, room)
 	}
 
 	@SubscribeMessage('get rooms')

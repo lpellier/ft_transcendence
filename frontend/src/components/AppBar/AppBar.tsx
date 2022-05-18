@@ -92,7 +92,7 @@ function PlayerAvatarBar(props: {image: any}) {
 	);
 }
 
-export default function SearchAppBar(props: {image: any}) {
+export default function SearchAppBar(props: {image: string}) {
 	const [width, setWidth] = useState(window.innerWidth);
 	const img = useState(props.image);
 	let [user, setUser] = useState<User>({avatar: "", id: -1, username: ""});
@@ -128,7 +128,7 @@ export default function SearchAppBar(props: {image: any}) {
 		return(
 			<AppBar position="static">
 			<Toolbar style={ BarStyle }>
-				<PongMenu />
+				<PongMenu user = {user} setUser={setUser}/>
 				<ProjectName />
 			</Toolbar>
 		  </AppBar>
@@ -139,7 +139,7 @@ export default function SearchAppBar(props: {image: any}) {
 		return(
 			<AppBar position="static">
 			<Toolbar style={ BarStyle }>
-				<PongMenu />
+				<PongMenu user = {user} setUser={setUser} />
 				<PlayerAvatarBar image={user.avatar}/>
 				<PlayerName name={""}/>
 				<Stack direction="row" spacing={2}>
@@ -154,7 +154,7 @@ export default function SearchAppBar(props: {image: any}) {
   return (
       <AppBar position="static">
         <Toolbar style={ BarStyle }>
-        	<PongMenu />
+        	<PongMenu user = {user} setUser={setUser}/>
 			<PlayerAvatarBar image={user.avatar}/>
 			<PlayerName name={user.username}/>
 			<ProjectName />

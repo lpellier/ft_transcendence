@@ -8,7 +8,9 @@ import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutli
 
 import {ModalStyle} from '../../../styles/tsxStyles/AppBar/Name'
 
-export default function ChooseNameModal() {
+import {User} from 'interfaces'
+
+export default function ChooseNameModal(props: {user: User, setUser: React.Dispatch<React.SetStateAction<User>>}) {
     const [open, setOpen] = React.useState(false);
   
     const handleOpen = () => {
@@ -33,7 +35,7 @@ export default function ChooseNameModal() {
           onClose={handleClose}
         >
           <Box sx={ModalStyle}>
-            <ChooseName/> 
+            <ChooseName user={props.user} setUser={props.setUser}/> 
            </Box>
         </Modal>
         </Stack>
