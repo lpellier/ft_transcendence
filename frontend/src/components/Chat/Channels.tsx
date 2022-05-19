@@ -30,7 +30,7 @@ function Channels(props : {user: User, current_room: Room, setCurrentRoom: React
 
 	function handleSubmit(e:any) {
 		e.preventDefault();
-		const room_name = e.target[0].value;
+		const room_name: string = e.target[0].value;
 		const room: {name: string} = {name: room_name}
 		if (room_name)
 		{

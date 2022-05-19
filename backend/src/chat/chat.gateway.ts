@@ -31,13 +31,11 @@ export class ChatGateway {
 	@SubscribeMessage('add user to room')
 	handleAddUserToRoom(@MessageBody() addUserDto: AddUserDto) {
 		this.chatService.addUserToRoom(addUserDto.userId, addUserDto.roomId);
-		// need user id
 	}
 
 	@SubscribeMessage('join room')
 	handleJoinRoom(@ConnectedSocket() client : Socket, @MessageBody() room_id: string ) {
 		client.join(room_id);
-		// need user id
 	}
 
 	@SubscribeMessage('chat message')
