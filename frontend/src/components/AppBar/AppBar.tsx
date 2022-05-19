@@ -95,7 +95,7 @@ function PlayerAvatarBar(props: {image: any}) {
 export default function SearchAppBar(props: {image: string}) {
 	const [width, setWidth] = useState(window.innerWidth);
 	const img = useState(props.image);
-	let [user, setUser] = useState<User>({avatar: "", id: -1, name: ""});
+	let [user, setUser] = useState<User>({avatar: "", id: -1, username: ""});
 
 
 	useEffect(() => {
@@ -156,7 +156,7 @@ export default function SearchAppBar(props: {image: string}) {
         <Toolbar style={ BarStyle }>
         	<PongMenu user = {user}/>
 			<PlayerAvatarBar image={user.avatar}/>
-			<PlayerName name={user.name}/>
+			<PlayerName name={user.username}/>
 			<ProjectName />
 			<Stack direction="row" spacing={2}>
 				<AppBarButton link={'/game'} tooltip={"New Game"} icon={<GamesIcon />}/>

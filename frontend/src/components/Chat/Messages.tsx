@@ -12,37 +12,47 @@ import '../../styles/Chat/Messages.css';
 
 import {User, Message, Room} from 'interfaces'
 
-// import {user} from '../../pages/Homepage/Homepage'
-
+interface CreateMessageDto {
+    content: string;
+    user: number;
+    room: number;
+    type: boolean;
+}
 
 function Messages(props : {user: User, current_room: Room}) {
 	
 	let [messages, setMessages] = useState<Message[]>([]);
 	let [users, setUsers] = useState<User[]>([]);
 
-	const addMessage = (newMessage: Message) => setMessages(state => [...state, {id: state.length, content: newMessage.content, userId: newMessage.userId, roomId: newMessage.roomId ,type: newMessage.type}]);
+	const addMessage = (newMessage: CreateMessageDto) => setMessages(state => [...state, {id: state.length, content: newMessage.content, userId: newMessage.user, roomId: newMessage.room ,type: newMessage.type}]);
 	
 	useEffect(() => {
-		socket.emit('get users', props.current_room.id)
-	}, [])
-	
-	useEffect(() => {
-		socket.on('get users', (users_list) => {
-			setUsers(users_list);
-		})
+		axios.get('http://127.0.0.1:3001/users',{
+			headers: {
+				'Authorization': token,
+			}
+			})
+			.then(res => {
+				console.log("Get request success")
+				const test_data: User[] = res.data;
+				setUsers(test_data);
+			})
+			.catch(function (err) {
+				console.log("Get request failed : ", err)
+		});
 	}, [])
 
 	function handleSubmit(e: any) {
 		e.preventDefault();
 		const message: string = e.target[0].value;
-		const messageDto: {content: string; user: number; room: number; type: boolean} = {content: message, user: props.user.id, room: props.current_room.id, type: true} 
+		const messageDto: CreateMessageDto = {content: message, user: props.user.id, room: props.current_room.id, type: true} 
 		if (message)
 			socket.emit('chat message', messageDto);
 		e.target[0].value = '';
 	}
 
 	useEffect(() => {
-		socket.on('chat message', (msg) => {
+		socket.on('chat message', (msg:CreateMessageDto) => {
 			addMessage(msg);
 			let objDiv = document.getElementById('messagebox');
             if (objDiv != null)
@@ -73,13 +83,13 @@ function Messages(props : {user: User, current_room: Room}) {
 										{item.userId === props.user.id ?
 										<div className='message current flex'>
 											<li className=''>{item.content}</li> 
-											<div className='user'><img className='avatar' src={users.find(user => user.id == item.id)?.avatar}/>{users.find(user => user.id == item.id)?.name}</div>
+											<div className='user'><img className='avatar' src={users.find(user => user.id === item.userId)?.avatar} alt="avatar"/>{users.find(user => user.id === item.userId)?.username}</div>
 											
 										</div>
 										:
 										<div className='message other flex'>
 											<li className=''>{item.content}</li>
-											<div className='user' ><img className='avatar' src={users.find(user => user.id == item.id)?.avatar}/>{users.find(user => user.id == item.id)?.name}</div>
+											<div className='user' ><img className='avatar' src={users.find(user => user.id === item.userId)?.avatar} alt="avatar"/>{users.find(user => user.id === item.userId)?.username}</div>
 											
 										</div>
 										}

@@ -23,9 +23,15 @@ export class ChatGateway {
 	server: Socket;
 
 	@SubscribeMessage('create room') 
-	handleCreateRoom(@MessageBody()  createRoomDto: CreateRoomDto) {
-		console.log(CreateRoomDto)
-		return this.chatService.createRoom(createRoomDto);
+	async handleCreateRoom(@ConnectedSocket () client : Socket, @MessageBody()  createRoomDto: CreateRoomDto) {
+		console.log("room = ", createRoomDto)
+		
+		let room_id: number;
+		await this.chatService.createRoom(createRoomDto).then(res => {
+			room_id = res;
+		});
+		client.join(room_id.toString());
+		this.server.to(room_id.toString()).emit('create room', room_id);
 	}
 
 	@SubscribeMessage('add user to room')
@@ -35,24 +41,30 @@ export class ChatGateway {
 
 	@SubscribeMessage('join room')
 	handleJoinRoom(@ConnectedSocket() client : Socket, @MessageBody() room_id: string ) {
+		console.log("join room id ", room_id)
 		client.join(room_id);
 	}
 
 	@SubscribeMessage('chat message')
-	handlemessage(@MessageBody() createMessageDto: CreateMessageDto) {
-		this.chatService.storeMessage(createMessageDto);
-		console.log(createMessageDto)
-		this.server.to(createMessageDto.room.toString()).emit('chat message', createMessageDto)
+	async handlemessage(@MessageBody() createMessageDto: CreateMessageDto) {
+		let message: CreateMessageDto;
+		await this.chatService.storeMessage(createMessageDto).then(res => {
+			message = res;
+		});
+		this.server.to(createMessageDto.room.toString()).emit('chat message', message)
 	}
 
 	@SubscribeMessage('get rooms')
 	handleGetRooms(@MessageBody('id') id: number){
+		console.log("get rooms id = ", id)
 		return this.chatService.getRoomsForUser(id);
+		
 		// TODO return room list from user
 	}
 
 	@SubscribeMessage('get users')
 	handleGetUsers(@MessageBody('id') id: number) {
+		console.log("room id = ", id);
 		return this.chatService.getUsersInRoom(id);
 		// TODO return users list from user
 	}

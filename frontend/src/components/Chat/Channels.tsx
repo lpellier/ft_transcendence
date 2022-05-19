@@ -10,12 +10,15 @@ import {socket} from './Chat'
 import {token} from 'index'
 import axios from 'axios'
 
+interface AddUserDto {
+    userId: number;
+    roomId: number;
+};
+
 function Channels(props : {user: User, current_room: Room, setCurrentRoom: React.Dispatch<React.SetStateAction<Room>>}) {
 
 	let [clicked, setClicked] = useState<number>(0);
-	let [rooms, setRooms] = useState<Room[]>([{id: 0, name: "global chat"}]);
-	let [roomChange, setRoomChange] = useState<number>(0);
-	let [allUsers, setAllUsers] = useState<User[]>();
+	let [rooms, setRooms] = useState<Room[]>([{id: 1, name: "global chat"}]);
 	// const addRoom = (newRoom: Room) => setRooms(state => [...state, {id: state.length, name: newRoom}])
 
 	function handleClick(e: any) {
@@ -33,39 +36,29 @@ function Channels(props : {user: User, current_room: Room, setCurrentRoom: React
 		const room_name: string = e.target[0].value;
 		const room: {name: string} = {name: room_name}
 		if (room_name)
-		{
 			socket.emit('create room', room);
-			socket.emit('add user to room', props.user.id);
-		}
 	}
 
 
 	useEffect(() => {
 		socket.on('create room', (room_id: number) => {
+			console.log("room_id = ", room_id, ", user_id = ", props.user.id)
+			const addUser: AddUserDto = {userId: props.user.id, roomId: room_id}
+			socket.emit('add user to room', addUser);
+			socket.emit('get rooms', props.user.id)
+		})
+	}, [])
+
+	useEffect(() => {
+		socket.on('get rooms', (rooms_list: Room[]) => {
+			setRooms(rooms_list);
 			rooms.map(room => (
 				socket.emit('join room', room.id)
 			))
-			setRoomChange(room_id);
 		})
-	})
+	}, [])
 
-	useEffect(() => {
-		axios.get('http://127.0.0.1:3001/rooms',{
-			headers: {
-				'Authorization': token,
-			}
-			})
-			.then(res => {
-				console.log("Get request success")
-				const test_data = res.data;
-				setRooms(test_data);
-			})
-			.catch(function (err) {
-				console.log("Get request failed : ", err)
-		});
-	}, [roomChange])
-
-	return (
+	return ( 
 		<Stack className='channels' justifyContent='space-between'>
 			<div className="dropdown">
 				<button className="dropbtn">{props.current_room.name}</button>

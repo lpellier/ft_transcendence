@@ -24,7 +24,7 @@ function NameButton() {
 
 function NameInput(props: {user: User}) {
 
-	let [new_username, setNewUsername] = useState(props.user.name);
+	let [new_username, setNewUsername] = useState(props.user.username);
 
 	function handleSubmit(e: any)
 	{
