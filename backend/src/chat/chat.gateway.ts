@@ -24,6 +24,7 @@ export class ChatGateway {
 
 	@SubscribeMessage('create room') 
 	handleCreateRoom(@MessageBody()  createRoomDto: CreateRoomDto) {
+		console.log(CreateRoomDto)
 		return this.chatService.createRoom(createRoomDto);
 	}
 
@@ -42,7 +43,7 @@ export class ChatGateway {
 	@SubscribeMessage('chat message')
 	handlemessage(@MessageBody() createMessageDto: CreateMessageDto) {
 		this.chatService.storeMessage(createMessageDto);
-		
+		console.log(createMessageDto)
 		this.server.to(createMessageDto.room.toString()).emit('chat message', createMessageDto)
 	}
 

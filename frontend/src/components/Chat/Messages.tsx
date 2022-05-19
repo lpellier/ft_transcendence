@@ -34,9 +34,10 @@ function Messages(props : {user: User, current_room: Room}) {
 
 	function handleSubmit(e: any) {
 		e.preventDefault();
-		const message = e.target[0].value;
+		const message: string = e.target[0].value;
+		const messageDto: {content: string; user: number; room: number; type: boolean} = {content: message, user: props.user.id, room: props.current_room.id, type: true} 
 		if (message)
-			socket.emit('chat message', message, props.user.id, props.current_room.id);
+			socket.emit('chat message', messageDto);
 		e.target[0].value = '';
 	}
 
