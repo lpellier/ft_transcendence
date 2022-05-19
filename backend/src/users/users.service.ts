@@ -22,6 +22,18 @@ export class UsersService {
           }
 				}
       });
+      await this.prisma.room.update({
+        where: {
+          id: 1
+        },
+        data: {
+          users: {
+            connect: {
+              id: u.id
+            }
+          }
+        }
+      })
 		}
 		return u;
 	}

@@ -15,6 +15,8 @@ model User {
   username    	String  @unique
   avatar		    String
   stats			    Stats?
+  rooms         Room[] @relation(references: [id])
+  messages      Message[]
   winHistory	  Match[] @relation("win")
   lossHistory	  Match[] @relation("loss")
 }
@@ -38,4 +40,21 @@ model Match {
   loserId	  Int
   Winner  	User		  @relation(name: "win", fields: [winnerId], references: [id])
   Loser		  User		  @relation(name: "loss", fields: [loserId], references: [id])
+}
+
+model Room {
+  id         Int       @id @default(autoincrement())
+  name       String
+  messages   Message[]
+  users      User[] 
+}
+
+model Message {
+  id        Int     @id @default(autoincrement())
+  content   String
+  userId    Int
+  roomId    Int
+  Room      Room   @relation(fields: [roomId], references: [id])
+  User      User   @relation(fields: [userId], references: [id])
+  type      Boolean
 }
