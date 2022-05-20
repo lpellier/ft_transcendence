@@ -23,25 +23,21 @@ export class ChatGateway {
 	server: Socket;
 
 	@SubscribeMessage('create room') 
-	async handleCreateRoom(@ConnectedSocket () client : Socket, @MessageBody()  createRoomDto: CreateRoomDto) {
-		console.log("room = ", createRoomDto)
-		
-		let room_id: number;
+	async handleCreateRoom(@ConnectedSocket () client : Socket, @MessageBody()  createRoomDto: CreateRoomDto) {		
 		await this.chatService.createRoom(createRoomDto).then(res => {
-			room_id = res;
+			client.emit('create room', res);
 		});
-		client.join(room_id.toString());
-		this.server.to(room_id.toString()).emit('create room', room_id);
 	}
 
 	@SubscribeMessage('add user to room')
 	handleAddUserToRoom(@MessageBody() addUserDto: AddUserDto) {
-		this.chatService.addUserToRoom(addUserDto.userId, addUserDto.roomId);
+		console.log("add user to room = ", addUserDto);
+		if (addUserDto.roomId >= 0 && addUserDto.userId >= 0)
+			this.chatService.addUserToRoom(addUserDto.userId, addUserDto.roomId);
 	}
 
 	@SubscribeMessage('join room')
 	handleJoinRoom(@ConnectedSocket() client : Socket, @MessageBody() room_id: string ) {
-		console.log("join room id ", room_id)
 		client.join(room_id);
 	}
 
@@ -49,21 +45,23 @@ export class ChatGateway {
 	async handlemessage(@MessageBody() createMessageDto: CreateMessageDto) {
 		let message: CreateMessageDto;
 		await this.chatService.storeMessage(createMessageDto).then(res => {
-			message = res;
+			this.server.to(createMessageDto.room.toString()).emit('chat message', res)
 		});
-		this.server.to(createMessageDto.room.toString()).emit('chat message', message)
 	}
 
 	@SubscribeMessage('get rooms')
-	handleGetRooms(@MessageBody('id') id: number){
+	async handleGetRooms(@ConnectedSocket () client : Socket,@MessageBody() id: number){
 		console.log("get rooms id = ", id)
-		return this.chatService.getRoomsForUser(id);
-		
-		// TODO return room list from user
+		if (id >= 0)
+		{
+			await this.chatService.getRoomsForUser(id).then(res => {
+				client.emit('get rooms', res);
+			})
+		}
 	}
 
 	@SubscribeMessage('get users')
-	handleGetUsers(@MessageBody('id') id: number) {
+	handleGetUsers(@MessageBody() id: number) {
 		console.log("room id = ", id);
 		return this.chatService.getUsersInRoom(id);
 		// TODO return users list from user

@@ -18,8 +18,7 @@ interface AddUserDto {
 function Channels(props : {user: User, current_room: Room, setCurrentRoom: React.Dispatch<React.SetStateAction<Room>>}) {
 
 	let [clicked, setClicked] = useState<number>(0);
-	let [rooms, setRooms] = useState<Room[]>([{id: 1, name: "global chat"}]);
-	// const addRoom = (newRoom: Room) => setRooms(state => [...state, {id: state.length, name: newRoom}])
+	let [rooms, setRooms] = useState<Room[]>([]);
 
 	function handleClick(e: any) {
 		e.preventDefault();
@@ -27,7 +26,6 @@ function Channels(props : {user: User, current_room: Room, setCurrentRoom: React
 	}
 
 	function handleListClick(clicked_room: Room) {
-
 		props.setCurrentRoom(clicked_room);
 	}
 
@@ -37,24 +35,25 @@ function Channels(props : {user: User, current_room: Room, setCurrentRoom: React
 		const room: {name: string} = {name: room_name}
 		if (room_name)
 			socket.emit('create room', room);
+		e.target[0].value = '';
 	}
-
 
 	useEffect(() => {
 		socket.on('create room', (room_id: number) => {
-			console.log("room_id = ", room_id, ", user_id = ", props.user.id)
 			const addUser: AddUserDto = {userId: props.user.id, roomId: room_id}
 			socket.emit('add user to room', addUser);
 			socket.emit('get rooms', props.user.id)
 		})
-	}, [])
+	}, [props.user.id])
+
 
 	useEffect(() => {
 		socket.on('get rooms', (rooms_list: Room[]) => {
+			console.log("getting rooms, rooms = ", rooms_list);
 			setRooms(rooms_list);
-			rooms.map(room => (
-				socket.emit('join room', room.id)
-			))
+			rooms_list.forEach(room => {
+				socket.emit('join room', room.id.toString());
+			})
 		})
 	}, [])
 
@@ -62,19 +61,19 @@ function Channels(props : {user: User, current_room: Room, setCurrentRoom: React
 		<Stack className='channels' justifyContent='space-between'>
 			<div className="dropdown">
 				<button className="dropbtn">{props.current_room.name}</button>
-				<div className="dropdown-content">
-					{rooms.map(room => (
-						<div key={room.id}>
-							{room.name !== props.current_room.name ?
-								<button className="dropdown-content"  onClick={() => handleListClick(room)}>
-									{room.name}
+				<ul >
+					{rooms.map(item => (
+						<div key={item.id}>
+							{item.name !== props.current_room.name ?
+								<button className="dropdown-content"  onClick={() => handleListClick(item)}>
+									{item.name}
 								</button>
 								:
 								<div/>
 							}
 						</div>
 					))}
-				</div>
+				</ul>
 			</div>
 			<div>
 				<form onClick={handleClick}>

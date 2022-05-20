@@ -21,7 +21,7 @@ function Chat() {
 	
 	let [status, setStatus] = useState('waiting for connection');
 	let [user, setUser] = useState<User>({avatar: "", id: -1, username: ""});
-	let [current_room, setCurrentRoom] = useState<Room> ({id: 1, name: "global chat"});
+	let [current_room, setCurrentRoom] = useState<Room> ({id: 1, name: "general"});
 
 	
 	useEffect(() => {
@@ -32,21 +32,18 @@ function Chat() {
 		})
 		.then(res => {
 			console.log("Get request success")
-			const test_data = res.data;
-			// socket.emit('new user', test_data.username);
+			const test_data: User= res.data;
 			setUser(test_data);
 		})
 		.catch(function (err) {
 			console.log("Get request failed : ", err)
 		});
 	}, [])
-
+	
 	useEffect(() => {
 		socket.on('connect', () => {
 			setStatus('connected');
-			// console.log("socket->",current_room);
 			socket.emit('get rooms', user.id)
-			socket.emit('join room', current_room.id.toString());
 			socket.on('disconnect', () => {
 				setStatus('disconnected');
 			})
@@ -55,13 +52,10 @@ function Chat() {
 		{
 			setStatus('connected');
 			socket.emit('get rooms', user.id)
-
-			socket.emit('join room', current_room.id.toString());
-
 			if (!socket.connected)
 				setStatus('disconnected');
 		}
-	}, [])
+	}, [user])
 
 
 		return (
