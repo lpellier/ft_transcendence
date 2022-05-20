@@ -22,6 +22,18 @@ export class UsersService {
         //   }
 				}
       });
+      await this.prisma.room.update({
+        where: {
+          id: 1
+        },
+        data: {
+          users: {
+            connect: {
+              id: u.id
+            }
+          }
+        }
+      })
 		}
 		return u;
 	}
@@ -46,6 +58,18 @@ export class UsersService {
       include: {
         // stats: true,
       },
+    });
+  }
+
+  async updateOne(id: number, data : any) {
+    return await this.prisma.user.update({
+      where: {
+        id: id,
+      },
+      data: data,
+      // data: {
+      //   username: newusername,
+      // }
     });
   }
 

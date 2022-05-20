@@ -2,6 +2,12 @@ import {Link} from 'react-router-dom'
 import {useState, useEffect} from 'react'
 import PongMenu from './PongMenu'
 
+import axios from 'axios';
+import {token} from 'index';
+import {User} from 'interfaces';
+
+
+
 import {PlayerAvatar} from	'../Avatars'
 
 import AppBar from '@mui/material/AppBar'
@@ -86,9 +92,11 @@ function PlayerAvatarBar(props: {image: any}) {
 	);
 }
 
-export default function SearchAppBar(props: {image: any}) {
+export default function SearchAppBar(props: {image: string}) {
 	const [width, setWidth] = useState(window.innerWidth);
 	const img = useState(props.image);
+	let [user, setUser] = useState<User>({avatar: "", id: -1, username: ""});
+
 
 	useEffect(() => {
 		const handleResizeWindow = () => setWidth(window.innerWidth);
@@ -98,12 +106,29 @@ export default function SearchAppBar(props: {image: any}) {
 		 };
 	}, [])
 
+	useEffect(() => {
+		axios.get('http://127.0.0.1:3001/users/me',{
+		headers: {
+			'Authorization': token,
+		}
+		})
+		.then(res => {
+			console.log("Get request success")
+			const test_data = res.data;
+			// socket.emit('new user', test_data.username);
+			setUser(test_data);
+		})
+		.catch(function (err) {
+			console.log("Get request failed : ", err)
+		});
+	}, [])
+
 	if (width <= phoneSize)
 	{
 		return(
 			<AppBar position="static">
 			<Toolbar style={ BarStyle }>
-				<PongMenu />
+				<PongMenu user = {user} setUser={setUser}/>
 				<ProjectName />
 			</Toolbar>
 		  </AppBar>
@@ -114,8 +139,8 @@ export default function SearchAppBar(props: {image: any}) {
 		return(
 			<AppBar position="static">
 			<Toolbar style={ BarStyle }>
-				<PongMenu />
-				<PlayerAvatarBar image={img}/>
+				<PongMenu user = {user} setUser={setUser} />
+				<PlayerAvatarBar image={user.avatar}/>
 				<PlayerName name={""}/>
 				<Stack direction="row" spacing={2}>
 					<ProjectName />
@@ -129,9 +154,9 @@ export default function SearchAppBar(props: {image: any}) {
   return (
       <AppBar position="static">
         <Toolbar style={ BarStyle }>
-        	<PongMenu />
-			<PlayerAvatarBar image={img}/>
-			<PlayerName name={"Mr Roboto"}/>
+        	<PongMenu user = {user} setUser={setUser}/>
+			<PlayerAvatarBar image={user.avatar}/>
+			<PlayerName name={user.username}/>
 			<ProjectName />
 			<Stack direction="row" spacing={2}>
 				<AppBarButton link={'/game'} tooltip={"New Game"} icon={<GamesIcon />}/>

@@ -94,3 +94,9 @@
 	color: gray;
 	align-self: center;
 }
+
+.avatar {
+	width: 30px;
+	height: 30px;
+	border-radius: 30px;
+}
