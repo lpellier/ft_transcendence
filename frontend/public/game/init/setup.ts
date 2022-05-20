@@ -89,7 +89,6 @@ function draw() {
 	clear(0, 0, 0, 0);
 	hideIcons();
 	background(0);
-	console.log(frameRate());
 	if (!document.getElementById("canvas-parent")) {
 		socket.emit("quit-ongoing-game");
 		should_load = true;
