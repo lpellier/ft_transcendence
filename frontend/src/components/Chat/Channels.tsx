@@ -1,24 +1,29 @@
 import '../../styles/Chat/Channels.css';
 // import io  from "socket.io-client";
 import Stack from '@mui/material/Stack'
+import Button from '@mui/material/Button';
 
 
 
 import {useState, useEffect} from 'react'
 import {Room, User} from 'interfaces'
 import {socket} from './Chat'
-import {token} from 'index'
-import axios from 'axios'
 
 interface AddUserDto {
     userId: number;
     roomId: number;
 };
 
-function Channels(props : {user: User, current_room: Room, setCurrentRoom: React.Dispatch<React.SetStateAction<Room>>}) {
+interface CreateRoomDto {
+	name: string;
+	userId: number;
+}
+
+function Channels(props : {user: User, users: User[], current_room: Room, setCurrentRoom: React.Dispatch<React.SetStateAction<Room>>}) {
 
 	let [clicked, setClicked] = useState<number>(0);
 	let [rooms, setRooms] = useState<Room[]>([]);
+	let [addUserClicked, setAddUserClicked] = useState<number>(0);
 
 	function handleClick(e: any) {
 		e.preventDefault();
@@ -32,17 +37,35 @@ function Channels(props : {user: User, current_room: Room, setCurrentRoom: React
 	function handleSubmit(e:any) {
 		e.preventDefault();
 		const room_name: string = e.target[0].value;
-		const room: {name: string} = {name: room_name}
+		const createRoomDto: CreateRoomDto = {name: room_name, userId: props.user.id}
 		if (room_name)
-			socket.emit('create room', room);
+			socket.emit('create room', createRoomDto);
 		e.target[0].value = '';
+		setClicked(0);
+	}
+
+	function handleAddUserClick(e: any) {
+		e.preventDefault();
+		setAddUserClicked(1);
+	}
+
+	function handleUserSubmit(e: any) {
+		e.preventDefault();
+		const username: string= e.target[0].value;
+
+		if (props.users.find(user => user.username === username))
+		{
+			let userId: any = props.users.find(user => user.username === username)?.id;
+			const addUser: AddUserDto = {userId: userId, roomId: props.current_room.id}
+			socket.emit('add user to room', addUser);
+		}
+		setAddUserClicked(0);
 	}
 
 	useEffect(() => {
 		socket.on('create room', (room_id: number) => {
 			const addUser: AddUserDto = {userId: props.user.id, roomId: room_id}
-			socket.emit('add user to room', addUser);
-			socket.emit('get rooms', props.user.id)
+			socket.emit('get rooms', props.user?.id)
 		})
 	}, [props.user.id])
 
@@ -59,22 +82,33 @@ function Channels(props : {user: User, current_room: Room, setCurrentRoom: React
 
 	return ( 
 		<Stack className='channels' justifyContent='space-between'>
-			<div className="dropdown">
-				<button className="dropbtn">{props.current_room.name}</button>
-				<ul >
-					{rooms.map(item => (
-						<div key={item.id}>
-							{item.name !== props.current_room.name ?
-								<button className="dropdown-content"  onClick={() => handleListClick(item)}>
-									{item.name}
-								</button>
-								:
-								<div/>
-							}
-						</div>
-					))}
-				</ul>
-			</div>
+				<Stack>
+					<ul className='channel-list'>
+						{rooms.map(item => (
+							<div key={item.id}>
+								{item.name !== props.current_room.name ?
+									<button className='channel-list-content' onClick={() => handleListClick(item)}>
+										{item.name}
+									</button>
+									:
+									<Stack>
+										<button className='current-channel'>{props.current_room.name} </button>
+										<button className='add-user' onClick={handleAddUserClick}>add user</button>
+										<div>
+											{addUserClicked ? 
+												<form onSubmit={handleUserSubmit}>
+													<input type="text" placeholder="username"/>
+												</form>
+											:
+												<div/>
+											}
+										</div>
+									</Stack>
+								}
+							</div>
+						))}
+					</ul>
+				</Stack>
 			<div>
 				<form onClick={handleClick}>
 					<button>Create Room</button>

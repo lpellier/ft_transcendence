@@ -26,6 +26,7 @@ export class ChatGateway {
 	async handleCreateRoom(@ConnectedSocket () client : Socket, @MessageBody()  createRoomDto: CreateRoomDto) {		
 		await this.chatService.createRoom(createRoomDto).then(res => {
 			client.emit('create room', res);
+			this.chatService.addUserToRoom(createRoomDto.userId, res);
 		});
 	}
 
@@ -33,7 +34,10 @@ export class ChatGateway {
 	handleAddUserToRoom(@MessageBody() addUserDto: AddUserDto) {
 		console.log("add user to room = ", addUserDto);
 		if (addUserDto.roomId >= 0 && addUserDto.userId >= 0)
+		{
 			this.chatService.addUserToRoom(addUserDto.userId, addUserDto.roomId);
+			
+		}
 	}
 
 	@SubscribeMessage('join room')

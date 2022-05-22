@@ -19,28 +19,11 @@ interface CreateMessageDto {
     type: boolean;
 }
 
-function Messages(props : {user: User, current_room: Room}) {
+function Messages(props : {user: User, users: User[], current_room: Room}) {
 	
 	let [messages, setMessages] = useState<Message[]>([]);
-	let [users, setUsers] = useState<User[]>([]);
 
 	const addMessage = (newMessage: CreateMessageDto) => setMessages(state => [...state, {id: state.length, content: newMessage.content, userId: newMessage.user, roomId: newMessage.room ,type: newMessage.type}]);
-	
-	useEffect(() => {
-		axios.get('http://127.0.0.1:3001/users',{
-			headers: {
-				'Authorization': token,
-			}
-			})
-			.then(res => {
-				console.log("Get request success")
-				const test_data: User[] = res.data;
-				setUsers(test_data);
-			})
-			.catch(function (err) {
-				console.log("Get request failed : ", err)
-		});
-	}, [])
 
 	function handleSubmit(e: any) {
 		e.preventDefault();
@@ -61,14 +44,20 @@ function Messages(props : {user: User, current_room: Room}) {
 	}, [])
 
 	// useEffect(() => {
-	// 	socket.on('new user', (username) => {
-	// 		let msg = username + " has entered the discussion";
-	// 		addMessage(msg,);
-	// 		let objDiv = document.getElementById('messagebox');
-    //         if (objDiv != null)
-    //             objDiv.scrollTop = objDiv.scrollHeight;
-	// 	})
-	// })
+	// 	axios.get('http://127.0.0.1:3001/messages',{
+	// 		headers: {
+	// 			'Authorization': token,
+	// 		}
+	// 		})
+	// 		.then(res => {
+	// 			console.log("Get request success")
+	// 			const test_data: Message[] = res.data;
+	// 			setMessages(test_data);
+	// 		})
+	// 		.catch(function (err) {
+	// 			console.log("Get request failed : ", err)
+	// 	});
+	// }, [])
 
     return (
 	<Container >
@@ -83,13 +72,13 @@ function Messages(props : {user: User, current_room: Room}) {
 										{item.userId === props.user.id ?
 										<div className='message current flex'>
 											<li className=''>{item.content}</li> 
-											<div className='user'><img className='avatar' src={users.find(user => user.id === item.userId)?.avatar} alt="avatar"/>{users.find(user => user.id === item.userId)?.username}</div>
+											<div className='user'><img className='avatar' src={props.users.find(user => user.id === item.userId)?.avatar} alt="avatar"/>{props.users.find(user => user.id === item.userId)?.username}</div>
 											
 										</div>
 										:
 										<div className='message other flex'>
 											<li className=''>{item.content}</li>
-											<div className='user' ><img className='avatar' src={users.find(user => user.id === item.userId)?.avatar} alt="avatar"/>{users.find(user => user.id === item.userId)?.username}</div>
+											<div className='user' ><img className='avatar' src={props.users.find(user => user.id === item.userId)?.avatar} alt="avatar"/>{props.users.find(user => user.id === item.userId)?.username}</div>
 											
 										</div>
 										}

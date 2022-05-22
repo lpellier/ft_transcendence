@@ -20,8 +20,10 @@ export const socket = io(SERVER, {
 function Chat() {
 	
 	let [status, setStatus] = useState('waiting for connection');
-	let [user, setUser] = useState<User>({avatar: "", id: -1, username: ""});
+	let [user, setUser] = useState<User>();
 	let [current_room, setCurrentRoom] = useState<Room> ({id: 1, name: "general"});
+	let [users, setUsers] = useState<User[]>([]);
+
 
 	
 	useEffect(() => {
@@ -43,7 +45,9 @@ function Chat() {
 	useEffect(() => {
 		socket.on('connect', () => {
 			setStatus('connected');
-			socket.emit('get rooms', user.id)
+			console.log("user = ", user);
+			if (user)
+				socket.emit('get rooms', user.id)
 			socket.on('disconnect', () => {
 				setStatus('disconnected');
 			})
@@ -51,21 +55,41 @@ function Chat() {
 		if (socket.connected)
 		{
 			setStatus('connected');
-			socket.emit('get rooms', user.id)
+			// console.log("user = ", user);
+			if (user)
+				socket.emit('get rooms', user?.id)
 			if (!socket.connected)
 				setStatus('disconnected');
 		}
 	}, [user])
 
+	useEffect(() => {
+		axios.get('http://127.0.0.1:3001/users',{
+			headers: {
+				'Authorization': token,
+			}
+			})
+			.then(res => {
+				console.log("Get request success")
+				const test_data: User[] = res.data;
+				setUsers(test_data);
+			})
+			.catch(function (err) {
+				console.log("Get request failed : ", err)
+		});
+	}, [])
 
 		return (
 			<Stack>
-				<Banner />
 				{status}
-				<Stack direction='row' spacing='2' className='chmsg'>
-					<Channels user={user} current_room={current_room} setCurrentRoom = {setCurrentRoom} />
-					<Messages user={user} current_room={current_room}/>
-				</Stack>
+				{user?
+					<Stack direction='row' spacing='2' className='chmsg'>
+						<Channels user={user} users={users} current_room={current_room} setCurrentRoom = {setCurrentRoom} />
+						<Messages user={user} users={users} current_room={current_room} />
+					</Stack>
+					:
+					<div/>
+				}
 			</Stack>
 		);
 }
