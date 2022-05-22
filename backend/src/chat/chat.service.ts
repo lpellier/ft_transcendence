@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 // import { UpdateChatDto } from './dto/update-chat.dto';
 import { PrismaClient } from '@prisma/client';
 import { CreateRoomDto } from './dto/create-room.dto';
+import { CreateMessageDto } from './dto/create-message.dto'
 
 @Injectable()
 export class ChatService {
@@ -17,7 +18,7 @@ export class ChatService {
     return room.id;
   }
 
-  async addUserToRoom(userId, roomId) {
+  async addUserToRoom(userId: number, roomId: number) {
     const room = await this.prisma.room.update({
       where: {id: roomId},
       data: {
@@ -28,12 +29,12 @@ export class ChatService {
     });
   }
 
-  async storeMessage(data) {
+  async storeMessage(data: CreateMessageDto) {
     let message = await this.prisma.message.create({
       data: {
-        content: data[0],
-        userId: data[1].id,
-        roomId: data[2].id,
+        content: data.content,
+        userId: data.user,
+        roomId: data.room,
         type: true
       }
     });

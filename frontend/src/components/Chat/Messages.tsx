@@ -29,6 +29,7 @@ function Messages(props : {user: User, users: User[], current_room: Room}) {
 		e.preventDefault();
 		const message: string = e.target[0].value;
 		const messageDto: CreateMessageDto = {content: message, user: props.user.id, room: props.current_room.id, type: true} 
+		console.log("messageDto = ", messageDto);
 		if (message)
 			socket.emit('chat message', messageDto);
 		e.target[0].value = '';
@@ -43,21 +44,21 @@ function Messages(props : {user: User, users: User[], current_room: Room}) {
 		})
 	}, [])
 
-	// useEffect(() => {
-	// 	axios.get('http://127.0.0.1:3001/messages',{
-	// 		headers: {
-	// 			'Authorization': token,
-	// 		}
-	// 		})
-	// 		.then(res => {
-	// 			console.log("Get request success")
-	// 			const test_data: Message[] = res.data;
-	// 			setMessages(test_data);
-	// 		})
-	// 		.catch(function (err) {
-	// 			console.log("Get request failed : ", err)
-	// 	});
-	// }, [])
+	useEffect(() => {
+		axios.get('http://127.0.0.1:3001/messages',{
+			headers: {
+				'Authorization': token,
+			}
+			})
+			.then(res => {
+				console.log("Get request success")
+				const test_data: Message[] = res.data;
+				setMessages(test_data);
+			})
+			.catch(function (err) {
+				console.log("Get request failed : ", err)
+		});
+	}, [])
 
     return (
 	<Container >

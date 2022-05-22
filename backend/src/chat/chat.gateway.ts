@@ -47,7 +47,6 @@ export class ChatGateway {
 
 	@SubscribeMessage('chat message')
 	async handlemessage(@MessageBody() createMessageDto: CreateMessageDto) {
-		let message: CreateMessageDto;
 		await this.chatService.storeMessage(createMessageDto).then(res => {
 			this.server.to(createMessageDto.room.toString()).emit('chat message', res)
 		});
