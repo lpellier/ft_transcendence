@@ -3,7 +3,7 @@
 ## Route /auth
 
 ### /auth 		GET 
-Redirects to 42 API for authentication, then redirects to 127.0.0.1:3000/auth?token=<TOKEN> 
+Redirection from 42 API, redirects to front homepage (/home) if authentication is successful. 
 
 ## Route /users
 
