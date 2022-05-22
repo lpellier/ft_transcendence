@@ -19,44 +19,48 @@ export class ChatService {
 
   async addUserToRoom(userId, roomId) {
     const room = await this.prisma.room.update({
-      where: {
-        id: roomId
-      },
+      where: {id: roomId},
       data: {
         users: {
-          connect: {
-            id: userId
-          }          
+          connect: {id: userId}          
         }
       }
     });
   }
 
   async storeMessage(data) {
-    return data;
+    let message = await this.prisma.message.create({
+      data: {
+        content: data[0],
+        userId: data[1].id,
+        roomId: data[2].id,
+        type: true
+      }
+    });
+    return message;
   }
   
   async getRoomsForUser(id: number) {
     let user = await this.prisma.user.findUnique({
-      where: {
-        id: id
-      },
-      include: {
-        rooms: true
-      }
+      where: {id: id},
+      include: {rooms: true}
     });
     return user.rooms;
   }
   async getUsersInRoom(id: number) {
     let room = await this.prisma.room.findUnique({
-      where:{
-        id: id
-      },
-      include:{
-        users: true
-      }
+      where: {id: id},
+      include: {users: true}
     })
     return room.users;
+  }
+
+  async getMessages(id: number) {
+    let room = await this.prisma.room.findUnique({
+      where: {id: id},
+      include: {messages: true}
+    })
+    return room.messages;
   }
 
   // create(createChatDto: CreateChatDto) {
