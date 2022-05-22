@@ -40,9 +40,3 @@ Returns object of specified user (username, avatar, stats and match_history, etc
     ...
 }
 ```
-
-## Route /chat
-
-### /chat	GET
-`{ 
-}`
