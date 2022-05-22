@@ -59,17 +59,15 @@ class Game extends React.Component {
 			<div id="canvas-parent">
 				<div id="main-menu-button-grid">
 					<div id="button-create"/>
-					<div id="main-menu-button-grid2">
-						<div id="button-join"/>
-						<div id="button-matchmaking"/>
-					</div>
-					<div id="button-local"/>
+					<div id="button-join"/>
+					<div id="button-matchmaking"/>
 				</div>
 				<div id="create-menu-button-grid">
 					<div id="button-anyone"/>
-					<div id="button-friends"/>
 					<div id="button-invitation"/>
+					<div id="button-local"/>
 				</div>
+				<div id="button-ai"/>
 				<div id="button-validate"/>
 				<div id="button-return"/>
 				<div id="icon-return"/>
@@ -117,12 +115,15 @@ export default class Gamepage extends React.Component {
 		addScript("/game/sketch/init/init.js");
 		addScript("/game/sketch/init/setup.js");
 		addScript("/game/sketch/socket/events.js");
+		addScript("/game/sketch/engine/input.js");
+		addScript("/game/sketch/engine/menus.js");
+		addScript("/game/sketch/engine/button_functions.js");
 		addScript("/p5/p5.js");
 	}
 
 	render() {
         return (
-			<Stack spacing={5}>
+			<Stack id="test_parent" spacing={5}>
                 <SearchAppBar image={''}/>
 				<Game/>
             </Stack>

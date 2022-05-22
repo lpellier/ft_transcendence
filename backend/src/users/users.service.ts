@@ -17,9 +17,9 @@ export class UsersService {
 					id:	user.id,
 					username: user.username,
 					avatar: user.avatar,
-          stats: {
-            create: {}
-          }
+			stats: {
+				create: {}
+			}
 				}
       });
       await this.prisma.room.update({

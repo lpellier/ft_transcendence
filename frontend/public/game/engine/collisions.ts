@@ -42,9 +42,9 @@ function debugCollisions(player : Player) {
 
 // ? MAP BOUNDS :
 // ? top bound : 10
-// ? bottom bound : MAP_HEIGHT - 10
+// ? bottom bound : HEIGHT - 10
 // ? left bound : 0
-// ? right bound : consts.MAP_WIDTH
+// ? right bound : consts.WIDTH
 
 function checkCollisions() {
 	if (game.frames_since_point === 0)
@@ -71,6 +71,8 @@ function checkCollisions() {
 			return ;
 		}
 	}
+	if (game.pong.pos[1] < consts.TOP_BOUND || game.pong.pos[1] > consts.BOT_BOUND)
+		game.pong.velocity[1] *= -1;
 	if (game.pong.velocity[0] > 0 && game.pong.pos[0] + game.pong.diameter > consts.RIGHT_BOUND) {
 		game.pong.relaunchPong("right");
 		game.score[0]++;
@@ -88,7 +90,7 @@ function checkCollisions() {
 		return ;
 	}
 	
-	let player = (game.pong.pos[0] < consts.MAP_WIDTH / 2 ? game.players[0] : game.players[1]);
+	let player = (game.pong.pos[0] < consts.WIDTH / 2 ? game.players[0] : game.players[1]);
 
 	// debugCollisions(player);
 
@@ -109,7 +111,7 @@ function checkCollisions() {
 		}
 		// ? invert velocity indexes for left / right collisions
 		else if (intersection_point[0][2] === "side") {
-			if (game.pong.pos[0] < game.map.width / 2)
+			if (game.pong.pos[0] < consts.WIDTH / 2)
 				game.pong.velocity[0] = (1 + consts.PONG_ACCELERATION_ACUTE_ANGLE * max_angle_percentage) * game.pong.speed * Math.cos(angle);
 			else
 				game.pong.velocity[0] = (1 + consts.PONG_ACCELERATION_ACUTE_ANGLE * max_angle_percentage) * game.pong.speed * -Math.cos(angle);

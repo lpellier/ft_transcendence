@@ -8,12 +8,16 @@ class Player {
 	id : string = "0";
 	ready : boolean = false;
 
-	constructor(pos_x : number, pos_y : number, width : number, height : number, color : string, index : number, id : any) {
-		this.pos = [pos_x, pos_y];
+	constructor(index : number, id : any) {
+		if (index == 1)
+			this.pos = [consts.WIDTH / 12, consts.HEIGHT / 2 - consts.PLAYER_HEIGHT / 2];
+		else
+			this.pos = [consts.WIDTH * 11 / 12, consts.HEIGHT / 2 - consts.PLAYER_HEIGHT / 2];
+
 		this.velocity = [0, 0];
-		this.width = width;
-		this.height = height;
-		this.color = color;
+		this.width = consts.PLAYER_WIDTH;
+		this.height = consts.PLAYER_HEIGHT;
+		this.color = "white";
 		this.index = index;
 		this.id = id;
 		this.ready = false;
@@ -27,12 +31,22 @@ class Player {
 		pop();
 	}
 	
+	resize() {
+		let proportionnal_y = this.pos[1] / consts.OLD_HEIGHT;
+		this.width = consts.PLAYER_WIDTH;
+		this.height = consts.PLAYER_HEIGHT;
+		if (this.index == 1)
+			this.pos = [consts.WIDTH / 12, consts.HEIGHT * proportionnal_y];
+		else
+			this.pos = [consts.WIDTH * 11 / 12, consts.HEIGHT * proportionnal_y];
+	}
+
 	calculateNewPos() {
 		this.pos[1] += this.velocity[1];
 		if (this.pos[1] < 10) // 10 for boundaries
 			this.pos[1] = 10;
-		if (this.pos[1] + this.height > consts.MAP_HEIGHT - 10) // -10 for boundaries
-			this.pos[1] = consts.MAP_HEIGHT - 10 - this.height;
+		if (this.pos[1] + this.height > consts.HEIGHT - 10) // -10 for boundaries
+			this.pos[1] = consts.HEIGHT - 10 - this.height;
 	}
 	
 	distanceTo(point : [number, number]) : number {
