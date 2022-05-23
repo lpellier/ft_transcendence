@@ -23,7 +23,7 @@ function Messages(props : {user: User, users: User[], current_room: Room}) {
 	
 	let [messages, setMessages] = useState<Message[]>([]);
 
-	const addMessage = (newMessage: CreateMessageDto) => setMessages(state => [...state, {id: state.length, content: newMessage.content, userId: newMessage.user, roomId: newMessage.room ,type: newMessage.type}]);
+	const addMessage = (newMessage: Message) => setMessages(state => [...state, {id: newMessage.id, content: newMessage.content, userId: newMessage.userId, roomId: newMessage.roomId ,type: newMessage.type}]);
 
 	function handleSubmit(e: any) {
 		e.preventDefault();
@@ -36,29 +36,30 @@ function Messages(props : {user: User, users: User[], current_room: Room}) {
 	}
 
 	useEffect(() => {
-		socket.on('chat message', (msg:CreateMessageDto) => {
+		socket.on('chat message', (msg:Message) => {
+			console.log("msg = ", msg);
 			addMessage(msg);
 			let objDiv = document.getElementById('messagebox');
             if (objDiv != null)
-                objDiv.scrollTop = objDiv.scrollHeight;
+				objDiv.scrollTop = objDiv.scrollHeight;
 		})
 	}, [])
 
-	useEffect(() => {
-		axios.get('http://127.0.0.1:3001/messages',{
-			headers: {
-				'Authorization': token,
-			}
-			})
-			.then(res => {
-				console.log("Get request success")
-				const test_data: Message[] = res.data;
-				setMessages(test_data);
-			})
-			.catch(function (err) {
-				console.log("Get request failed : ", err)
-		});
-	}, [])
+	// useEffect(() => {
+	// 	axios.get('http://127.0.0.1:3001/messages',{
+	// 		headers: {
+	// 			'Authorization': token,
+	// 		}
+	// 		})
+	// 		.then(res => {
+	// 			console.log("Get request success")
+	// 			const test_data: Message[] = res.data;
+	// 			setMessages(test_data);
+	// 		})
+	// 		.catch(function (err) {
+	// 			console.log("Get request failed : ", err)
+	// 	});
+	// }, [])
 
     return (
 	<Container >
@@ -85,7 +86,7 @@ function Messages(props : {user: User, users: User[], current_room: Room}) {
 										}
 									</div>
 								:
-								<div className='flexwrapper'>
+									<div className='flexwrapper'>
 										<div className='newuser'>
 											{item.content}
 										</div>

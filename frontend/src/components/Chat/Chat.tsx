@@ -28,43 +28,48 @@ function Chat() {
 	
 	useEffect(() => {
 		axios.get('http://127.0.0.1:3001/users/me',{
-		headers: {
-			'Authorization': token,
-		}
-		})
-		.then(res => {
-			console.log("Get request success")
-			const test_data: User= res.data;
-			setUser(test_data);
-		})
-		.catch(function (err) {
-			console.log("Get request failed : ", err)
-		});
-	}, [])
-	
-	useEffect(() => {
+			headers: {
+				'Authorization': token,
+			}
+			})
+			.then(res => {
+				console.log("Get request success")
+				const test_data: User= res.data;
+				setUser(test_data);
+			})
+			.catch(function (err) {
+				console.log("Get request failed : ", err)
+			});
+		}, [])
+		
+		useEffect(() => {
 		socket.on('connect', () => {
 			setStatus('connected');
-			console.log("user = ", user);
 			if (user)
-				socket.emit('get rooms', user.id)
-			socket.on('disconnect', () => {
+			{
+				socket.emit('get rooms', user.id);
+				socket.emit('new user', user.id);
+			}
+				socket.on('disconnect', () => {
 				setStatus('disconnected');
 			})
 		})
 		if (socket.connected)
 		{
 			setStatus('connected');
-			// console.log("user = ", user);
 			if (user)
-				socket.emit('get rooms', user?.id)
+			{
+				socket.emit('get rooms', user.id);
+				socket.emit('new user', user.id);
+			}
 			if (!socket.connected)
 				setStatus('disconnected');
 		}
 	}, [user])
 
 	useEffect(() => {
-		axios.get('http://127.0.0.1:3001/users',{
+		socket.on('new user', () => {
+			axios.get('http://127.0.0.1:3001/users',{
 			headers: {
 				'Authorization': token,
 			}
@@ -76,9 +81,10 @@ function Chat() {
 			})
 			.catch(function (err) {
 				console.log("Get request failed : ", err)
-		});
+			});
+		})
 	}, [])
-
+	
 		return (
 			<Stack>
 				{status}

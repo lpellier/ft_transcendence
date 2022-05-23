@@ -36,7 +36,7 @@ export class ChatGateway {
 		if (addUserDto.roomId >= 0 && addUserDto.userId >= 0)
 		{
 			this.chatService.addUserToRoom(addUserDto.userId, addUserDto.roomId);
-			
+			this.server.emit('create room', addUserDto.roomId);
 		}
 	}
 
@@ -47,9 +47,8 @@ export class ChatGateway {
 
 	@SubscribeMessage('chat message')
 	async handlemessage(@MessageBody() createMessageDto: CreateMessageDto) {
-		await this.chatService.storeMessage(createMessageDto).then(res => {
-			this.server.to(createMessageDto.room.toString()).emit('chat message', res)
-		});
+		let msg = await this.chatService.storeMessage(createMessageDto);
+		this.server.to(createMessageDto.room.toString()).emit('chat message', msg);
 	}
 
 	@SubscribeMessage('get rooms')
@@ -57,9 +56,8 @@ export class ChatGateway {
 		console.log("get rooms id = ", id)
 		if (id >= 0)
 		{
-			await this.chatService.getRoomsForUser(id).then(res => {
-				client.emit('get rooms', res);
-			})
+			let rooms = await this.chatService.getRoomsForUser(id);
+			client.emit('get rooms', rooms);
 		}
 	}
 
@@ -76,29 +74,8 @@ export class ChatGateway {
 		// TODO return room list from user
 	}
 
-
-  // @SubscribeMessage('createChat')
-  // create(@MessageBody() createChatDto: CreateChatDto) {
-  //   return this.chatService.create(createChatDto);
-  // }
-
-  // @SubscribeMessage('findAllChat')
-  // findAll() {
-  //   return this.chatService.findAll();
-  // }
-
-  // @SubscribeMessage('findOneChat')
-  // findOne(@MessageBody() id: number) {
-  //   return this.chatService.findOne(id);
-  // }
-
-  // @SubscribeMessage('updateChat')
-  // update(@MessageBody() updateChatDto: UpdateChatDto) {
-  //   return this.chatService.update(updateChatDto.id, updateChatDto);
-  // }
-
-  // @SubscribeMessage('removeChat')
-  // remove(@MessageBody() id: number) {
-  //   return this.chatService.remove(id);
-  // }
+	@SubscribeMessage('new user')
+	handleNewUser(@MessageBody() id: number) {
+		this.server.emit('new user');
+	}
 }

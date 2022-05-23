@@ -58,14 +58,15 @@ function Channels(props : {user: User, users: User[], current_room: Room, setCur
 			let userId: any = props.users.find(user => user.username === username)?.id;
 			const addUser: AddUserDto = {userId: userId, roomId: props.current_room.id}
 			socket.emit('add user to room', addUser);
+			setAddUserClicked(0);
 		}
-		setAddUserClicked(0);
+		
 	}
 
 	useEffect(() => {
 		socket.on('create room', (room_id: number) => {
 			const addUser: AddUserDto = {userId: props.user.id, roomId: room_id}
-			socket.emit('get rooms', props.user?.id)
+			socket.emit('get rooms', props.user.id)
 		})
 	}, [props.user.id])
 

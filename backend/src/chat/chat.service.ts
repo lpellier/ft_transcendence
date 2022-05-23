@@ -45,7 +45,7 @@ export class ChatService {
     let user = await this.prisma.user.findUnique({
       where: {id: id},
       include: {rooms: true}
-    });
+    })
     return user.rooms;
   }
   async getUsersInRoom(id: number) {
