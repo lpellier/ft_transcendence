@@ -1,5 +1,7 @@
 import {useEffect, useState} from 'react';
 import {socket} from './Chat';
+import axios from 'axios';
+import {token} from 'index';
 // import io  from "socket.io-client";
 
 
@@ -10,47 +12,54 @@ import '../../styles/Chat/Messages.css';
 
 import {User, Message, Room} from 'interfaces'
 
-// import {user} from '../../pages/Homepage/Homepage'
+interface CreateMessageDto {
+    content: string;
+    user: number;
+    room: number;
+    type: boolean;
+}
 
-
-function Messages(props : {user: User, current_room: Room}) {
+function Messages(props : {user: User, users: User[], current_room: Room}) {
 	
 	let [messages, setMessages] = useState<Message[]>([]);
 
-	const addMessage = (newMessage:string, user:User, room:Room, type:boolean) => setMessages(state => [...state, {id: state.length, content: newMessage, user: {avatar:user.avatar, id: user.id, username: user.username}, room: {id: room.id, name: room.name} ,type: type}]);
-	
-	
+	const addMessage = (newMessage: Message) => setMessages(state => [...state, {id: newMessage.id, content: newMessage.content, userId: newMessage.userId, roomId: newMessage.roomId ,type: newMessage.type}]);
+
 	function handleSubmit(e: any) {
 		e.preventDefault();
-		const message = e.target[0].value;
-		// console.log("submit message room_id = ", props.current_room.id);
-		// addMessage(message, user.username, true);
+		const message: string = e.target[0].value;
+		const messageDto: CreateMessageDto = {content: message, user: props.user.id, room: props.current_room.id, type: true} 
+		console.log("messageDto = ", messageDto);
 		if (message)
-			socket.emit('chat message', message, props.user, props.current_room);
+			socket.emit('chat message', messageDto);
 		e.target[0].value = '';
 	}
 
 	useEffect(() => {
-		socket.on('chat message', (msg, user, room) => {
-			// console.log(msg);
-			// console.log(user);
-			// console.log("recieved message room_id = ", room);
-			addMessage(msg, user, room, true)	;
+		socket.on('chat message', (msg:Message) => {
+			console.log("msg = ", msg);
+			addMessage(msg);
 			let objDiv = document.getElementById('messagebox');
             if (objDiv != null)
-                objDiv.scrollTop = objDiv.scrollHeight;
+				objDiv.scrollTop = objDiv.scrollHeight;
 		})
 	}, [])
 
-	useEffect(() => {
-		socket.on('new user', (username) => {
-			let msg = username + " has entered the discussion";
-			addMessage(msg, username, props.current_room, false);
-			let objDiv = document.getElementById('messagebox');
-            if (objDiv != null)
-                objDiv.scrollTop = objDiv.scrollHeight;
-		})
-	})
+	// useEffect(() => {
+	// 	axios.get('http://127.0.0.1:3001/messages',{
+	// 		headers: {
+	// 			'Authorization': token,
+	// 		}
+	// 		})
+	// 		.then(res => {
+	// 			console.log("Get request success")
+	// 			const test_data: Message[] = res.data;
+	// 			setMessages(test_data);
+	// 		})
+	// 		.catch(function (err) {
+	// 			console.log("Get request failed : ", err)
+	// 	});
+	// }, [])
 
     return (
 	<Container >
@@ -58,26 +67,26 @@ function Messages(props : {user: User, current_room: Room}) {
 			<ul className='messages' id='messagebox'>
 				{messages.map(item=> (
 					<div key={item.id}>
-						{item.room.id === props.current_room.id ?
+						{item.roomId === props.current_room.id ?
 							<div>
 								{item.type ?
 									<div className='flexwrapper' >
-										{item.user.id === props.user.id ?
+										{item.userId === props.user.id ?
 										<div className='message current flex'>
 											<li className=''>{item.content}</li> 
-											<div className='user'><img className='avatar' src={item.user.avatar}/>{item.user.username}</div>
+											<div className='user'><img className='avatar' src={props.users.find(user => user.id === item.userId)?.avatar} alt="avatar"/>{props.users.find(user => user.id === item.userId)?.username}</div>
 											
 										</div>
 										:
 										<div className='message other flex'>
 											<li className=''>{item.content}</li>
-											<div className='user' ><img className='avatar' src={item.user.avatar}/>{item.user.username}</div>
+											<div className='user' ><img className='avatar' src={props.users.find(user => user.id === item.userId)?.avatar} alt="avatar"/>{props.users.find(user => user.id === item.userId)?.username}</div>
 											
 										</div>
 										}
 									</div>
 								:
-								<div className='flexwrapper'>
+									<div className='flexwrapper'>
 										<div className='newuser'>
 											{item.content}
 										</div>

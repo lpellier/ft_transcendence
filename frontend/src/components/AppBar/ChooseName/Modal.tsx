@@ -10,7 +10,7 @@ import {ModalStyle} from '../../../styles/tsxStyles/AppBar/Name'
 
 import {User} from 'interfaces'
 
-export default function ChooseNameModal(props: {user: User, setUser: React.Dispatch<React.SetStateAction<User>>}) {
+export default function ChooseNameModal(props: {user: User}) {
     const [open, setOpen] = React.useState(false);
   
     const handleOpen = () => {
@@ -35,7 +35,7 @@ export default function ChooseNameModal(props: {user: User, setUser: React.Dispa
           onClose={handleClose}
         >
           <Box sx={ModalStyle}>
-            <ChooseName user={props.user} setUser={props.setUser}/> 
+            <ChooseName user={props.user}/> 
            </Box>
         </Modal>
         </Stack>

@@ -20,53 +20,82 @@ export const socket = io(SERVER, {
 function Chat() {
 	
 	let [status, setStatus] = useState('waiting for connection');
-	let [user, setUser] = useState<User>({avatar: "", id: -1, username: ""});
-	let [current_room, setCurrentRoom] = useState<Room> ({id: 0, name: "global chat"});
+	let [user, setUser] = useState<User>();
+	let [current_room, setCurrentRoom] = useState<Room> ({id: 1, name: "general"});
+	let [users, setUsers] = useState<User[]>([]);
+
 
 	
 	useEffect(() => {
+		axios.get('http://127.0.0.1:3001/users/me',{
+			headers: {
+				'Authorization': token,
+			}
+			})
+			.then(res => {
+				console.log("Get request success")
+				const test_data: User= res.data;
+				setUser(test_data);
+			})
+			.catch(function (err) {
+				console.log("Get request failed : ", err)
+			});
+		}, [])
+		
+		useEffect(() => {
 		socket.on('connect', () => {
 			setStatus('connected');
-			// console.log("socket->",current_room);
-			socket.emit('join room', current_room.id.toString());
-			socket.on('disconnect', () => {
+			if (user)
+			{
+				socket.emit('get rooms', user.id);
+				socket.emit('new user', user.id);
+			}
+				socket.on('disconnect', () => {
 				setStatus('disconnected');
 			})
 		})
 		if (socket.connected)
 		{
 			setStatus('connected');
-			socket.emit('join room', current_room.id.toString());	
+			if (user)
+			{
+				socket.emit('get rooms', user.id);
+				socket.emit('new user', user.id);
+			}
 			if (!socket.connected)
 				setStatus('disconnected');
 		}
-	}, [])
+	}, [user])
 
 	useEffect(() => {
-		axios.get('http://127.0.0.1:3001/users/me',{
-		headers: {
-			'Authorization': token,
-		}
+		socket.on('new user', () => {
+			axios.get('http://127.0.0.1:3001/users',{
+			headers: {
+				'Authorization': token,
+			}
+			})
+			.then(res => {
+				console.log("Get request success")
+				const test_data: User[] = res.data;
+				setUsers(test_data);
+			})
+			.catch(function (err) {
+				console.log("Get request failed : ", err)
+			});
 		})
-		.then(res => {
-			console.log("Get request success")
-			const test_data = res.data;
-			// socket.emit('new user', test_data.username);
-			setUser(test_data);
-		})
-		.catch(function (err) {
-			console.log("Get request failed : ", err)
-		});
 	}, [])
-
+	
 		return (
 			<Stack>
-				<Banner />
 				{status}
-				<Stack direction='row' spacing='2' className='chmsg'>
-					<Channels current_room={current_room} setCurrentRoom = {setCurrentRoom} />
-					<Messages user={user} current_room={current_room}/>
-				</Stack>
+				{user?
+					<Stack direction='row' spacing='2' className='chmsg'>
+						<Channels user={user} users={users} current_room={current_room} setCurrentRoom = {setCurrentRoom} />
+						<Messages user={user} users={users} current_room={current_room} />
+					</Stack>
+					:
+					<div/>
+				}
 			</Stack>
 		);
 }

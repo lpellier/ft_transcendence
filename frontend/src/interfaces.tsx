@@ -1,7 +1,7 @@
 
 interface User {
-    avatar: string,
     id: number,
+    avatar: string,
     username: string,
 }
 
@@ -13,8 +13,8 @@ interface Room {
 interface Message {
     id:number;
     content: string;
-    user: User;
-    room: Room;
+    userId: number;
+    roomId: number;
     type: boolean;
 }
 
