@@ -24,29 +24,44 @@ class Keys {
 	}
 	
 	init() {
-		this.w.size(75, 75);
+		this.w.size(consts.small_square_diameter * 1.5, consts.small_square_diameter * 1.5);
 		this.w.parent("w-key");
-		this.a.size(75, 75);
+		this.a.size(consts.small_square_diameter * 1.5, consts.small_square_diameter * 1.5);
 		this.a.parent("a-key");
-		this.s.size(75, 75);
+		this.s.size(consts.small_square_diameter * 1.5, consts.small_square_diameter * 1.5);
 		this.s.parent("s-key");
-		this.d.size(75, 75);
+		this.d.size(consts.small_square_diameter * 1.5, consts.small_square_diameter * 1.5);
 		this.d.parent("d-key");
 		
-		this.up.size(75, 75);
+		this.up.size(consts.small_square_diameter * 1.5, consts.small_square_diameter * 1.5);
 		this.up.parent("up-key");
-		this.left.size(75, 75);
+		this.left.size(consts.small_square_diameter * 1.5, consts.small_square_diameter * 1.5);
 		this.left.parent("left-key");
-		this.down.size(75, 75);
+		this.down.size(consts.small_square_diameter * 1.5, consts.small_square_diameter * 1.5);
 		this.down.parent("down-key");
-		this.right.size(75, 75);
+		this.right.size(consts.small_square_diameter * 1.5, consts.small_square_diameter * 1.5);
 		this.right.parent("right-key");
 		
-		this.space.size(150, 75);
+		this.space.size(consts.small_square_diameter * 3, consts.small_square_diameter * 1.5);
 		// this.space.parent("space-key");
 		this.hide();
 	}
 	
+	resize() {	
+		this.w.size(consts.small_square_diameter * 1.5, consts.small_square_diameter * 1.5);
+		this.a.size(consts.small_square_diameter * 1.5, consts.small_square_diameter * 1.5);
+		this.s.size(consts.small_square_diameter * 1.5, consts.small_square_diameter * 1.5);
+		this.d.size(consts.small_square_diameter * 1.5, consts.small_square_diameter * 1.5);
+		
+		this.up.size(consts.small_square_diameter * 1.5, consts.small_square_diameter * 1.5);
+		this.left.size(consts.small_square_diameter * 1.5, consts.small_square_diameter * 1.5);
+		this.down.size(consts.small_square_diameter * 1.5, consts.small_square_diameter * 1.5);
+		this.right.size(consts.small_square_diameter * 1.5, consts.small_square_diameter * 1.5);
+
+		this.space.size(consts.small_square_diameter * 3, consts.small_square_diameter * 1.5);
+
+	}
+
 	hide() {
 		this.w.hide();
 		this.a.hide();

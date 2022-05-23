@@ -31,20 +31,30 @@ function drawHelp() {
 	fill("white");
 	noStroke();
 	if (index === 1)
-		triangle(consts.MAP_WIDTH / 6, consts.MAP_HEIGHT / 2, consts.MAP_WIDTH / 6 + arrow_width, consts.MAP_HEIGHT / 2 + arrow_width, consts.MAP_WIDTH / 6 + arrow_width, consts.MAP_HEIGHT / 2 - arrow_width);
+		triangle(consts.WIDTH / 6, consts.HEIGHT / 2, consts.WIDTH / 6 + arrow_width, consts.HEIGHT / 2 + arrow_width, consts.WIDTH / 6 + arrow_width, consts.HEIGHT / 2 - arrow_width);
 	else
-		triangle(consts.MAP_WIDTH * 5 / 6, consts.MAP_HEIGHT / 2, consts.MAP_WIDTH * 5 / 6 - arrow_width, consts.MAP_HEIGHT / 2 + arrow_width, consts.MAP_WIDTH * 5 / 6 - arrow_width, consts.MAP_HEIGHT / 2 - arrow_width);
+		triangle(consts.WIDTH * 5 / 6, consts.HEIGHT / 2, consts.WIDTH * 5 / 6 - arrow_width, consts.HEIGHT / 2 + arrow_width, consts.WIDTH * 5 / 6 - arrow_width, consts.HEIGHT / 2 - arrow_width);
 	pop();
 }
 
 function drawInput() {
-	keys.w.show();
-	keys.a.show();
-	keys.s.show();
-	keys.d.show();
+	if (game.players[0].index == 2) {
+		keys.up.show();
+		keys.left.show();
+		keys.down.show();
+		keys.right.show();
+	}
+	else {
+		keys.w.show();
+		keys.a.show();
+		keys.s.show();
+		keys.d.show();
+	}
 
-	keys.up.show();
-	keys.left.show();
-	keys.down.show();
-	keys.right.show();
+	if ((game.local && !game.ai)) {
+		keys.up.show();
+		keys.left.show();
+		keys.down.show();
+		keys.right.show();
+	}
 }

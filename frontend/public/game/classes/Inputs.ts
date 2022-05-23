@@ -18,14 +18,21 @@ class Inputs {
 		
 	create_inputs() {
 		this.join = createCustomInput('');
-		this.join.size(600, 75);
+		this.join.size(consts.WIDTH / 1.75, consts.HEIGHT / 8);
 		
 		this.score_limit = createCustomInput('');
-		this.score_limit.size(100, 75);
 		this.score_limit.attribute("disabled", "true");
-
+		this.score_limit.style("text-align", "center");
+		this.score_limit.size(consts.WIDTH / 12, consts.HEIGHT / 10);
 		this.hide();
 		this.addParent();
+	}
+
+	resize() {
+		this.join.size(consts.WIDTH / 1.75, consts.HEIGHT / 8);
+		this.join.style("font-size", (consts.std_font_size).toString() + "px");
+		this.score_limit.size(consts.WIDTH / 12, consts.HEIGHT / 10);
+		this.score_limit.style("font-size", (consts.std_font_size).toString() + "px");
 	}
 
 	hide() {

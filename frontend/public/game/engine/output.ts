@@ -17,8 +17,8 @@ function drawPlayerReadiness() {
 		textAlign(CENTER);
 		fill("white");
 		push();
-		textSize(30);
-		text("P" + player.index, (player.index === 1 ? consts.MAP_WIDTH / 4 : consts.MAP_WIDTH * 3 / 4), consts.MAP_HEIGHT * 2 / 3);
+		textSize(consts.std_font_size);
+		text("P" + player.index, (player.index === 1 ? consts.WIDTH / 4 : consts.WIDTH * 3 / 4), consts.HEIGHT * 2 / 3);
 		pop();
 		if (player.ready === true)
 			player.index === 1 ? icon_p1 = consts.MARK_ICON : icon_p2 = consts.MARK_ICON;
@@ -36,5 +36,5 @@ function drawPlayerReadiness() {
 }
 
 function outputCountdown() {
-	outputAnnouncement("" + game.timer, 45, consts.MAP_WIDTH / 2 + 5, consts.MAP_HEIGHT / 2 + 20);
+	outputAnnouncement("" + game.timer, consts.std_font_size, consts.WIDTH / 2 + 5, consts.HEIGHT / 2 + 20);
 }
