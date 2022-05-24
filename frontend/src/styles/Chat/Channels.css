@@ -36,4 +36,22 @@
 	width: 50%;
 	max-width: inherit;
 	text-align: left;
+	margin: 0;
+}
+
+.add-user-list-content {
+	width: fit-content;
+	max-width: inherit;
+	margin: 0;
+	padding-left: 0.5em;
+	padding-right: 0.5em;
+	text-align: left;
+	border: none;
+}
+
+.add-user-list {
+	width: fit-content;
+	max-width: inherit;
+	margin-bottom: 0.2em;
+	margin-top: 0;
 }

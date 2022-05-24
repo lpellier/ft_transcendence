@@ -1,8 +1,6 @@
 import '../../styles/Chat/Channels.css';
-// import io  from "socket.io-client";
-import Stack from '@mui/material/Stack'
-import Button from '@mui/material/Button';
-
+import Stack from '@mui/material/Stack';
+import {toast} from 'react-toastify';
 
 
 import {useState, useEffect} from 'react'
@@ -19,40 +17,59 @@ interface CreateRoomDto {
 	userId: number;
 }
 
+function AddUser() {
+	
+}
+
+function UserList(props : {users: User[], room: Room}) {
+	let [roomUsers, setRoomUsers] = useState<User[]>([]);
+	useEffect (() => {
+		socket.on('get users', (data: User[]) => {
+			setRoomUsers(data);
+		})
+	}, [])
+
+	return (
+		<Stack className="add-user-list">
+			{props.users.map(item => (
+				<div key={item.id}>
+					{roomUsers.find(user => user.username === item.username)?
+						<div/>
+						:
+						<button className="add-user-list-content" key={item.id}>
+							{item.username}		
+						</button>
+					}
+				</div>
+			))}
+		</Stack>
+	);
+}
+
 function Channels(props : {user: User, users: User[], current_room: Room, setCurrentRoom: React.Dispatch<React.SetStateAction<Room>>}) {
 
-	let [clicked, setClicked] = useState<number>(0);
+	let [addRoomClicked, setAddRoomClicked] = useState<number>(0);
 	let [rooms, setRooms] = useState<Room[]>([]);
 	let [addUserClicked, setAddUserClicked] = useState<number>(0);
 
-	function handleClick(e: any) {
-		e.preventDefault();
-		setClicked(1);
-	}
-
-	function handleListClick(clicked_room: Room) {
-		props.setCurrentRoom(clicked_room);
-	}
-
-	function handleSubmit(e:any) {
+	function handleRoomSubmit(e:any) {
 		e.preventDefault();
 		const room_name: string = e.target[0].value;
 		const createRoomDto: CreateRoomDto = {name: room_name, userId: props.user.id}
 		if (room_name)
 			socket.emit('create room', createRoomDto);
 		e.target[0].value = '';
-		setClicked(0);
+		setAddRoomClicked(0);
 	}
 
-	function handleAddUserClick(e: any) {
-		e.preventDefault();
-		setAddUserClicked(1);
+	function handleRoomClick(room: Room) {
+		setAddUserClicked(0);
+		props.setCurrentRoom(room)
 	}
 
 	function handleUserSubmit(e: any) {
 		e.preventDefault();
 		const username: string= e.target[0].value;
-
 		if (props.users.find(user => user.username === username))
 		{
 			let userId: any = props.users.find(user => user.username === username)?.id;
@@ -60,7 +77,23 @@ function Channels(props : {user: User, users: User[], current_room: Room, setCur
 			socket.emit('add user to room', addUser);
 			setAddUserClicked(0);
 		}
-		
+		else
+		{
+			toast.error('username not found', {
+				position: "top-center",
+				autoClose: 5000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+				});
+		}
+	}
+
+	function handleAddUserClick(room: Room) {
+		socket.emit('get users', room.id);
+		setAddUserClicked(1);
 	}
 
 	useEffect(() => {
@@ -88,18 +121,24 @@ function Channels(props : {user: User, users: User[], current_room: Room, setCur
 						{rooms.map(item => (
 							<div key={item.id}>
 								{item.name !== props.current_room.name ?
-									<button className='channel-list-content' onClick={() => handleListClick(item)}>
+									<button className='channel-list-content' onClick={() => handleRoomClick(item)}>
 										{item.name}
 									</button>
 									:
 									<Stack>
 										<button className='current-channel'>{props.current_room.name} </button>
-										<button className='add-user' onClick={handleAddUserClick}>add user</button>
+										<button className='add-user' onClick={() => handleAddUserClick(item)}>add user</button>
 										<div>
-											{addUserClicked ? 
-												<form onSubmit={handleUserSubmit}>
-													<input type="text" placeholder="username"/>
-												</form>
+											{addUserClicked ?
+												<Stack>
+													<Stack direction="row">
+														<form onSubmit={handleUserSubmit}>
+															<input type="text" placeholder="username"/>
+														</form>
+														<button title="cancel" onClick={() => setAddUserClicked(0)}>❌</button>
+													</Stack>
+													<UserList users={props.users} room={item}/>
+												</Stack>
 											:
 												<div/>
 											}
@@ -111,14 +150,15 @@ function Channels(props : {user: User, users: User[], current_room: Room, setCur
 					</ul>
 				</Stack>
 			<div>
-				<form onClick={handleClick}>
-					<button>Create Room</button>
-				</form>
+				<button onClick={() => setAddRoomClicked(1)}>Create Room</button>
 				<div>
-					{clicked ?
-						<form onSubmit={handleSubmit}>
-							<input type="text" placeholder='Room name'/>
-						</form>
+					{addRoomClicked ?
+							<Stack direction="row">
+								<form onSubmit={handleRoomSubmit}>
+									<input type="text" placeholder='Room name'/>
+								</form>
+								<button title="cancel" onClick={() => setAddRoomClicked(0)}>❌</button>
+							</Stack>
 						:
 						<div/>
 					}

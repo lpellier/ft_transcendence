@@ -3,6 +3,8 @@ import Box from '@mui/material/Box';
 
 import Chat from 'components/Chat/Chat'
 import SearchAppBar from 'components/AppBar/AppBar'
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const ChatBoxStyle = {	
     width: '80vw',
@@ -24,11 +26,24 @@ const ChatPageStyle = {
 
 export default function Chatpage() {
     return(
+        <div>
+            <ToastContainer
+                position="top-center"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+            />
             <Stack spacing={6} style={ChatPageStyle}>
                 <SearchAppBar image={''}/>
                 <Box sx={ChatBoxStyle}>
 					<Chat />
 				</Box>
             </Stack>
+        </div>
         );
 }

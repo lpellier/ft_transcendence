@@ -52,7 +52,7 @@ export class ChatGateway {
 	}
 
 	@SubscribeMessage('get rooms')
-	async handleGetRooms(@ConnectedSocket () client : Socket,@MessageBody() id: number){
+	async handleGetRooms(@ConnectedSocket () client : Socket, @MessageBody() id: number){
 		console.log("get rooms id = ", id)
 		if (id >= 0)
 		{
@@ -62,10 +62,12 @@ export class ChatGateway {
 	}
 
 	@SubscribeMessage('get users')
-	handleGetUsers(@MessageBody() id: number) {
-		console.log("room id = ", id);
-		return this.chatService.getUsersInRoom(id);
-		// TODO return users list from user
+	async handleGetUsers(@ConnectedSocket () client : Socket, @MessageBody() id: number) {
+		if (id >= 0)
+		{
+			let users = await this.chatService.getUsersInRoom(id);
+			client.emit('get users', users);
+		}// TODO return users list from user
 	}
 
 	@SubscribeMessage('get messages')
