@@ -17,33 +17,91 @@ interface CreateRoomDto {
 	userId: number;
 }
 
-function AddUser() {
-	
+function toastThatError(message: string) {
+	toast.error(message, {
+		position: "top-center",
+		autoClose: 5000,
+		hideProgressBar: false,
+		closeOnClick: true,
+		pauseOnHover: true,
+		draggable: true,
+		progress: undefined,
+	});
 }
 
-function UserList(props : {users: User[], room: Room}) {
+function toastIt(message: string) {
+	toast.success(message, {
+		position: "top-center",
+		autoClose: 5000,
+		hideProgressBar: false,
+		closeOnClick: true,
+		pauseOnHover: true,
+		draggable: true,
+		progress: undefined,
+	});
+}
+
+function AddUser(props : {users: User[], room: Room, setAddUserClicked: React.Dispatch<React.SetStateAction<number>>}) {
+
 	let [roomUsers, setRoomUsers] = useState<User[]>([]);
-	useEffect (() => {
-		socket.on('get users', (data: User[]) => {
-			setRoomUsers(data);
-		})
-	}, [])
+
+
+	function handleUserSubmit(e: any) {
+		e.preventDefault();
+		const username: string= e.target[0].value;
+		if (props.users.find(user => user.username === username))
+		{
+			if (roomUsers.find(user => user.username === username))
+				toastThatError('user already in room');
+			else
+			{
+				let userId: any = props.users.find(user => user.username === username)?.id;
+				const addUser: AddUserDto = {userId: userId, roomId: props.room.id}
+				socket.emit('add user to room', addUser);
+				props.setAddUserClicked(0);
+				toastIt(username + ' added to ' + props.room.name);
+			}
+		}
+		else
+			toastThatError('username not found')
+	}
+
+	function UserList(props : {users: User[], room: Room, roomUsers: User[], setRoomUsers: React.Dispatch<React.SetStateAction<User[]>>}) {
+		useEffect (() => {
+			socket.on('get users', (data: User[]) => {
+				setRoomUsers(data);
+			})
+		}, [])
+	
+		return (
+			<Stack className="add-user-list">
+				{props.users.map(item => (
+					<div key={item.id}>
+						{roomUsers.find(user => user.username === item.username)?
+							<div/>
+							:
+							<button className="add-user-list-content" key={item.id}>
+								{item.username}		
+							</button>
+						}
+					</div>
+				))}
+			</Stack>
+		);
+	}
+
 
 	return (
-		<Stack className="add-user-list">
-			{props.users.map(item => (
-				<div key={item.id}>
-					{roomUsers.find(user => user.username === item.username)?
-						<div/>
-						:
-						<button className="add-user-list-content" key={item.id}>
-							{item.username}		
-						</button>
-					}
-				</div>
-			))}
+		<Stack>
+			<Stack direction="row">
+				<form onSubmit={handleUserSubmit}>
+					<input type="text" placeholder="username"/>
+				</form>
+				<button title="cancel" onClick={() => props.setAddUserClicked(0)}>❌</button>
+			</Stack>
+			<UserList users={props.users} room={props.room} roomUsers={roomUsers} setRoomUsers={setRoomUsers}/>
 		</Stack>
-	);
+	)
 }
 
 function Channels(props : {user: User, users: User[], current_room: Room, setCurrentRoom: React.Dispatch<React.SetStateAction<Room>>}) {
@@ -65,30 +123,6 @@ function Channels(props : {user: User, users: User[], current_room: Room, setCur
 	function handleRoomClick(room: Room) {
 		setAddUserClicked(0);
 		props.setCurrentRoom(room)
-	}
-
-	function handleUserSubmit(e: any) {
-		e.preventDefault();
-		const username: string= e.target[0].value;
-		if (props.users.find(user => user.username === username))
-		{
-			let userId: any = props.users.find(user => user.username === username)?.id;
-			const addUser: AddUserDto = {userId: userId, roomId: props.current_room.id}
-			socket.emit('add user to room', addUser);
-			setAddUserClicked(0);
-		}
-		else
-		{
-			toast.error('username not found', {
-				position: "top-center",
-				autoClose: 5000,
-				hideProgressBar: false,
-				closeOnClick: true,
-				pauseOnHover: true,
-				draggable: true,
-				progress: undefined,
-				});
-		}
 	}
 
 	function handleAddUserClick(room: Room) {
@@ -130,15 +164,7 @@ function Channels(props : {user: User, users: User[], current_room: Room, setCur
 										<button className='add-user' onClick={() => handleAddUserClick(item)}>add user</button>
 										<div>
 											{addUserClicked ?
-												<Stack>
-													<Stack direction="row">
-														<form onSubmit={handleUserSubmit}>
-															<input type="text" placeholder="username"/>
-														</form>
-														<button title="cancel" onClick={() => setAddUserClicked(0)}>❌</button>
-													</Stack>
-													<UserList users={props.users} room={item}/>
-												</Stack>
+												<AddUser users={props.users} room={item} setAddUserClicked={setAddUserClicked}/>
 											:
 												<div/>
 											}
