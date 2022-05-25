@@ -57,13 +57,17 @@ export class ChatService {
   }
 
   async getAllMessagesForUser(id: number) {
-    let user = await this.prisma.user.findUnique({
+    const user = await this.prisma.user.findUnique({
       where: {id: id},
       include: {rooms: true}
     });
     let messages = [];
     for (let i = 0; i < user.rooms.length; ++i) {
-      messages.push(...user.rooms[i].messages);
+      const room = await this.prisma.room.findUnique({
+        where: {id: user.rooms[i].id},
+        include {messages: true}
+      });
+      messages.push(...room.messages);
     }
     return messages;
   }
