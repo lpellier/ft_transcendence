@@ -70,6 +70,11 @@ export class ChatGateway {
 		}// TODO return users list from user
 	}
 
+	@SubscribeMessage('get all messages')
+	handleGetAllMessages(@MessageBody('id') id: number){
+		return this.chatService.getAllMessagesForUser(id);
+		// TODO return room list from user
+	}
 	@SubscribeMessage('get messages')
 	handleGetMessages(@MessageBody('id') id: number){
 		return this.chatService.getMessages(id);
