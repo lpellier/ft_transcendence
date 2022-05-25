@@ -1,5 +1,5 @@
 .chat {
-	height: 45vh;
+	height: 96%;
 }
 
 .message-form {
@@ -109,4 +109,14 @@
 	width: 30px;
 	height: 30px;
 	border-radius: 30px;
+}
+
+.cat-chat {
+	margin-top: 0.5em;
+	align-self: flex-end;
+}
+
+.cat-chat-logo {
+	height: 20px;
+	width: 20px;
 }
