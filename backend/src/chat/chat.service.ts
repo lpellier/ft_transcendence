@@ -65,7 +65,7 @@ export class ChatService {
     for (let i = 0; i < user.rooms.length; ++i) {
       const room = await this.prisma.room.findUnique({
         where: {id: user.rooms[i].id},
-        include {messages: true}
+        include: {messages: true}
       });
       messages.push(...room.messages);
     }

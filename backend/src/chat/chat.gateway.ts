@@ -73,14 +73,15 @@ export class ChatGateway {
 	@SubscribeMessage('get all messages')
 	async handleGetAllMessages(@ConnectedSocket () client : Socket, @MessageBody() id: number){
 		let messages = await this.chatService.getAllMessagesForUser(id);
-		client.emit('get all messages');
+		
+		client.emit('get all messages', messages);
 		// TODO return room list from user
 	}
-	@SubscribeMessage('get messages')
-	handleGetMessages(@MessageBody('id') id: number){
-		return this.chatService.getMessages(id);
-		// TODO return room list from user
-	}
+	// @SubscribeMessage('get messages')
+	// handleGetMessages(@MessageBody('id') id: number){
+	// 	return this.chatService.getMessages(id);
+	// 	// TODO return room list from user
+	// }
 
 	@SubscribeMessage('new user')
 	handleNewUser(@MessageBody() id: number) {

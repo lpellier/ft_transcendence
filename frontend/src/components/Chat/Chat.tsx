@@ -49,7 +49,7 @@ function Chat() {
 			{
 				socket.emit('get rooms', user.id);
 				socket.emit('new user', user.id);
-				// socket.emit('get all messages', user.id);
+				socket.emit('get all messages', user.id);
 			}
 				socket.on('disconnect', () => {
 				setStatus('disconnected');
@@ -62,7 +62,7 @@ function Chat() {
 			{
 				socket.emit('get rooms', user.id);
 				socket.emit('new user', user.id);
-				// socket.emit('get all messages', user.id);
+				socket.emit('get all messages', user.id);
 			}
 			if (!socket.connected)
 				setStatus('disconnected');
