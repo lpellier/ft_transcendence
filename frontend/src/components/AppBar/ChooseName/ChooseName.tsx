@@ -37,7 +37,7 @@ function NameInput(props: {user: User}) {
 		axios.put('http://127.0.0.1:3001/users/me',
 			{
 				id: props.user.id,
-				name: new_username,
+				username: new_username,
 				avatar: props.user.avatar
 			},
 			{
