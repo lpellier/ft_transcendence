@@ -45,21 +45,11 @@ function Messages(props : {user: User, users: User[], current_room: Room}) {
 		})
 	}, [])
 
-	// useEffect(() => {
-	// 	axios.get('http://127.0.0.1:3001/messages',{
-	// 		headers: {
-	// 			'Authorization': token,
-	// 		}
-	// 		})
-	// 		.then(res => {
-	// 			console.log("Get request success")
-	// 			const test_data: Message[] = res.data;
-	// 			setMessages(test_data);
-	// 		})
-	// 		.catch(function (err) {
-	// 			console.log("Get request failed : ", err)
-	// 	});
-	// }, [])
+	useEffect(() => {
+		socket.on('get all messages', (msgs:Message[]) => {
+			setMessages(msgs);
+		})
+	}, [])
 
     return (
 	<Container >

@@ -71,8 +71,9 @@ export class ChatGateway {
 	}
 
 	@SubscribeMessage('get all messages')
-	handleGetAllMessages(@MessageBody('id') id: number){
-		return this.chatService.getAllMessagesForUser(id);
+	async handleGetAllMessages(@ConnectedSocket () client : Socket, @MessageBody() id: number){
+		let messages = await this.chatService.getAllMessagesForUser(id);
+		client.emit('get all messages');
 		// TODO return room list from user
 	}
 	@SubscribeMessage('get messages')
