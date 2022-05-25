@@ -24,6 +24,7 @@ import WebhookIcon from '@mui/icons-material/Webhook'
 import {tabletSize, phoneSize} from 'index'
 import { BarStyle, SearchStyle, SearchIconWrapper, StyledInputBase } from '../../styles/tsxStyles/AppBar/AppBar'
 
+
 function SearchComponent() {
 	return (
 		<SearchStyle>

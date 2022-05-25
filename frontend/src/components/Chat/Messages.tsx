@@ -45,21 +45,11 @@ function Messages(props : {user: User, users: User[], current_room: Room}) {
 		})
 	}, [])
 
-	// useEffect(() => {
-	// 	axios.get('http://127.0.0.1:3001/messages',{
-	// 		headers: {
-	// 			'Authorization': token,
-	// 		}
-	// 		})
-	// 		.then(res => {
-	// 			console.log("Get request success")
-	// 			const test_data: Message[] = res.data;
-	// 			setMessages(test_data);
-	// 		})
-	// 		.catch(function (err) {
-	// 			console.log("Get request failed : ", err)
-	// 	});
-	// }, [])
+	useEffect(() => {
+		socket.on('get all messages', (msgs:Message[]) => {
+			setMessages(msgs);
+		})
+	}, [])
 
     return (
 	<Container >
@@ -99,13 +89,17 @@ function Messages(props : {user: User, users: User[], current_room: Room}) {
 					</div>
 				))}
 			</ul>
-			<form className="form" id="form" onSubmit={handleSubmit}>
-				<Stack direction='row' spacing={1} justifyContent='space-between'>
+			<form className="message-form" id="form" onSubmit={handleSubmit}>
+				<Stack direction='row' spacing={1} justifyContent='space-between' className="message-form">
 					<input className='input' type="text" />
-					<button className='button'>Miauw</button>
+					<button className='miauw-button'>Miauw</button>
 				</Stack>
             </form>
         </Stack>
+		<Stack direction="row" spacing={1} className="cat-chat">
+			<img className="cat-chat-logo" src="https://media.istockphoto.com/vectors/minimal-cat-drawing-vector-id671786264?k=20&m=671786264&s=612x612&w=0&h=3PdcGzJGmzoe8T80LCUrTFMTDJf1r8M15kB_JRPa8H0=" alt='logo'/>
+			<div >powered by Cat Chat</div>
+		</Stack>
 	</Container>
     )
 }
