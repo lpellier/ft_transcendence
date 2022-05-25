@@ -89,10 +89,10 @@ function Messages(props : {user: User, users: User[], current_room: Room}) {
 					</div>
 				))}
 			</ul>
-			<form className="form" id="form" onSubmit={handleSubmit}>
-				<Stack direction='row' spacing={1} justifyContent='space-between'>
+			<form className="message-form" id="form" onSubmit={handleSubmit}>
+				<Stack direction='row' spacing={1} justifyContent='space-between' className="message-form">
 					<input className='input' type="text" />
-					<button className='button'>Miauw</button>
+					<button className='miauw-button'>Miauw</button>
 				</Stack>
             </form>
         </Stack>

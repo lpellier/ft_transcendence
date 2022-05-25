@@ -92,10 +92,10 @@ function AddUser(props : {users: User[], room: Room, setAddUserClicked: React.Di
 
 
 	return (
-		<Stack>
-			<Stack direction="row">
+		<Stack >
+			<Stack direction="row" >
 				<form onSubmit={handleUserSubmit}>
-					<input type="text" placeholder="username"/>
+					<input type="text" placeholder="username" className="form"/>
 				</form>
 				<button title="cancel" onClick={() => props.setAddUserClicked(0)}>❌</button>
 			</Stack>
@@ -181,7 +181,7 @@ function Channels(props : {user: User, users: User[], current_room: Room, setCur
 					{addRoomClicked ?
 							<Stack direction="row">
 								<form onSubmit={handleRoomSubmit}>
-									<input type="text" placeholder='Room name'/>
+									<input type="text" placeholder='Room name' className="form"/>
 								</form>
 								<button title="cancel" onClick={() => setAddRoomClicked(0)}>❌</button>
 							</Stack>
