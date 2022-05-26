@@ -1,4 +1,4 @@
-export class UserRoomDto {
+ export class AddUserDto {
     userId: number;
     roomId: number;
 };
