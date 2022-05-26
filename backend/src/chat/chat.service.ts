@@ -29,6 +29,17 @@ export class ChatService {
     });
   }
 
+  async removeUserFromRoom(userId: number, roomId: number) {
+    const room = await this.prisma.room.update({
+      where: {id: roomId},
+      data: {
+        users: {
+          disconnect: {id: userId}          
+        }
+      }
+    });
+  }
+
   async storeMessage(data: CreateMessageDto) {
     let message = await this.prisma.message.create({
       data: {

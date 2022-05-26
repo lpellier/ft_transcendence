@@ -4,7 +4,7 @@ import { Prisma, PrismaClient } from "@prisma/client";
 import { Socket } from "socket.io";
 import { User, Room, Message} from '../interfaces'
 import { ChatService } from './chat.service';
-import { AddUserDto } from "./dto/add-user.dto";
+import { UserRoomDto } from "./dto/user-room.dto";
 import { CreateRoomDto } from './dto/create-room.dto';
 import { UpdateRoomDto } from './dto/update-room.dto';
 import { CreateMessageDto } from "./dto/create-message.dto";
@@ -31,13 +31,19 @@ export class ChatGateway {
 	}
 
 	@SubscribeMessage('add user to room')
-	handleAddUserToRoom(@MessageBody() addUserDto: AddUserDto) {
+	handleAddUserToRoom(@MessageBody() addUserDto: UserRoomDto) {
 		console.log("add user to room = ", addUserDto);
 		if (addUserDto.roomId >= 0 && addUserDto.userId >= 0)
 		{
 			this.chatService.addUserToRoom(addUserDto.userId, addUserDto.roomId);
 			this.server.emit('create room', addUserDto.roomId);
 		}
+	}
+
+	@SubscribeMessage('remove user from room')
+	handleRemoveUserFromRoom(@MessageBody() removeUserDto: UserRoomDto) {
+		this.chatService.removeUserFromRoom(removeUserDto.userId, removeUserDto.roomId);
+			// this.server.emit('create room', removeUserDto.roomId);
 	}
 
 	@SubscribeMessage('join room')
