@@ -26,8 +26,8 @@ export class UsersService {
     const user = await this.prisma.user.create({
       data: {
         id: profile.id,
-        username: profile.login,
-        avatar: profile.image_url,
+        username: profile.username,
+        avatar: profile.avatar,
         tfa: false,
         stats: {
           create: {}

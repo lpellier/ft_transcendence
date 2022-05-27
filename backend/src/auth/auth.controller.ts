@@ -14,6 +14,9 @@ export class AuthController {
 	@Get()
 	@Redirect()
 	async login (@Req() req, @Res({passthrough: true}) res: Response) {
+		// if (req.user.tfa === true) {
+			
+		// }
 		const TOKEN = await this.authService.login(req.user);
 		const URL = this.configService.get('FRONT_URL') + '/home';
 		res.cookie('Authorization', 'Bearer ' + TOKEN['access_token']);
