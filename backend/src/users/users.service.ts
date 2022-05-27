@@ -10,15 +10,14 @@ export class UsersService {
   async findOrCreate(profile: any): Promise<User> {
 		let user = await this.findOne(profile.id)
     if (!user) {
-			await this.create(profile)
+			user = await this.create(profile)
 		}
 		return user
   }
 
   async findOne(id: number) {
     return await this.prisma.user.findUnique({
-      where: {id: id},
-      include: {stats: true}
+      where: {id: id}
     });
   }
 
