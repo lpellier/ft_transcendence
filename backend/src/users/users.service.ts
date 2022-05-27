@@ -7,35 +7,44 @@ import { PrismaClient, User } from '@prisma/client';
 export class UsersService {
   constructor(private readonly prisma: PrismaClient) {}
   
-  async findOrCreate(user: User): Promise<User | undefined> {
-		let u = await this.prisma.user.findUnique({
-			where: { id: user.id },
-		});
-		if (!u) {
-			u = await this.prisma.user.create({
-				data: {
-					id:	user.id,
-					username: user.username,
-					avatar: user.avatar,
-			stats: {
-				create: {}
-			}
-				}
-      });
-      await this.prisma.room.update({
-        where: {
-          id: 1
-        },
-        data: {
-          users: {
-            connect: {
-              id: u.id
-            }
+  async findOrCreate(profile: any): Promise<User> {
+		let user = await this.findOne(profile.id)
+    if (!user) {
+			await this.create(profile)
+		}
+		return user
+  }
+
+  async findOne(id: number) {
+    return await this.prisma.user.findUnique({
+      where: {id: id},
+      include: {stats: true}
+    });
+  }
+
+  async create(profile: any): Promise<User> {
+    const user = await this.prisma.user.create({
+      data: {
+        id: profile.id,
+        username: profile.login,
+        avatar: profile.image_url,
+        tfa: false,
+        stats: {
+          create: {}
+        }
+      }
+    });
+    await this.prisma.room.update({
+      where: {id: 1},
+      data: {
+        users: {
+          connect: {
+            id: user.id
           }
         }
-      })
-		}
-		return u;
+      }
+    })
+    return user;
 	}
   
   // create(createUserDto: CreateUserDto) {
@@ -43,22 +52,7 @@ export class UsersService {
   // }
 
   async findAll() {
-    return await this.prisma.user.findMany({
-      include: {
-        stats: true,
-      },
-    });
-  }
-
-  async findOne(id: number) {
-    return await this.prisma.user.findUnique({
-      where: {
-        id: id,
-      },
-      include: {
-        stats: true,
-      },
-    });
+    return await this.prisma.user.findMany();
   }
 
   async updateOne(id: number, data : any) {
