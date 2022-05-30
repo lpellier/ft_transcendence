@@ -29,6 +29,20 @@ export class ChatService {
     });
   }
 
+  async removeUserFromRoom(userId: number, roomId: number) {
+    const room = await this.prisma.room.update({
+      where: {id: roomId},
+      data: {
+        users: {
+          disconnect: {id: userId}          
+        }
+      },
+      select: {
+        users: true
+      }
+    });
+  }
+
   async storeMessage(data: CreateMessageDto) {
     let message = await this.prisma.message.create({
       data: {
@@ -59,15 +73,15 @@ export class ChatService {
   async getAllMessagesForUser(id: number) {
     const user = await this.prisma.user.findUnique({
       where: {id: id},
-      include: {rooms: true}
+      include: {
+        rooms: {
+          include: {messages: true}
+        }
+      }
     });
     let messages = [];
     for (let i = 0; i < user.rooms.length; ++i) {
-      const room = await this.prisma.room.findUnique({
-        where: {id: user.rooms[i].id},
-        include: {messages: true}
-      });
-      messages.push(...room.messages);
+      messages.push(...user.rooms[i].messages);
     }
     return messages;
   }
