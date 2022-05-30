@@ -24,26 +24,21 @@ export class ChatGateway {
 
 	@SubscribeMessage('create room') 
 	async handleCreateRoom(@ConnectedSocket () client : Socket, @MessageBody()  createRoomDto: CreateRoomDto) {		
-		await this.chatService.createRoom(createRoomDto).then(res => {
-			client.emit('create room', res);
-			this.chatService.addUserToRoom(createRoomDto.userId, res);
-		});
+		let roomId = await this.chatService.createRoom(createRoomDto);
+		await this.chatService.addUserToRoom(createRoomDto.userId, roomId);
+		client.emit('create room');
 	}
 
 	@SubscribeMessage('add user to room')
-	handleAddUserToRoom(@MessageBody() addUserDto: UserRoomDto) {
-		console.log("add user to room = ", addUserDto);
-		if (addUserDto.roomId >= 0 && addUserDto.userId >= 0)
-		{
-			this.chatService.addUserToRoom(addUserDto.userId, addUserDto.roomId);
-			this.server.emit('create room', addUserDto.roomId);
-		}
+	async handleAddUserToRoom(@MessageBody() addUserDto: UserRoomDto) {
+		await this.chatService.addUserToRoom(addUserDto.userId, addUserDto.roomId);
+		this.server.emit('create room', addUserDto.roomId);
 	}
 
 	@SubscribeMessage('remove user from room')
-	handleRemoveUserFromRoom(@MessageBody() removeUserDto: UserRoomDto) {
-		this.chatService.removeUserFromRoom(removeUserDto.userId, removeUserDto.roomId);
-			// this.server.emit('create room', removeUserDto.roomId);
+	async handleRemoveUserFromRoom(@MessageBody() removeUserDto: UserRoomDto) {
+		await this.chatService.removeUserFromRoom(removeUserDto.userId, removeUserDto.roomId);
+		this.server.emit('create room', removeUserDto.roomId);
 	}
 
 	@SubscribeMessage('join room')
@@ -59,35 +54,21 @@ export class ChatGateway {
 
 	@SubscribeMessage('get rooms')
 	async handleGetRooms(@ConnectedSocket () client : Socket, @MessageBody() id: number){
-		console.log("get rooms id = ", id)
-		if (id >= 0)
-		{
-			let rooms = await this.chatService.getRoomsForUser(id);
-			client.emit('get rooms', rooms);
-		}
+		let rooms = await this.chatService.getRoomsForUser(id);
+		client.emit('get rooms', rooms);
 	}
 
 	@SubscribeMessage('get users')
 	async handleGetUsers(@ConnectedSocket () client : Socket, @MessageBody() id: number) {
-		if (id >= 0)
-		{
-			let users = await this.chatService.getUsersInRoom(id);
-			client.emit('get users', users);
-		}// TODO return users list from user
+		let users = await this.chatService.getUsersInRoom(id);
+		client.emit('get users', users);
 	}
 
 	@SubscribeMessage('get all messages')
 	async handleGetAllMessages(@ConnectedSocket () client : Socket, @MessageBody() id: number){
 		let messages = await this.chatService.getAllMessagesForUser(id);
-		
 		client.emit('get all messages', messages);
-		// TODO return room list from user
 	}
-	// @SubscribeMessage('get messages')
-	// handleGetMessages(@MessageBody('id') id: number){
-	// 	return this.chatService.getMessages(id);
-	// 	// TODO return room list from user
-	// }
 
 	@SubscribeMessage('new user')
 	handleNewUser(@MessageBody() id: number) {

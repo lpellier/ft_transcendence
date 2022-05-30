@@ -10,6 +10,7 @@ import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
 import ForumIcon from '@mui/icons-material/Forum'
 import GamesIcon from '@mui/icons-material/Games'
 import HomeIcon from '@mui/icons-material/Home';
+import SettingsIcon from '@mui/icons-material/Settings';
 import Paper from '@mui/material/Paper'
 
 import ChooseAvatarModal from './ChooseAvatar/Modal'
@@ -20,6 +21,20 @@ import { phoneSize } from 'index'
 import { IconButtonStyle } from '../../styles/tsxStyles/AppBar/PongMenu'
 
 import {User} from 'interfaces'
+function SettingsLink() {
+  return (
+    <nav>
+      <Link to="/settings" style={{ textDecoration: 'none' }}>
+        <Button
+            variant="contained"
+            startIcon={<SettingsIcon />}
+            color="secondary">
+          Settings
+        </Button>
+      </Link>
+    </nav>
+  );
+}
 
 function LogOutLink() {
   return (
@@ -120,38 +135,32 @@ export default function PongMenu(props: {user: User}) {
 
   return (
     <div>
-	<Tooltip title="Menu" placement="bottom">
-      <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            sx={IconButtonStyle}
-            onClick={handleClick}
-            >
-            <MenuIcon />
+      <Tooltip title="Menu" placement="bottom">
+        <IconButton
+          size="large"
+          edge="start"
+          color="inherit"
+          aria-label="open drawer"
+          sx={IconButtonStyle}
+          onClick={handleClick}
+        >
+          <MenuIcon />
         </IconButton>
-		</Tooltip>
+      </Tooltip>
       <Menu
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
         >
-    <Paper style={{backgroundColor: 'rgb(70, 50, 220)'}}>
-        {width <= phoneSize && <PhoneButton/>}
-        <MenuItem>
-          <ChooseNameModal user={props.user}/>
-        </MenuItem>
-        <MenuItem>
-          <ChooseAvatarModal img={""}/>
-        </MenuItem>
-        <MenuItem >
-          <ChooseAuthModal />
-        </MenuItem>
-        <MenuItem>
-         <LogOutLink />
-        </MenuItem>
-          </Paper>
+        <Paper style={{backgroundColor: 'rgb(70, 50, 220)'}}>
+            {width <= phoneSize && <PhoneButton/>}
+            <MenuItem>
+              <SettingsLink/>
+            </MenuItem>
+            <MenuItem>
+              <LogOutLink />
+            </MenuItem>
+        </Paper>
       </Menu>
     </div>
   );

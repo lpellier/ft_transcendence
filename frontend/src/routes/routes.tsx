@@ -7,10 +7,12 @@ import {
 import {token} from 'index';
 
 import LogIn from '../pages/LogInpage/LogIn'
+import Settingspage from '../pages/Settingspage/Settingspage'
 import Homepage from '../pages/Homepage/Homepage'
 import Gamepage from '../pages/Gamepage/Gamepage'
 import Chatpage from '../pages/Chatpage/Chatpage'
 import Error from '../pages/Error/Error'
+
 
 type Props = {children: JSX.Element}
 
@@ -36,6 +38,7 @@ export default function AllRoutes() {
                     <Route path="game" element={ <ProtectedRoute><Gamepage /></ProtectedRoute>} />
                     <Route path="chat" element={ <ProtectedRoute><Chatpage /></ProtectedRoute>} />
                     <Route path="error" element={ <ProtectedRoute><Error /></ProtectedRoute>} />
+                    <Route path="settings" element={ <ProtectedRoute><Settingspage /></ProtectedRoute>} />
                 </Routes>
             </BrowserRouter>
         );
