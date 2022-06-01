@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import Banner from './Banner';
 import io  from "socket.io-client";
 import Stack from '@mui/material/Stack'
 import Messages from './Messages';
@@ -21,7 +20,7 @@ function Chat() {
 	
 	let [status, setStatus] = useState('waiting for connection');
 	let [user, setUser] = useState<User>();
-	let [current_room, setCurrentRoom] = useState<Room> ({id: 1, name: "general"});
+	let [current_room, setCurrentRoom] = useState<Room> ({id: 1, name: "general", ownerId: 1});
 	let [users, setUsers] = useState<User[]>([]);
 
 

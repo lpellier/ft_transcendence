@@ -9,10 +9,12 @@ import { CreateMessageDto } from './dto/create-message.dto'
 export class ChatService {
   constructor(private readonly prisma: PrismaClient) {}
 
-  async createRoom(createRoomDto: CreateRoomDto, ownerIdl) {
+  async createRoom(createRoomDto: CreateRoomDto) {
     const room = await this.prisma.room.create({
       data: {
-        name: createRoomDto.name
+        name: createRoomDto.name,
+        ownerId: createRoomDto.userId,
+        visibility: createRoomDto.visibility
       }
     });
     return room.id;
@@ -23,7 +25,7 @@ export class ChatService {
       where: {id: roomId},
       data: {
         users: {
-          connect: {id: userId}          
+          connect: {id: userId}       
         }
       }
     });

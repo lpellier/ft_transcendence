@@ -1,12 +1,9 @@
 import { ConfigService } from "@nestjs/config";
 import { MessageBody, ConnectedSocket, SubscribeMessage, WebSocketGateway, WebSocketServer } from "@nestjs/websockets";
-import { Prisma, PrismaClient } from "@prisma/client";
 import { Socket } from "socket.io";
-import { User, Room, Message} from '../interfaces'
 import { ChatService } from './chat.service';
 import { UserRoomDto } from "./dto/user-room.dto";
 import { CreateRoomDto } from './dto/create-room.dto';
-import { UpdateRoomDto } from './dto/update-room.dto';
 import { CreateMessageDto } from "./dto/create-message.dto";
 
 
@@ -26,6 +23,7 @@ export class ChatGateway {
 	async handleCreateRoom(@ConnectedSocket () client : Socket, @MessageBody()  createRoomDto: CreateRoomDto) {		
 		let roomId = await this.chatService.createRoom(createRoomDto);
 		await this.chatService.addUserToRoom(createRoomDto.userId, roomId);
+		console.log("my id = ", createRoomDto.userId);
 		client.emit('create room');
 	}
 

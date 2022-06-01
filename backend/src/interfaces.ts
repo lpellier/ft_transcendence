@@ -7,6 +7,7 @@ interface User {
 interface Room {
     id: number;
     name: string;
+    ownerId: number;
 }
 
 

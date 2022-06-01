@@ -21,6 +21,7 @@ function Channels(props : {user: User, users: User[], current_room: Room, setCur
 	function handleRoomSubmit(e:any) {
 		e.preventDefault();
 		const room_name: string = e.target[0].value;
+		console.log(e.target.value);
 		const createRoomDto: CreateRoomDto = {name: room_name, userId: props.user.id}
 		if (room_name)
 			socket.emit('create room', createRoomDto);
@@ -61,7 +62,11 @@ function Channels(props : {user: User, users: User[], current_room: Room, setCur
 									:
 									<Stack>
 										<button className='current-channel'>{props.current_room.name} </button>
-										<RoomUserMod currentUser={props.user} users={props.users} room={item}/>
+										{props.user.id === item.ownerId ?
+											<RoomUserMod currentUser={props.user} users={props.users} room={item}/>
+										:
+											<div/>
+										}
 									</Stack>
 								}
 							</div>
@@ -72,11 +77,17 @@ function Channels(props : {user: User, users: User[], current_room: Room, setCur
 				<button onClick={() => setAddRoomClicked(1)}>Create Room</button>
 				<div>
 					{addRoomClicked ?
-							<Stack direction="row">
+							<Stack>
 								<form onSubmit={handleRoomSubmit}>
 									<input type="text" placeholder='Room name' className="form"/>
-								</form>	
-								<button title="cancel" onClick={() => setAddRoomClicked(0)}>❌</button>
+									<fieldset>
+										<legend>Select channel type:</legend>
+										<input type="radio" id="private">private</input>
+										<input type="radio" id="public">public</input>
+									</fieldset>
+									<button>create</button>
+								</form>
+								<button title="cancel" onClick={() => setAddRoomClicked(0)}>cancel</button>
 							</Stack>
 						:
 						<div/>

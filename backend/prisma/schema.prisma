@@ -11,8 +11,8 @@ datasource db {
 }
 
 model User {
-  id          	Int     @id
-  username    	String  @unique
+  id          	Int @id
+  username    	String @unique
   avatar		    String
   stats			    Stats?
   rooms         Room[] @relation(references: [id])
@@ -43,12 +43,12 @@ model Match {
 }
 
 model Room {
-  id         Int       @id @default(autoincrement())
+  id         Int      @id @default(autoincrement())
   name       String
   messages   Message[]
-  owner      User
+  ownerId    Int
   users      User[]
-  admins     User[]
+  visibility String
 }
 
 model Message {
