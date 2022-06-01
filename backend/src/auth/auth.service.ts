@@ -2,6 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import axios from 'axios';
 import { UsersService } from 'src/users/users.service';
+import { authenticator } from 'otplib';
 
 @Injectable()
 export class AuthService {
@@ -17,6 +18,21 @@ export class AuthService {
 				'Authorization': "Bearer " + accessToken }
 		});
 		return profile
+	}
+
+	async generateGoogleAuthenticatorToken(secret) {
+		return authenticator.generate(secret);
+	}
+	
+	async validateGoogleAuthenticatorToken(user, body) {
+		let validated = false;
+		try {
+			validated = authenticator.check(body, user.tfaSecret)
+		}
+		catch(err) {
+			console.log(err)
+		}
+		return validated;
 	}
 
 	async login(user: any) {

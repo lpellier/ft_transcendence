@@ -6,13 +6,12 @@ read -p "Username: " username
 read -s -p "Password: " password
 
 echo "authenticity_token=$token&user[login]=$username&user[password]=$password"
-curl -sLv --cookie cookie.txt --cookie-jar cookie.txt -d "authenticity_token=$token&user[login]=$username&user[password]=$password&commit=Sign+in" https://signin.intra.42.fr/users/sign_in > file1
-
+curl -sL --cookie cookie.txt --cookie-jar cookie.txt -d "authenticity_token=$token&user[login]=$username&user[password]=$password&commit=Sign+in" https://signin.intra.42.fr/users/sign_in
 echo "before auth"
-curl -Lv --cookie cookie.txt --cookie-jar cookie.txt http://127.0.0.1:3001/auth  > file2
+curl -sL --cookie cookie.txt --cookie-jar cookie.txt http://127.0.0.1:3001/auth
 
 echo "before me"
-curl -Lv --cookie cookie.txt "http://127.0.0.1:3001/users/me"
+curl --cookie cookie.txt "http://127.0.0.1:3001/users/me"
 
 # read -p "Add the token: " TOKEN
 
