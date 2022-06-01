@@ -7,7 +7,7 @@ import {useState, useEffect} from 'react'
 import {Room, User} from 'interfaces'
 import {socket} from './Chat'
 
-export interface AddUserDto {
+export interface RoomUserDto {
     userId: number;
     roomId: number;
 };
@@ -43,6 +43,7 @@ export default function RoomUserMod(props : {currentUser: User, users: User[], r
     let [kickUserClicked, setKickUserClicked] = useState<number>(0);
 
 	function handleAddUserClick(room: Room) {
+		setKickUserClicked(0);
 		socket.emit('get users', room.id);
 		setAddUserClicked(1);
 	}
@@ -64,7 +65,7 @@ export default function RoomUserMod(props : {currentUser: User, users: User[], r
 			else
 			{
 				let userId: any = props.users.find(user => user.username === username)?.id;
-				const addUser: AddUserDto = {userId: userId, roomId: props.room.id}
+				const addUser: RoomUserDto = {userId: userId, roomId: props.room.id}
 				socket.emit('add user to room', addUser);
 				setAddUserClicked(0);
 				toastIt(username + ' added to ' + props.room.name);
@@ -82,7 +83,7 @@ export default function RoomUserMod(props : {currentUser: User, users: User[], r
 			if (roomUsers.find(user => user.username === username))
 			{
 				let userId: any = props.users.find(user => user.username === username)?.id;
-				const removeUser: AddUserDto = {userId: userId, roomId: props.room.id};
+				const removeUser: RoomUserDto = {userId: userId, roomId: props.room.id};
 				socket.emit('remove user from room', removeUser);
 				setKickUserClicked(0);
 				toastIt(username + ' removed from ' + props.room.name);
@@ -96,6 +97,7 @@ export default function RoomUserMod(props : {currentUser: User, users: User[], r
 
 
     function handleKickUserClick(room: Room) {
+		setAddUserClicked(0);
         socket.emit('get users', room.id);
 		setKickUserClicked(1);
     }

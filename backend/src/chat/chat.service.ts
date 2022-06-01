@@ -9,7 +9,7 @@ import { CreateMessageDto } from './dto/create-message.dto'
 export class ChatService {
   constructor(private readonly prisma: PrismaClient) {}
 
-  async createRoom(createRoomDto: CreateRoomDto) {
+  async createRoom(createRoomDto: CreateRoomDto, ownerIdl) {
     const room = await this.prisma.room.create({
       data: {
         name: createRoomDto.name
@@ -62,6 +62,7 @@ export class ChatService {
     })
     return user.rooms;
   }
+
   async getUsersInRoom(id: number) {
     let room = await this.prisma.room.findUnique({
       where: {id: id},
@@ -93,24 +94,4 @@ export class ChatService {
     })
     return room.messages;
   }
-
-  // create(createChatDto: CreateChatDto) {
-  //   return 'This action adds a new chat';
-  // }
-
-  // findAll() {
-  //   return `This action returns all chat`;
-  // }
-
-  // findOne(id: number) {
-  //   return `This action returns a #${id} chat`;
-  // }
-
-  // update(id: number, updateChatDto: UpdateChatDto) {
-  //   return `This action updates a #${id} chat`;
-  // }
-
-  // remove(id: number) {
-  //   return `This action removes a #${id} chat`;
-  // }
 }
