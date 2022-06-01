@@ -12,14 +12,10 @@ export class AuthController {
 
 	@UseGuards(AuthGuard('oauth2'))
 	@Get()
-	@Redirect()
 	async login (@Req() req, @Res({passthrough: true}) res: Response) {
-		// if (req.user.tfa === true) {
-			
-		// }
 		const TOKEN = await this.authService.login(req.user);
 		const URL = this.configService.get('FRONT_URL') + '/home';
-		res.cookie('Authorization', 'Bearer ' + TOKEN['access_token']);
-		return { url: URL };
+		res.cookie('jwt', TOKEN['access_token']);
+		return TOKEN;
 	}
 }
