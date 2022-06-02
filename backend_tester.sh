@@ -10,8 +10,7 @@ curl -sL --cookie cookie.txt --cookie-jar cookie.txt -d "authenticity_token=$tok
 echo "before auth"
 curl -sL --cookie cookie.txt --cookie-jar cookie.txt http://127.0.0.1:3001/auth
 
-echo "before me"
-curl --cookie cookie.txt "http://127.0.0.1:3001/users/me"
+curl -H "Authorization: Bearer `grep jwt cookie.txt | cut -d "	" -f 7`" "http://127.0.0.1:3001/users/me"
 
 # read -p "Add the token: " TOKEN
 
