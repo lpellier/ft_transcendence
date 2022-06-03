@@ -7,19 +7,8 @@ import AvatarList from './ChooseAvatar'
 import FaceIcon from '@mui/icons-material/Face';
 import AppSearchBar from '../AppBar'
 
-
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  bgcolor: 'rgb(128, 161, 212, 0.7)',
-  border: '3px solid black',
-  boxShadow: 24,
-  pt: 2,
-  px: 4,
-  pb: 3,
-};
+import {ButtonModalStyle, IconStyle} from '../../../styles/tsxStyles/AppBar/PongMenu'
+import {AvatarListStyle} from '../../../styles/tsxStyles/AppBar/Avatar'
 
 export default function ChooseAvatarModal(props: {img: any}) {
     const [open, setOpen] = React.useState(false);
@@ -38,15 +27,17 @@ export default function ChooseAvatarModal(props: {img: any}) {
       <Button
             onClick={handleOpen}
             variant="contained"
-            startIcon={<FaceIcon />}
-            color="secondary">
+            color="secondary"
+            style={ButtonModalStyle}
+          >
+          <FaceIcon sx={IconStyle}/>
           Choose avatar
         </Button>
     	<Modal
           open={open}
           onClose={handleClose}
         > 
-          <Box sx={style}>
+          <Box sx={AvatarListStyle}>
               <AvatarList/>
           </Box>
         </Modal>

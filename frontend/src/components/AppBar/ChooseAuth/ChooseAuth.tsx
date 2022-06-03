@@ -9,11 +9,11 @@ import { ButtonStackStyle, Title } from '../../../styles/tsxStyles/AppBar/AuthSt
 
 export default function ChooseAuth() {
         return (
-                <Stack spacing={2}>
+                <Stack spacing={5}>
                     <Typography sx={Title}>
                         Authentication
                     </Typography>
-                    <Stack spacing={1} sx={ButtonStackStyle}>
+                    <Stack spacing={4} sx={ButtonStackStyle}>
                         <TFASwitch />
                         <GoogleAuth />
                         <SMSInput/>
