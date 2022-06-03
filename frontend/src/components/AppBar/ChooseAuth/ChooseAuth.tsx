@@ -11,7 +11,7 @@ export default function ChooseAuth() {
         return (
                 <Stack spacing={5}>
                     <Typography sx={Title}>
-                        Authentication
+                        Change Authentication
                     </Typography>
                     <Stack spacing={4} sx={ButtonStackStyle}>
                         <TFASwitch />

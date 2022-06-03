@@ -1,4 +1,4 @@
-import React, { Component, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
@@ -13,17 +13,16 @@ import {User} from 'interfaces'
 
 function NameButton() {
 	return (
-	<Button disabled 
-	sx={NameButtonStyle}
-	variant="contained"
-	color="secondary">
-  Choose New name :
-</Button>
+		<Button disabled 
+			sx={NameButtonStyle}
+			variant="contained"
+			color="secondary">
+			Choose New name :
+		</Button>
 	);
 }
 
 function NameInput(props: {user: User}) {
-
 	let [new_username, setNewUsername] = useState(props.user.username);
 
 	function handleSubmit(e: any)

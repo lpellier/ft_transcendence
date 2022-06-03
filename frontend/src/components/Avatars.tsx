@@ -1,7 +1,11 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import axios from 'axios'
+import {token} from 'index'
+
 import Avatar from '@mui/material/Avatar'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
+import {User} from 'interfaces'
 
 // Avatar images importation
 
@@ -33,7 +37,7 @@ const SmallAvatar = {border: 2, width: 50, height: 50}
 
 function PlayerAvatar(props: {image: string}) {
     const image = props.image;
-
+    
     return(
         <IconButton>
             <Tooltip title="Home" placement="bottom">
@@ -43,10 +47,27 @@ function PlayerAvatar(props: {image: string}) {
     );
 }
 
-function CreateAvatar(props: {img: any, style: any}) {
+function CreateAvatar(props: {img: any, style: any, user: User}) {
+    let [new_avatar, setNewAvatar] = useState(props.user.avatar);
     
-    const [image, setimage] = useState("");
-
+    useEffect(() => {
+        axios.put('http://127.0.0.1:3001/users/me',
+            {
+                id: props.user.id,
+                username: props.user.username,
+                avatar: new_avatar
+            },
+            {
+            headers: {
+                'Authorization': token,
+                'Content-Type': 'application/json'
+            }
+        })
+        .catch(function (err) {
+            console.log("Get request failed : ", err)
+        });
+    }, [new_avatar])
+    
     const handleClick = () => {
         
 
