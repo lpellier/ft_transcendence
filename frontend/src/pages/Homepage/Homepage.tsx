@@ -27,7 +27,7 @@ export default function Homepage() {
 	if (width <= phoneSize) {
 	  return (
 	    <Stack spacing={2}>
-        	<SearchAppBar image={''}/>
+        	<SearchAppBar />
 			<Container>
 				<Stack direction="row" spacing={1} sx={AllHomeStyle}>
 					<StatsPart />
@@ -38,7 +38,7 @@ export default function Homepage() {
 	}
     return (
 		<Stack spacing={2}>
-        	<SearchAppBar image={''}/>
+        	<SearchAppBar />
 			<Container>
 				<Stack direction="row" spacing={1} sx={AllHomeStyle}>
 					<FriendBand />

@@ -30,9 +30,8 @@ export default function Settings() {
 		})
 		.then(res => {
 			console.log("Get request success")
-			const test_data = res.data;
-			// socket.emit('new user', test_data.username);
-			setUser(test_data);
+			const user_data = res.data;
+			setUser(user_data);
 		})
 		.catch(function (err) {
 			console.log("Get request failed : ", err)
@@ -42,7 +41,7 @@ export default function Settings() {
     return (
         <Box sx={SettingStyle}>
             <Stack spacing={5}>
-            	<ChooseAvatarModal img=''/>
+            	<ChooseAvatarModal user={user}/>
                 <ChooseNameModal user={user}/>
                 <ChooseAuthModal />
 		    </Stack>

@@ -1,21 +1,22 @@
-import * as React from 'react';
+import {useState, useEffect} from 'react';
+
 import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import AvatarList from './ChooseAvatar'
 import FaceIcon from '@mui/icons-material/Face';
-import AppSearchBar from '../AppBar'
 
 import {ButtonModalStyle, IconStyle} from '../../../styles/tsxStyles/AppBar/PongMenu'
 import {AvatarListStyle} from '../../../styles/tsxStyles/AppBar/Avatar'
 
-export default function ChooseAvatarModal(props: {img: any}) {
-    const [open, setOpen] = React.useState(false);
+import {User} from 'interfaces'
+
+export default function ChooseAvatarModal(props: {user: User}) {
+    const [open, setOpen] = useState(false);
 
     const handleOpen = () => {
       setOpen(true);
-      AppSearchBar(props.img);
     };
   
     const handleClose = () => {
@@ -32,13 +33,13 @@ export default function ChooseAvatarModal(props: {img: any}) {
           >
           <FaceIcon sx={IconStyle}/>
           Choose avatar
-        </Button>
+      </Button>
     	<Modal
           open={open}
           onClose={handleClose}
         > 
           <Box sx={AvatarListStyle}>
-              <AvatarList/>
+              <AvatarList user={props.user}/>
           </Box>
         </Modal>
         </Stack>

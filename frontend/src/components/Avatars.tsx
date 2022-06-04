@@ -47,17 +47,31 @@ function PlayerAvatar(props: {image: string}) {
     );
 }
 
-function CreateAvatar(props: {img: any, style: any, user: User}) {
-    let [new_avatar, setNewAvatar] = useState(props.user.avatar);
+function CreateAvatar(props: {img: string, style: any}) {
+    let [user, setUser] = useState<User>({avatar: "", id: -1, username: ""});
     
-    useEffect(() => {
+    const handleClick = () => {
+        axios.get('http://127.0.0.1:3001/users/me',{
+        headers: {
+            'Authorization': token,
+        }
+        })
+        .then(res => {
+            console.log("Get request success")
+            const test_data = res.data;
+            setUser(test_data);
+        })
+        .catch(function (err) {
+            console.log("Get request failed : ", err)
+        });
+
         axios.put('http://127.0.0.1:3001/users/me',
-            {
-                id: props.user.id,
-                username: props.user.username,
-                avatar: new_avatar
-            },
-            {
+        {
+            id: user.id,
+            username: user.username,
+            avatar: user.img
+        },
+        {
             headers: {
                 'Authorization': token,
                 'Content-Type': 'application/json'
@@ -66,12 +80,7 @@ function CreateAvatar(props: {img: any, style: any, user: User}) {
         .catch(function (err) {
             console.log("Get request failed : ", err)
         });
-    }, [new_avatar])
-    
-    const handleClick = () => {
-        
-
-    } 
+    }
     
     return (
         <IconButton onClick={handleClick}>
