@@ -5,7 +5,7 @@ token=`curl -s --cookie-jar cookie.txt https://signin.intra.42.fr/users/sign_in 
 read -p "Username: " username
 read -s -p "Password: " password
 
-curl -s --cookie cookie.txt --cookie-jar cookie.txt -d "authenticity_token=$token&user[login]=$username&user[password]=$password&commit=Sign+in" https://signin.intra.42.fr/users/sign_in
+curl -sL --cookie cookie.txt --cookie-jar cookie.txt -d "authenticity_token=$token&user[login]=$username&user[password]=$password&commit=Sign+in" https://signin.intra.42.fr/users/sign_in
 curl -sL --cookie cookie.txt --cookie-jar cookie.txt http://127.0.0.1:3001/auth
 
 curl -H "Authorization: Bearer `grep jwt cookie.txt | cut -d "	" -f 7`" "http://127.0.0.1:3001/users/me"

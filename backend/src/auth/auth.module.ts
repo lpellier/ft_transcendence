@@ -5,12 +5,13 @@ import { UsersModule } from 'src/users/users.module';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { jwtConstants } from './constants';
+import { Jwt2faStrategy } from './jwt-2fa.strategy';
 import { JwtStrategy } from './jwt.strategy';
 import { OAuth2Strategy } from './oauth2.strategy';
 
 @Module({
   controllers: [AuthController],
-  providers: [AuthService, OAuth2Strategy, JwtStrategy],
+  providers: [AuthService, OAuth2Strategy, JwtStrategy, Jwt2faStrategy],
   imports: [
 	UsersModule,
 	PassportModule,

@@ -13,17 +13,24 @@ export class AuthController {
 	@UseGuards(AuthGuard('oauth2'))
 	@Get()
 	async login (@Req() req, @Res({passthrough: true}) res: Response) {
+		let token;
+		let type;
+		console.log(req.user.tfa)
 		if (req.user.tfa === true) {
-			return this.authService.generateGoogleAuthenticatorToken(req.user.tfaSecret);
+			token = await this.authService.login2fa(req.user);
+			type = 'jwt-2fa'
+		} else {
+			token = await this.authService.login(req.user);
+			type = 'jwt'
 		}
-		const TOKEN = await this.authService.login(req.user);
-		res.cookie('jwt', TOKEN['access_token']);
-		return TOKEN;
+		res.cookie(type, token['access_token']);
+		return {type: 'jwt', token: token};
 	}
 
-	@UseGuards(AuthGuard('oauth2'))
+	@UseGuards(AuthGuard('jwt-2fa'))
 	@Post('google-authenticator')
 	async google_authenticator_login(@Req() req: Request, @Res({passthrough: true}) res: Response) {
+		console.log(req.body);
 		const validated = await this.authService.validateGoogleAuthenticatorToken(req.user, req.body)
 		if (validated === true) {
 			const TOKEN = await this.authService.login(req.user);

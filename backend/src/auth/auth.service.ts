@@ -35,6 +35,13 @@ export class AuthService {
 		return validated;
 	}
 
+	async login2fa(user: any) {
+		const payload = {username: user.username, sub: user.id}
+		return {
+			access_token: this.jwtService.sign(payload)
+		};
+	}
+
 	async login(user: any) {
 		const payload = {username: user.username, sub: user.id}
 		return {
