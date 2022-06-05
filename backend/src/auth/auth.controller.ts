@@ -24,7 +24,7 @@ export class AuthController {
 			type = 'jwt'
 		}
 		res.cookie(type, token['access_token']);
-		return {type: 'jwt', token: token};
+		return {type: type, token: token};
 	}
 
 	@UseGuards(AuthGuard('jwt-2fa'))

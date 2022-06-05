@@ -26,8 +26,9 @@ export class AuthService {
 	
 	async validateGoogleAuthenticatorToken(user, body) {
 		let validated = false;
+		console.log("vaidateGoogleAuthenticator", body.token, body.token instanceof)
 		try {
-			validated = authenticator.check(body, user.tfaSecret)
+			validated = authenticator.check(body.token, user.tfaSecret)
 		}
 		catch(err) {
 			console.log(err)
@@ -36,14 +37,14 @@ export class AuthService {
 	}
 
 	async login2fa(user: any) {
-		const payload = {username: user.username, sub: user.id}
+		const payload = {username: user.username, sub: user.id, isAuthenticated: false}
 		return {
 			access_token: this.jwtService.sign(payload)
 		};
 	}
 
 	async login(user: any) {
-		const payload = {username: user.username, sub: user.id}
+		const payload = {username: user.username, sub: user.id, isAuthenticated: true}
 		return {
 			access_token: this.jwtService.sign(payload)
 		};
