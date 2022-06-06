@@ -64,12 +64,16 @@ function CreateAvatar(props: {img: string, style: any}) {
         .catch(function (err) {
             console.log("Get request failed : ", err)
         });
-
         axios.put('http://127.0.0.1:3001/users/me',
         {
-            id: user.id,
-            username: user.username,
-            avatar: user.img
+            // avatar:  "https://cdn.intra.42.fr/users/davlasov.jpg"
+
+            data: {
+                // id: 56186,
+                // username: "davlasov",
+                avatar: props.img,
+            },
+            
         },
         {
             headers: {
@@ -77,9 +81,32 @@ function CreateAvatar(props: {img: string, style: any}) {
                 'Content-Type': 'application/json'
             }
         })
+        .then(res => {
+            console.log("Get request success")
+            const test_data = res.data;
+            console.log(test_data);
+            setUser(test_data);
+        })
         .catch(function (err) {
             console.log("Get request failed : ", err)
         });
+        // axios.delete('http://127.0.0.1:3001/users/me', {
+        //     headers: {
+        //         'Authorization': token,
+        //         'Content-Type': 'application/json'
+        //     },
+        //     data: {
+        //       source: "source"
+        //     }
+        //   })       
+        // .then(res => {
+        // console.log("Delete request success")
+        // const test_data = res.data;
+        // setUser(test_data);
+        // })
+        // .catch(function (err) {
+        //     console.log("Delete request failed : ", err)
+        // });
     }
     
     return (
