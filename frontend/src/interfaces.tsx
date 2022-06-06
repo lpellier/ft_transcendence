@@ -1,8 +1,10 @@
 
 interface User {
-    id: number,
-    avatar: string,
-    username: string,
+    id: number;
+    avatar: string;
+    username: string;
+	wins: number;
+	losses: number;
 }
 
 interface Room {
@@ -18,4 +20,15 @@ interface Message {
     type: boolean;
 }
 
-export {User, Room, Message}
+// interface Stats {
+// 	wins: number;
+// 	losses: number;
+// }
+
+// interface LeaderBoard {
+// 	Rank: number;
+// 	PlayerName: string;
+// 	PlayerLevel: number;
+// }
+
+export {User, Room, Message/*Stats*/}
