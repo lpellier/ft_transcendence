@@ -20,15 +20,4 @@ interface Message {
     type: boolean;
 }
 
-// interface Stats {
-// 	wins: number;
-// 	losses: number;
-// }
-
-// interface LeaderBoard {
-// 	Rank: number;
-// 	PlayerName: string;
-// 	PlayerLevel: number;
-// }
-
-export {User, Room, Message/*Stats*/}
+export {User, Room, Message}

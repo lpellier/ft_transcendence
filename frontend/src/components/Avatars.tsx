@@ -48,7 +48,7 @@ function PlayerAvatar(props: {image: string}) {
 }
 
 function CreateAvatar(props: {img: string, style: any}) {
-    let [user, setUser] = useState<User>({avatar: "", id: -1, username: ""});
+    let [user, setUser] = useState<User>({avatar: "", id: -1, username: "", wins: -1, losses: -1});
     
     const handleClick = () => {
         axios.get('http://127.0.0.1:3001/users/me',{
