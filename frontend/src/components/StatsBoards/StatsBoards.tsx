@@ -91,27 +91,28 @@ export default function StatsBoards() {
 	//let [stats, setStats] = useState<Stats>({wins: -1, losses: -1});
 	//let [leadboard, setLeadboard] = useState<LeaderBoard>({Rank: -1, PlayerName: '', PlayerLevel: -1});
 
-	axios.get('http://127.0.0.1:3001/user/me',{
-       headers: {
-           'Authorization': token,
-       }})
-       .then(res => {
-           console.log("Get request success")
-           const resStats = res.data;
-           setStats(resStats);
-       })
-       .catch(function (err) {
-           console.log("Get request failed : ", err)
-    });
-
 	useEffect(() => {
+		axios.get('http://127.0.0.1:3001/users/me',{
+		   headers: {
+			   'Authorization': token,
+		   }})
+		   .then(res => {
+			   console.log("Get request success")
+			   const resStats = res.data;
+			   setStats(resStats);
+			   console.log("res : ", resStats)
+		   })
+		   .catch(function (err) {
+			   console.log("Get request failed : ", err)
+		});
+
 		const handleResizeWindow = () => setWidth(window.innerWidth);
 		 window.addEventListener("resize", handleResizeWindow);
 		 return () => {
 		   window.removeEventListener("resize", handleResizeWindow);
 		 };
 	}, [])
-	
+
 	if (width <= phoneSize) {
 	  return (
 		<Stack spacing={1}>
