@@ -63,7 +63,7 @@ export class UsersService {
     });
   }
 
-  async generate2faSecret(id: number) {
+  async enableTwoFactorAuthentication(id: number) {
     const secret = authenticator.generateSecret();
     await this.prisma.user.update({
       where: {
@@ -74,7 +74,7 @@ export class UsersService {
         tfaSecret: secret
       }
     });
-    return true;
+    return secret;
   }
 
   // update(id: number, updateUserDto: UpdateUserDto) {
