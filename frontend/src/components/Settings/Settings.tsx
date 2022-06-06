@@ -20,7 +20,7 @@ const SettingStyle = {
 }
 
 export default function Settings() {
-    let [user, setUser] = useState<User>({avatar: "", id: -1, username: ""});
+    let [user, setUser] = useState<User>({avatar: "", id: -1, username: "", wins: -1, losses: -1});
 
     useEffect(() => {
 		axios.get('http://127.0.0.1:3001/users/me',{

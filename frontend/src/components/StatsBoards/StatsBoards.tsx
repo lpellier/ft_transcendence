@@ -98,7 +98,7 @@ export default function StatsBoards() {
        .then(res => {
            console.log("Get request success")
            const resStats = res.data;
-           //setStats(resStats);
+           setStats(resStats);
        })
        .catch(function (err) {
            console.log("Get request failed : ", err)

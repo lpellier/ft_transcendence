@@ -19,7 +19,6 @@ function StatsPart() {
 	);
 }
 
-
 export default function Homepage() {
 
 	const [width, setWidth] = useState(window.innerWidth);
