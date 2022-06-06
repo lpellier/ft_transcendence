@@ -19,14 +19,13 @@ export class AuthService {
 		});
 		return profile
 	}
-
-	async generateGoogleAuthenticatorToken(secret) {
-		return authenticator.generate(secret);
-	}
 	
-	async validateGoogleAuthenticatorToken(user, body) {
+	async validateGoogleAuthenticatorToken(userPayload, body) {
 		let validated = false;
-		console.log("vaidateGoogleAuthenticator", body.token, body.token instanceof)
+		const user = await this.usersService.findOne(userPayload.id);
+		if (!user) {
+			return false;
+		}
 		try {
 			validated = authenticator.check(body.token, user.tfaSecret)
 		}

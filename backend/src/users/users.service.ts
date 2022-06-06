@@ -1,11 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaClient, User } from '@prisma/client';
+import { authenticator } from 'otplib';
 // import { CreateUserDto } from './dto/create-user.dto';
 // import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly prisma: PrismaClient) {}
+  constructor(
+    private readonly prisma: PrismaClient) {}
   
   async findOrCreate(profile: any): Promise<User> {
 		let user = await this.findOne(profile.id)
@@ -27,7 +29,6 @@ export class UsersService {
         id: profile.id,
         username: profile.username,
         avatar: profile.avatar,
-        tfa: false,
         stats: {
           create: {}
         }
@@ -46,10 +47,6 @@ export class UsersService {
     return user;
 	}
   
-  // create(createUserDto: CreateUserDto) {
-  //   return 'This action adds a new user';
-  // }
-
   async findAll() {
     return await this.prisma.user.findMany();
   }
@@ -64,6 +61,20 @@ export class UsersService {
       //   username: newusername,
       // }
     });
+  }
+
+  async generate2faSecret(id: number) {
+    const secret = authenticator.generateSecret();
+    await this.prisma.user.update({
+      where: {
+        id: id
+      },
+      data: {
+        tfa: true,
+        tfaSecret: secret
+      }
+    });
+    return true;
   }
 
   // update(id: number, updateUserDto: UpdateUserDto) {
