@@ -14,6 +14,8 @@ model User {
   id          	Int     @id
   username    	String  @unique
   avatar		    String
+  tfa           Boolean @default(false)
+  tfaSecret     String  @default("")
   stats			    Stats?
   rooms         Room[] @relation(references: [id])
   messages      Message[]

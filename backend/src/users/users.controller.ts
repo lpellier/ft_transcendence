@@ -23,7 +23,12 @@ export class UsersController {
   findMe(@Req() req) {
     return this.usersService.findOne(req.user.id);
   }
-  
+
+  @Get('enable-two-factor-authentication')
+  enableTwoFactorAuthentication(@Req() req) {
+    return this.usersService.enableTwoFactorAuthentication(+req.user.id);
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.usersService.findOne(+id);
