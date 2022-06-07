@@ -20,8 +20,9 @@ export class UsersController {
   }
 
   @Get('me')
-  findMe(@Req() req) {
-    return this.usersService.findOne(req.user.id);
+  async findMe(@Req() req) {
+    const user = await this.usersService.getProfile(req.user.id);
+    return user;
   }
 
   @Get('enable-two-factor-authentication')
@@ -30,8 +31,9 @@ export class UsersController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.usersService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    const user = await this.usersService.getProfile(+id);
+    return user;
   }
 
   @Put('me')

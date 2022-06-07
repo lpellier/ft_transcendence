@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaClient, User } from '@prisma/client';
 import { authenticator } from 'otplib';
+import { Profile } from './interfaces/user.interface';
 // import { CreateUserDto } from './dto/create-user.dto';
 // import { UpdateUserDto } from './dto/update-user.dto';
 
@@ -17,7 +18,7 @@ export class UsersService {
 		return user
   }
 
-  async findOne(id: number) {
+  async findOne(id: number): Promise<User> {
     return this.prisma.user.findUnique({
       where: {id: id}
     });
@@ -47,8 +48,20 @@ export class UsersService {
     return user;
 	}
   
-  async findAll() {
+  async findAll() : Promise<User[]> {
     return this.prisma.user.findMany();
+  }
+
+  async getProfile(id: number): Promise<Profile> {
+    const {tfa, tfaSecret, ...profile} = await this.prisma.user.findUnique({
+      where: {
+        id: id
+      },
+      include: {
+        stats: true
+      }
+    });
+    return profile;
   }
 
   async updateOne(id: number, data : any) {
@@ -75,6 +88,18 @@ export class UsersService {
       }
     });
     return secret;
+  }
+
+  async disableTwoFactorAuthentication(id: number) {
+    await this.prisma.user.update({
+      where: {
+        id: id
+      },
+      data: {
+        tfa: false,
+        tfaSecret: ""
+      }
+    });
   }
 
   // update(id: number, updateUserDto: UpdateUserDto) {
