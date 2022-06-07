@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaClient, User } from '@prisma/client';
 import { authenticator } from 'otplib';
-import { Profile } from './interfaces/user.interface';
+import { Profile } from './interfaces/profile.interface';
 // import { CreateUserDto } from './dto/create-user.dto';
 // import { UpdateUserDto } from './dto/update-user.dto';
 
