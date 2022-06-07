@@ -1,15 +1,14 @@
 interface User {
-    avatar: string,
-    id: number,
-    username: string,
+    id: number;
+    username: string;
+    avatar: string;
+    tfa: boolean
 }
 
 interface Room {
     id: number;
     name: string;
 }
-
-
 
 interface Message {
     id:number;

@@ -1,14 +1,16 @@
 import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { PassportStrategy } from "@nestjs/passport";
-import axios from "axios";
 import { Strategy } from "passport-oauth2";
+import { User } from "src/users/interfaces/user.interface";
 import { UsersService } from "src/users/users.service";
-import { AuthService } from "./auth.service";
+import { AuthService } from "../auth.service";
 
 @Injectable()
 export class OAuth2Strategy extends PassportStrategy(Strategy, 'oauth2') {
-	constructor(private usersService: UsersService, private configService: ConfigService, private authService: AuthService) {
+	constructor(private usersService: UsersService,
+				private configService: ConfigService, 
+				private authService: AuthService) {
 		super({
 			authorizationURL: 'https://api.intra.42.fr/oauth/authorize',
 			tokenURL: 'https://api.intra.42.fr/oauth/token',
@@ -18,12 +20,12 @@ export class OAuth2Strategy extends PassportStrategy(Strategy, 'oauth2') {
 		});
 	}
 
-	async validate(accessToken): Promise<any> {
+	async validate(accessToken: string): Promise<User> {
 		const profile = await this.authService.validateUser(accessToken);
 		if (!profile) {
 			throw new UnauthorizedException();
 		}
-		const user = await this.usersService.findOrCreate({id: profile.data.id, username: profile.data.login, avatar: profile.data.image_url})
+		const {tfaSecret, ...user} = await this.usersService.findOrCreate({id: profile.id, username: profile.login, avatar: profile.image_url})
 		return user;
 	}
 }

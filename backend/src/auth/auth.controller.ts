@@ -1,43 +1,31 @@
-import { Body, Controller, Get, Post, Query, Redirect, Req, Res, UseGuards } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { AuthGuard } from '@nestjs/passport';
+import { Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { Request, Response } from 'express';
+import { Response } from 'express';
+import { OAuth2AuthGuard } from './guards/oauth2-auth.guard';
+import { Jwt2faAuthGuard } from './guards/jwt-2fa-auth.guard';
 
 @Controller('auth')
 export class AuthController {
 	constructor(
-		private authService: AuthService,
-		private configService: ConfigService) {}
+		private authService: AuthService) {}
 
-	@UseGuards(AuthGuard('oauth2'))
+	@UseGuards(OAuth2AuthGuard)
 	@Get()
-	async login (@Req() req, @Res({passthrough: true}) res: Response) {
-		let token: object;
-		let type: string;
-		if (req.user.tfa === true) {
-			token = await this.authService.login2fa(req.user);
-			type = 'jwt-2fa'
-		} else {
-			token = await this.authService.login(req.user);
-			type = 'jwt'
-		}
-		res.cookie(type, token['access_token']);
-		return {type: type, token: token};
+	async login(@Req() req, @Res({passthrough: true}) res: Response) {
+		const isAuthenticated = !req.user.tfa;
+		const authentication = await this.authService.login(req.user.id, isAuthenticated);
+		res.cookie(authentication.type, authentication.token);
+		return authentication;
 	}
 
-	@UseGuards(AuthGuard('jwt-2fa'))
+	@UseGuards(Jwt2faAuthGuard)
 	@Post('google-authenticator')
-	async google_authenticator_login(@Req() req: Request, @Res({passthrough: true}) res: Response) {
-		const validated = await this.authService.validateGoogleAuthenticatorToken(req.user, req.body)
+	async google_authenticator_login(@Req() req, @Res({passthrough: true}) res: Response) {
+		const validated = await this.authService.validateGoogleAuthenticatorToken(req.user.id, req.body)
 		if (validated === true) {
-			const TOKEN = await this.authService.login(req.user);
-			res.cookie('jwt', TOKEN['access_token']);
-			return TOKEN;
-		} else {
-			return false;
+			const authentication = await this.authService.login(req.user.id, true);
+			res.cookie(authentication.type, authentication.token);
+			return authentication;
 		}
 	}
-
-
 }
