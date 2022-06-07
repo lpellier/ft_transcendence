@@ -9,7 +9,6 @@ import ChooseAvatarModal from '../AppBar/ChooseAvatar/Modal'
 import ChooseNameModal from '../AppBar/ChooseName/Modal'
 import ChooseAuthModal from '../AppBar/ChooseAuth/Modal'
 
-import {AllHomeStyle} from '../../styles/tsxStyles/Home'
 import {User} from 'interfaces'
 
 const SettingStyle = {

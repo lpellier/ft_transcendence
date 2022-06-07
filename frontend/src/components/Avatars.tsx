@@ -1,11 +1,9 @@
-import { useState} from 'react'
 import axios from 'axios'
 import {token} from 'index'
 
 import Avatar from '@mui/material/Avatar'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
-import {User} from 'interfaces'
 
 // Avatar images importation
 
@@ -36,7 +34,6 @@ const BigAvatar = {border: 2, width: 150, height: 150}
 const SmallAvatar = {border: 2, width: 50, height: 50}
 
 function PlayerAvatar(props: {image: string}) {
-    const image = props.image;
     
     return(
         <IconButton>
@@ -48,28 +45,14 @@ function PlayerAvatar(props: {image: string}) {
 }
 
 function CreateAvatar(props: {img: string, style: any}) {
-    let [user, setUser] = useState<User>({avatar: "", id: -1, username: "", wins: -1, losses: -1});
     
     const handleClick = () => {
-        axios.get('http://127.0.0.1:3001/users/me',{
-        headers: {
-            'Authorization': token,
-        }
-        })
-        .then(res => {
-            console.log("Get request success")
-            const test_data = res.data;
-            setUser(test_data);
-        })
-        .catch(function (err) {
-            console.log("Get request failed : ", err)
-        });
+
         axios.put('http://127.0.0.1:3001/users/me',
         {
             data: {
                 avatar: props.img,
             },
-            
         },
         {
             headers: {
@@ -77,14 +60,8 @@ function CreateAvatar(props: {img: string, style: any}) {
                 'Content-Type': 'application/json'
             }
         })
-        .then(res => {
-            console.log("Get request success")
-            const test_data = res.data;
-            console.log(test_data);
-            setUser(test_data);
-        })
         .catch(function (err) {
-            console.log("Get request failed : ", err)
+            console.log("Put request failed : ", err)
         });
     }
     

@@ -67,13 +67,8 @@ export class UsersService {
         id: id,
       },
       data: data,
-      // data: {
-      //   username: data.username,
-
-      // }
     });
   }
-
 
   async remove(id: number) {
     return await this.prisma.user.delete({

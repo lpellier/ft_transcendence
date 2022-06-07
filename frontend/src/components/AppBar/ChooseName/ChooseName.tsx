@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
-import CasinoIcon from '@mui/icons-material/Casino';
 
 import { NameButtonStyle } from '../../../styles/tsxStyles/AppBar/Name'
 
@@ -32,12 +31,11 @@ function NameInput(props: {user: User}) {
 	}
 
 	useEffect(() => {
-
 		axios.put('http://127.0.0.1:3001/users/me',
 			{
-				id: props.user.id,
-				username: new_username,
-				avatar: props.user.avatar
+				data: {
+					username: new_username,
+				}
 			},
 			{
 			headers: {
@@ -46,15 +44,14 @@ function NameInput(props: {user: User}) {
 			}
 		})
 		.catch(function (err) {
-			console.log("Get request failed : ", err)
+			console.log("Put request failed : ", err)
 		});
 	}, [new_username])
-
 
 	return (
 		<Stack direction="row">
 		<form id='ChangeNameForm' onSubmit={handleSubmit} style={{width: '100%'}}>
-			<TextField 
+			<TextField
 				type="text"
 				label="Your name" 
 				variant="standard"
@@ -66,24 +63,12 @@ function NameInput(props: {user: User}) {
 	);
 }
 
-function NameRandom() {
-	return (
-		<Button
-			startIcon={<CasinoIcon />}
-			color="secondary"
-			>
-	  		Create random name
-		</Button>
-	);
-}
-
 export default function ChooseName(props: {user: User}) {
 
         return (
 				<Stack spacing={2} style={{justifyContent: 'center'}}>
                     <NameButton />
 					<NameInput user={props.user}/>
-					<NameRandom />
                 </Stack>
         );
 }
