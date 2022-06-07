@@ -1,5 +1,5 @@
 import { Stack } from '@mui/material';
-import { StackStyle, TitleStyle, ImageStyle } from '../../styles/tsxStyles/error' 
+import { StackStyle, TitleStyle, ImageStyle } from '../styles/tsxStyles/error' 
 
 function ErrorComponent() {
 	return (

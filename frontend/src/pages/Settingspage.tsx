@@ -1,4 +1,3 @@
-import React from 'react';
 import Stack from '@mui/material/Stack'
 import Settings from 'components/Settings/Settings'
 import SearchAppBar from 'components/AppBar/AppBar'
