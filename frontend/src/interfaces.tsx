@@ -9,6 +9,7 @@ interface Room {
     id: number;
     name: string;
     ownerId: number;
+    visibility: string;
 }
 
 interface Message {

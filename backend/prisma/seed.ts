@@ -7,7 +7,7 @@ async function main() {
 		data:{
 			name: "general",
 			ownerId: 60040,
-			visibility: "public"
+			visibility: "public",
 		}
 	})
 }

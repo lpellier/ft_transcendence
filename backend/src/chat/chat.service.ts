@@ -59,10 +59,17 @@ export class ChatService {
   
   async getRoomsForUser(id: number) {
     let user = await this.prisma.user.findUnique({
-      where: {id: id},
+      where: {id: id} ,
       include: {rooms: true}
     })
     return user.rooms;
+  }
+
+  async getPublicRooms() {
+    let rooms = await this.prisma.room.findMany( {
+      where: {visibility: "public"}
+    })
+    return rooms;
   }
 
   async getUsersInRoom(id: number) {

@@ -56,6 +56,12 @@ export class ChatGateway {
 		client.emit('get rooms', rooms);
 	}
 
+	@SubscribeMessage('get public rooms')
+	async handlePublicRooms(@ConnectedSocket () client: Socket) {
+		let publicRooms = await this.chatService.getPublicRooms();
+		client.emit('get public rooms', publicRooms);
+	}
+
 	@SubscribeMessage('get users')
 	async handleGetUsers(@ConnectedSocket () client : Socket, @MessageBody() id: number) {
 		let users = await this.chatService.getUsersInRoom(id);

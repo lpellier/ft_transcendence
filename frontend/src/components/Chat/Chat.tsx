@@ -20,7 +20,7 @@ function Chat() {
 	
 	let [status, setStatus] = useState('waiting for connection');
 	let [user, setUser] = useState<User>();
-	let [current_room, setCurrentRoom] = useState<Room> ({id: 1, name: "general", ownerId: 1});
+	let [current_room, setCurrentRoom] = useState<Room> ({id: 1, name: "general", ownerId: 60040, visibility: "public"});
 	let [users, setUsers] = useState<User[]>([]);
 
 
@@ -47,6 +47,7 @@ function Chat() {
 			if (user)
 			{
 				socket.emit('get rooms', user.id);
+				socket.emit('get public rooms', user.id);
 				socket.emit('new user', user.id);
 				socket.emit('get all messages', user.id);
 			}
@@ -60,6 +61,7 @@ function Chat() {
 			if (user)
 			{
 				socket.emit('get rooms', user.id);
+				socket.emit('get public rooms', user.id);
 				socket.emit('new user', user.id);
 				socket.emit('get all messages', user.id);
 			}
