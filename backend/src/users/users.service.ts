@@ -18,7 +18,7 @@ export class UsersService {
   }
 
   async findOne(id: number) {
-    return await this.prisma.user.findUnique({
+    return this.prisma.user.findUnique({
       where: {id: id}
     });
   }
@@ -48,11 +48,11 @@ export class UsersService {
 	}
   
   async findAll() {
-    return await this.prisma.user.findMany();
+    return this.prisma.user.findMany();
   }
 
   async updateOne(id: number, data : any) {
-    return await this.prisma.user.update({
+    return this.prisma.user.update({
       where: {
         id: id,
       },
