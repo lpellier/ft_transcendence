@@ -27,7 +27,7 @@ function BoardComponent(props: {icon: any, title: string}) {
 }
 
 function StatsBox(props: {myStats: User}){
-	const totGames = props.myStats.wins + props.myStats.losses;
+	const totGames = props.myStats.winHistory + props.myStats.lossHistory;
 
 	return (
 		<Stack spacing={1}>
@@ -35,8 +35,8 @@ function StatsBox(props: {myStats: User}){
 			icon={<TimelineIcon />} 
 			title="Stats" />
 			<Box sx={StatBox}>
-				<h3> Victories : {props.myStats.wins} </h3>
-				<h3> Games lost : {props.myStats.losses} </h3>
+				<h3> Victories : {props.myStats.winHistory} </h3>
+				<h3> Games lost : {props.myStats.lossHistory} </h3>
 				<h3> Total games : {totGames} </h3>
 			</Box>
 		</Stack>
@@ -87,7 +87,7 @@ function MatchhistoryBox(){
 
 export default function StatsBoards() {
 	const [width, setWidth] = useState(window.innerWidth);
-	let [stats, setStats] = useState<User>({id: -1, avatar: "", username: "", wins: -1, losses: -1});
+	let [stats, setStats] = useState<User>({id: -1, avatar: "", username: "", winHistory: -1, lossHistory: -1});
 	//let [stats, setStats] = useState<Stats>({wins: -1, losses: -1});
 	//let [leadboard, setLeadboard] = useState<LeaderBoard>({Rank: -1, PlayerName: '', PlayerLevel: -1});
 

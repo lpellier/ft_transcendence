@@ -1,8 +1,6 @@
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography'
-
-import {TFASwitch} from './AuthSwitch'
-
+import { TFAButton } from './AuthButton'
 import { ButtonStackStyle, Title } from '../../../styles/tsxStyles/AppBar/AuthStyle'
 
 export default function ChooseAuth() {
@@ -12,7 +10,7 @@ export default function ChooseAuth() {
                         Change Authentication
                     </Typography>
                     <Stack spacing={4} sx={ButtonStackStyle}>
-                        <TFASwitch />
+                        <TFAButton />
                     </Stack>
                 </Stack>
         );
