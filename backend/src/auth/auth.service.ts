@@ -3,6 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { UsersService } from 'src/users/users.service';
 import { authenticator } from 'otplib';
 import { Authentication } from './interfaces/authentication.interface';
+import { ValidateOtpDto } from './dto/validate-otp.dto';
 import axios from 'axios';
 
 @Injectable()
@@ -23,7 +24,7 @@ export class AuthService {
 
 	async login(userId: number, isAuthenticated: boolean): Promise<Authentication> {
 		const payload = {sub: userId, isAuthenticated};
-		const type = isAuthenticated ? "jwt" : "jwt-2fa";
+		const type = isAuthenticated ? "jwt" : "jwt-otp";
 
 		const authentication = {
 			type,
@@ -32,12 +33,9 @@ export class AuthService {
 		return authentication;
 	}
 
-	async validateGoogleAuthenticatorToken(userId: number, body) {
-		const { tfaSecret } = await this.usersService.findOne(userId);
-		if (!tfaSecret) {
-			return false;
-		}
-		const validated = authenticator.check(body.token, tfaSecret);
+	async validateGoogleAuthenticatorToken(userId: number, otp: ValidateOtpDto) {
+		const { otpSecret } = await this.usersService.findOne(userId);
+		const validated = authenticator.check(otp.value, otpSecret);
 		return validated;
 	}
 }

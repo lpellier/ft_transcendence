@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Response } from 'express';
 import { OAuth2AuthGuard } from './guards/oauth2-auth.guard';
-import { Jwt2faAuthGuard } from './guards/jwt-2fa-auth.guard';
+import { JwtOtpAuthGuard } from './guards/jwt-otp-auth.guard';
+import { ValidateOtpDto } from './dto/validate-otp.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -18,10 +19,10 @@ export class AuthController {
 		return authentication;
 	}
 
-	@UseGuards(Jwt2faAuthGuard)
+	@UseGuards(JwtOtpAuthGuard)
 	@Post('google-authenticator')
-	async google_authenticator_login(@Req() req, @Res({passthrough: true}) res: Response) {
-		const validated = await this.authService.validateGoogleAuthenticatorToken(req.user.id, req.body)
+	async google_authenticator_login(@Req() req, @Res({passthrough: true}) res: Response, @Body() otp: ValidateOtpDto) {
+		const validated = await this.authService.validateGoogleAuthenticatorToken(req.user.id, otp)
 		if (validated === true) {
 			const authentication = await this.authService.login(req.user.id, true);
 			res.cookie(authentication.type, authentication.token);

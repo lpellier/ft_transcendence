@@ -5,7 +5,7 @@ import { jwtConstants } from "../constants";
 import { JwtPayload } from "../interfaces/jwt-payload.interface";
 
 @Injectable()
-export class Jwt2faStrategy extends PassportStrategy(Strategy, 'jwt-2fa') {
+export class JwtOtpStrategy extends PassportStrategy(Strategy, 'jwt-otp') {
 	constructor() {
 		super({
 			jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),

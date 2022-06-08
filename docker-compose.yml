@@ -4,6 +4,7 @@ services:
 
   postgres:
     image: postgres:14.2
+    container_name: postgres
     restart: always
     environment:
       - POSTGRES_PASSWORD=secret
@@ -12,6 +13,7 @@ services:
     depends_on:
       - postgres
     image: node:lts
+    container_name: backend
     volumes:
       - ./backend:/backend
     working_dir: /backend
@@ -27,6 +29,7 @@ services:
 
   frontend:
     image: node:lts
+    container_name: frontend
     volumes:
       - ./frontend:/frontend
     working_dir: /frontend

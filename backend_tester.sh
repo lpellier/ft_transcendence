@@ -13,10 +13,10 @@ curl -sL --cookie cookie.txt --cookie-jar cookie.txt http://127.0.0.1:3001/auth
 # curl -H "Authorization: Bearer `grep 'jwt[^-]' cookie.txt | cut -d "	" -f 7`" "http://127.0.0.1:3001/users/me"
 
 # To send token for 2fa
-# curl -H "Authorization: Bearer `grep jwt-2fa cookie.txt | cut -d "   " -f 7`" --cookie cookie.txt --cookie-jar cookie.txt "http://127.0.0.1:3001/auth/google-authenticator" -d "token="
+# curl -H "Authorization: Bearer `grep jwt-otp cookie.txt | cut -d "   " -f 7`" --cookie cookie.txt --cookie-jar cookie.txt "http://127.0.0.1:3001/auth/google-authenticator" -d "token="
 
 # To enable 2fa and get secret
-# curl -H "Authorization: Bearer `grep 'jwt-2fa' cookie.txt | cut -d "	" -f 7`" "http://127.0.0.1:3001/users/enable-two-factor-authentication"
+# curl -H "Authorization: Bearer `grep 'jwt' cookie.txt | cut -d "	" -f 7`" "http://127.0.0.1:3001/users/enable-two-factor-authentication"
 
 
 # read -p "Add the token: " TOKEN
