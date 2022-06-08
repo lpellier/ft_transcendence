@@ -22,6 +22,7 @@ function Chat() {
 	let [user, setUser] = useState<User>();
 	let [current_room, setCurrentRoom] = useState<Room> ({id: 1, name: "general", ownerId: 60040, visibility: "public"});
 	let [users, setUsers] = useState<User[]>([]);
+	let [canWrite, setCanWrite] = useState<boolean>(true);
 
 
 	
@@ -48,7 +49,6 @@ function Chat() {
 			{
 				socket.emit('get rooms', user.id);
 				socket.emit('get public rooms', user.id);
-				socket.emit('new user', user.id);
 				socket.emit('get all messages', user.id);
 			}
 				socket.on('disconnect', () => {
@@ -62,7 +62,6 @@ function Chat() {
 			{
 				socket.emit('get rooms', user.id);
 				socket.emit('get public rooms', user.id);
-				socket.emit('new user', user.id);
 				socket.emit('get all messages', user.id);
 			}
 			if (!socket.connected)
@@ -93,8 +92,8 @@ function Chat() {
 				{status}
 				{user?
 					<Stack direction='row' spacing='2' className='chmsg'>
-						<Channels user={user} users={users} current_room={current_room} setCurrentRoom = {setCurrentRoom} />
-						<Messages user={user} users={users} current_room={current_room} />
+						<Channels user={user} users={users} current_room={current_room} setCurrentRoom = {setCurrentRoom} setCanWrite = {setCanWrite}/>
+						<Messages user={user} users={users} current_room={current_room} canWrite = {canWrite} />
 					</Stack>
 					:
 					<div/>

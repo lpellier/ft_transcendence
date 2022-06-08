@@ -23,7 +23,6 @@ export class ChatGateway {
 	async handleCreateRoom(@ConnectedSocket () client : Socket, @MessageBody()  createRoomDto: CreateRoomDto) {		
 		let roomId = await this.chatService.createRoom(createRoomDto);
 		await this.chatService.addUserToRoom(createRoomDto.userId, roomId);
-		console.log("my id = ", createRoomDto.userId);
 		client.emit('create room');
 	}
 
@@ -31,6 +30,12 @@ export class ChatGateway {
 	async handleAddUserToRoom(@MessageBody() addUserDto: UserRoomDto) {
 		await this.chatService.addUserToRoom(addUserDto.userId, addUserDto.roomId);
 		this.server.emit('create room', addUserDto.roomId);
+	}
+
+	@SubscribeMessage('add admin to room')
+	async handleAddAdminToRoom(@MessageBody() addAdminDto: UserRoomDto) {
+		await this.chatService.addAdminToRoom(addAdminDto.userId, addAdminDto.roomId);
+		this.server.emit('create room', addAdminDto.roomId);
 	}
 
 	@SubscribeMessage('remove user from room')
@@ -57,15 +62,21 @@ export class ChatGateway {
 	}
 
 	@SubscribeMessage('get public rooms')
-	async handlePublicRooms(@ConnectedSocket () client: Socket) {
+	async handlePublicRooms() {
 		let publicRooms = await this.chatService.getPublicRooms();
-		client.emit('get public rooms', publicRooms);
+		this.server.emit('get public rooms', publicRooms);
 	}
 
 	@SubscribeMessage('get users')
 	async handleGetUsers(@ConnectedSocket () client : Socket, @MessageBody() id: number) {
 		let users = await this.chatService.getUsersInRoom(id);
 		client.emit('get users', users);
+	}
+
+	@SubscribeMessage('get admins')
+	async handleGetAdminss(@ConnectedSocket () client : Socket, @MessageBody() id: number) {
+		let admins = await this.chatService.getUsersInRoom(id);
+		client.emit('get admins', admins);
 	}
 
 	@SubscribeMessage('get all messages')

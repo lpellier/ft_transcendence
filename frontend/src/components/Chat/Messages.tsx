@@ -19,7 +19,7 @@ interface CreateMessageDto {
     type: boolean;
 }
 
-function Messages(props : {user: User, users: User[], current_room: Room}) {
+function Messages(props : {user: User, users: User[], current_room: Room, canWrite: boolean}) {
 	
 	let [messages, setMessages] = useState<Message[]>([]);
 
@@ -89,12 +89,16 @@ function Messages(props : {user: User, users: User[], current_room: Room}) {
 					</div>
 				))}
 			</ul>
+			{props.canWrite?
 			<form className="message-form" id="form" onSubmit={handleSubmit}>
 				<Stack direction='row' spacing={1} justifyContent='space-between' className="message-form">
 					<input className='input' type="text" />
 					<button className='miauw-button'>Miauw</button>
 				</Stack>
             </form>
+			:
+			<div/>
+			}
         </Stack>
 		<Stack direction="row" spacing={1} className="cat-chat">
 			<img className="cat-chat-logo" src="https://media.istockphoto.com/vectors/minimal-cat-drawing-vector-id671786264?k=20&m=671786264&s=612x612&w=0&h=3PdcGzJGmzoe8T80LCUrTFMTDJf1r8M15kB_JRPa8H0=" alt='logo'/>

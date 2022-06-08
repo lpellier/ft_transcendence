@@ -31,6 +31,17 @@ export class ChatService {
     });
   }
 
+  async addAdminToRoom(adminId: number, roomId: number) {
+    const room = await this.prisma.room.update({
+      where: {id: roomId},
+      data: {
+        admins: {
+          connect: {id: adminId}
+        }
+      }
+    });
+  }
+
   async removeUserFromRoom(userId: number, roomId: number) {
     const room = await this.prisma.room.update({
       where: {id: roomId},
@@ -78,6 +89,14 @@ export class ChatService {
       include: {users: true}
     })
     return room.users;
+  }
+
+  async getAdminsInRoom(id: number) {
+    let room = await this.prisma.room.findUnique({
+      where: {id: id},
+      include: {admins: true}
+    })
+    return room.admins;
   }
 
   async getAllMessagesForUser(id: number) {
