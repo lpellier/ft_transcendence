@@ -1,9 +1,8 @@
-version: '3.8'
-
 services:
 
-  postgres:
-    image: postgres:14.2
+  database:
+    image: postgres:alpine
+    container_name: database
     restart: always
     environment:
       - POSTGRES_PASSWORD=secret
@@ -11,7 +10,8 @@ services:
   backend:
     depends_on:
       - postgres
-    image: node:lts
+    image: node:lts-alpine
+    container_name: backend
     volumes:
       - ./backend:/backend
     working_dir: /backend
@@ -26,7 +26,8 @@ services:
               && npm run start:dev"
 
   frontend:
-    image: node:lts
+    image: node:lts-alpine
+    container_name: frontend
     volumes:
       - ./frontend:/frontend
     working_dir: /frontend
