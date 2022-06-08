@@ -1,6 +1,5 @@
 import { Controller, Get, Post, Put, Body, Patch, Param, Delete, UseGuards, Req } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
@@ -25,10 +24,10 @@ export class UsersController {
     return user;
   }
 
-  @Get('enable-two-factor-authentication')
-  enableTwoFactorAuthentication(@Req() req) {
-    return this.usersService.enableTwoFactorAuthentication(+req.user.id);
-  }
+  // @Get('enable-two-factor-authentication')
+  // enableTwoFactorAuthentication(@Req() req) {
+  //   return this.usersService.enableTwoFactorAuthentication(+req.user.id);
+  // }
 
   @Get(':id')
   async findOne(@Param('id') id: string) {
@@ -36,16 +35,21 @@ export class UsersController {
     return user;
   }
 
-  @Put('me')
-  updateMe(@Req() req,  @Body() data: any) {
-    console.log("!!! updateme data = ", data.username);
-    return this.usersService.updateOne(req.user.id, data);
-  }
-
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-  //   return this.usersService.update(+id, updateUserDto);
+  // @Put('me')
+  // updateMe(@Req() req,  @Body() data: any) {
+  //   console.log("!!! updateme data = ", data.username);
+  //   return this.usersService.updateOne(req.user.id, data);
   // }
+
+  @Patch('me')
+  updateMe(@Req() req, @Body() updateUserDto: UpdateUserDto) {
+    return this.usersService.update(req.user.id, updateUserDto);
+  }
+  
+  /* @Patch(':id')
+  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+    return this.usersService.update(+id, updateUserDto);
+  } */
 
   // @Delete(':id')
   // remove(@Param('id') id: string) {

@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaClient, User } from '@prisma/client';
 import { authenticator } from 'otplib';
+import { UpdateUserDto } from './dto/update-user.dto';
 import { Profile } from './interfaces/profile.interface';
 // import { CreateUserDto } from './dto/create-user.dto';
 // import { UpdateUserDto } from './dto/update-user.dto';
@@ -53,7 +54,7 @@ export class UsersService {
   }
 
   async getProfile(id: number): Promise<Profile> {
-    const {tfa, tfaSecret, ...profile} = await this.prisma.user.findUnique({
+    const {tfa, otpSecret, ...profile} = await this.prisma.user.findUnique({
       where: {
         id: id
       },
@@ -76,6 +77,17 @@ export class UsersService {
     });
   }
 
+  async update(id: number, data: UpdateUserDto) {
+    if (data.tfa) {
+      if (data.tfa === true) {
+        return this.enableTwoFactorAuthentication(id);
+      } else {
+        await this.disableTwoFactorAuthentication(id);
+      }
+    }
+
+  }
+
   async enableTwoFactorAuthentication(id: number) {
     const secret = authenticator.generateSecret();
     await this.prisma.user.update({
@@ -84,7 +96,7 @@ export class UsersService {
       },
       data: {
         tfa: true,
-        tfaSecret: secret
+        otpSecret: secret
       }
     });
     return secret;
@@ -97,7 +109,7 @@ export class UsersService {
       },
       data: {
         tfa: false,
-        tfaSecret: ""
+        otpSecret: ""
       }
     });
   }

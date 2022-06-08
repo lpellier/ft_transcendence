@@ -25,7 +25,7 @@ export class OAuth2Strategy extends PassportStrategy(Strategy, 'oauth2') {
 		if (!profile) {
 			throw new UnauthorizedException();
 		}
-		const {tfaSecret, ...user} = await this.usersService.findOrCreate({id: profile.id, username: profile.login, avatar: profile.image_url})
+		const user = await this.usersService.findOrCreate({id: profile.id, username: profile.login, avatar: profile.image_url})
 		return user;
 	}
 }
