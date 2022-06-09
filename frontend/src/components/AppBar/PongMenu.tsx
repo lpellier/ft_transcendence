@@ -13,10 +13,6 @@ import HomeIcon from '@mui/icons-material/Home';
 import SettingsIcon from '@mui/icons-material/Settings';
 import Paper from '@mui/material/Paper'
 
-import ChooseAvatarModal from './ChooseAvatar/Modal'
-import ChooseNameModal from './ChooseName/Modal'
-import ChooseAuthModal from './ChooseAuth/Modal'
-
 import { phoneSize } from 'index'
 import { IconButtonStyle } from '../../styles/tsxStyles/AppBar/PongMenu'
 

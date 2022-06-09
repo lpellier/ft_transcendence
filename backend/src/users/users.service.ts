@@ -67,12 +67,17 @@ export class UsersService {
         id: id,
       },
       data: data,
-      // data: {
-      //   username: newusername,
-      // }
     });
   }
 
+  async remove(id: number) {
+    return await this.prisma.user.delete({
+      where: {
+        id: id,
+      },
+    });
+   
+  }
   // update(id: number, updateUserDto: UpdateUserDto) {
   //   return `This action updates a #${id} user`;
   // }

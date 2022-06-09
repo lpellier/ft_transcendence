@@ -7,7 +7,7 @@ import ChooseName from './ChooseName'
 import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
 
 import {ModalStyle} from '../../../styles/tsxStyles/AppBar/Name'
-
+import {ButtonModalStyle, IconStyle} from '../../../styles/tsxStyles/AppBar/PongMenu'
 import {User} from 'interfaces'
 
 export default function ChooseNameModal(props: {user: User}) {
@@ -26,9 +26,11 @@ export default function ChooseNameModal(props: {user: User}) {
       <Button
             onClick={handleOpen}
             variant="contained"
-            startIcon={<DriveFileRenameOutlineIcon />}
-            color="secondary">
-          Choose Name
+            color="secondary"
+            style={ButtonModalStyle}
+            >
+            <DriveFileRenameOutlineIcon sx={IconStyle}/>
+            Choose Name
         </Button>
     <Modal
           open={open}
@@ -36,7 +38,7 @@ export default function ChooseNameModal(props: {user: User}) {
         >
           <Box sx={ModalStyle}>
             <ChooseName user={props.user}/> 
-           </Box>
+          </Box>
         </Modal>
         </Stack>
     );

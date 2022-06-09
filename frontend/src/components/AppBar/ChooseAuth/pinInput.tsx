@@ -16,7 +16,7 @@ const TextMaskCustom = React.forwardRef<HTMLElement, CustomProps>(
     return (
       <IMaskInput
         {...other}
-        mask="(+33) 0 00 00 00 00"
+        mask="000-000"
         onAccept={(value: any) => onChange({ target: { name: props.name, value } })}
         overwrite
       />
@@ -29,7 +29,7 @@ interface State {
   numberformat: string;
 }
 
-export default function SMSInput() {
+export default function PinInput() {
   const [values, setValues] = React.useState<State>({
     textmask: '',
     numberformat: '',
@@ -51,7 +51,7 @@ export default function SMSInput() {
       }}
     >
         <FormControl variant="standard">
-        <InputLabel htmlFor="formatted-text-mask-input">Send SMS to :</InputLabel>
+        <InputLabel htmlFor="formatted-text-mask-input">Choose your Pin :</InputLabel>
         <Input
           value={values.textmask}
           onChange={handleChange}

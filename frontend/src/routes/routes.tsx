@@ -6,12 +6,12 @@ import {
 } from "react-router-dom";
 import {token} from 'index';
 
-import LogIn from '../pages/LogInpage/LogIn'
-import Settingspage from '../pages/Settingspage/Settingspage'
-import Homepage from '../pages/Homepage/Homepage'
-import Gamepage from '../pages/Gamepage/Gamepage'
-import Chatpage from '../pages/Chatpage/Chatpage'
-import Error from '../pages/Error/Error'
+import LogIn from '../pages/LogIn'
+import Settingspage from '../pages/Settingspage'
+import Homepage from '../pages/Homepage'
+import Gamepage from '../pages/Gamepage'
+import Chatpage from '../pages/Chatpage'
+import Error from '../pages/Error'
 
 
 type Props = {children: JSX.Element}
