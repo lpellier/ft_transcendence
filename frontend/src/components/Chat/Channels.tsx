@@ -4,15 +4,11 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import Divider from '@mui/material/Divider';
-import SettingsIcon from '@mui/icons-material/Settings';
-
 
 import {useState, useEffect, useRef} from 'react'
 import {Room, User} from 'interfaces'
 import {socket} from './Chat'
-import RoomUserMod from './RoomUserMod'
-import Box from '@mui/material/Box';
-import Popper from '@mui/material/Popper';
+import RoomUserPopper from './RoomUserMod'
 
 
 
@@ -22,7 +18,7 @@ interface CreateRoomDto {
 	visibility: string;
 }
 
-function Channels(props : {user: User, users: User[], current_room: Room, setCurrentRoom: React.Dispatch<React.SetStateAction<Room>>, setCanWrite: React.Dispatch<React.SetStateAction<boolean>>}) {
+function Channels(props : {user: User, users: User[], currentRoom: Room, setCurrentRoom: React.Dispatch<React.SetStateAction<Room>>, setCanWrite: React.Dispatch<React.SetStateAction<boolean>>}) {
 
 	let [addRoomClicked, setAddRoomClicked] = useState<number>(0);
 	let [rooms, setRooms] = useState<Room[]>([]);
@@ -31,11 +27,8 @@ function Channels(props : {user: User, users: User[], current_room: Room, setCur
 
 	function handleRoomSubmit(e:any) {
 		e.preventDefault();
-
 		const room_name: string = e.target[0].value;
 		const visibility: string = e.target[1].value;
-
-
 		const createRoomDto: CreateRoomDto = {name: room_name, userId: props.user.id, visibility: visibility}
 		if (room_name && visibility)
 			socket.emit('create room', createRoomDto);
@@ -45,6 +38,8 @@ function Channels(props : {user: User, users: User[], current_room: Room, setCur
 
 	function handleRoomClick(room: Room) {
 		props.setCurrentRoom(room)
+		socket.emit('get users', room.id);
+		socket.emit('get admins', room.id);
 		if (rooms.find(item => item.id === room.id))
 			props.setCanWrite(true);
 		else
@@ -75,53 +70,24 @@ function Channels(props : {user: User, users: User[], current_room: Room, setCur
 		})
 	})
 
-	function SimplePopper(props : {user: User, users: User[], room: Room}) {
-		const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-	  
-		const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-		  setAnchorEl(anchorEl ? null : event.currentTarget);
-		};
-	  
-		const open = Boolean(anchorEl);
-		const id = open ? 'simple-popper' : undefined;
-	  
-		return (
-		  <div>
-			<button aria-describedby={id} type="button" onClick={handleClick}>
-			  <SettingsIcon/>
-			</button>
-			<Popper id={id} open={open} anchorEl={anchorEl}>
-			  <Box sx={{ border: 1, p: 1, bgcolor: 'background.paper' }}>
-				<RoomUserMod currentUser={props.user} users={props.users} room={props.room}/>
-			  </Box>
-			</Popper>
-		  </div>
-		);
-	  }
 
-	function RoomList(props: {rooms: Room[], current_room: Room, users: User[], user: User, visibility: string}) {
+	function RoomList(props: {rooms: Room[], currentRoom: Room, users: User[], user: User, visibility: string}) {
 		return (
 			<List>
 					{props.rooms.map(item => (
 						<div key={item.id}>
 							{item.visibility === props.visibility ?
 								<div>
-									{ item.id !== props.current_room.id ?
+									{ item.id !== props.currentRoom.id ?
 									<ListItem button onClick={() => handleRoomClick(item)}>
 										<ListItemText primary={item.name}/>
 									</ListItem>
 									:
 									<Stack direction="row">
-										<ListItem button>
-											<ListItemText primary={item.name}/>
+										<ListItem button >
+											<ListItemText primary={item.name}  />
 										</ListItem>
-										<div>
-											{(props.user.id === item.ownerId) ?
-												<SimplePopper user={props.user} users={props.users} room={item}/>
-											:
-												<div/>
-											}
-										</div>
+										<RoomUserPopper currentUser={props.user} users={props.users} room={props.currentRoom}/>
 									</Stack>
 									}
 									<Divider/>
@@ -141,8 +107,8 @@ function Channels(props : {user: User, users: User[], current_room: Room, setCur
 	return ( 
 		<Stack className='channels' justifyContent='space-between'>
 				<div>
-					<RoomList rooms = {publicRooms} current_room = {props.current_room} users = {props.users} user = {props.user} visibility = "public"/>
-					<RoomList rooms = {rooms} current_room = {props.current_room} users = {props.users} user = {props.user} visibility="private"/>
+					<RoomList rooms = {publicRooms} currentRoom = {props.currentRoom} users = {props.users} user = {props.user} visibility = "public"/>
+					<RoomList rooms = {rooms} currentRoom = {props.currentRoom} users = {props.users} user = {props.user} visibility="private"/>
 				</div>
 			<div>
 				<div>

@@ -50,6 +50,7 @@ function Chat() {
 				socket.emit('get rooms', user.id);
 				socket.emit('get public rooms', user.id);
 				socket.emit('get all messages', user.id);
+				socket.emit('new user', current_room.id);
 			}
 				socket.on('disconnect', () => {
 				setStatus('disconnected');
@@ -63,6 +64,7 @@ function Chat() {
 				socket.emit('get rooms', user.id);
 				socket.emit('get public rooms', user.id);
 				socket.emit('get all messages', user.id);
+				socket.emit('new user', current_room.id);
 			}
 			if (!socket.connected)
 				setStatus('disconnected');
@@ -92,7 +94,7 @@ function Chat() {
 				{status}
 				{user?
 					<Stack direction='row' spacing='2' className='chmsg'>
-						<Channels user={user} users={users} current_room={current_room} setCurrentRoom = {setCurrentRoom} setCanWrite = {setCanWrite}/>
+						<Channels user={user} users={users} currentRoom={current_room} setCurrentRoom = {setCurrentRoom} setCanWrite = {setCanWrite}/>
 						<Messages user={user} users={users} current_room={current_room} canWrite = {canWrite} />
 					</Stack>
 					:

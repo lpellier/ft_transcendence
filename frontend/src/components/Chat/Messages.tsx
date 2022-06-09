@@ -37,7 +37,6 @@ function Messages(props : {user: User, users: User[], current_room: Room, canWri
 
 	useEffect(() => {
 		socket.on('chat message', (msg:Message) => {
-			console.log("msg = ", msg);
 			addMessage(msg);
 			let objDiv = document.getElementById('messagebox');
             if (objDiv != null)

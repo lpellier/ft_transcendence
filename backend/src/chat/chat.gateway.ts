@@ -23,6 +23,7 @@ export class ChatGateway {
 	async handleCreateRoom(@ConnectedSocket () client : Socket, @MessageBody()  createRoomDto: CreateRoomDto) {		
 		let roomId = await this.chatService.createRoom(createRoomDto);
 		await this.chatService.addUserToRoom(createRoomDto.userId, roomId);
+		await this.chatService.addAdminToRoom(createRoomDto.userId, roomId);
 		client.emit('create room');
 	}
 
@@ -74,8 +75,8 @@ export class ChatGateway {
 	}
 
 	@SubscribeMessage('get admins')
-	async handleGetAdminss(@ConnectedSocket () client : Socket, @MessageBody() id: number) {
-		let admins = await this.chatService.getUsersInRoom(id);
+	async handleGetAdmins(@ConnectedSocket () client : Socket, @MessageBody() id: number) {
+		let admins = await this.chatService.getAdminsInRoom(id);
 		client.emit('get admins', admins);
 	}
 
