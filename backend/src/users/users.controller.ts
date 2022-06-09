@@ -1,17 +1,14 @@
-import { Controller, Get, Post, Put, Body, Patch, Param, Delete, UseGuards, Req } from '@nestjs/common';
+import { Controller, Get, Body, Patch, Param, UseGuards, Req } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { ProfileWithSettings } from './interfaces/profile-with-settings.interface';
+import { Profile } from './interfaces/profile.interface';
 
 @UseGuards(JwtAuthGuard)
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
-
-  // @Post()
-  // create(@Body() createUserDto: CreateUserDto) {
-  //   return this.usersService.create(createUserDto);
-  // }
 
   @Get()
   findAll() {
@@ -19,33 +16,22 @@ export class UsersController {
   }
 
   @Get('me')
-  async findMe(@Req() req) {
-    const user = await this.usersService.getProfile(req.user.id);
+  async findMe(@Req() req): Promise<ProfileWithSettings> {
+    const user = await this.usersService.getProfileWithSettings(req.user.id);
     return user;
   }
 
-  // @Get('enable-two-factor-authentication')
-  // enableTwoFactorAuthentication(@Req() req) {
-  //   return this.usersService.enableTwoFactorAuthentication(+req.user.id);
-  // }
+  @Patch('me')
+  updateMe(@Req() req, @Body() updateUserDto: UpdateUserDto) {
+    return this.usersService.updateUser(req.user.id, updateUserDto);
+  }
 
   @Get(':id')
-  async findOne(@Param('id') id: string) {
+  async findOne(@Param('id') id: string): Promise<Profile> {
     const user = await this.usersService.getProfile(+id);
     return user;
   }
 
-  // @Put('me')
-  // updateMe(@Req() req,  @Body() data: any) {
-  //   console.log("!!! updateme data = ", data.username);
-  //   return this.usersService.updateOne(req.user.id, data);
-  // }
-
-  @Patch('me')
-  updateMe(@Req() req, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(req.user.id, updateUserDto);
-  }
-  
   /* @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(+id, updateUserDto);

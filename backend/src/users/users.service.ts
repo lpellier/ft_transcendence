@@ -1,10 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable } from '@nestjs/common';
 import { PrismaClient, User } from '@prisma/client';
 import { authenticator } from 'otplib';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { ProfileWithSettings } from './interfaces/profile-with-settings.interface';
 import { Profile } from './interfaces/profile.interface';
-// import { CreateUserDto } from './dto/create-user.dto';
-// import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -53,6 +52,18 @@ export class UsersService {
     return this.prisma.user.findMany();
   }
 
+  async getProfileWithSettings(id: number): Promise<ProfileWithSettings> {
+    const {otpSecret, ...profile} = await this.prisma.user.findUnique({
+      where: {
+        id: id
+      },
+      include: {
+        stats: true
+      }
+    });
+    return profile;
+  }
+
   async getProfile(id: number): Promise<Profile> {
     const {tfa, otpSecret, ...profile} = await this.prisma.user.findUnique({
       where: {
@@ -65,54 +76,76 @@ export class UsersService {
     return profile;
   }
 
-  async updateOne(id: number, data : any) {
-    return this.prisma.user.update({
-      where: {
-        id: id,
-      },
-      data: data,
-      // data: {
-      //   username: newusername,
-      // }
-    });
-  }
-
-  async update(id: number, data: UpdateUserDto) {
-    if (data.tfa) {
-      if (data.tfa === true) {
-        return this.enableTwoFactorAuthentication(id);
-      } else {
-        await this.disableTwoFactorAuthentication(id);
-      }
+  async updateUser(id: number, data: UpdateUserDto): Promise<string> {
+    if (Object.keys(data).length != 1) {
+      throw BadRequestException;
     }
 
+    if (data.username) {
+      return this.tryToChangeUsername(id, data.username);
+    }
+    
+    if (data.tfa) {
+      return this.tryToChangeAuthentication(id, data.tfa);
+    }
   }
 
-  async enableTwoFactorAuthentication(id: number) {
-    const secret = authenticator.generateSecret();
-    await this.prisma.user.update({
+  async tryToChangeUsername(id: number, newUsername: string) {
+    const isTaken = this.prisma.user.findUnique({
+      where: { username: newUsername }
+    })
+    if (isTaken) {
+      throw ConflictException;
+    }
+
+    const user = await this.prisma.user.update({
       where: {
         id: id
       },
       data: {
-        tfa: true,
-        otpSecret: secret
+        username: newUsername
       }
-    });
-    return secret;
+    })
+    return user.username;
   }
 
-  async disableTwoFactorAuthentication(id: number) {
-    await this.prisma.user.update({
+  async tryToChangeAuthentication(id: number, tfa: boolean) {
+    const user = await this.prisma.user.findUnique({
       where: {
         id: id
-      },
-      data: {
-        tfa: false,
-        otpSecret: ""
       }
-    });
+    })
+    
+    if (user.tfa === tfa) {
+      throw ConflictException
+    }
+    
+    if (tfa === true) {
+      const secret = authenticator.generateSecret();
+      await this.prisma.user.update({
+        where: {
+          id: id
+        },
+        data: {
+          tfa: true,
+          otpSecret: secret
+        }
+      });
+      return secret;
+    } else {
+      await this.prisma.user.update({
+        where: {
+          id: id
+        },
+        data: {
+          tfa: false,
+          otpSecret: ""
+        }
+      });
+      return "";
+    }
   }
+
 
   // update(id: number, updateUserDto: UpdateUserDto) {
   //   return `This action updates a #${id} user`;
