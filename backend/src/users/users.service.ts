@@ -78,26 +78,23 @@ export class UsersService {
 
   async updateUser(id: number, data: UpdateUserDto): Promise<string> {
     if (Object.keys(data).length != 1) {
-      throw BadRequestException;
+      throw new BadRequestException();
     }
-
-    if (data.username) {
+    if (data.hasOwnProperty('username')) {
       return this.tryToChangeUsername(id, data.username);
     }
-    
-    if (data.tfa) {
+    if (data.hasOwnProperty('tfa')) {
       return this.tryToChangeAuthentication(id, data.tfa);
     }
   }
 
   async tryToChangeUsername(id: number, newUsername: string) {
-    const isTaken = this.prisma.user.findUnique({
+    const isTaken = await this.prisma.user.findUnique({
       where: { username: newUsername }
     })
     if (isTaken) {
-      throw ConflictException;
+      throw new ConflictException();
     }
-
     const user = await this.prisma.user.update({
       where: {
         id: id
@@ -115,43 +112,19 @@ export class UsersService {
         id: id
       }
     })
-    
     if (user.tfa === tfa) {
-      throw ConflictException
+      throw new ConflictException();
     }
-    
-    if (tfa === true) {
-      const secret = authenticator.generateSecret();
-      await this.prisma.user.update({
-        where: {
-          id: id
-        },
-        data: {
-          tfa: true,
-          otpSecret: secret
-        }
-      });
-      return secret;
-    } else {
-      await this.prisma.user.update({
-        where: {
-          id: id
-        },
-        data: {
-          tfa: false,
-          otpSecret: ""
-        }
-      });
-      return "";
-    }
+    const secret = (tfa === true) ? authenticator.generateSecret() : "";
+    await this.prisma.user.update({
+      where: {
+        id: id
+      },
+      data: {
+        tfa: tfa,
+        otpSecret: secret
+      }
+    });
+    return secret;
   }
-
-
-  // update(id: number, updateUserDto: UpdateUserDto) {
-  //   return `This action updates a #${id} user`;
-  // }
-
-  // remove(id: number) {
-  //   return `This action removes a #${id} user`;
-  // }
 }

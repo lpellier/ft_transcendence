@@ -17,8 +17,7 @@ export class UsersController {
 
   @Get('me')
   async findMe(@Req() req): Promise<ProfileWithSettings> {
-    const user = await this.usersService.getProfileWithSettings(req.user.id);
-    return user;
+    return this.usersService.getProfileWithSettings(req.user.id);
   }
 
   @Patch('me')
@@ -28,8 +27,7 @@ export class UsersController {
 
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<Profile> {
-    const user = await this.usersService.getProfile(+id);
-    return user;
+    return this.usersService.getProfile(+id);
   }
 
   /* @Patch(':id')
