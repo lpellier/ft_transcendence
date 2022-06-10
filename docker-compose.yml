@@ -1,8 +1,8 @@
 services:
 
-  database:
+  postgres:
     image: postgres:alpine
-    container_name: database
+    container_name: postgres
     restart: always
     environment:
       - POSTGRES_PASSWORD=secret
