@@ -6,7 +6,8 @@ import Stack from '@mui/material/Stack'
 import ChooseAuth from './ChooseAuth'
 import VpnKeyIcon from '@mui/icons-material/VpnKey'
 
-import {ModalStyle} from '../../../styles/tsxStyles/AppBar/Avatar'
+import {ModalStyle} from '../../../styles/tsxStyles/AppBar/AuthStyle'
+import {ButtonModalStyle, IconStyle} from '../../../styles/tsxStyles/AppBar/PongMenu'
 
 export default function ChooseAuthModal() {
     const [open, setOpen] = React.useState(false);
@@ -24,15 +25,15 @@ export default function ChooseAuthModal() {
       <Button
             onClick={handleOpen}
             variant="contained"
-            startIcon={<VpnKeyIcon />}
-            color="secondary">
+            color="secondary"
+            style={ButtonModalStyle}
+            >
+          <VpnKeyIcon sx={IconStyle}/>
           Choose Authentication
         </Button>
     <Modal
           open={open}
           onClose={handleClose}
-          aria-labelledby="parent-modal-title"
-          aria-describedby="parent-modal-description"
         >
           <Box sx={ModalStyle}>
               <ChooseAuth/> 

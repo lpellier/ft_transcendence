@@ -7,8 +7,9 @@ import Modal from '@mui/material/Modal';
 
 import CustomAvatar from './CustomAvatar';
 import { CustomAvatarStyle } from '../../../styles/tsxStyles/AppBar/Avatar';
+import {User} from 'interfaces'
 
-export default function ChooseAvatarButton() {
+export default function ChooseAvatarButton(props: {user: User}) {
   const [open, setOpen] = React.useState(false);
 
   const handleOpen = () => {

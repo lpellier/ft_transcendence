@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import Banner from './Banner';
+// import Banner from './Banner';
 import io  from "socket.io-client";
 import Stack from '@mui/material/Stack'
 import Messages from './Messages';

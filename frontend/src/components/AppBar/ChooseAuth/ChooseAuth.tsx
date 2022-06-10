@@ -1,22 +1,16 @@
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography'
-
-import {TFASwitch} from './AuthSwitch'
-import {GoogleAuth} from './AuthSwitch'
-import SMSInput from './SMSInput'
-
+import { TFAButton } from './AuthButton'
 import { ButtonStackStyle, Title } from '../../../styles/tsxStyles/AppBar/AuthStyle'
 
 export default function ChooseAuth() {
         return (
-                <Stack spacing={2}>
+                <Stack spacing={5}>
                     <Typography sx={Title}>
-                        Authentication
+                        Change Authentication
                     </Typography>
-                    <Stack spacing={1} sx={ButtonStackStyle}>
-                        <TFASwitch />
-                        <GoogleAuth />
-                        <SMSInput/>
+                    <Stack spacing={4} sx={ButtonStackStyle}>
+                        <TFAButton />
                     </Stack>
                 </Stack>
         );
