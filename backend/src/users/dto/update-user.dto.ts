@@ -1,5 +1,4 @@
-import { Transform, Type } from "class-transformer";
-import { IsBoolean, IsBooleanString, IsOptional, Matches } from "class-validator";
+import { IsBoolean, IsOptional, Matches } from "class-validator";
 
 export class UpdateUserDto {
 	@IsOptional()
@@ -7,6 +6,6 @@ export class UpdateUserDto {
 	username: string;
 	
 	@IsOptional()
-	@Transform( ({ value }) => value === true)
+	@IsBoolean()
 	tfa: boolean;
 }

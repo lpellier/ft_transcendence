@@ -9,8 +9,7 @@ async function bootstrap() {
 	app.use(cookieParser());
 	app.useGlobalPipes(new ValidationPipe({
 		whitelist: true,
-		forbidNonWhitelisted: true,
-		transform: true
+		forbidNonWhitelisted: true
 	}));
 	app.enableCors({
 		origin: (new ConfigService).get("FRONT_URL")

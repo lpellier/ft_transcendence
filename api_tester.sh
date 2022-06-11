@@ -1,5 +1,7 @@
 #!/bin/bash
 
+BACKEND_URL="http://127.0.0.1:3001"
+
 if [  `grep user.id cookie.txt > /dev/null; echo $?` != 0 ]
 then
 	echo "Authenticate to 42:"
@@ -22,6 +24,9 @@ else
 	echo "Already authenticated to 42."
 fi
 
+auth_otp="Authorization: Bearer `grep jwt-otp cookie.txt | cut -d "	" -f 7`"
+auth_jwt="Authorization: Bearer `grep jwt[^-] cookie.txt | cut -d "	" -f 7`"
+
 while [ 1 ]
 do
 	cat << EOF
@@ -37,22 +42,25 @@ What do you want to do?
 EOF
 	read
 	case $REPLY in
-		1)		curl -sL -b cookie.txt -c cookie.txt http://127.0.0.1:3001/auth
+		1)		curl -sL -b cookie.txt -c cookie.txt $BACKEND_URL/auth
+				auth_otp="Authorization: Bearer `grep jwt-otp cookie.txt | cut -d "	" -f 7`"
+				auth_jwt="Authorization: Bearer `grep jwt[^-] cookie.txt | cut -d "	" -f 7`"
 				;;
 		2)		read -p "Key in one-time password:" otp
-				curl -H "Authorization: Bearer `grep jwt- cookie.txt | cut -d "	" -f 7`" -c cookie.txt -b cookie.txt -d "value=$otp" "http://127.0.0.1:3001/auth/google-authenticator" 
+				curl -H $auth_otp -c cookie.txt -b cookie.txt -d "value=$otp" "$BACKEND_URL/auth/google-authenticator" 
+				auth_jwt="Authorization: Bearer `grep jwt[^-] cookie.txt | cut -d "	" -f 7`"
 				;;
-		3)		curl -H "Authorization: Bearer `grep 'jwt[^-]' cookie.txt | cut -d "	" -f 7`" "http://127.0.0.1:3001/users/me"
+		3)		curl -H "$auth_jwt" "$BACKEND_URL/users/me"
 				;;
-		4)		curl -X PATCH -H "Authorization: Bearer `grep 'jwt[^-]' cookie.txt | cut -d "	" -f 7`" -d "tfa=true" "http://127.0.0.1:3001/users/me"
+		4)		curl -X PATCH -H "Content-Type: application/json" -H "$auth_jwt" -d '{"tfa": true}' "$BACKEND_URL/users/me"
 				;;
-		5)		curl -X PATCH -H "Authorization: Bearer `grep 'jwt[^-]' cookie.txt | cut -d "	" -f 7`" -d "tfa=false" "http://127.0.0.1:3001/users/me"
+		5)		curl -X PATCH -H "Content-Type: application/json" -H "$auth_jwt" -d '{"tfa": false}' "$BACKEND_URL/users/me"
 				;;
 		6)		read -p "Key in new username: " newUserName
-				curl -X PATCH -H "Authorization: Bearer `grep 'jwt[^-]' cookie.txt | cut -d "	" -f 7`" -d "username=$newUserName" "http://127.0.0.1:3001/users/me"
+				curl -X PATCH -H "$auth_jwt" -d "username=$newUserName" "$BACKEND_URL/users/me"
 				;;
 		7)		read -p "Key in route to test:" route
-				curl -H "Authorization: Bearer `grep 'jwt[^-]' cookie.txt | cut -d "	" -f 7`" "http://127.0.0.1:3001/$route"
+				curl -H "$auth_jwt" "$BACKEND_URL/$route"
 				;;
 		9)		exit
 				;;
