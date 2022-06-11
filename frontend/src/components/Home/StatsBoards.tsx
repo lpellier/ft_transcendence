@@ -87,7 +87,7 @@ function MatchhistoryBox(){
 
 export default function StatsBoards() {
 	const [width, setWidth] = useState(window.innerWidth);
-	let [stats, setStats] = useState<User>({id: -1, avatar: "", username: "", winHistory: -1, lossHistory: -1});
+	let [stats, setStats] = useState<User>({avatar: "", id: -1, username: "", winHistory: -1, lossHistory: -1, tfa: false});
 	//let [stats, setStats] = useState<Stats>({wins: -1, losses: -1});
 	//let [leadboard, setLeadboard] = useState<LeaderBoard>({Rank: -1, PlayerName: '', PlayerLevel: -1});
 

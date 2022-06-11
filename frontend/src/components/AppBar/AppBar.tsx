@@ -93,7 +93,7 @@ function PlayerAvatarBar(props: {image: any}) {
 
 export default function SearchAppBar() {
 	const [width, setWidth] = useState(window.innerWidth);
-	let [user, setUser] = useState<User>({avatar: "", id: -1, username: "", winHistory: -1, lossHistory: -1});
+	const [user, setUser] = useState<User>({avatar: "", id: -1, username: "", winHistory: -1, lossHistory: -1, tfa: false});
 
 	useEffect(() => {
 		const handleResizeWindow = () => setWidth(window.innerWidth);

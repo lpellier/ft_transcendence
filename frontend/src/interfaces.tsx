@@ -5,6 +5,7 @@ interface User {
     username: string;
 	winHistory: number;
 	lossHistory: number;
+    tfa: boolean;
 }
 
 interface Room {
