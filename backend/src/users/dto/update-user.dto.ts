@@ -7,6 +7,6 @@ export class UpdateUserDto {
 	username: string;
 	
 	@IsOptional()
-	@Transform( ({ value }) => value === 'true')
+	@Transform( ({ value }) => value === true)
 	tfa: boolean;
 }
