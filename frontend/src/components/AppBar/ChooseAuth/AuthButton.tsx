@@ -3,6 +3,7 @@ import Button from '@mui/material/Button'
 import Box from '@mui/material/Box'
 import Stack from '@mui/material/Stack'
 import QRCode from 'react-qr-code'
+
 import axios from 'axios'
 import {token} from 'index'
 import {User} from 'interfaces'
@@ -21,15 +22,18 @@ function GenerateQRCode(props: {url: string}) {
 function TFAButton() {
 	const [input, showedInput] = useState(false);
 	const [url, setUrl] = useState("");
-	const [user, setUser] = useState<User>({avatar: "", id: -1, username: "", winHistory: -1, lossHistory: -1, tfa: false});
-	const [status, setStatus] = useState(false);
+	const [user, setUser] = useState<User>({avatar: "", id: -1, username: "", 
+			winHistory: -1, lossHistory: -1, tfa: false, otpsecret: ""});
 
 	useEffect(() => {
-		axios.get('http://127.0.0.1:3001/users/me',{
-		headers: {
-			'Authorization': token,
-		}
-		})
+
+		const res = axios.get(
+			'http://127.0.0.1:3001/users/me',
+			{
+				headers: { 
+					'Authorization': token, 
+				}
+			})
 		.then(res => {
 			console.log("Get request success")
 			const getData = res.data;
@@ -40,14 +44,12 @@ function TFAButton() {
 		});
 	}, [])
 
-	function putTfa() {
 
-		axios.put('http://127.0.0.1:3001/users/me', 
-			{
-				data: {
-					tfa: status,
-				},
-			},	
+	function patchTfa(props: {query: string}) {
+
+		axios.patch(
+			'http://127.0.0.1:3001/users/me', 
+			props.query,
 			{
 				headers: {
 					'Authorization': token,
@@ -58,31 +60,20 @@ function TFAButton() {
 			})
 	}
 
+	function getSecret() {
+		const otpUrl = "otpauth://totp/transcendance_BoopBipBoop?secret=" + user.otpsecret;
+
+		setUrl(otpUrl)
+	}
+
 	function showFlashcode() {
-		//const otpUrl = "otpauth://totp/transcendance?secret=" +  ;
-		// const res = axios.get('http://127.0.0.1:3001/auth',{
-		// headers: {
-			// 'Authorization': token,
-		// }
-		// })
-		// .then(res => {
-			// console.log("Get otp secret success")
-			// const getData = res.data;
-			// console.log("get secret result : ", res.data)
-			// setSecret(getData);
-		// })
-		// .catch(function (err) {
-			// console.log("Get secret failed : ", err)
-		// });
+			getSecret()
 			showedInput(true)
-			setStatus(true)
-			putTfa()
-			setUrl("http://127.0.0.1:3000/settings")
+			patchTfa({query:"tfa=true"})
 		}
 
 		function deactivateTfa() {
-			setStatus(true)
-			putTfa()
+			patchTfa({query:"tfa=false"})
 		}
 
 	if (user.tfa == false) {
@@ -94,9 +85,7 @@ function TFAButton() {
 					color="secondary">
 					Activate Two Factor Authentication
 				</Button>
-				{input 
-					&& < GenerateQRCode url={url} /> 
-					}
+				{input && < GenerateQRCode url={url} /> }
 			</Stack>
     	);}
 		return (
