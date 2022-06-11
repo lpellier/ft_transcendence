@@ -1,8 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable } from '@nestjs/common';
 import { PrismaClient, User } from '@prisma/client';
 import { authenticator } from 'otplib';
-// import { CreateUserDto } from './dto/create-user.dto';
-// import { UpdateUserDto } from './dto/update-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { ProfileWithSettings } from './interfaces/profile-with-settings.interface';
+import { Profile } from './interfaces/profile.interface';
 
 @Injectable()
 export class UsersService {
@@ -17,8 +18,8 @@ export class UsersService {
 		return user
   }
 
-  async findOne(id: number) {
-    return await this.prisma.user.findUnique({
+  async findOne(id: number): Promise<User> {
+    return this.prisma.user.findUnique({
       where: {id: id}
     });
   }
@@ -47,41 +48,83 @@ export class UsersService {
     return user;
 	}
   
-  async findAll() {
-    return await this.prisma.user.findMany();
+  async findAll() : Promise<User[]> {
+    return this.prisma.user.findMany();
   }
 
-  async updateOne(id: number, data : any) {
-    return await this.prisma.user.update({
+  async getProfileWithSettings(id: number): Promise<ProfileWithSettings> {
+    const {otpSecret, ...profile} = await this.prisma.user.findUnique({
       where: {
-        id: id,
+        id: id
       },
-      data: data,
-      // data: {
-      //   username: newusername,
-      // }
+      include: {
+        stats: true
+      }
     });
+    return profile;
   }
 
-  async enableTwoFactorAuthentication(id: number) {
-    const secret = authenticator.generateSecret();
+  async getProfile(id: number): Promise<Profile> {
+    const {tfa, otpSecret, ...profile} = await this.prisma.user.findUnique({
+      where: {
+        id: id
+      },
+      include: {
+        stats: true
+      }
+    });
+    return profile;
+  }
+
+  async updateUser(id: number, data: UpdateUserDto): Promise<string> {
+    if (Object.keys(data).length != 1) {
+      throw new BadRequestException();
+    }
+    if (data.hasOwnProperty('username')) {
+      return this.tryToChangeUsername(id, data.username);
+    }
+    if (data.hasOwnProperty('tfa')) {
+      return this.tryToChangeAuthentication(id, data.tfa);
+    }
+  }
+
+  async tryToChangeUsername(id: number, newUsername: string) {
+    const isTaken = await this.prisma.user.findUnique({
+      where: { username: newUsername }
+    })
+    if (isTaken) {
+      throw new ConflictException();
+    }
+    const user = await this.prisma.user.update({
+      where: {
+        id: id
+      },
+      data: {
+        username: newUsername
+      }
+    })
+    return user.username;
+  }
+
+  async tryToChangeAuthentication(id: number, tfa: boolean) {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id: id
+      }
+    })
+    if (user.tfa === tfa) {
+      throw new ConflictException();
+    }
+    const secret = (tfa === true) ? authenticator.generateSecret() : "";
     await this.prisma.user.update({
       where: {
         id: id
       },
       data: {
-        tfa: true,
-        tfaSecret: secret
+        tfa: tfa,
+        otpSecret: secret
       }
     });
     return secret;
   }
-
-  // update(id: number, updateUserDto: UpdateUserDto) {
-  //   return `This action updates a #${id} user`;
-  // }
-
-  // remove(id: number) {
-  //   return `This action removes a #${id} user`;
-  // }
 }

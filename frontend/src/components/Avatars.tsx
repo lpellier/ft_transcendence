@@ -1,4 +1,6 @@
-import { useState } from 'react'
+import axios from 'axios'
+import {token} from 'index'
+
 import Avatar from '@mui/material/Avatar'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
@@ -32,8 +34,7 @@ const BigAvatar = {border: 2, width: 150, height: 150}
 const SmallAvatar = {border: 2, width: 50, height: 50}
 
 function PlayerAvatar(props: {image: string}) {
-    const image = props.image;
-
+    
     return(
         <IconButton>
             <Tooltip title="Home" placement="bottom">
@@ -43,14 +44,26 @@ function PlayerAvatar(props: {image: string}) {
     );
 }
 
-function CreateAvatar(props: {img: any, style: any}) {
+function CreateAvatar(props: {img: string, style: any}) {
     
-    const [image, setimage] = useState("");
-
     const handleClick = () => {
-        
 
-    } 
+        axios.put('http://127.0.0.1:3001/users/me',
+        {
+            data: {
+                avatar: props.img,
+            },
+        },
+        {
+            headers: {
+                'Authorization': token,
+                'Content-Type': 'application/json'
+            }
+        })
+        .catch(function (err) {
+            console.log("Put request failed : ", err)
+        });
+    }
     
     return (
         <IconButton onClick={handleClick}>

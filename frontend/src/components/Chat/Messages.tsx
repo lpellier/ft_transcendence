@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react';
 import {socket} from './Chat';
-import axios from 'axios';
-import {token} from 'index';
+// import axios from 'axios';
+// import {token} from 'index';
 // import io  from "socket.io-client";
 
 
