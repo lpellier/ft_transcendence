@@ -5,7 +5,7 @@ import { ThemeProvider } from '@mui/styles';
 import WebhookIcon from '@mui/icons-material/Webhook';
 
 import {orangeTheme} from 'components/Themes'
-import {Title, ButtonStyle, LinkStyle, IconStyle} from "../../styles/tsxStyles/LogIn"
+import {Title, ButtonStyle, LinkStyle, IconStyle} from "../styles/tsxStyles/LogIn"
 
 import axios from "axios";
 
@@ -32,10 +32,9 @@ function LogInButton(props: {login: any})
 export default function LogIn() {
 	
 	 function getRequest() {
-		const newWin = window.open(AuthAPI, 'newwindow', 'width=400, height=400');
 		axios.get('http://127.0.0.1:3001',
 		{'headers': {
-			// 'Origin':'http://127.0.0.1:3000',
+			'Origin':'http://127.0.0.1:3000',
 			'Access-Control-Allow-Origin': 'http://127.0.0.1:3000',
 		}
 	})
@@ -57,9 +56,9 @@ export default function LogIn() {
 					Pong
 				</div>
 				<nav>
-					{/* <a href={AuthAPI} style={LinkStyle}> */}
+					<a href={AuthAPI} style={LinkStyle}>
 					  	<LogInButton login={getRequest}/>
-					{/* </a> */}
+					</a>
 				</nav>
         	</Stack>
         );

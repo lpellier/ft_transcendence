@@ -6,8 +6,6 @@ import axios from 'axios';
 import {token} from 'index';
 import {User} from 'interfaces';
 
-
-
 import {PlayerAvatar} from	'../Avatars'
 
 import AppBar from '@mui/material/AppBar'
@@ -93,11 +91,10 @@ function PlayerAvatarBar(props: {image: any}) {
 	);
 }
 
-export default function SearchAppBar(props: {image: string}) {
+export default function SearchAppBar() {
 	const [width, setWidth] = useState(window.innerWidth);
-	const img = useState(props.image);
-	let [user, setUser] = useState<User>({avatar: "", id: -1, username: ""});
-
+	const [user, setUser] = useState<User>({avatar: "", id: -1, username: "", 
+			winHistory: -1, lossHistory: -1, tfa: false, otpsecret: ""});
 
 	useEffect(() => {
 		const handleResizeWindow = () => setWidth(window.innerWidth);
@@ -116,7 +113,6 @@ export default function SearchAppBar(props: {image: string}) {
 		.then(res => {
 			console.log("Get request success")
 			const test_data = res.data;
-			// socket.emit('new user', test_data.username);
 			setUser(test_data);
 		})
 		.catch(function (err) {

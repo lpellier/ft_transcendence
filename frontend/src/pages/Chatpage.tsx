@@ -39,7 +39,7 @@ export default function Chatpage() {
                 pauseOnHover
             />
             <Stack spacing={6} style={ChatPageStyle}>
-                <SearchAppBar image={''}/>
+                <SearchAppBar />
                 <Box sx={ChatBoxStyle}>
 					<Chat />
 				</Box>
