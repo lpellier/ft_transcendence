@@ -38,6 +38,7 @@ What do you want to do?
 5. Disable TFA
 6. Change username
 7. Test a custom route with GET
+8. Logout
 9. Exit
 EOF
 	read
@@ -61,7 +62,11 @@ EOF
 				;;
 		7)		read -p "Key in route to test:" route
 				curl -H "$auth_jwt" "$BACKEND_URL/$route"
+				;;	
+		8)		curl -H "$auth_jwt" -b cookie.txt -c cookie.txt "$BACKEND_URL/auth/logout"
+				auth_jwt="Authorization: Bearer `grep jwt[^-] cookie.txt | cut -d "	" -f 7`"
 				;;
+
 		9)		exit
 				;;
 	esac

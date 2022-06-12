@@ -4,6 +4,7 @@ import { Response } from 'express';
 import { OAuth2AuthGuard } from './guards/oauth2-auth.guard';
 import { JwtOtpAuthGuard } from './guards/jwt-otp-auth.guard';
 import { ValidateOtpDto } from './dto/validate-otp.dto';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -28,5 +29,11 @@ export class AuthController {
 			res.cookie(authentication.type, authentication.token);
 			return authentication;
 		}
+	}
+
+	@UseGuards(JwtAuthGuard)
+	@Get('logout')
+	async logout(@Req() req, @Res({passthrough: true}) res: Response) {
+		res.cookie('jwt', "");
 	}
 }
