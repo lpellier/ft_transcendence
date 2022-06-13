@@ -12,7 +12,8 @@ async function bootstrap() {
 		forbidNonWhitelisted: true
 	}));
 	app.enableCors({
-		origin: (new ConfigService).get("FRONT_URL")
+		origin: (new ConfigService).get("FRONT_URL"),
+		credentials: true
 	});
 	await app.listen(3001);
 }

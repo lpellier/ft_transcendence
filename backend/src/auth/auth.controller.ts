@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Redirect, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Response } from 'express';
 import { OAuth2AuthGuard } from './guards/oauth2-auth.guard';
@@ -13,11 +13,11 @@ export class AuthController {
 
 	@UseGuards(OAuth2AuthGuard)
 	@Get()
+	@Redirect('http://127.0.0.1:3000/home')
 	async login(@Req() req, @Res({passthrough: true}) res: Response) {
 		const isAuthenticated = !req.user.tfa;
 		const authentication = await this.authService.login(req.user.id, isAuthenticated);
 		res.cookie(authentication.type, authentication.token);
-		return authentication;
 	}
 
 	@UseGuards(JwtOtpAuthGuard)
