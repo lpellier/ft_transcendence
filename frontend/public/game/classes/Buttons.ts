@@ -31,7 +31,7 @@ class Buttons {
 		this.anyone_can_join = createCustomButton("Anyone can join", clickAnyone, highlightButton, resetButton, consts.medium_width, consts.medium_height);
 		this.anyone_can_join.style("background-color", "rgba(0, 0, 0, 0)");
 		this.anyone_can_join.style("font-size", consts.medium_font_size.toString() + "px");
-		this.anyone_can_join.style("outline", "5px solid");
+		this.anyone_can_join.style("outline", "3px solid");
 		this.anyone_can_join.style("border", "none");
 		this.invitation_only = createCustomButton("Invitation only", clickInvitation, highlightButton, resetButton, consts.medium_width, consts.medium_height);
 		this.invitation_only.style("background-color", "rgba(0, 0, 0, 0)");
@@ -157,7 +157,7 @@ class Buttons {
 	}
 
 	clickAnyone() {
-		this.anyone_can_join.style("outline", "5px solid");
+		this.anyone_can_join.style("outline", "3px solid");
 		this.local.style("outline", "none");
 		this.invitation_only.style("outline", "none");
 		
@@ -170,7 +170,7 @@ class Buttons {
 
 	clickLocal() {
 		this.anyone_can_join.style("outline", "none");
-		this.local.style("outline", "5px solid");
+		this.local.style("outline", "3px solid");
 		this.invitation_only.style("outline", "none");
 
 		this.ai.show();
@@ -181,7 +181,7 @@ class Buttons {
 	clickInvitation() {
 		this.anyone_can_join.style("outline", "none");
 		this.local.style("outline", "none");
-		this.invitation_only.style("outline", "5px solid");
+		this.invitation_only.style("outline", "3px solid");
 
 		this.ai.hide();
 		this.ai.style("outline", "none");

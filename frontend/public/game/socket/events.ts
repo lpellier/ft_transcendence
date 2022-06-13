@@ -107,7 +107,7 @@ function resizeEverything() {
 	if (game.pong)
 		game.pong.resize();
 	if (game.map)
-		game.map.resize();
+		game.map.resize(consts.WIDTH, consts.HEIGHT);
 	buttons.resize();
 	keys.resize();
 	inputs.resize();

@@ -8,7 +8,7 @@ class Pong {
 	constructor() {
 		this.pos = [consts.WIDTH / 2 - consts.PONG_DIAMETER / 2, consts.HEIGHT / 2 - consts.PONG_DIAMETER / 2];
 		this.diameter = consts.PONG_DIAMETER;
-		this.color = consts.PONG_COLOR;
+		this.color = game.map.object_color;
 
 		let side = Math.random() < 0.5 ? "left" : "right";
 		this.relaunchPong(side);

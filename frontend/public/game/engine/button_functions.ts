@@ -91,7 +91,7 @@ function clickAi() {
 		}
 		else {
 			// @ts-ignore : next-line
-			this.style("outline", "5px solid");
+			this.style("outline", "3px solid");
 		}
 		game.ai = !game.ai;
 	}

@@ -34,13 +34,25 @@ class Consts {
 	medium_square_diameter : number;
 	small_square_diameter : number;
 	
+	original_map : GameMap;
+	city_map : GameMap;
+	casino_map : GameMap;
+
 	FONT : any;
 	RETURN_ICON : any;
 	CROSS_ICON : any;
 	CROSS_ICON2 : any;
 	MARK_ICON : any;
+	CITY_BACKGROUND : any;
+	TOKYO_BACKGROUND : any;
 	
 	constructor() {
+		this.WIDTH = 1200;
+		this.HEIGHT = 750;
+
+		this.original_map = new GameMap(1, this.WIDTH, this.HEIGHT);
+		this.city_map = new GameMap(2, this.WIDTH, this.HEIGHT);
+		this.casino_map = new GameMap(3, this.WIDTH, this.HEIGHT);
 		this.resize();
 		
 		this.FONT = loadFont("/assets/fonts/PressStart2P-Regular.ttf");
@@ -57,6 +69,9 @@ class Consts {
 		
 		this.MARK_ICON = createImg("/assets/icons/green-mark.png", "mark-icon");
 		this.MARK_ICON.size(this.small_square_diameter * 1.7, this.small_square_diameter * 1.5);
+	
+		this.CITY_BACKGROUND = loadImage("/assets/backgrounds/city.jpg");
+		this.TOKYO_BACKGROUND = loadImage("/assets/backgrounds/tokyo.png");
 	}
 
 	setWindowSize() {
@@ -99,6 +114,10 @@ class Consts {
 		
 		this.medium_square_diameter = this.DIAGONAL / 14;
 		this.small_square_diameter = this.DIAGONAL / 28;
+
+		this.original_map.resize(this.WIDTH , this.HEIGHT);
+		this.city_map.resize(this.WIDTH , this.HEIGHT);
+		this.casino_map.resize(this.WIDTH , this.HEIGHT);
 
 		if (this.RETURN_ICON)
 			this.RETURN_ICON.size(this.medium_square_diameter, this.medium_square_diameter);

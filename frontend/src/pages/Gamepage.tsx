@@ -70,6 +70,7 @@ class Game extends React.Component {
 				<div id="button-ai"/>
 				<div id="button-validate"/>
 				<div id="button-return"/>
+				<div id="background-city"/>
 				<div id="icon-return"/>
 				<div id="icon-player_one"/>
 				<div id="icon-player_two"/>
