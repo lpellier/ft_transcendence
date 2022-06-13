@@ -20,8 +20,7 @@ export const socket = io(SERVER, {
 function Chat() {
 	
 	let [status, setStatus] = useState('waiting for connection');
-	let [user, setUser] = useState<User>({avatar: "", id: -1, username: "", 
-		winHistory: -1, lossHistory: -1, tfa: false, otpsecret: ""});
+	let [user, setUser] = useState<User>();
 	let [current_room, setCurrentRoom] = useState<Room> ({id: 1, name: "general"});
 	let [users, setUsers] = useState<User[]>([]);
 
