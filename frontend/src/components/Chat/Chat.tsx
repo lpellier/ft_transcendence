@@ -7,8 +7,8 @@ import Channels from './Channels';
 
 import '../../styles/Chat/Chat.css';
 
-import {token} from 'index'
-import {User, Room} from 'interfaces'
+import {token} from 'index';
+import {User, Room} from 'interfaces';
 
 const SERVER = "http://127.0.0.1:3001";
 export const socket = io(SERVER, {

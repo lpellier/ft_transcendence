@@ -5,7 +5,7 @@ import { ThemeProvider } from '@mui/styles';
 import WebhookIcon from '@mui/icons-material/Webhook';
 
 import {orangeTheme} from 'components/Themes'
-import {Title, ButtonStyle, LinkStyle, IconStyle} from "../../styles/tsxStyles/LogIn"
+import {Title, ButtonStyle, LinkStyle, IconStyle} from "../styles/tsxStyles/LogIn"
 
 import axios from "axios";
 

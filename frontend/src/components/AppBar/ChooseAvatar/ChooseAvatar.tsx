@@ -3,12 +3,14 @@ import Container from '@mui/material/Container';
 import ChooseAvatarButton from './ChooseAvatarButton'
 import DotsMobileStepper from './Stepper'
 
-export default function AvatarList(){
+import {User} from 'interfaces'
+
+export default function AvatarList(props: {user: User}){
         return (
                 <Container>
                   <Stack spacing={2} style={{justifyContent: 'center'}}>
-                    <DotsMobileStepper />
-                	  <ChooseAvatarButton />
+                        <DotsMobileStepper />
+                        <ChooseAvatarButton user={props.user}/>
                   </Stack>
                 </Container>
         );

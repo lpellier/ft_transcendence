@@ -40,12 +40,12 @@ function toastIt(message: string) {
 	});
 }
 
-function RoomUserMod(props : {currentUser: User, users: User[], room: Room, roomAdmins:User[]}) {
+function RoomUserMod(props : {currentUser: User, users: User[], room: Room, roomAdmins:User[], setRoomAdmins: React.Dispatch<React.SetStateAction<User[]>>}) {
 
 	let [roomUsers, setRoomUsers] = useState<User[]>([]);
 	let [addUserClicked, setAddUserClicked] = useState<number>(0);
     let [kickUserClicked, setKickUserClicked] = useState<number>(0);
-	let [addAdminClicked, setAddAdminClicked] = useState<boolean>(false);
+	let [addAdminClicked, setAddAdminClicked] = useState<number>(0);
 
 	function handleAddUserClick(room: Room) {
 		socket.emit('get users', room.id);
@@ -104,10 +104,17 @@ function RoomUserMod(props : {currentUser: User, users: User[], room: Room, room
 		setKickUserClicked(1);
     }
 
+	useEffect (() => {
+		socket.on('get admins', (data: User[]) => {
+			console.log("data = ", data);
+			props.setRoomAdmins(data);
+		})
+	}, [])
+
 	function handleAddAdminClick(room: Room) {
 		socket.emit('get admins', room.id);
 		socket.emit('get users', room.id);
-		setAddAdminClicked(true);
+		setAddAdminClicked(1);
 	}
 
 	function handleAddAdminSubmit(e: any) {
@@ -124,7 +131,7 @@ function RoomUserMod(props : {currentUser: User, users: User[], room: Room, room
 					let userId: any = props.users.find(user => user.username === username)?.id;
 					const removeUser: RoomUserDto = {userId: userId, roomId: props.room.id};
 					socket.emit('add admin to room', removeUser);
-					setAddAdminClicked(false);
+					setAddAdminClicked(0);
 					toastIt(username + ' given admin privileges ' + props.room.name);
 				}
 			}
@@ -231,7 +238,7 @@ function RoomUserMod(props : {currentUser: User, users: User[], room: Room, room
                         <form onSubmit={handleAddAdminSubmit}>
                             <input type="text" placeholder="username" className="form"/>
                         </form>
-                        <button title="cancel" onClick={() => setAddAdminClicked(false)}>❌</button>
+                        <button title="cancel" onClick={() => setAddAdminClicked(0)}>❌</button>
                     </Stack>
                     <AddAdminList currentUser={props.currentUser} users={props.users} room={props.room} roomUsers={roomUsers} roomAdmins={props.roomAdmins}/>
                 </Stack>
@@ -262,7 +269,7 @@ export default function RoomUserPopper(props : {currentUser: User, users: User[]
 			</button>
 			<Popper id={id} open={open} anchorEl={anchorEl}>
 				<Box sx={{ border: 1, p: 1, bgcolor: 'background.paper' }}>
-					<RoomUserMod currentUser={props.user} users={props.users} room={props.room} roomAdmins={props.roomAdmins}/>
+					<RoomUserMod currentUser={props.user} users={props.users} room={props.room} roomAdmins={props.roomAdmins} setRoomAdmins={setRoomAdmins}/>
 				</Box>
 			</Popper>
 			</div>

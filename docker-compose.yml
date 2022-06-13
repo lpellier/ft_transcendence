@@ -1,32 +1,33 @@
-version: '3.8'
-
 services:
 
   postgres:
-    image: postgres:14.2
+    image: postgres:alpine
+    container_name: postgres
     restart: always
     environment:
       - POSTGRES_PASSWORD=secret
 
   backend:
     depends_on:
-      - postgres
-    image: node:lts
+      - database
+    image: node:lts-alpine
+    container_name: backend
     volumes:
       - ./backend:/backend
     working_dir: /backend
     ports:
       - 3001:3001
       - 5555:5555
-    stdin_open: true
     restart: always
     command:  sh -c "npm install
-              && npx prisma migrate dev
+              && npx prisma db push
+              && npx prisma generate
               && npx prisma db seed
               && npm run start:dev"
 
   frontend:
-    image: node:lts
+    image: node:lts-alpine
+    container_name: frontend
     volumes:
       - ./frontend:/frontend
     working_dir: /frontend
@@ -34,4 +35,3 @@ services:
       - 3000:3000
     command:  sh -c "npm install
               && npm start"
-
