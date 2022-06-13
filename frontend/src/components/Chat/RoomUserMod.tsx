@@ -6,7 +6,7 @@ import Popper from '@mui/material/Popper';
 
 import {toast} from 'react-toastify';
 
-import {useState, useEffect} from 'react'
+import {useState, useEffect, useRef} from 'react'
 import {Room, User} from 'interfaces'
 import {socket} from './Chat'
 
@@ -40,12 +40,14 @@ function toastIt(message: string) {
 	});
 }
 
-function RoomUserMod(props : {currentUser: User, users: User[], room: Room, roomAdmins:User[], setRoomAdmins: React.Dispatch<React.SetStateAction<User[]>>}) {
+function RoomUserMod(props : {currentUser: User, users: User[], room: Room, roomAdmins: User[]}) {
 
 	let [roomUsers, setRoomUsers] = useState<User[]>([]);
 	let [addUserClicked, setAddUserClicked] = useState<number>(0);
     let [kickUserClicked, setKickUserClicked] = useState<number>(0);
 	let [addAdminClicked, setAddAdminClicked] = useState<number>(0);
+	let [roomAdmins, setRoomAdmins] = useState<User[]>([]);
+
 
 	function handleAddUserClick(room: Room) {
 		socket.emit('get users', room.id);
@@ -53,9 +55,11 @@ function RoomUserMod(props : {currentUser: User, users: User[], room: Room, room
 	}
 
     useEffect (() => {
-        socket.on('get users', (data: User[]) => {
-            setRoomUsers(data);
-        })
+		const handler = (data: User[]) => { setRoomUsers(data);};
+		socket.on('get users', handler);
+		return () => {
+			socket.off('get users', handler);
+		}
     }, [])
 
 
@@ -104,15 +108,8 @@ function RoomUserMod(props : {currentUser: User, users: User[], room: Room, room
 		setKickUserClicked(1);
     }
 
-	useEffect (() => {
-		socket.on('get admins', (data: User[]) => {
-			console.log("data = ", data);
-			props.setRoomAdmins(data);
-		})
-	}, [])
 
 	function handleAddAdminClick(room: Room) {
-		socket.emit('get admins', room.id);
 		socket.emit('get users', room.id);
 		setAddAdminClicked(1);
 	}
@@ -249,43 +246,50 @@ function RoomUserMod(props : {currentUser: User, users: User[], room: Room, room
 	)
 }
 
+function SimplePopper(props : {user: User, users: User[], room: Room, roomAdmins: User[]}) {
+	const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+	
+	const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+		setAnchorEl(anchorEl ? null : event.currentTarget);
+	};
+	
+	const open = Boolean(anchorEl);
+	const id = open ? 'simple-popper' : undefined;
+	
+	return (
+		<div>
+		<button aria-describedby={id} type="button" onClick={handleClick}>
+			<SettingsIcon/>
+		</button>
+		<Popper id={id} open={open} anchorEl={anchorEl}>
+			<Box sx={{ border: 1, p: 1, bgcolor: 'background.paper' }}>
+				<RoomUserMod currentUser={props.user} users={props.users} room={props.room} roomAdmins={props.roomAdmins}/>
+			</Box>
+		</Popper>
+		</div>
+	);
+}
+
 export default function RoomUserPopper(props : {currentUser: User, users: User[], room: Room}) {
 	let [roomAdmins, setRoomAdmins] = useState<User[]>([]);
-
-	function SimplePopper(props : {user: User, users: User[], room: Room, roomAdmins: User[]}) {
-		const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-		
-		const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-			setAnchorEl(anchorEl ? null : event.currentTarget);
-		};
-		
-		const open = Boolean(anchorEl);
-		const id = open ? 'simple-popper' : undefined;
-		
-		return (
-			<div>
-			<button aria-describedby={id} type="button" onClick={handleClick}>
-				<SettingsIcon/>
-			</button>
-			<Popper id={id} open={open} anchorEl={anchorEl}>
-				<Box sx={{ border: 1, p: 1, bgcolor: 'background.paper' }}>
-					<RoomUserMod currentUser={props.user} users={props.users} room={props.room} roomAdmins={props.roomAdmins} setRoomAdmins={setRoomAdmins}/>
-				</Box>
-			</Popper>
-			</div>
-		);
-	}
-
-	  
+	let [canAdmin, setCanAdmin] = useState<boolean>(false);
+	
 	useEffect (() => {
-		socket.on('get admins', (data: User[]) => {
-			setRoomAdmins(data);
-		})
+		const handler = (data: User[]) => { setRoomAdmins(data);};
+		socket.on('get admins', handler);
+		return () => {
+			socket.off('get admins', handler);
+		}
 	}, [])
+
+	useEffect(() => {
+		if(roomAdmins?.find(user => user.id === props.currentUser?.id))
+			setCanAdmin(true);
+	}, [roomAdmins])
 
 	  return (
 		<div>
-			{roomAdmins.find(user => user.id === props.currentUser?.id)?
+			{canAdmin?
 				<SimplePopper user={props.currentUser} users={props.users} room={props.room} roomAdmins={roomAdmins}/>
 			:
 				<div/>

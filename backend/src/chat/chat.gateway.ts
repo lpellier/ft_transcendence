@@ -77,7 +77,6 @@ export class ChatGateway {
 	@SubscribeMessage('get admins')
 	async handleGetAdmins(@ConnectedSocket () client : Socket, @MessageBody() id: number) {
 		let admins = await this.chatService.getAdminsInRoom(id);
-		console.log("admins = ", admins);
 		client.emit('get admins', admins);
 	}
 
@@ -89,6 +88,7 @@ export class ChatGateway {
 
 	@SubscribeMessage('new user')
 	handleNewUser(@MessageBody() id: number) {
-		this.server.emit('new user');
+		const allUsers =  this.chatService.getAllUsers();
+		this.server.emit('new user', allUsers);
 	}
 }

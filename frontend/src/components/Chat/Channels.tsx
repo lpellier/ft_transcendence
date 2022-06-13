@@ -5,7 +5,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import Divider from '@mui/material/Divider';
 
-import {useState, useEffect, useRef} from 'react'
+import {useState, useEffect} from 'react'
 import {Room, User} from 'interfaces'
 import {socket} from './Chat'
 import RoomUserPopper from './RoomUserMod'
@@ -38,7 +38,7 @@ function Channels(props : {user: User, users: User[], currentRoom: Room, setCurr
 
 	function handleRoomClick(room: Room) {
 		props.setCurrentRoom(room)
-		socket.emit('get users', room.id);
+		// socket.emit('get users', room.id);
 		socket.emit('get admins', room.id);
 		if (rooms.find(item => item.id === room.id))
 			props.setCanWrite(true);
@@ -47,28 +47,37 @@ function Channels(props : {user: User, users: User[], currentRoom: Room, setCurr
 	}
 
 	useEffect(() => {
-		socket.on('create room', () => {
+		const handler = () => {
 			socket.emit('get rooms', props.user.id)
 			socket.emit('get public rooms');
+		};
+		socket.on('create room', handler);
+		return ( () => {
+			socket.off('create room', handler);
 		})
 	})
 
 	useEffect(() => {
-		socket.on('get rooms', (rooms_list: Room[]) => {
+		const handler = (rooms_list: Room[]) => {
 			setRooms(rooms_list);
 			rooms_list.forEach(room => {
 				socket.emit('join room', room.id.toString());
-			})
-		})
-	})
+			});
+		};
+		socket.on('get rooms', handler);
+		return (() => {socket.off('get rooms', handler);})
+	}, [])
+
 	useEffect(() => {
-		socket.on('get public rooms', (rooms_list: Room[]) => {
+		const handler = (rooms_list: Room[]) => {
 			setPublicRooms(rooms_list);
 			rooms_list.forEach(room => {
 				socket.emit('join room', room.id.toString());
-			})
-		})
-	})
+			});
+		};
+		socket.on('get public rooms', handler);
+		return(() => {socket.off('get public rooms', handler)})
+	}, [])
 
 
 	function RoomList(props: {rooms: Room[], currentRoom: Room, users: User[], user: User, visibility: string}) {

@@ -99,6 +99,10 @@ export class ChatService {
     return room.admins;
   }
 
+  getAllUsers() {
+    return (this.prisma.user);
+  }
+
   async getAllMessagesForUser(id: number) {
     const user = await this.prisma.user.findUnique({
       where: {id: id},

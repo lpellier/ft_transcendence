@@ -34,8 +34,8 @@ function Chat() {
 			})
 			.then(res => {
 				console.log("Get request success")
-				const test_data: User= res.data;
-				setUser(test_data);
+				const user_data: User= res.data;
+				setUser(user_data);
 			})
 			.catch(function (err) {
 				console.log("Get request failed : ", err)
@@ -72,20 +72,25 @@ function Chat() {
 	}, [user])
 
 	useEffect(() => {
-		socket.on('new user', () => {
-			axios.get('http://127.0.0.1:3001/users',{
-			headers: {
-				'Authorization': token,
-			}
-			})
-			.then(res => {
-				console.log("Get request success")
-				const test_data: User[] = res.data;
-				setUsers(test_data);
-			})
-			.catch(function (err) {
-				console.log("Get request failed : ", err)
-			});
+		const handler = (usersData: User[]) => {
+			// axios.get('http://127.0.0.1:3001/users',{
+			// headers: {
+			// 	'Authorization': token,
+			// }
+			// })
+			// .then(res => {
+			// 	console.log("Get request success")
+			// 	const test_data: User[] = res.data;
+			// 	setUsers(test_data);
+			// })
+			// .catch(function (err) {
+			// 	console.log("Get request failed : ", err)
+			// });
+			setUsers(usersData);
+		}
+		socket.on('new user', handler);
+		return (() => {
+			socket.off('new user', handler);
 		})
 	}, [])
 	
