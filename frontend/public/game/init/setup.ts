@@ -2,17 +2,12 @@
 // ? Coding consistency : snake_case for variables | camelCase for functions | PascalCase for classes
 // ? Map indexes : 1 (normal map)
 
+// TODO Collision isn't working in multiplayer
+
 // TODO local mode : pause by pressing escape -> removing sound or quitting to menu
 // TODO adding options and probably sounds
 
-// TODO in menu creation, button to go to map page and choose a map
-
 // TODO key animation not playing on safari
-
-// TODO add switch classic/themed mode 1977 / 2077
-// ? classic mode has no power-ups and is retro-themed
-// ? themed mode has power ups and should be coherent within a specific theme (to be defined)
-// ? CYBERPUNK themed so futuristic shit idk
 
 // TODO different map ideas, windjammer inspired
 // TODO keep basic map
@@ -20,7 +15,7 @@
 // TODO for example, each pong ball gives a random number of points
 // ? Casino
 // TODO another with walls in the middle, forcing the player to play around it
-// ? Arena
+// ? City
 
 // TODO power ups 
 // ? they will spawn one at a time for 2 seconds
@@ -81,7 +76,6 @@ function hideIcons() {
 	consts.MARK_ICON.hide();
 	consts.CROSS_ICON.hide();
 	consts.CROSS_ICON2.hide();
-	// consts.CITY_BACKGROUND.hide();
 }
 
 function draw() {
@@ -139,6 +133,8 @@ function draw() {
 				game.players[i].render();
 			game.pong.render();
 		}
+		if (game.frames_since_point < 180)
+			outputAnnouncement(game.pong.value + (game.pong.value === 1 ? " point" : " points"), 25, consts.WIDTH * 0.5, consts.HEIGHT * 0.95, game.pong.color);
 	}
 	else if (game.state === "game-over") {
 		buttons.return.show();

@@ -65,13 +65,19 @@ class Buttons {
 
 		this.map_original = createCustomButton("Original", clickMapOriginal, highlightButton, resetButton, consts.WIDTH * 0.2 + 25, consts.HEIGHT * 0.2 + 25);
 		this.map_original.style("background", "none");
+		this.map_original.style("border", "none");
 		this.map_original.style("outline", "3px solid");
+		this.map_original.style("font-size", consts.medium_font_size.toString() + "px");
 		this.map_city = createCustomButton("City", clickMapCity, highlightButton, resetButton, consts.WIDTH * 0.2 + 25, consts.HEIGHT * 0.2 + 25);
 		this.map_city.style("background", "none");
+		this.map_city.style("border", "none");
 		this.map_city.style("outline", "none");
+		this.map_city.style("font-size", consts.medium_font_size.toString() + "px");
 		this.map_casino = createCustomButton("Casino", clickMapCasino, highlightButton, resetButton, consts.WIDTH * 0.2 + 25, consts.HEIGHT * 0.2 + 25);
 		this.map_casino.style("background", "none");
+		this.map_casino.style("border", "none");
 		this.map_casino.style("outline", "none");
+		this.map_casino.style("font-size", consts.medium_font_size.toString() + "px");
 		
 		this.hide();
 		this.addParent();

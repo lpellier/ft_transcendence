@@ -5,9 +5,11 @@ class GameMap {
 	height : number;
 	background : any;
 	object_color : string;
+	name : string;
 
 	constructor(index : number, w : number, h : number) {
 		this.index = index;
+		this.name = "original";
 		this.resize(w, h);
 	}
 
@@ -50,6 +52,12 @@ class GameMap {
 
 		push();
 		noStroke();
+		if (this.background)
+			image(this.background, 0, 0, map_width, map_height);
+		push();
+		fill("rgba(0, 0, 0, 0.60)");
+		rect(0, 0, map_width, map_height);
+		pop();
 		fill(this.object_color);
 		if (ratio === 1) {
 			textSize(14);
@@ -67,12 +75,7 @@ class GameMap {
 			text(game.score[1], map_width / 2 + map_width / 30, map_height / 9); // score
 			pop();
 		}
-		if (this.background)
-			image(this.background, 0, 0, map_width, map_height);
-		push();
-		fill("rgba(0, 0, 0, 0.60)");
-		rect(0, 0, map_width, map_height);
-		pop();
+		
 		push();
 		stroke(this.object_color);
 		for (let i : number = top_bound; i < bot_bound; i += 20 * ratio * 2)
@@ -88,9 +91,13 @@ class GameMap {
 		this.height = h;
 		if (this.index === 1)
 			this.originalMap();
-		else if (this.index === 2)
+		else if (this.index === 2) {
+			this.name = "city";
 			this.cityMap();
-		else if (this.index === 3)
+		}
+		else if (this.index === 3) {
+			this.name = "casino";
 			this.casinoMap();
+		}
 	}
 };

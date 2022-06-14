@@ -1,5 +1,5 @@
 function listenStartEvents() {
-	socket.on("waiting_room", (r_id : string, score_limit : number) => {
+	socket.on("waiting_room", (r_id : string, score_limit : number, map : string) => {
 		game.room_id = r_id;
 		game.state = "waiting-player";
 		game.score_limit = score_limit;
@@ -8,6 +8,11 @@ function listenStartEvents() {
 		inputs.hide()
 	
 		buttons.return.show();
+	
+		if (map === "city")
+			game.map = consts.city_map;
+		else if (map === "casino")
+			game.map = consts.casino_map;
 	});
 
 	socket.on("matchmaking-error", (error : string) => {

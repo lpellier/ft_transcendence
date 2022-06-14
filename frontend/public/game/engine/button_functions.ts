@@ -31,12 +31,12 @@ function createGame() {
 		if (game.publicity === "local")
 			startLocal();
 		else
-			socket.emit("matchmaking", game.publicity, false, game.score_limit);
+			socket.emit("matchmaking", game.publicity, false, game.score_limit, game.map.name);
 	}
 }
 function matchmaking() {
 	if (mouseButton === LEFT)
-		socket.emit("matchmaking", "public", true, 10);
+		socket.emit("matchmaking", "public", true, 10, "original");
 }
 
 function highlightButton() {
@@ -47,8 +47,6 @@ function resetButton() {
 	// @ts-ignore: next-line
 	this.style("color", "white");
 }
-
-// matchmaking args : publicity, matchamking_boolean, score_limit, map_index
 
 function plusScoreLimit() {
 	if (mouseButton === LEFT && game.score_limit < 15) {
