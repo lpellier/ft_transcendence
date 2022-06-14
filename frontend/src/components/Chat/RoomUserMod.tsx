@@ -46,8 +46,6 @@ function RoomUserMod(props : {currentUser: User, users: User[], room: Room, room
 	let [addUserClicked, setAddUserClicked] = useState<number>(0);
     let [kickUserClicked, setKickUserClicked] = useState<number>(0);
 	let [addAdminClicked, setAddAdminClicked] = useState<number>(0);
-	let [roomAdmins, setRoomAdmins] = useState<User[]>([]);
-
 
 	function handleAddUserClick(room: Room) {
 		socket.emit('get users', room.id);
@@ -184,7 +182,7 @@ function RoomUserMod(props : {currentUser: User, users: User[], room: Room, room
 			<Stack className="add-user-list">
 				{props.users.map(item => (
 					<div key={item.id}>
-						{(props.roomUsers.find(user => user.id === item.id) && item.id !== props.currentUser.id)?
+						{(props.roomUsers.find(user => user.id === item.id) && item.id !== props.currentUser.id && props.roomAdmins.find(admin => admin.id === item.id) === undefined)?
 							<button className="add-user-list-content" key={item.id}>
 								{item.username}		
 							</button>
@@ -270,27 +268,13 @@ function SimplePopper(props : {user: User, users: User[], room: Room, roomAdmins
 	);
 }
 
-export default function RoomUserPopper(props : {currentUser: User, users: User[], room: Room}) {
-	let [roomAdmins, setRoomAdmins] = useState<User[]>([]);
-	let [canAdmin, setCanAdmin] = useState<boolean>(false);
-	
-	useEffect (() => {
-		const handler = (data: User[]) => { setRoomAdmins(data);};
-		socket.on('get admins', handler);
-		return () => {
-			socket.off('get admins', handler);
-		}
-	}, [])
+export default function RoomUserPopper(props : {currentUser: User, users: User[], room: Room, roomAdmins:User[]}) {
 
-	useEffect(() => {
-		if(roomAdmins?.find(user => user.id === props.currentUser?.id))
-			setCanAdmin(true);
-	}, [roomAdmins])
 
 	  return (
 		<div>
-			{canAdmin?
-				<SimplePopper user={props.currentUser} users={props.users} room={props.room} roomAdmins={roomAdmins}/>
+			{props.roomAdmins.find(user => user.id === props.currentUser?.id)?
+				<SimplePopper user={props.currentUser} users={props.users} room={props.room} roomAdmins={props.roomAdmins}/>
 			:
 				<div/>
 			}

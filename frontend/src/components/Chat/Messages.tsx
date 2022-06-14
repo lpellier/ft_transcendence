@@ -19,7 +19,7 @@ interface CreateMessageDto {
     type: boolean;
 }
 
-function Messages(props : {user: User, users: User[], current_room: Room, canWrite: boolean}) {
+function Messages(props : {user: User, users: User[], currentRoom: Room, canWrite: boolean}) {
 	
 	let [messages, setMessages] = useState<Message[]>([]);
 
@@ -28,7 +28,7 @@ function Messages(props : {user: User, users: User[], current_room: Room, canWri
 	function handleSubmit(e: any) {
 		e.preventDefault();
 		const message: string = e.target[0].value;
-		const messageDto: CreateMessageDto = {content: message, user: props.user.id, room: props.current_room.id, type: true} 
+		const messageDto: CreateMessageDto = {content: message, user: props.user.id, room: props.currentRoom.id, type: true} 
 		console.log("messageDto = ", messageDto);
 		if (message)
 			socket.emit('chat message', messageDto);
@@ -56,7 +56,7 @@ function Messages(props : {user: User, users: User[], current_room: Room, canWri
 			<ul className='messages' id='messagebox'>
 				{messages.map(item=> (
 					<div key={item.id}>
-						{item.roomId === props.current_room.id ?
+						{item.roomId === props.currentRoom.id ?
 							<div>
 								{item.type ?
 									<div className='flexwrapper' >

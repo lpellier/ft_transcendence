@@ -5,7 +5,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import Divider from '@mui/material/Divider';
 
-import {useState, useEffect} from 'react'
+import {useState, useEffect, useReducer} from 'react'
 import {Room, User} from 'interfaces'
 import {socket} from './Chat'
 import RoomUserPopper from './RoomUserMod'
@@ -18,7 +18,13 @@ interface CreateRoomDto {
 	visibility: string;
 }
 
-function Channels(props : {user: User, users: User[], currentRoom: Room, setCurrentRoom: React.Dispatch<React.SetStateAction<Room>>, setCanWrite: React.Dispatch<React.SetStateAction<boolean>>}) {
+export interface UserRoomDto {
+    userId: number;
+    roomId: number;
+};
+
+
+function Channels(props : {user: User, users: User[], currentRoom: Room, setCurrentRoom: React.Dispatch<React.SetStateAction<Room>>, setCanWrite: React.Dispatch<React.SetStateAction<boolean>>, roomAdmins:User[]}) {
 
 	let [addRoomClicked, setAddRoomClicked] = useState<number>(0);
 	let [rooms, setRooms] = useState<Room[]>([]);
@@ -38,13 +44,27 @@ function Channels(props : {user: User, users: User[], currentRoom: Room, setCurr
 
 	function handleRoomClick(room: Room) {
 		props.setCurrentRoom(room)
-		// socket.emit('get users', room.id);
 		socket.emit('get admins', room.id);
 		if (rooms.find(item => item.id === room.id))
 			props.setCanWrite(true);
 		else
 			props.setCanWrite(false);
 	}
+
+	useEffect(() => {
+		const handler = (removeUserDto: UserRoomDto) => {
+			if(removeUserDto.userId == props.user.id)
+			{
+				socket.emit('leave room', removeUserDto.roomId);
+				socket.emit('get rooms', props.user.id)
+				socket.emit('get public rooms');
+			};
+		};
+		socket.on('remove user from room', handler);
+		return (() => {
+			socket.off('remove user from room', handler);
+		})
+	})
 
 	useEffect(() => {
 		const handler = () => {
@@ -66,7 +86,7 @@ function Channels(props : {user: User, users: User[], currentRoom: Room, setCurr
 		};
 		socket.on('get rooms', handler);
 		return (() => {socket.off('get rooms', handler);})
-	}, [])
+	})
 
 	useEffect(() => {
 		const handler = (rooms_list: Room[]) => {
@@ -77,10 +97,10 @@ function Channels(props : {user: User, users: User[], currentRoom: Room, setCurr
 		};
 		socket.on('get public rooms', handler);
 		return(() => {socket.off('get public rooms', handler)})
-	}, [])
+	})
 
 
-	function RoomList(props: {rooms: Room[], currentRoom: Room, users: User[], user: User, visibility: string}) {
+	function RoomList(props: {rooms: Room[], currentRoom: Room, users: User[], user: User, visibility: string, roomAdmins:User[]}) {
 		return (
 			<List>
 					{props.rooms.map(item => (
@@ -93,10 +113,10 @@ function Channels(props : {user: User, users: User[], currentRoom: Room, setCurr
 									</ListItem>
 									:
 									<Stack direction="row">
-										<ListItem button >
+										<ListItem button selected className="MenuItem">
 											<ListItemText primary={item.name}  />
 										</ListItem>
-										<RoomUserPopper currentUser={props.user} users={props.users} room={props.currentRoom}/>
+										<RoomUserPopper currentUser={props.user} users={props.users} room={props.currentRoom} roomAdmins={props.roomAdmins}/>
 									</Stack>
 									}
 									<Divider/>
@@ -112,12 +132,11 @@ function Channels(props : {user: User, users: User[], currentRoom: Room, setCurr
 
 
 
-
 	return ( 
 		<Stack className='channels' justifyContent='space-between'>
 				<div>
-					<RoomList rooms = {publicRooms} currentRoom = {props.currentRoom} users = {props.users} user = {props.user} visibility = "public"/>
-					<RoomList rooms = {rooms} currentRoom = {props.currentRoom} users = {props.users} user = {props.user} visibility="private"/>
+					<RoomList rooms = {publicRooms} currentRoom = {props.currentRoom} users = {props.users} user = {props.user} visibility = "public" roomAdmins={props.roomAdmins}/>
+					<RoomList rooms = {rooms} currentRoom = {props.currentRoom} users = {props.users} user = {props.user} visibility="private" roomAdmins={props.roomAdmins}/>
 				</div>
 			<div>
 				<div>

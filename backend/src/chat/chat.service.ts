@@ -99,8 +99,9 @@ export class ChatService {
     return room.admins;
   }
 
-  getAllUsers() {
-    return (this.prisma.user);
+  async getAllUsers() {
+    let users = await this.prisma.user.findMany();
+    return (users);
   }
 
   async getAllMessagesForUser(id: number) {
