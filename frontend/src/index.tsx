@@ -5,7 +5,7 @@ import './styles/body.css';
 
 
 const cookies = new Cookies();
-const token = cookies.get("Authorization");
+const token = "Bearer " + cookies.get("jwt");
 
 const tabletSize = 768;
 const phoneSize = 530;
