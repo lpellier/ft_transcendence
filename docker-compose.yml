@@ -9,7 +9,7 @@ services:
 
   backend:
     depends_on:
-      - database
+      - postgres
     image: node:lts-alpine
     container_name: backend
     volumes:

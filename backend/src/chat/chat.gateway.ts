@@ -2,7 +2,6 @@ import { ConfigService } from "@nestjs/config";
 import { MessageBody, ConnectedSocket, SubscribeMessage, WebSocketGateway, WebSocketServer } from "@nestjs/websockets";
 import { Prisma, PrismaClient } from "@prisma/client";
 import { Socket } from "socket.io";
-import { User, Room, Message} from '../interfaces'
 import { ChatService } from './chat.service';
 import { UserRoomDto } from "./dto/user-room.dto";
 import { CreateRoomDto } from './dto/create-room.dto';
