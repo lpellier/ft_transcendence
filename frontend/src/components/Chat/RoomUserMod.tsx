@@ -46,6 +46,8 @@ function RoomUserMod(props : {currentUser: User, users: User[], room: Room, room
 	let [addUserClicked, setAddUserClicked] = useState<number>(0);
     let [kickUserClicked, setKickUserClicked] = useState<number>(0);
 	let [addAdminClicked, setAddAdminClicked] = useState<number>(0);
+	let [kickAdminClicked, setKickAdminClicked] = useState<number>(0);
+
 
 	function handleAddUserClick(room: Room) {
 		socket.emit('get users', room.id);
@@ -112,6 +114,11 @@ function RoomUserMod(props : {currentUser: User, users: User[], room: Room, room
 		setAddAdminClicked(1);
 	}
 
+	function handleKickAdminClick(room: Room) {
+		socket.emit('get users', room.id);
+		setKickAdminClicked(1);
+	}
+
 	function handleAddAdminSubmit(e: any) {
 		e.preventDefault();
 		const username: string= e.target[0].value;
@@ -129,6 +136,31 @@ function RoomUserMod(props : {currentUser: User, users: User[], room: Room, room
 					setAddAdminClicked(0);
 					toastIt(username + ' given admin privileges ' + props.room.name);
 				}
+			}
+			else
+				toastThatError('user not in room');
+		}
+		else
+			toastThatError('username not found')
+	}
+
+	function handleKickAdminSubmit(e: any) {
+		e.preventDefault();
+		const username: string= e.target[0].value;
+		if (props.users.find(user => user.username === username))
+		{
+			if (roomUsers.find(user => user.username === username))
+			{
+				if (props.roomAdmins.find(admin => admin.username === username))
+				{
+					let userId: any = props.users.find(user => user.username === username)?.id;
+					const removeAdmin: RoomUserDto = {userId: userId, roomId: props.room.id};
+					socket.emit('remove admin from room', removeAdmin);
+					setKickAdminClicked(0);
+					toastIt(username + ' removed from administrators in ' + props.room.name);
+				}
+				else
+					toastThatError('user is not an administrator')
 			}
 			else
 				toastThatError('user not in room');
@@ -196,6 +228,25 @@ function RoomUserMod(props : {currentUser: User, users: User[], room: Room, room
 		);
 	}
 
+	function KickAdminList(props : {currentUser: User, room: Room, roomAdmins: User[]}) {
+		return (
+			<Stack className="add-user-list">
+				{props.roomAdmins.map(item => (
+					<div key={item.id}>
+						{(item.id !== props.currentUser.id)?
+							<button className="add-user-list-content" key={item.id}>
+								{item.username}		
+							</button>
+                            :
+                            <div/>
+						}
+						<div/>
+					</div>
+				))}
+			</Stack>
+		);
+	}
+
 	return (
 		<Stack>
 			<button className='add-user' onClick={() => handleAddUserClick(props.room)}>add user</button>
@@ -236,6 +287,20 @@ function RoomUserMod(props : {currentUser: User, users: User[], room: Room, room
                         <button title="cancel" onClick={() => setAddAdminClicked(0)}>❌</button>
                     </Stack>
                     <AddAdminList currentUser={props.currentUser} users={props.users} room={props.room} roomUsers={roomUsers} roomAdmins={props.roomAdmins}/>
+                </Stack>
+            :
+                <div/>
+            }
+			<button className='add-user' onClick={ () => handleKickAdminClick(props.room)}>kick admin</button>
+			{kickAdminClicked ?
+                <Stack >
+                    <Stack direction="row" >
+                        <form onSubmit={handleKickAdminSubmit}>
+                            <input type="text" placeholder="username" className="form"/>
+                        </form>
+                        <button title="cancel" onClick={() => setKickAdminClicked(0)}>❌</button>
+                    </Stack>
+                    <KickAdminList currentUser={props.currentUser} room={props.room} roomAdmins={props.roomAdmins}/>
                 </Stack>
             :
                 <div/>

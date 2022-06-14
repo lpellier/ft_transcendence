@@ -35,7 +35,26 @@ function Chat() {
 		}
 	}, [])
 
-	
+	useEffect(() => {
+		const handler = () => { 
+			socket.emit('get admins', currentRoom.id);
+		};
+		socket.on('admin added to room', handler);
+		return () => {
+			socket.off('admin added to room', handler);
+		}
+	})
+
+	useEffect(() => {
+		const handler = () => { 
+			socket.emit('get admins', currentRoom.id);
+		};
+		socket.on('admin removed from room', handler);
+		return () => {
+			socket.off('admin removed from room', handler);
+		}
+	})
+
 	useEffect(() => {
 		axios.get('http://127.0.0.1:3001/users/me',{
 			headers: {

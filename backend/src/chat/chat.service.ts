@@ -42,6 +42,7 @@ export class ChatService {
     });
   }
 
+  
   async removeUserFromRoom(userId: number, roomId: number) {
     const room = await this.prisma.room.update({
       where: {id: roomId},
@@ -52,6 +53,20 @@ export class ChatService {
       },
       select: {
         users: true
+      }
+    });
+  }
+
+  async removeAdminFromRoom(adminId: number, roomId: number) {
+    const room = await this.prisma.room.update({
+      where: {id: roomId},
+      data: {
+        admins: {
+          disconnect: {id: adminId}          
+        }
+      },
+      select: {
+        admins: true
       }
     });
   }

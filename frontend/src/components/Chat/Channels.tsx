@@ -5,7 +5,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import Divider from '@mui/material/Divider';
 
-import {useState, useEffect, useReducer} from 'react'
+import {useState, useEffect} from 'react'
 import {Room, User} from 'interfaces'
 import {socket} from './Chat'
 import RoomUserPopper from './RoomUserMod'
@@ -45,15 +45,28 @@ function Channels(props : {user: User, users: User[], currentRoom: Room, setCurr
 	function handleRoomClick(room: Room) {
 		props.setCurrentRoom(room)
 		socket.emit('get admins', room.id);
-		if (rooms.find(item => item.id === room.id))
+	}
+	useEffect(() => {
+		if (rooms.find(item => item.id === props.currentRoom.id))
 			props.setCanWrite(true);
 		else
 			props.setCanWrite(false);
-	}
+	}, [props, rooms])
+
+	useEffect(() => {
+		const handler = () => {
+				socket.emit('get rooms', props.user.id);
+				socket.emit('get public rooms');
+		};
+		socket.on('add user to room', handler);
+		return (() => {
+			socket.off('add user to room', handler);
+		})
+	})
 
 	useEffect(() => {
 		const handler = (removeUserDto: UserRoomDto) => {
-			if(removeUserDto.userId == props.user.id)
+			if(removeUserDto.userId === props.user.id)
 			{
 				socket.emit('leave room', removeUserDto.roomId);
 				socket.emit('get rooms', props.user.id)
@@ -86,7 +99,7 @@ function Channels(props : {user: User, users: User[], currentRoom: Room, setCurr
 		};
 		socket.on('get rooms', handler);
 		return (() => {socket.off('get rooms', handler);})
-	})
+	}, [])
 
 	useEffect(() => {
 		const handler = (rooms_list: Room[]) => {
@@ -97,7 +110,7 @@ function Channels(props : {user: User, users: User[], currentRoom: Room, setCurr
 		};
 		socket.on('get public rooms', handler);
 		return(() => {socket.off('get public rooms', handler)})
-	})
+	}, [])
 
 
 	function RoomList(props: {rooms: Room[], currentRoom: Room, users: User[], user: User, visibility: string, roomAdmins:User[]}) {
@@ -108,7 +121,7 @@ function Channels(props : {user: User, users: User[], currentRoom: Room, setCurr
 							{item.visibility === props.visibility ?
 								<div>
 									{ item.id !== props.currentRoom.id ?
-									<ListItem button onClick={() => handleRoomClick(item)}>
+									<ListItem className="MenuItem" button onClick={() => handleRoomClick(item)}>
 										<ListItemText primary={item.name}/>
 									</ListItem>
 									:
