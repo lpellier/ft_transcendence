@@ -21,7 +21,7 @@ class GameMap {
 	}
 
 	cityMap() {
-		this.object_color = "#009933";
+		this.object_color = "#ffffff";
 		if (consts)
 			this.background = consts.CITY_BACKGROUND;
 		this.walls =	[
@@ -33,7 +33,7 @@ class GameMap {
 	} 
 
 	casinoMap() {
-		this.object_color = "#009933";
+		this.object_color = "#ffffff";
 		if (consts)
 			this.background = consts.TOKYO_BACKGROUND;
 		this.walls =	[
@@ -69,6 +69,10 @@ class GameMap {
 		}
 		if (this.background)
 			image(this.background, 0, 0, map_width, map_height);
+		push();
+		fill("rgba(0, 0, 0, 0.60)");
+		rect(0, 0, map_width, map_height);
+		pop();
 		push();
 		stroke(this.object_color);
 		for (let i : number = top_bound; i < bot_bound; i += 20 * ratio * 2)

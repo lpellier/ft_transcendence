@@ -36,14 +36,14 @@ function drawMinimaps() {
 	translate(consts.WIDTH * 0.4, consts.HEIGHT * 0.58);
 	consts.city_map.render(0.2);
 	pop();
-	outputAnnouncement("City", 25, consts.WIDTH * 0.5, consts.HEIGHT * 0.70, "#009933");
+	outputAnnouncement("City", 25, consts.WIDTH * 0.5, consts.HEIGHT * 0.70, "#ffffff");
 
 	consts.casino_map.casinoMap();
 	push();
 	translate(consts.WIDTH * 0.7, consts.HEIGHT * 0.58);
 	consts.casino_map.render(0.2);
 	pop();
-	outputAnnouncement("Casino", 25, consts.WIDTH * 0.8, consts.HEIGHT * 0.70, "#009933");
+	outputAnnouncement("Casino", 25, consts.WIDTH * 0.8, consts.HEIGHT * 0.70, "#ffffff");
 }
 
 function drawInput() {
