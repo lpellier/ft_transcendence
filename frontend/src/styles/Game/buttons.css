@@ -92,3 +92,19 @@
 	left: 38%;
 	z-index: 0;
 }
+
+#button-map-original {
+	position: absolute;
+	bottom: 20%;
+	left: 9%;
+}
+#button-map-city {
+	position: absolute;
+	bottom: 20%;
+	left: 39%;
+}
+#button-map-casino {
+	position: absolute;
+	bottom: 20%;
+	left: 69%;
+}

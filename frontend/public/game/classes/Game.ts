@@ -28,6 +28,6 @@ class Game {
 		this.local = false;
 		this.ai = false;
 		this.frames_since_point = 0;
-		this.map = consts.casino_map;
+		this.map = consts.original_map;
 	}
 };

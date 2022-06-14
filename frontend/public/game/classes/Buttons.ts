@@ -15,6 +15,10 @@ class Buttons {
 
 	opponent_left_ok : any;
 
+	map_original : any;
+	map_city : any;
+	map_casino : any;
+
 	constructor() {
 		this.reset();
 		this.createButtons();
@@ -54,11 +58,21 @@ class Buttons {
 		this.plus.style("font-size", consts.small_font_size.toString() + "px");
 		this.minus = createCustomButton("-", minusScoreLimit, highlightButton, resetButton, consts.small_square_diameter, consts.small_square_diameter);
 		this.minus.style("border", "none");
+		this.minus.style("font-size", consts.small_font_size.toString() + "px");
 		
 		this.opponent_left_ok = createCustomButton("OK", goToMainMenu, highlightButton, resetButton);
 		this.opponent_left_ok.style("border", "none");
-		this.minus.style("font-size", consts.small_font_size.toString() + "px");
 
+		this.map_original = createCustomButton("Original", clickMapOriginal, highlightButton, resetButton, consts.WIDTH * 0.2 + 25, consts.HEIGHT * 0.2 + 25);
+		this.map_original.style("background", "none");
+		this.map_original.style("outline", "3px solid");
+		this.map_city = createCustomButton("City", clickMapCity, highlightButton, resetButton, consts.WIDTH * 0.2 + 25, consts.HEIGHT * 0.2 + 25);
+		this.map_city.style("background", "none");
+		this.map_city.style("outline", "none");
+		this.map_casino = createCustomButton("Casino", clickMapCasino, highlightButton, resetButton, consts.WIDTH * 0.2 + 25, consts.HEIGHT * 0.2 + 25);
+		this.map_casino.style("background", "none");
+		this.map_casino.style("outline", "none");
+		
 		this.hide();
 		this.addParent();
 	
@@ -95,6 +109,17 @@ class Buttons {
 	
 		this.return.size(consts.medium_square_diameter, consts.medium_square_diameter);
 		this.return.style("font-size", consts.medium_font_size.toString() + "px");
+	
+		this.map_original.size(consts.WIDTH * 0.2 + 25, consts.HEIGHT * 0.2 + 25);
+		this.map_original.style("font-size", consts.medium_font_size.toString() + "px");
+		this.map_original.style("outline", "3px solid");
+		this.map_original.style("border", "none");
+		this.map_city.size(consts.WIDTH * 0.2 + 25, consts.HEIGHT * 0.2 + 25);
+		this.map_city.style("font-size", consts.medium_font_size.toString() + "px");
+		this.map_city.style("border", "none");
+		this.map_casino.size(consts.WIDTH * 0.2 + 25, consts.HEIGHT * 0.2 + 25);
+		this.map_casino.style("font-size", consts.medium_font_size.toString() + "px");
+		this.map_casino.style("border", "none");
 	}
 
 	reset() {
@@ -136,6 +161,16 @@ class Buttons {
 		if (this.opponent_left_ok)
 			this.opponent_left_ok.remove();
 		this.opponent_left_ok = null;
+
+		if (this.map_original)
+			this.map_original.remove();
+		this.map_original = null;
+		if (this.map_city)
+			this.map_city.remove();
+		this.map_city = null;
+		if (this.map_casino)
+			this.map_casino.remove();
+		this.map_casino = null;
 	}
 
 	hide() {
@@ -154,6 +189,10 @@ class Buttons {
 		this.minus.hide();
 
 		this.opponent_left_ok.hide();
+	
+		this.map_original.hide();
+		this.map_city.hide();
+		this.map_casino.hide();
 	}
 
 	clickAnyone() {
@@ -203,5 +242,9 @@ class Buttons {
 		this.plus.parent(document.getElementById("button-plus"));
 		this.minus.parent(document.getElementById("button-minus"));
 		this.opponent_left_ok.parent(document.getElementById("button-opp-left-ok"));
+
+		this.map_original.parent(document.getElementById("button-map-original"));
+		this.map_city.parent(document.getElementById("button-map-city"));
+		this.map_casino.parent(document.getElementById("button-map-casino"));
 	}
 };

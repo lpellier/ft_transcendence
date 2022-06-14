@@ -18,6 +18,10 @@ function createGameMenu() {
 		inputs.score_limit.show();
 		inputs.score_limit.attribute("value", game.score_limit);
 		buttons.opponent_left_ok.parent().style["z-index"] = 0; // deal with buttons overlapping
+
+		buttons.map_original.show();
+		buttons.map_city.show();
+		buttons.map_casino.show();
 		game.state = "in-menu-create";
 	}
 }
@@ -94,6 +98,34 @@ function clickAi() {
 			this.style("outline", "3px solid");
 		}
 		game.ai = !game.ai;
+	}
+}
+
+function clickMapOriginal() {
+	if (mouseButton === LEFT) {
+		// @ts-ignore : next-line
+		this.style("outline", "3px solid");
+		buttons.map_city.style("outline", "none");
+		buttons.map_casino.style("outline", "none");
+		game.map = consts.original_map;
+	}
+}
+function clickMapCity() {
+	if (mouseButton === LEFT) {
+		// @ts-ignore : next-line
+		this.style("outline", "3px solid");
+		buttons.map_original.style("outline", "none");
+		buttons.map_casino.style("outline", "none");
+		game.map = consts.city_map;
+	}
+}
+function clickMapCasino() {
+	if (mouseButton === LEFT) {
+		// @ts-ignore : next-line
+		this.style("outline", "3px solid");
+		buttons.map_city.style("outline", "none");
+		buttons.map_original.style("outline", "none");
+		game.map = consts.casino_map;
 	}
 }
 
