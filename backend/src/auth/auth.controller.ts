@@ -1,22 +1,39 @@
-import { Body, Controller, Get, Post, Query, Redirect, Req, Res, UseGuards } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { AuthGuard } from '@nestjs/passport';
+import { Body, Controller, Get, Post, Redirect, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Response } from 'express';
+import { OAuth2AuthGuard } from './guards/oauth2-auth.guard';
+import { JwtOtpAuthGuard } from './guards/jwt-otp-auth.guard';
+import { ValidateOtpDto } from './dto/validate-otp.dto';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
 @Controller('auth')
 export class AuthController {
 	constructor(
-		private authService: AuthService,
-		private configService: ConfigService) {}
+		private authService: AuthService) {}
 
-	@UseGuards(AuthGuard('oauth2'))
+	@UseGuards(OAuth2AuthGuard)
 	@Get()
-	@Redirect()
-	async login (@Req() req, @Res({passthrough: true}) res: Response) {
-		const TOKEN = await this.authService.login(req.user);
-		const URL = this.configService.get('FRONT_URL') + '/home';
-		res.cookie('Authorization', 'Bearer ' + TOKEN['access_token']);
-		return { url: URL };
+	@Redirect('http://127.0.0.1:3000/home')
+	async login(@Req() req, @Res({passthrough: true}) res: Response) {
+		const isAuthenticated = !req.user.tfa;
+		const authentication = await this.authService.login(req.user.id, isAuthenticated);
+		res.cookie(authentication.type, authentication.token);
+	}
+
+	@UseGuards(JwtOtpAuthGuard)
+	@Post('google-authenticator')
+	async google_authenticator_login(@Req() req, @Res({passthrough: true}) res: Response, @Body() otp: ValidateOtpDto) {
+		const validated = await this.authService.validateGoogleAuthenticatorToken(req.user.id, otp)
+		if (validated === true) {
+			const authentication = await this.authService.login(req.user.id, true);
+			res.cookie(authentication.type, authentication.token);
+			return authentication;
+		}
+	}
+
+	@UseGuards(JwtAuthGuard)
+	@Get('logout')
+	async logout(@Req() req, @Res({passthrough: true}) res: Response) {
+		res.cookie('jwt', "");
 	}
 }

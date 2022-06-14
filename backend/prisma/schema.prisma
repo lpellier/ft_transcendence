@@ -11,14 +11,16 @@ datasource db {
 }
 
 model User {
-  id          	Int     @id
-  username    	String  @unique
-  avatar		    String
-  stats			    Stats?
-  rooms         Room[] @relation(references: [id])
-  messages      Message[]
-  winHistory	  Match[] @relation("win")
-  lossHistory	  Match[] @relation("loss")
+  id           Int     @id
+  username     String  @unique
+  avatar		   String
+  tfa          Boolean @default(false)
+  otpSecret    String  @default("")
+  stats			   Stats?
+  rooms        Room[] @relation(references: [id])
+  messages     Message[]
+  winHistory	 Match[] @relation("win")
+  lossHistory	 Match[] @relation("loss")
 }
 
 model Stats {

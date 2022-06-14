@@ -12,8 +12,9 @@ import GamesIcon from '@mui/icons-material/Games'
 import HomeIcon from '@mui/icons-material/Home';
 import SettingsIcon from '@mui/icons-material/Settings';
 import Paper from '@mui/material/Paper'
+import axios from 'axios';
 
-import { phoneSize } from 'index'
+import { phoneSize, token } from 'index'
 import { IconButtonStyle } from '../../styles/tsxStyles/AppBar/PongMenu'
 
 import {User} from 'interfaces'
@@ -33,10 +34,30 @@ function SettingsLink() {
 }
 
 function LogOutLink() {
+  
+  function logout() {
+
+    axios.get('http://127.0.0.1:3001/auth/logout',
+    {
+        withCredentials: true,
+        headers: {
+          'Authorization': token,
+        }
+    })
+    .then(res => {
+      console.log("Logout ")
+    })
+    .catch(function (err) {
+      console.log("Get request failed : ", err)
+    });
+
+  }
+
   return (
     <nav>
       <Link to="/" style={{ textDecoration: 'none' }}>
         <Button
+            onClick={logout}
             variant="contained"
             startIcon={<MeetingRoomIcon />}
             color="secondary">
