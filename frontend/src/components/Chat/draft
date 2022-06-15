@@ -1,0 +1,36 @@
+function	UserModButton(props: {clickAction: Function, room:Room, clicked: number, handleSubmit:Function, List:any}) {
+		return (
+				<div>
+					<button className='add-user' onClick={() => props.clickAction(props.room)}>add user</button>
+					{props.clicked ?
+						<Stack >
+							<Stack direction="row" >
+								<form onSubmit={() => props.handleSubmit()}>
+									<input type="text" placeholder="username" className="form"/>
+								</form>
+								<button title="cancel" onClick={() => setAddUserClicked(0)}>❌</button>
+							</Stack>
+							{props.List}
+						</Stack>
+					:
+					<div/>
+					}
+				</div>
+		);
+	}
+
+
+    <button className='add-user' onClick={() => handleAddUserClick(props.room)}>add user</button>
+			{addUserClicked ?
+				<Stack >
+					<Stack direction="row" >
+						<form onSubmit={handleUserSubmit}>
+							<input type="text" placeholder="username" className="form"/>
+						</form>
+						<button title="cancel" onClick={() => setAddUserClicked(0)}>❌</button>
+					</Stack>
+					<UserList users={props.users} room={props.room} roomUsers={roomUsers}/>
+				</Stack>
+			:
+			<div/>
+			}
