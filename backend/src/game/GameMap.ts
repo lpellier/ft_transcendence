@@ -1,35 +1,49 @@
 import * as consts from "./Consts"
 
 export class GameMap {
-	width : number;
-	height : number;
 	walls : [[number, number], [number, number], [number, number], [number, number]][]; // [pos_x, pos_y], [width, height], outer1, outer2
 	index : number;
+	width : number;
+	height : number;
+	name: string;
 
-	constructor(width : number, height : number, walls : [[number, number], [number, number], [number, number], [number, number]][]) {
-		this.width = width;
-		this.height = height;
-		this.walls = walls;
-		this.index = 0;
+	constructor(index : number, w : number, h : number) {
+		this.index = index;
+		this.width = w;
+		this.height = h;
+		this.name = "original";
+		if (this.index === 1) 
+			this.originalMap();
+		else if (this.index === 2) {
+			this.name = "city";
+			this.cityMap();
+		}
+		else if (this.index === 3) {
+			this.name = "casino";
+			this.casinoMap();
+		}
 	}
 
-	defaultMap() {
-		this.width = consts.MAP_WIDTH;
-		this.height = consts.MAP_HEIGHT;
-		this.walls =	[[[5, 5], [this.width - 10, 5], [5, 10], [this.width - 5, 10]], 
-						[[5, this.height - 10], [this.width - 10, 5], [5, this.height - 10], [this.width - 5, this.height - 10]]];	
-		this.index = 1;
+	originalMap() {
+		this.walls =	[
+						[[5, 5], [this.width - 10, 5], [5, 10], [this.width - 5, 10]], 
+						[[5, this.height - 10], [this.width - 10, 5], [5, this.height - 10], [this.width - 5, this.height - 10]]
+					];	
 	}
 
-	hardMap() {
-		this.width = consts.MAP_WIDTH;
-		this.height = consts.MAP_HEIGHT;
-		this.walls =	[[[5, 5], [this.width - 10, 5], [10, 10], [this.width - 10, 10]], 
-		[[5, this.height - 10], [this.width - 10, 5], [10, this.height - 10], [this.width - 10, this.height - 10]],
-						[[5, 5], [5, this.height / 3 - 5], [10, 10], [10, this.height / 3]],
-						[[5, this.height * 2 / 3], [5, this.height / 3 - 5], [10, this.height * 2 / 3], [10, this.height - 10]],
-						[[this.width - 10, 5], [5, this.height / 3 - 5], [this.width - 10, 10], [this.width - 10, this.height / 3]],
-						[[this.width - 10, this.height * 2 / 3], [5, this.height / 3 - 5], [this.width - 10, this.height * 2 / 3], [this.width - 10, this.height - 10]]];	
-		this.index = 2;
+	cityMap() {
+		this.walls =	[
+						[[5, 5], [this.width - 10, 5], [5, 10], [this.width - 5, 10]], 
+						[[5, this.height - 10], [this.width - 10, 5], [5, this.height - 10], [this.width - 5, this.height - 10]],
+						[[this.width / 2, this.height / 5], [5, this.height / 5], [0, 0], [0, 0]],
+						[[this.width / 2, this.height * 3/ 5], [5, this.height / 5], [0, 0], [0, 0]],
+					];
+	} 
+
+	casinoMap() {
+		this.walls =	[
+						[[5, 5], [this.width - 10, 5], [5, 10], [this.width - 5, 10]], 
+						[[5, this.height - 10], [this.width - 10, 5], [5, this.height - 10], [this.width - 5, this.height - 10]]
+					];	
 	}
 };

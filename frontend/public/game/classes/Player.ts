@@ -17,7 +17,7 @@ class Player {
 		this.velocity = [0, 0];
 		this.width = consts.PLAYER_WIDTH;
 		this.height = consts.PLAYER_HEIGHT;
-		this.color = "white";
+		this.color = game.map.object_color;
 		this.index = index;
 		this.id = id;
 		this.ready = false;

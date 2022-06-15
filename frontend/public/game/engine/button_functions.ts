@@ -18,6 +18,10 @@ function createGameMenu() {
 		inputs.score_limit.show();
 		inputs.score_limit.attribute("value", game.score_limit);
 		buttons.opponent_left_ok.parent().style["z-index"] = 0; // deal with buttons overlapping
+
+		buttons.map_original.show();
+		buttons.map_city.show();
+		buttons.map_casino.show();
 		game.state = "in-menu-create";
 	}
 }
@@ -27,12 +31,12 @@ function createGame() {
 		if (game.publicity === "local")
 			startLocal();
 		else
-			socket.emit("matchmaking", game.publicity, false, game.score_limit);
+			socket.emit("matchmaking", game.publicity, false, game.score_limit, game.map.name);
 	}
 }
 function matchmaking() {
 	if (mouseButton === LEFT)
-		socket.emit("matchmaking", "public", true, 10);
+		socket.emit("matchmaking", "public", true, 10, "original");
 }
 
 function highlightButton() {
@@ -43,8 +47,6 @@ function resetButton() {
 	// @ts-ignore: next-line
 	this.style("color", "white");
 }
-
-// matchmaking args : publicity, matchamking_boolean, score_limit, map_index
 
 function plusScoreLimit() {
 	if (mouseButton === LEFT && game.score_limit < 15) {
@@ -91,9 +93,37 @@ function clickAi() {
 		}
 		else {
 			// @ts-ignore : next-line
-			this.style("outline", "5px solid");
+			this.style("outline", "3px solid");
 		}
 		game.ai = !game.ai;
+	}
+}
+
+function clickMapOriginal() {
+	if (mouseButton === LEFT) {
+		// @ts-ignore : next-line
+		this.style("outline", "3px solid");
+		buttons.map_city.style("outline", "none");
+		buttons.map_casino.style("outline", "none");
+		game.map = consts.original_map;
+	}
+}
+function clickMapCity() {
+	if (mouseButton === LEFT) {
+		// @ts-ignore : next-line
+		this.style("outline", "3px solid");
+		buttons.map_original.style("outline", "none");
+		buttons.map_casino.style("outline", "none");
+		game.map = consts.city_map;
+	}
+}
+function clickMapCasino() {
+	if (mouseButton === LEFT) {
+		// @ts-ignore : next-line
+		this.style("outline", "3px solid");
+		buttons.map_city.style("outline", "none");
+		buttons.map_original.style("outline", "none");
+		game.map = consts.casino_map;
 	}
 }
 
