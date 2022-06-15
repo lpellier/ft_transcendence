@@ -187,6 +187,10 @@ function RoomUserMod(props : {currentUser: User, users: User[], room: Room, room
 		);
 	}
 
+	interface UserModArgs {
+
+	}
+
 	function	UserModButton(props: {clickAction: Function, room:Room, title:string, clicked: number, handleSubmit: React.FormEventHandler<HTMLFormElement>, setClicked:Function, users: User[], condition: Function}) {
 		return (
 				<div>
@@ -208,12 +212,46 @@ function RoomUserMod(props : {currentUser: User, users: User[], room: Room, room
 		);
 	}
 
+
 	return (
 		<Stack>
-			<UserModButton clickAction={handleAddUserClick} room={props.room} title="add user" clicked={addUserClicked} handleSubmit={handleUserSubmit} setClicked={setAddUserClicked} users={props.users} condition={(item:User) => {return(roomUsers.find(user => user.username === item.username))}}/>
-			<UserModButton clickAction={handleKickUserClick} room={props.room} title="kick user" clicked={kickUserClicked} handleSubmit={handleKickUserSubmit} setClicked={setKickUserClicked} users={props.users} condition={(item:User) => {return(!(roomUsers.find(user => user.id === item.id) && item.id !== props.currentUser.id))}}/>
-			<UserModButton clickAction={handleAddAdminClick} room={props.room} title="add admin" clicked={addAdminClicked} handleSubmit={handleAddAdminSubmit} setClicked={setAddAdminClicked} users={props.users} condition={(item:User) => {return(!(roomUsers.find(user => user.id === item.id) && item.id !== props.currentUser.id && props.roomAdmins.find(admin => admin.id === item.id) === undefined))}}/>
-			<UserModButton clickAction={handleKickAdminClick} room={props.room} title="kick admin" clicked={kickAdminClicked} handleSubmit={handleKickAdminSubmit} setClicked={setKickAdminClicked} users={props.roomAdmins} condition={(item:User) => {return(item.id === props.currentUser.id)}}/>
+			<UserModButton 
+				clickAction={handleAddUserClick} 
+				room={props.room} title="add user"
+				clicked={addUserClicked} 
+				handleSubmit={handleUserSubmit} 
+				setClicked={setAddUserClicked} 
+				users={props.users} 
+				condition={(item:User) => {return(roomUsers.find(user => user.username === item.username))}}
+			/>
+			<UserModButton 
+				clickAction={handleKickUserClick} 
+				room={props.room} 
+				title="kick user" 
+				clicked={kickUserClicked} 
+				handleSubmit={handleKickUserSubmit} 
+				setClicked={setKickUserClicked} 
+				users={props.users} 
+				condition={(item:User) => {return(!(roomUsers.find(user => user.id === item.id) && item.id !== props.currentUser.id))}}
+			/>
+			<UserModButton
+				clickAction={handleAddAdminClick} 
+				room={props.room} title="add admin" 
+				clicked={addAdminClicked} 
+				handleSubmit={handleAddAdminSubmit} 
+				setClicked={setAddAdminClicked} 
+				users={props.users} 
+				condition={(item:User) => {return(!(roomUsers.find(user => user.id === item.id) && item.id !== props.currentUser.id && props.roomAdmins.find(admin => admin.id === item.id) === undefined))}}/>
+			<UserModButton 
+				clickAction={handleKickAdminClick} 
+				room={props.room} 
+				title="kick admin" 
+				clicked={kickAdminClicked} 
+				handleSubmit={handleKickAdminSubmit} 
+				setClicked={setKickAdminClicked} 
+				users={props.roomAdmins} 
+				condition={(item:User) => {return(item.id === props.currentUser.id)}}
+			/>
 		</Stack>
 	)
 }
