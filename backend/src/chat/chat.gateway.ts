@@ -1,11 +1,9 @@
 import { ConfigService } from "@nestjs/config";
 import { MessageBody, ConnectedSocket, SubscribeMessage, WebSocketGateway, WebSocketServer } from "@nestjs/websockets";
-import { Prisma, PrismaClient } from "@prisma/client";
 import { Socket } from "socket.io";
 import { ChatService } from './chat.service';
 import { UserRoomDto } from "./dto/user-room.dto";
 import { CreateRoomDto } from './dto/create-room.dto';
-import { UpdateRoomDto } from './dto/update-room.dto';
 import { CreateMessageDto } from "./dto/create-message.dto";
 
 
@@ -25,52 +23,109 @@ export class ChatGateway {
 	async handleCreateRoom(@ConnectedSocket () client : Socket, @MessageBody()  createRoomDto: CreateRoomDto) {		
 		let roomId = await this.chatService.createRoom(createRoomDto);
 		await this.chatService.addUserToRoom(createRoomDto.userId, roomId);
+		await this.chatService.addAdminToRoom(createRoomDto.userId, roomId);
+		//console.log('create room called', createRoomDto)
 		client.emit('create room');
 	}
 
 	@SubscribeMessage('add user to room')
 	async handleAddUserToRoom(@MessageBody() addUserDto: UserRoomDto) {
 		await this.chatService.addUserToRoom(addUserDto.userId, addUserDto.roomId);
-		this.server.emit('create room', addUserDto.roomId);
+		//console.log('add user to room called', addUserDto)
+		this.server.emit('add user to room');
+	}
+
+	@SubscribeMessage('add admin to room')
+	async handleAddAdminToRoom(@MessageBody() addAdminDto: UserRoomDto) {
+		await this.chatService.addAdminToRoom(addAdminDto.userId, addAdminDto.roomId);
+		//console.log('add admin to room called', addAdminDto)
+		this.server.to(addAdminDto.roomId.toString()).emit('admin added to room');
+	}
+
+	@SubscribeMessage('remove admin from room')
+	async handleKickAdminToRoom(@MessageBody() addAdminDto: UserRoomDto) {
+		await this.chatService.removeAdminFromRoom(addAdminDto.userId, addAdminDto.roomId);
+		//console.log('remove admin from room called', addAdminDto)
+		this.server.to(addAdminDto.roomId.toString()).emit('admin removed from room');
 	}
 
 	@SubscribeMessage('remove user from room')
 	async handleRemoveUserFromRoom(@MessageBody() removeUserDto: UserRoomDto) {
 		await this.chatService.removeUserFromRoom(removeUserDto.userId, removeUserDto.roomId);
-		this.server.emit('create room', removeUserDto.roomId);
+		//console.log('remove user from room called', removeUserDto)
+		this.server.to(removeUserDto.roomId.toString()).emit('remove user from room', removeUserDto);
 	}
 
 	@SubscribeMessage('join room')
 	handleJoinRoom(@ConnectedSocket() client : Socket, @MessageBody() room_id: string ) {
 		client.join(room_id);
+		//console.log('join room called', room_id)
+
+	}
+
+	@SubscribeMessage('leave room')
+	handleLeaveRoom(@ConnectedSocket() client : Socket, @MessageBody() room_id: string ) {
+		client.leave(room_id);
+		//console.log('leave room called', room_id);
 	}
 
 	@SubscribeMessage('chat message')
 	async handlemessage(@MessageBody() createMessageDto: CreateMessageDto) {
 		let msg = await this.chatService.storeMessage(createMessageDto);
 		this.server.to(createMessageDto.room.toString()).emit('chat message', msg);
+		//console.log('chat message called', createMessageDto)
+
 	}
 
 	@SubscribeMessage('get rooms')
 	async handleGetRooms(@ConnectedSocket () client : Socket, @MessageBody() id: number){
 		let rooms = await this.chatService.getRoomsForUser(id);
 		client.emit('get rooms', rooms);
+		//console.log('get rooms called', id)
+
+	}
+
+	@SubscribeMessage('get public rooms')
+	async handlePublicRooms() {
+		let publicRooms = await this.chatService.getPublicRooms();
+		this.server.emit('get public rooms', publicRooms);
+		//console.log('get public rooms called')
+
 	}
 
 	@SubscribeMessage('get users')
 	async handleGetUsers(@ConnectedSocket () client : Socket, @MessageBody() id: number) {
 		let users = await this.chatService.getUsersInRoom(id);
 		client.emit('get users', users);
+		//console.log('get users called', id)
+
+	}
+
+	@SubscribeMessage('get admins')
+	async handleGetAdmins(@ConnectedSocket () client : Socket, @MessageBody() id: number) {
+		let admins = await this.chatService.getAdminsInRoom(id);
+		client.emit('get admins', admins);
+		//console.log('get admins called', id)
+
 	}
 
 	@SubscribeMessage('get all messages')
 	async handleGetAllMessages(@ConnectedSocket () client : Socket, @MessageBody() id: number){
 		let messages = await this.chatService.getAllMessagesForUser(id);
 		client.emit('get all messages', messages);
+		//console.log('get all messages called', id)
+
 	}
 
 	@SubscribeMessage('new user')
-	handleNewUser(@MessageBody() id: number) {
-		this.server.emit('new user');
+	async handleNewUser(@ConnectedSocket () client : Socket,@MessageBody() newUserDto: UserRoomDto) {
+		// const roomUsers = await this.chatService.getUsersInRoom(1);
+		// if (roomUsers.find(user => user.id == newUserDto.userId) == undefined)
+		// {
+		await this.chatService.addUserToRoom(newUserDto.userId, 1);
+		const allUsers =  await this.chatService.getAllUsers();
+		this.server.emit('new user', allUsers);
+		// }
+		// console.log('new user called', newUserDto)
 	}
 }

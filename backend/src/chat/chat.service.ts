@@ -12,7 +12,9 @@ export class ChatService {
   async createRoom(createRoomDto: CreateRoomDto) {
     const room = await this.prisma.room.create({
       data: {
-        name: createRoomDto.name
+        name: createRoomDto.name,
+        ownerId: createRoomDto.userId,
+        visibility: createRoomDto.visibility
       }
     });
     return room.id;
@@ -23,12 +25,24 @@ export class ChatService {
       where: {id: roomId},
       data: {
         users: {
-          connect: {id: userId}          
+          connect: {id: userId}       
         }
       }
     });
   }
 
+  async addAdminToRoom(adminId: number, roomId: number) {
+    const room = await this.prisma.room.update({
+      where: {id: roomId},
+      data: {
+        admins: {
+          connect: {id: adminId}
+        }
+      }
+    });
+  }
+
+  
   async removeUserFromRoom(userId: number, roomId: number) {
     const room = await this.prisma.room.update({
       where: {id: roomId},
@@ -39,6 +53,20 @@ export class ChatService {
       },
       select: {
         users: true
+      }
+    });
+  }
+
+  async removeAdminFromRoom(adminId: number, roomId: number) {
+    const room = await this.prisma.room.update({
+      where: {id: roomId},
+      data: {
+        admins: {
+          disconnect: {id: adminId}          
+        }
+      },
+      select: {
+        admins: true
       }
     });
   }
@@ -57,17 +85,38 @@ export class ChatService {
   
   async getRoomsForUser(id: number) {
     let user = await this.prisma.user.findUnique({
-      where: {id: id},
+      where: {id: id} ,
       include: {rooms: true}
     })
     return user.rooms;
   }
+
+  async getPublicRooms() {
+    let rooms = await this.prisma.room.findMany( {
+      where: {visibility: "public"}
+    })
+    return rooms;
+  }
+
   async getUsersInRoom(id: number) {
     let room = await this.prisma.room.findUnique({
       where: {id: id},
       include: {users: true}
     })
     return room.users;
+  }
+
+  async getAdminsInRoom(id: number) {
+    let room = await this.prisma.room.findUnique({
+      where: {id: id},
+      include: {admins: true}
+    })
+    return room.admins;
+  }
+
+  async getAllUsers() {
+    let users = await this.prisma.user.findMany();
+    return (users);
   }
 
   async getAllMessagesForUser(id: number) {
@@ -93,24 +142,4 @@ export class ChatService {
     })
     return room.messages;
   }
-
-  // create(createChatDto: CreateChatDto) {
-  //   return 'This action adds a new chat';
-  // }
-
-  // findAll() {
-  //   return `This action returns all chat`;
-  // }
-
-  // findOne(id: number) {
-  //   return `This action returns a #${id} chat`;
-  // }
-
-  // update(id: number, updateChatDto: UpdateChatDto) {
-  //   return `This action updates a #${id} chat`;
-  // }
-
-  // remove(id: number) {
-  //   return `This action removes a #${id} chat`;
-  // }
 }

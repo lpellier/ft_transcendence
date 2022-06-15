@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-// import Banner from './Banner';
 import io  from "socket.io-client";
 import Stack from '@mui/material/Stack'
 import Messages from './Messages';
@@ -8,8 +7,8 @@ import Channels from './Channels';
 
 import '../../styles/Chat/Chat.css';
 
-import {token} from 'index'
-import {User, Room} from 'interfaces'
+import {token} from 'index';
+import {User, Room} from 'interfaces';
 
 const SERVER = "http://127.0.0.1:3001";
 export const socket = io(SERVER, {
@@ -21,11 +20,41 @@ function Chat() {
 	
 	let [status, setStatus] = useState('waiting for connection');
 	let [user, setUser] = useState<User>();
-	let [current_room, setCurrentRoom] = useState<Room> ({id: 1, name: "general"});
+	let [currentRoom, setCurrentRoom] = useState<Room> ({id: 1, name: "general", ownerId: 60040, visibility: "public"});
 	let [users, setUsers] = useState<User[]>([]);
+	let [canWrite, setCanWrite] = useState<boolean>(true);
+	let [roomAdmins, setRoomAdmins] = useState<User[]>([]);
 
+	useEffect (() => {
+		const handler = (data: User[]) => { 
+			setRoomAdmins(data);
+		};
+		socket.on('get admins', handler);
+		return () => {
+			socket.off('get admins', handler);
+		}
+	}, [])
 
-	
+	useEffect(() => {
+		const handler = () => { 
+			socket.emit('get admins', currentRoom.id);
+		};
+		socket.on('admin added to room', handler);
+		return () => {
+			socket.off('admin added to room', handler);
+		}
+	})
+
+	useEffect(() => {
+		const handler = () => { 
+			socket.emit('get admins', currentRoom.id);
+		};
+		socket.on('admin removed from room', handler);
+		return () => {
+			socket.off('admin removed from room', handler);
+		}
+	})
+
 	useEffect(() => {
 		axios.get('http://127.0.0.1:3001/users/me',{
 			headers: {
@@ -34,8 +63,8 @@ function Chat() {
 			})
 			.then(res => {
 				console.log("Get request success")
-				const test_data: User= res.data;
-				setUser(test_data);
+				const user_data: User= res.data;
+				setUser(user_data);
 			})
 			.catch(function (err) {
 				console.log("Get request failed : ", err)
@@ -43,47 +72,34 @@ function Chat() {
 		}, [])
 		
 		useEffect(() => {
-		socket.on('connect', () => {
+		const init = () => {
 			setStatus('connected');
 			if (user)
 			{
 				socket.emit('get rooms', user.id);
-				socket.emit('new user', user.id);
+				socket.emit('get public rooms', user.id);
 				socket.emit('get all messages', user.id);
-			}
-				socket.on('disconnect', () => {
-				setStatus('disconnected');
-			})
-		})
-		if (socket.connected)
-		{
-			setStatus('connected');
-			if (user)
-			{
-				socket.emit('get rooms', user.id);
-				socket.emit('new user', user.id);
-				socket.emit('get all messages', user.id);
+				socket.emit('new user', {userId: user.id, roomId: currentRoom.id});
 			}
 			if (!socket.connected)
 				setStatus('disconnected');
 		}
+		if (socket.connected)
+			init();
+		else
+			socket.on('connect', init)
+		
 	}, [user])
 
 	useEffect(() => {
-		socket.on('new user', () => {
-			axios.get('http://127.0.0.1:3001/users',{
-			headers: {
-				'Authorization': token,
-			}
-			})
-			.then(res => {
-				console.log("Get request success")
-				const test_data: User[] = res.data;
-				setUsers(test_data);
-			})
-			.catch(function (err) {
-				console.log("Get request failed : ", err)
-			});
+		const handler = (usersData: User[]) => {
+			setUsers(usersData);
+			// socket.emit('get admins', currentRoom.id);
+			// console.log('socket.on("new user called")')
+		}
+		socket.on('new user', handler);
+		return (() => {
+			socket.off('new user', handler);
 		})
 	}, [])
 	
@@ -92,8 +108,8 @@ function Chat() {
 				{status}
 				{user?
 					<Stack direction='row' spacing='2' className='chmsg'>
-						<Channels user={user} users={users} current_room={current_room} setCurrentRoom = {setCurrentRoom} />
-						<Messages user={user} users={users} current_room={current_room} />
+						<Channels user={user} users={users} currentRoom={currentRoom} setCurrentRoom = {setCurrentRoom} setCanWrite = {setCanWrite} roomAdmins={roomAdmins}/>
+						<Messages user={user} users={users} currentRoom={currentRoom} canWrite = {canWrite} />
 					</Stack>
 					:
 					<div/>
