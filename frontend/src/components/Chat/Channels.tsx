@@ -29,6 +29,7 @@ function Channels(props : {user: User, users: User[], currentRoom: Room, setCurr
 	let [addRoomClicked, setAddRoomClicked] = useState<number>(0);
 	let [rooms, setRooms] = useState<Room[]>([]);
 	let [publicRooms, setPublicRooms] = useState<Room[]>([]);
+	let [showPassword, setShowPassword] = useState<number>(0);
 
 
 	function handleRoomSubmit(e:any) {
@@ -143,7 +144,12 @@ function Channels(props : {user: User, users: User[], currentRoom: Room, setCurr
 		)
 	}
 
-
+	function handlePasswordSelect() {
+		if (showPassword)
+			setShowPassword(0);
+		else
+			setShowPassword(1);
+	}
 
 	return ( 
 		<Stack className='channels' justifyContent='space-between'>
@@ -165,6 +171,14 @@ function Channels(props : {user: User, users: User[], currentRoom: Room, setCurr
 												<option value="private">private</option>
 												<option value="public">public</option>
 											</select>
+											<label>password protected</label>
+											<input type="checkbox" id='password-option' onChange={handlePasswordSelect}/>
+											{showPassword?
+												<input type="password" id="password-input"/>
+												:
+												<div/>
+											}
+
 									<input type="submit" value="create"/>
 								</form>
 								<button title="cancel" onClick={() => setAddRoomClicked(0)}>cancel</button>
