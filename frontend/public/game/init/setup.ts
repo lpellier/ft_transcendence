@@ -1,21 +1,14 @@
 // ? P to quit local mode
 // ? Coding consistency : snake_case for variables | camelCase for functions | PascalCase for classes
-// ? Map indexes : 1 (normal map)
+// ? Map indexes : 1 (normal map), 2 (city map), 3 (casino map)
 
-// TODO Collision isn't working in multiplayer
+// TODO Add casino mechanics to multiplayer mode aswell
+// TODO Brainstorm a better idea than walls in the middle for City
 
 // TODO local mode : pause by pressing escape -> removing sound or quitting to menu
 // TODO adding options and probably sounds
 
 // TODO key animation not playing on safari
-
-// TODO different map ideas, windjammer inspired
-// TODO keep basic map
-// ? Original
-// TODO for example, each pong ball gives a random number of points
-// ? Casino
-// TODO another with walls in the middle, forcing the player to play around it
-// ? City
 
 // TODO power ups 
 // ? they will spawn one at a time for 2 seconds
@@ -133,7 +126,7 @@ function draw() {
 				game.players[i].render();
 			game.pong.render();
 		}
-		if (game.frames_since_point < 180)
+		if (game.frames_since_point < 180 && game.map.name === "casino")
 			outputAnnouncement(game.pong.value + (game.pong.value === 1 ? " point" : " points"), 25, consts.WIDTH * 0.5, consts.HEIGHT * 0.95, game.pong.color);
 	}
 	else if (game.state === "game-over") {

@@ -72,7 +72,6 @@ export class GameGateway {
 						clearInterval(game.update_interval);
 						clearInterval(game.ball_update_interval);
 						this.games.splice(this.games.indexOf(game), 1);
-						// console.log(client.id, "just disconnected -", this.clients.length, this.clients.length === 1 ? "user  total" : "users total");
 						return ;
 					}
 				}
@@ -190,7 +189,7 @@ export class GameGateway {
 											game.pong.pos,
 											[game.players[0].id, game.players[0].pos],
 											[game.players[1].id, game.players[1].pos],
-											game.score);
+											game.score, game.pong.value);
 									}, this.timestep);
 								}
 							}, i * 1000);

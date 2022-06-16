@@ -82,7 +82,8 @@ function listenMoveEvents() {
 		pong_pos : [number, number],
 		p1_state : [string, [number, number]],
 		p2_state : [string, [number, number]],
-		score : [number, number]
+		score : [number, number],
+		pong_value : number
 	) => {
 		if (game.state != "in-game")
 			return ;
@@ -101,6 +102,7 @@ function listenMoveEvents() {
 			game.players[1].pos[0] = p1_state[1][0] * consts.WIDTH / 1200;
 			game.players[1].pos[1] = p1_state[1][1] * consts.HEIGHT / 750;
 		}
+		game.pong.value = pong_value;
 	});
 }
 
