@@ -4,11 +4,20 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import Divider from '@mui/material/Divider';
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+import Select from '@mui/material/Select';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import KeyIcon from '@mui/icons-material/Key';
+import ToggleButton from '@mui/material/ToggleButton';
 
 import {useState, useEffect} from 'react'
 import {Room, User} from 'interfaces'
 import {socket} from './Chat'
 import RoomUserPopper from './RoomUserMod'
+import FormControl from '@mui/material/FormControl'
+import Button from '@mui/material/Button'
 
 
 
@@ -158,35 +167,43 @@ function Channels(props : {user: User, users: User[], currentRoom: Room, setCurr
 					<RoomList rooms = {rooms} currentRoom = {props.currentRoom} users = {props.users} user = {props.user} visibility="private" roomAdmins={props.roomAdmins}/>
 				</div>
 			<div>
-				<div>
+				<Box>
 					{addRoomClicked ?
 							<Stack>
-								<form onSubmit={handleRoomSubmit} className="add-channel-form">
-										<input
-											name="roomName"
-											type="text" 
-											placeholder='Room name'
-											className="form"/>
-											<select>
-												<option value="private">private</option>
-												<option value="public">public</option>
-											</select>
-											<label>password protected</label>
-											<input type="checkbox" id='password-option' onChange={handlePasswordSelect}/>
-											{showPassword?
-												<input type="password" id="password-input"/>
-												:
-												<div/>
-											}
+								<Stack component="form" onSubmit={handleRoomSubmit} spacing={1}>
+									<TextField id="roomName" label="Room name" variant="standard" />
+									<FormControl fullWidth>
+										<InputLabel id="visibility-label">visibility</InputLabel>
+										<Select
+										labelId="visibility-label"
+										id="visibility"
+										label="visibility"
+										>
+											<MenuItem value="public">public</MenuItem>
+											<MenuItem value="private">private</MenuItem>
+										</Select>
+									</FormControl>
+									<ToggleButton value={showPassword} onChange={handlePasswordSelect}>
+										<KeyIcon/>
+									</ToggleButton>
+									{showPassword?
+										<TextField id="password" label="password" type="password" />
+										:
+										<div/>
+									}
 
-									<input type="submit" value="create"/>
-								</form>
-								<button title="cancel" onClick={() => setAddRoomClicked(0)}>cancel</button>
+								<Button variant="contained" color="success" type="submit">
+									Create
+								</Button>
+								</Stack>
+								<Button variant="contained" color="error" onClick={() => setAddRoomClicked(0)}>
+									Cancel
+								</Button>
 							</Stack>
 						:
 						<button onClick={() => setAddRoomClicked(1)}>Create Room</button>
 					}
-				</div>
+				</Box>
 			</div>
 		</Stack>
 	);
