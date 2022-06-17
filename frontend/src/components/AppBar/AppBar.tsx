@@ -3,7 +3,6 @@ import {useState, useEffect} from 'react'
 import PongMenu from './PongMenu'
 
 import axios from 'axios';
-import {token} from 'index';
 import {User} from 'interfaces';
 
 import {PlayerAvatar} from	'../Avatars'
@@ -106,9 +105,7 @@ export default function SearchAppBar() {
 
 	useEffect(() => {
 		axios.get('http://127.0.0.1:3001/users/me',{
-		headers: {
-			'Authorization': token,
-		}
+			withCredentials: true, 
 		})
 		.then(res => {
 			console.log("Get request success")
