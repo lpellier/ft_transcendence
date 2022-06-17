@@ -37,7 +37,7 @@ export default function Homepage() {
 	//}
     return (
 		<Stack spacing={2}>
-        	<SearchAppBar />
+        	<SearchAppBar /> 
 			<Container>
 				<Stack direction="row" spacing={1} sx={AllHomeStyle}>
 					<FriendBand />

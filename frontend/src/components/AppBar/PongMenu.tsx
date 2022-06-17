@@ -11,50 +11,34 @@ import ForumIcon from '@mui/icons-material/Forum'
 import GamesIcon from '@mui/icons-material/Games'
 import HomeIcon from '@mui/icons-material/Home';
 import SettingsIcon from '@mui/icons-material/Settings';
-import Paper from '@mui/material/Paper'
-import axios from 'axios';
+import Paper from '@mui/material/Paper';
+import {reqLogout} from 'requests';
+import { phoneSize } from 'index';
+import { IconButtonStyle } from '../../styles/tsxStyles/AppBar/PongMenu';
+import {User} from 'interfaces';
 
-import { phoneSize } from 'index'
-import { IconButtonStyle } from '../../styles/tsxStyles/AppBar/PongMenu'
-
-import {User} from 'interfaces'
-function SettingsLink() {
-  return (
-    <nav>
-      <Link to="/settings" style={{ textDecoration: 'none' }}>
-        <Button
-            variant="contained"
-            startIcon={<SettingsIcon />}
-            color="secondary">
-          Settings
-        </Button>
-      </Link>
-    </nav>
-  );
+function ALink(props: {linkto: string, title: string, icon: any}) {
+	return (
+		<nav>
+		  <Link to={props.linkto} style={{ textDecoration: 'none' }}>
+			<Button
+				variant="contained"
+				startIcon={<SettingsIcon />}
+				color="secondary">
+			  {props.title}
+			</Button>
+		  </Link>
+		</nav>
+	  );
 }
 
 function LogOutLink() {
-  
-  function logout() {
-
-    axios.get('http://127.0.0.1:3001/auth/logout',
-    {
-        withCredentials: true,
-    })
-    .then(res => {
-      console.log("Logout ")
-    })
-    .catch(function (err) {
-      console.log("Get request failed : ", err)
-    });
-
-  }
-
-  return (
+	
+	return (
     <nav>
       <Link to="/" style={{ textDecoration: 'none' }}>
         <Button
-            onClick={logout}
+            onClick={reqLogout}
             variant="contained"
             startIcon={<MeetingRoomIcon />}
             color="secondary">
@@ -65,63 +49,28 @@ function LogOutLink() {
   );
 }
 
+function SettingsLink() {
+	return ( <ALink linkto={"/settings"} title={"Settings"} icon={<SettingsIcon/>} /> )
+}
+
 function GameLink() {
-  return (
-    <nav>
-      <Link to="/game" style={{ textDecoration: 'none' }}>
-        <Button
-            variant="contained"
-            startIcon={<GamesIcon />}
-            color="secondary">
-          Game
-        </Button>
-      </Link>
-    </nav>
-  );
+	return ( <ALink linkto={"/game"} title={"Game"} icon={<GamesIcon />}/> )
 }
 
 function HomeLink() {
-  return (
-    <nav>
-      <Link to="/home" style={{ textDecoration: 'none' }}>
-        <Button
-            variant="contained"
-            startIcon={<HomeIcon />}
-            color="secondary">
-          Home
-        </Button>
-      </Link>
-    </nav>
-  );
+	return ( <ALink linkto={"/home"} title={"Home"} icon={<HomeIcon />} /> )
 }
 
 function ChatLink() {
-  return (
-    <nav>
-      <Link to="/chat" style={{ textDecoration: 'none' }}>
-        <Button
-            variant="contained"
-            startIcon={<ForumIcon />}
-            color="secondary">
-          Chat
-        </Button>
-      </Link>
-    </nav>
-  );
+	return ( <ALink linkto={"/chat"} title={"Chat"} icon={<ForumIcon />} /> )
 }
 
 function PhoneButton() {
   return (
     <div>
-      <MenuItem  	>
-        <HomeLink />
-      </MenuItem>
-      <MenuItem  	>
-        <GameLink />
-      </MenuItem>
-      <MenuItem  	>
-        <ChatLink />
-      </MenuItem>
+      <MenuItem> <HomeLink /> </MenuItem>
+      <MenuItem> <GameLink /> </MenuItem>
+      <MenuItem> <ChatLink /> </MenuItem>
     </div>
   );
 }

@@ -6,8 +6,7 @@ import WebhookIcon from '@mui/icons-material/Webhook';
 
 import {orangeTheme} from 'components/Themes'
 import {Title, ButtonStyle, LinkStyle, IconStyle} from "../styles/tsxStyles/LogIn"
-
-import axios from "axios";
+import {getUser} from 'requests'
 
 const AuthAPI = "http://127.0.0.1:3001/auth"
 
@@ -30,20 +29,6 @@ function LogInButton(props: {login: any})
 }
 
 export default function LogIn() {
-	
-	 function getRequest() {
-		axios.get('http://127.0.0.1:3001/users/me', {
-			withCredentials: true
-		})
-		.then(res => {
-			console.log("Get request success")
-			const test_data = res.data;
-			console.log({test_data});
-		})
-		.catch(function (err) {
-			console.log("Get request failed")
-		});
-	}
 
     return (
         	<Stack spacing={10} sx={Title}>
@@ -54,7 +39,7 @@ export default function LogIn() {
 				</div>
 				<nav>
 					<a href={AuthAPI} style={LinkStyle}>
-					  	<LogInButton login={getRequest}/>
+					  	<LogInButton login={getUser}/>
 					</a>
 				</nav>
         	</Stack>

@@ -1,18 +1,36 @@
-
 interface User {
-    id: number;
+	id: number;
     avatar: string;
     username: string;
-	winHistory: number;
-	lossHistory: number;
-    tfa: boolean;
-    otpsecret: string;
+	Friends: [Friend];
+	auth: Auth;
+	stats: Stats;
+}
+
+const init_user = {} as User
+
+interface Stats {
+	level: number;
+	wins: number;
+	losses: number;
+}
+
+const init_stats = {} as Stats
+
+interface Friend {
+	friend: User;
+	status: string;
+}
+
+interface Auth {
+	tfa: boolean;
+	otpsecret: string;
 }
 
 interface Room {
     id: number;
     name: string;
-    ownerId: number;
+	ownerId: number;
     visibility: string;
 }
 
@@ -24,12 +42,5 @@ interface Message {
     type: boolean;
 }
 
-interface Stats {
-	id: number;
-	wins: number;
-	losses: number;
-	level: number;
-	userId: number;
-}
 
-export {User, Room, Message, Stats}
+export {User, init_user, Stats, init_stats, Room, Message, Auth}

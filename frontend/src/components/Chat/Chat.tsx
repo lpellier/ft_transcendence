@@ -8,6 +8,7 @@ import Channels from './Channels';
 import '../../styles/Chat/Chat.css';
 
 import {User, Room} from 'interfaces';
+import { getUser } from 'requests';
 
 const SERVER = "http://127.0.0.1:3001";
 export const socket = io(SERVER, {
@@ -55,17 +56,7 @@ function Chat() {
 	})
 
 	useEffect(() => {
-		axios.get('http://127.0.0.1:3001/users/me',{
-			withCredentials: true
-			})
-			.then(res => {
-				console.log("Get request success")
-				const user_data: User= res.data;
-				setUser(user_data);
-			})
-			.catch(function (err) {
-				console.log("Get request failed : ", err)
-			});
+		getUser(setUser)
 		}, [])
 		
 		useEffect(() => {

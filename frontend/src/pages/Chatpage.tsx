@@ -1,6 +1,5 @@
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
-
 import Chat from 'components/Chat/Chat'
 import SearchAppBar from 'components/AppBar/AppBar'
 import { ToastContainer } from 'react-toastify';
@@ -39,7 +38,7 @@ export default function Chatpage() {
                 pauseOnHover
             />
             <Stack spacing={6} style={ChatPageStyle}>
-                <SearchAppBar />
+                <SearchAppBar /> 
                 <Box sx={ChatBoxStyle}>
 					<Chat />
 				</Box>

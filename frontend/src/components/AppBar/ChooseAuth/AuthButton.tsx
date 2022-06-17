@@ -5,7 +5,8 @@ import Stack from '@mui/material/Stack'
 import QRCode from 'react-qr-code'
 
 import axios from 'axios'
-import {User} from 'interfaces'
+import {init_user, User} from 'interfaces'
+import {getUser} from 'requests'
 
 function GenerateQRCode(props: {url: string}) {
 
@@ -21,24 +22,10 @@ function GenerateQRCode(props: {url: string}) {
 function TFAButton() {
 	const [input, showedInput] = useState(false);
 	const [url, setUrl] = useState("");
-	const [user, setUser] = useState<User>({avatar: "", id: -1, username: "", 
-			winHistory: -1, lossHistory: -1, tfa: false, otpsecret: ""});
+	const [user, setUser] = useState<User>(init_user);
 
 	useEffect(() => {
-
-		const res = axios.get(
-			'http://127.0.0.1:3001/users/me',
-			{
-					withCredentials: true, 
-			})
-		.then(res => {
-			console.log("Get request success")
-			const getData = res.data;
-			setUser(getData);
-		})
-		.catch(function (err) {
-			console.log("Get request failed : ", err)
-		});
+		getUser(setUser);
 	}, [])
 
 
@@ -56,7 +43,8 @@ function TFAButton() {
 	}
 
 	function getSecret() {
-		const otpUrl = "otpauth://totp/transcendance_BoopBipBoop?secret=" + user.otpsecret;
+		const otpUrl = "otpauth://totp/transcendance_BoopBipBoop?secret=" 
+						+ user.auth.otpsecret;
 
 		setUrl(otpUrl)
 	}
@@ -71,7 +59,7 @@ function TFAButton() {
 			patchTfa({query:"tfa=false"})
 		}
 
-	if (user.tfa == false) {
+	if (user.auth.tfa == false) {
 		return (
 			<Stack>
     			< Button

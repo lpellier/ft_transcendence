@@ -6,7 +6,7 @@ import Box from '@mui/material/Box';
 export default function Settingspage() {
     return (
 		<Stack >
-			<SearchAppBar />
+			<SearchAppBar /> 
 			<Box >
 				<Settings />
 			</Box>

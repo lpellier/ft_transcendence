@@ -1,14 +1,11 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-
 import Stack from '@mui/material/Stack'
 import Box from '@mui/material/Box'
-
 import ChooseAvatarModal from '../AppBar/ChooseAvatar/Modal'
 import ChooseNameModal from '../AppBar/ChooseName/Modal'
 import ChooseAuthModal from '../AppBar/ChooseAuth/Modal'
-
-import {User} from 'interfaces'
+import {init_user, User} from 'interfaces'
 
 const SettingStyle = {
     height:  '100vh',
@@ -18,8 +15,7 @@ const SettingStyle = {
 }
 
 export default function Settings() {
-    let [user, setUser] = useState<User>({avatar: "", id: -1, username: "", 
-		winHistory: -1, lossHistory: -1, tfa: false, otpsecret: ""});
+    let [user, setUser] = useState<User>(init_user);
 
     useEffect(() => {
 		axios.get('http://127.0.0.1:3001/users/me',{
