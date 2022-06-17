@@ -1,9 +1,11 @@
-import { Controller, Get, Body, Patch, Param, UseGuards, Req } from '@nestjs/common';
+import { Controller, Get, Body, Patch, Param, UseGuards, Req, Put, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { ProfileWithSettings } from './interfaces/profile-with-settings.interface';
 import { Profile } from './interfaces/profile.interface';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
 
 @UseGuards(JwtAuthGuard)
 @Controller('users')
@@ -25,6 +27,22 @@ export class UsersController {
     return this.usersService.updateUser(req.user.id, updateUserDto);
   }
 
+  @Put('upload-avatar')
+  @UseInterceptors(FileInterceptor('avatar', {
+    storage: diskStorage({
+      destination: './avatar',
+      filename: (req: any, file, cb) => cb(null, req.user.id + '.png')
+    }),
+    fileFilter: (req, file, cb) => {
+      console.log(file.mimetype);
+      console.log(file.encoding);
+      cb(null, true)
+    }
+  }))
+  uploadAvatar(@UploadedFile() file: Express.Multer.File) {
+    console.log("heyllo");
+  }
+  
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<Profile> {
     return this.usersService.getProfile(+id);

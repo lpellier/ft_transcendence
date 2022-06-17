@@ -66,8 +66,9 @@ EOF
 		8)		curl -H "$auth_jwt" -b cookie.txt -c cookie.txt "$BACKEND_URL/auth/logout"
 				auth_jwt="Authorization: Bearer `grep jwt[^-] cookie.txt | cut -d "	" -f 7`"
 				;;
-
 		9)		exit
+				;;
+		10)		curl -X PUT -H "$auth_jwt" -b cookie.txt -c cookie.txt -F "avatar=@/mnt/nfs/homes/bolmos-o/dev/ft_transcendence/testfile" "$BACKEND_URL/users/upload-avatar"
 				;;
 	esac
 	read
