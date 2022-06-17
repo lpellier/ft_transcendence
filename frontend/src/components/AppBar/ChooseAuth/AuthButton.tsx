@@ -5,7 +5,6 @@ import Stack from '@mui/material/Stack'
 import QRCode from 'react-qr-code'
 
 import axios from 'axios'
-import {token} from 'index'
 import {User} from 'interfaces'
 
 function GenerateQRCode(props: {url: string}) {
@@ -30,9 +29,7 @@ function TFAButton() {
 		const res = axios.get(
 			'http://127.0.0.1:3001/users/me',
 			{
-				headers: { 
-					'Authorization': token, 
-				}
+					withCredentials: true, 
 			})
 		.then(res => {
 			console.log("Get request success")
@@ -51,9 +48,7 @@ function TFAButton() {
 			'http://127.0.0.1:3001/users/me', 
 			props.query,
 			{
-				headers: {
-					'Authorization': token,
-				}
+				withCredentials: true, 
 			})
 			.catch(function (err) {
 				console.log("Setting tfa failed :", err)

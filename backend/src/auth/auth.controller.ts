@@ -17,7 +17,7 @@ export class AuthController {
 	async login(@Req() req, @Res({passthrough: true}) res: Response) {
 		const isAuthenticated = !req.user.tfa;
 		const authentication = await this.authService.login(req.user.id, isAuthenticated);
-		res.cookie(authentication.type, authentication.token);
+		res.cookie(authentication.type, authentication.token, { sameSite: 'strict' , httpOnly: true });
 	}
 
 	@UseGuards(JwtOtpAuthGuard)
@@ -26,14 +26,13 @@ export class AuthController {
 		const validated = await this.authService.validateGoogleAuthenticatorToken(req.user.id, otp)
 		if (validated === true) {
 			const authentication = await this.authService.login(req.user.id, true);
-			res.cookie(authentication.type, authentication.token);
-			return authentication;
+			res.cookie(authentication.type, authentication.token, { sameSite: 'strict' , httpOnly: true });
 		}
 	}
 
 	@UseGuards(JwtAuthGuard)
 	@Get('logout')
-	async logout(@Req() req, @Res({passthrough: true}) res: Response) {
-		res.cookie('jwt', "");
+	async logout(@Res({passthrough: true}) res: Response) {
+		res.cookie('jwt', "", { expires: new Date(), sameSite: 'strict' , httpOnly: true });
 	}
 }

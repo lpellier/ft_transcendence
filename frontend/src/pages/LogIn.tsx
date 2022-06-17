@@ -32,12 +32,9 @@ function LogInButton(props: {login: any})
 export default function LogIn() {
 	
 	 function getRequest() {
-		axios.get('http://127.0.0.1:3001',
-		{'headers': {
-			'Origin':'http://127.0.0.1:3000',
-			'Access-Control-Allow-Origin': 'http://127.0.0.1:3000',
-		}
-	})
+		axios.get('http://127.0.0.1:3001/users/me', {
+			withCredentials: true
+		})
 		.then(res => {
 			console.log("Get request success")
 			const test_data = res.data;
