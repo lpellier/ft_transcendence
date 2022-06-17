@@ -68,7 +68,7 @@ EOF
 				;;
 		9)		exit
 				;;
-		10)		curl -X PUT -H "$auth_jwt" -b cookie.txt -c cookie.txt -F "avatar=@/mnt/nfs/homes/bolmos-o/dev/ft_transcendence/testfile" "$BACKEND_URL/users/upload-avatar"
+		10)		curl -vX PUT -H "$auth_jwt" -b cookie.txt -c cookie.txt -F "avatar=@/mnt/nfs/homes/bolmos-o/dev/ft_transcendence/testfile.pn" "$BACKEND_URL/users/upload-avatar"
 				;;
 	esac
 	read

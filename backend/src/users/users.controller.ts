@@ -30,17 +30,18 @@ export class UsersController {
   @Put('upload-avatar')
   @UseInterceptors(FileInterceptor('avatar', {
     storage: diskStorage({
-      destination: './avatar',
+      destination: './avatars',
       filename: (req: any, file, cb) => cb(null, req.user.id + '.png')
     }),
     fileFilter: (req, file, cb) => {
-      console.log(file.mimetype);
-      console.log(file.encoding);
-      cb(null, true)
+      if (file.mimetype.match(/^image/)){
+        cb(null, true);
+      } else {
+        cb(null, false);
+      }
     }
   }))
   uploadAvatar(@UploadedFile() file: Express.Multer.File) {
-    console.log("heyllo");
   }
   
   @Get(':id')

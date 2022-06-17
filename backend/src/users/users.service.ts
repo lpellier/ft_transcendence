@@ -1,5 +1,6 @@
 import { BadRequestException, ConflictException, Injectable } from '@nestjs/common';
 import { PrismaClient, User } from '@prisma/client';
+import * as fs from 'fs/promises';
 import { authenticator } from 'otplib';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ProfileWithSettings } from './interfaces/profile-with-settings.interface';
@@ -29,12 +30,12 @@ export class UsersService {
       data: {
         id: profile.id,
         username: profile.username,
-        avatar: profile.avatar,
         stats: {
           create: {}
         }
       }
     });
+    await fs.symlink('/backend/avatars/default.png', '/backend/avatars/' + profile.id + '.png');
     await this.prisma.room.update({
       where: {id: 1},
       data: {
