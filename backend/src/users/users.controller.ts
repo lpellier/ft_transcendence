@@ -30,7 +30,7 @@ export class UsersController {
   @Put('upload-avatar')
   @UseInterceptors(FileInterceptor('avatar', {
     storage: diskStorage({
-      destination: './avatars',
+      destination: './public/avatars',
       filename: (req: any, file, cb) => cb(null, req.user.id + '.png')
     }),
     fileFilter: (req, file, cb) => {
@@ -39,6 +39,9 @@ export class UsersController {
       } else {
         cb(null, false);
       }
+    },
+    limits: {
+      fileSize: 1048576
     }
   }))
   uploadAvatar(@UploadedFile() file: Express.Multer.File) {
