@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import {token} from 'index';
 
 import Stack from '@mui/material/Stack'
 import Box from '@mui/material/Box'
@@ -24,9 +23,7 @@ export default function Settings() {
 
     useEffect(() => {
 		axios.get('http://127.0.0.1:3001/users/me',{
-		headers: {
-			'Authorization': token,
-		}
+			withCredentials: true
 		})
 		.then(res => {
 			console.log("Get request success")
