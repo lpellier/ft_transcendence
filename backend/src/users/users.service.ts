@@ -1,4 +1,4 @@
-import { BadRequestException, ConflictException, Injectable } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaClient, User } from '@prisma/client';
 import * as fs from 'fs/promises';
 import { authenticator } from 'otplib';
@@ -35,7 +35,7 @@ export class UsersService {
         }
       }
     });
-    await fs.symlink('/backend/avatars/default.png', '/backend/avatars/' + profile.id + '.png');
+    await fs.copyFile('/backend/public/avatars/default.png', '/backend/public/avatars/' + profile.id + '.png');
     await this.prisma.room.update({
       where: {id: 1},
       data: {
@@ -66,7 +66,7 @@ export class UsersService {
   }
 
   async getProfile(id: number): Promise<Profile> {
-    const {tfa, otpSecret, ...profile} = await this.prisma.user.findUnique({
+    const profile = await this.prisma.user.findUnique({
       where: {
         id: id
       },
@@ -74,7 +74,11 @@ export class UsersService {
         stats: true
       }
     });
-    return profile;
+    if (!profile) {
+      throw new NotFoundException();
+    }
+    const {tfa, otpSecret, ...result} = profile;
+    return result;
   }
 
   async updateUser(id: number, data: UpdateUserDto): Promise<string> {
