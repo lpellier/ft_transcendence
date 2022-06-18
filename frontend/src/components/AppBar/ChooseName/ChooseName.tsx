@@ -2,12 +2,11 @@ import { useState, useEffect } from "react";
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
-
+import {User} from 'interfaces'
 import { NameButtonStyle } from '../../../styles/tsxStyles/AppBar/Name'
 
-import axios from 'axios';
+import {putUser} from 'requests';
 
-import {User} from 'interfaces'
 
 function NameButton() {
 	return (
@@ -30,21 +29,9 @@ function NameInput(props: {user: User}) {
 	}
 
 	useEffect(() => {
-		axios.put('http://127.0.0.1:3001/users/me',
-			{
-				data: {
-					username: new_username,
-				}
-			},
-			{
-			withCredentials: true,
-			headers: {
-				'Content-Type': 'application/json'
-			}
-		})
-		.catch(function (err) {
-			console.log("Put request failed : ", err)
-		});
+	
+		putUser("username: new_username");
+
 	}, [new_username])
 
 	return (

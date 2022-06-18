@@ -28,7 +28,6 @@ function TFAButton() {
 		getUser(setUser);
 	}, [])
 
-
 	function patchTfa(props: {query: string}) {
 
 		axios.patch(
@@ -55,9 +54,9 @@ function TFAButton() {
 			patchTfa({query:"tfa=true"})
 		}
 
-		function deactivateTfa() {
-			patchTfa({query:"tfa=false"})
-		}
+	function deactivateTfa() {
+		patchTfa({query:"tfa=false"})
+	}
 
 	if (user.auth.tfa == false) {
 		return (
