@@ -11,16 +11,15 @@ import Homepage from '../pages/Homepage'
 import Gamepage from '../pages/Gamepage'
 import Chatpage from '../pages/Chatpage'
 import Error from '../pages/Error'
-
+import {token} from 'index'
 
 type Props = {children: JSX.Element}
 
 function ProtectedRoute({children} : Props) {
-    // if (token) {
-    if (1) {
-        // console.log("Token value : ", {token}); // ? je me suis permis de commenter
+    if (token) {
         return (
-        <>{children}</>)
+			<>{children}</>
+		)
     }
     else {
         return (
