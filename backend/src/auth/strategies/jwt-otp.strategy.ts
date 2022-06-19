@@ -18,7 +18,6 @@ export class JwtOtpStrategy extends PassportStrategy(Strategy, 'jwt-otp') {
 		if (req && req.cookies) {
 			token = req.cookies['jwt-otp']
 		}
-		console.log(token)
 		return token;
 	}
 
