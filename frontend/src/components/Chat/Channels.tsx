@@ -70,9 +70,52 @@ function PasswordInput(props: {openPassword: boolean, setOpenPassword: React.Dis
 				type="password"
 				fullWidth
 				variant="standard"
-			/>
+				/>
 			</Box>
 		</Dialog>
+	)
+}
+
+function RoomList(props: {rooms: Room[], currentRoom: Room, setCurrentRoom: React.Dispatch<React.SetStateAction<Room>>, users: User[], user: User, visibility: string, roomAdmins:User[]}) {
+	let [openPassword, setOpenPassword] = useState<boolean>(false);
+
+	function handleRoomClick(room: Room) {
+		if (room.password === "")
+		{
+			props.setCurrentRoom(room)
+			socket.emit('get admins', room.id);
+		}
+		else
+			setOpenPassword(true);
+	}
+
+	return (
+		<List>
+				{props.rooms.map(item => (
+					<div key={item.id}>
+						{item.visibility === props.visibility ?
+							<div>
+								{ item.id !== props.currentRoom.id ?
+								<ListItem className="MenuItem" button onClick={() => handleRoomClick(item)}>
+									<ListItemText primary={item.name}/>
+									<PasswordInput openPassword={openPassword} setOpenPassword={setOpenPassword} room={item} setCurrentRoom={props.setCurrentRoom}/>
+								</ListItem>
+								:
+								<Stack direction="row">
+									<ListItem button selected className="MenuItem">
+										<ListItemText primary={item.name}  />
+									</ListItem>
+									<RoomUserPopper currentUser={props.user} users={props.users} room={props.currentRoom} roomAdmins={props.roomAdmins}/>
+								</Stack>
+								}
+								<Divider/>
+							</div>
+							:
+							<div/>
+						}
+					</div>
+				))}
+		</List>
 	)
 }
 
@@ -82,10 +125,14 @@ function Channels(props : {user: User, users: User[], currentRoom: Room, setCurr
 	let [rooms, setRooms] = useState<Room[]>([]);
 	let [publicRooms, setPublicRooms] = useState<Room[]>([]);
 	let [showPassword, setShowPassword] = useState<number>(0);
-	let [openPassword, setOpenPassword] = useState<boolean>(false);
+	
+	async function handleRoomSubmit(e:any) {
+		function addtoDb(password:string, room_name:string, visibility:string) {
+			const createRoomDto: CreateRoomDto = {name: room_name, userId: props.user.id, visibility: visibility, password: password}
+			if (room_name && visibility)
+				socket.emit('create room', createRoomDto);
+		}
 
-
-	function handleRoomSubmit(e:any) {
 		e.preventDefault();
 		const room_name: string = e.target[0].value;
 		const visibility: string = e.target[1].value;
@@ -94,28 +141,17 @@ function Channels(props : {user: User, users: User[], currentRoom: Room, setCurr
 		if (password !== "")
 		{
 			bcrypt.hash(password, 10, function(err, hash) {
-				hashedPassword = hash;
+				addtoDb(hash, room_name, visibility);
 			});
 		}
+		else
+			addtoDb(password, room_name, visibility);
 
-		const createRoomDto: CreateRoomDto = {name: room_name, userId: props.user.id, visibility: visibility, password: hashedPassword}
-		if (room_name && visibility)
-			socket.emit('create room', createRoomDto);
 		e.target[0].value = '';
 		setAddRoomClicked(0);
 	}
 
-	function handleRoomClick(room: Room) {
-		if (room.password === "")
-		{
-			props.setCurrentRoom(room)
-			socket.emit('get admins', room.id);
-		}
-		else
-		{
-			setOpenPassword(true);
-		}
-	}
+
 	useEffect(() => {
 		if (rooms.find(item => item.id === props.currentRoom.id))
 			props.setCanWrite(true);
@@ -182,38 +218,6 @@ function Channels(props : {user: User, users: User[], currentRoom: Room, setCurr
 		return(() => {socket.off('get public rooms', handler)})
 	}, [])
 
-
-	function RoomList(props: {rooms: Room[], currentRoom: Room, setCurrentRoom: React.Dispatch<React.SetStateAction<Room>>, users: User[], user: User, visibility: string, roomAdmins:User[]}) {
-		return (
-			<List>
-					{props.rooms.map(item => (
-						<div key={item.id}>
-							{item.visibility === props.visibility ?
-								<div>
-									{ item.id !== props.currentRoom.id ?
-									<ListItem className="MenuItem" button onClick={() => handleRoomClick(item)}>
-										<ListItemText primary={item.name}/>
-										<PasswordInput openPassword={openPassword} setOpenPassword={setOpenPassword} room={item} setCurrentRoom={props.setCurrentRoom}/>
-									</ListItem>
-									:
-									<Stack direction="row">
-										<ListItem button selected className="MenuItem">
-											<ListItemText primary={item.name}  />
-										</ListItem>
-										<RoomUserPopper currentUser={props.user} users={props.users} room={props.currentRoom} roomAdmins={props.roomAdmins}/>
-									</Stack>
-									}
-									<Divider/>
-								</div>
-								:
-								<div/>
-							}
-						</div>
-					))}
-			</List>
-		)
-	}
-
 	function handlePasswordSelect() {
 		if (showPassword)
 			setShowPassword(0);
@@ -221,12 +225,11 @@ function Channels(props : {user: User, users: User[], currentRoom: Room, setCurr
 			setShowPassword(1);
 	}
 
-
 	return ( 
 		<Stack className='channels' justifyContent='space-between'>
 				<div>
-					<RoomList rooms = {publicRooms} currentRoom = {props.currentRoom} setCurrentRoom={props.setCurrentRoom} users = {props.users} user = {props.user} visibility = "public" roomAdmins={props.roomAdmins}/>
-					<RoomList rooms = {rooms} currentRoom = {props.currentRoom} setCurrentRoom={props.setCurrentRoom} users = {props.users} user = {props.user} visibility="private" roomAdmins={props.roomAdmins}/>
+					<RoomList rooms = {publicRooms} currentRoom = {props.currentRoom} setCurrentRoom = {props.setCurrentRoom} users = {props.users} user = {props.user} visibility = "public" roomAdmins={props.roomAdmins} />
+					<RoomList rooms = {rooms} currentRoom = {props.currentRoom} setCurrentRoom = {props.setCurrentRoom} users = {props.users} user = {props.user} visibility="private" roomAdmins={props.roomAdmins} />
 				</div>
 			<div>
 				<Box>
@@ -256,9 +259,9 @@ function Channels(props : {user: User, users: User[], currentRoom: Room, setCurr
 										<div/>
 									}
 
-								<Button variant="contained" color="success" type="submit">
-									Create
-								</Button>
+									<Button variant="contained" color="success" type="submit">
+										Create
+									</Button>
 								</Stack>
 								<Button variant="contained" color="error" onClick={() => setAddRoomClicked(0)}>
 									Cancel
