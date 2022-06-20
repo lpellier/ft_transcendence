@@ -2,7 +2,6 @@
 // ? Coding consistency : snake_case for variables | camelCase for functions | PascalCase for classes
 // ? Map indexes : 1 (normal map), 2 (city map), 3 (casino map)
 
-// TODO Add casino mechanics to multiplayer mode aswell
 // TODO Brainstorm a better idea than walls in the middle for City
 
 // TODO local mode : pause by pressing escape -> removing sound or quitting to menu
