@@ -1,26 +1,24 @@
 import { Injectable } from '@nestjs/common';
-import { CreateFriendDto } from './dto/create-friend.dto';
-import { UpdateFriendDto } from './dto/update-friend.dto';
+import { PrismaClient } from '@prisma/client';
 
 @Injectable()
 export class FriendsService {
-  create(createFriendDto: CreateFriendDto) {
-    return 'This action adds a new friend';
-  }
+  constructor(private prisma: PrismaClient) {}
 
-  findAll() {
-    return `This action returns all friends`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} friend`;
-  }
-
-  update(id: number, updateFriendDto: UpdateFriendDto) {
-    return `This action updates a #${id} friend`;
+  add(id: number) {
+    // await this.prisma.user.update({
+    //   where: {
+    //     id:
+    //   }
+    // })
+    return `This action removes a #${id} friend`;
   }
 
   remove(id: number) {
     return `This action removes a #${id} friend`;
+  }
+
+  findAll() {
+    return `This action returns all friends`;
   }
 }

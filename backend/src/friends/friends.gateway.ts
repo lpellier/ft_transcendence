@@ -1,29 +1,35 @@
-import { WebSocketGateway, SubscribeMessage, MessageBody, OnGatewayConnection, OnGatewayDisconnect } from '@nestjs/websockets';
+import {
+  WebSocketGateway,
+  SubscribeMessage,
+  MessageBody,
+  OnGatewayConnection,
+  OnGatewayDisconnect,
+} from '@nestjs/websockets';
 import { FriendsService } from './friends.service';
-import { CreateFriendDto } from './dto/create-friend.dto';
-import { UpdateFriendDto } from './dto/update-friend.dto';
 import { ConfigService } from '@nestjs/config';
+import { UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
+@UseGuards(JwtAuthGuard)
 @WebSocketGateway({
   cors: {
-    origin: (new ConfigService).get("FRONT_URL"),
-    credentials: true
-  }
+    origin: new ConfigService().get('FRONT_URL'),
+    credentials: true,
+  },
 })
-export class FriendsGateway implements OnGatewayConnection, OnGatewayDisconnect {
+export class FriendsGateway
+  implements OnGatewayConnection, OnGatewayDisconnect
+{
   constructor(private readonly friendsService: FriendsService) {}
 
-  handleConnection(client) {
-    console.log("client connected")
+  @SubscribeMessage('addFriend')
+  add(@MessageBody() id: number) {
+    return this.friendsService.add(id);
   }
 
-  handleDisconnect(client) {
-    console.log("client disconnected")
-  }
-
-  @SubscribeMessage('createFriend')
-  create(@MessageBody() createFriendDto: CreateFriendDto) {
-    return this.friendsService.create(createFriendDto);
+  @SubscribeMessage('removeFriend')
+  remove(@MessageBody() id: number) {
+    return this.friendsService.remove(id);
   }
 
   @SubscribeMessage('findAllFriends')
@@ -31,18 +37,21 @@ export class FriendsGateway implements OnGatewayConnection, OnGatewayDisconnect 
     return this.friendsService.findAll();
   }
 
-  @SubscribeMessage('findOneFriend')
-  findOne(@MessageBody() id: number) {
-    return this.friendsService.findOne(id);
+  handleConnection(client) {
+    console.log('client connected');
   }
 
-  @SubscribeMessage('updateFriend')
-  update(@MessageBody() updateFriendDto: UpdateFriendDto) {
-    return this.friendsService.update(updateFriendDto.id, updateFriendDto);
+  handleDisconnect(client) {
+    console.log('client disconnected');
   }
 
-  @SubscribeMessage('removeFriend')
-  remove(@MessageBody() id: number) {
-    return this.friendsService.remove(id);
-  }
+  // @SubscribeMessage('findOneFriend')
+  // findOne(@MessageBody() id: number) {
+  //   return this.friendsService.findOne(id);
+  // }
+
+  // @SubscribeMessage('updateFriend')
+  // update(@MessageBody() updateFriendDto: UpdateFriendDto) {
+  //   return this.friendsService.update(updateFriendDto.id, updateFriendDto);
+  // }
 }

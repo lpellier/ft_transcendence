@@ -3,6 +3,6 @@ import { FriendsService } from './friends.service';
 import { FriendsGateway } from './friends.gateway';
 
 @Module({
-  providers: [FriendsGateway, FriendsService]
+  providers: [FriendsGateway, FriendsService],
 })
 export class FriendsModule {}
