@@ -98,7 +98,7 @@ export class Game {
 			let intersection : [number, number, string] = utils.getLineIntersection(this.pong.center(), this.pong.centerNextFrame(), wall[2], wall[3]);
 			if (intersection[0] != -1) {
 				this.pong.velocity[1] *= -1;
-				return ;
+				return false;
 			}
 		}
 		if (this.pong.velocity[0] > 0 && this.pong.pos[0] + this.pong.diameter > right_bound) {

@@ -59,7 +59,7 @@ export class GameGateway {
 	clients : string[] = [];
 	games : Game[] = [];
 
-	timestep : number = 20; // ms
+	timestep : number = 15; // ms
 
 	handleDisconnect(client : Socket) {
 		let index = -1;
@@ -111,7 +111,6 @@ export class GameGateway {
 	@SubscribeMessage('my_id')
 	getConnection(@MessageBody() client_id : string) {
 		this.clients.push(client_id);
-		// console.log(client_id, "just connected    -", this.clients.length, this.clients.length === 1 ? "user  total" : "users total");
 	}
 
 	@SubscribeMessage('matchmaking')
@@ -138,6 +137,8 @@ export class GameGateway {
 		existing_game.addPlayer(client.id);
 		this.server.to(existing_game.room_id).emit("waiting_room", existing_game.room_id, existing_game.score_limit, existing_game.map.name);
 		startGameFullRooms(this.games, this.server);
+
+		console.log(this.games);
 	}
 
 	// ? if user is searching for a specific room
@@ -164,6 +165,7 @@ export class GameGateway {
 		if (!found)
 			this.server.to(client.id).emit("matchmaking-error", "game_not_found");
 	}
+	
 
 	@SubscribeMessage("countdown_start")
 	handleCountdown(@ConnectedSocket() client : Socket) {
@@ -203,7 +205,6 @@ export class GameGateway {
 
 	@SubscribeMessage("switch_readiness")
 	handleSwitchReadiness(
-		@ConnectedSocket() client : Socket,
 		@MessageBody() client_id : string
 	) {
 		for (const game of this.games) {

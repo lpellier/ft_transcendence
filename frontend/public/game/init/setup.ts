@@ -4,17 +4,21 @@
 
 // TODO Brainstorm a better idea than walls in the middle for City
 
-// TODO local mode : pause by pressing escape -> removing sound or quitting to menu
-// TODO adding options and probably sounds
+// TODO Fix issue where matchmaking doesnt work properly
+	// ? hard to say when it happens, to replicate open a game on one tab and try to join it with matchamking on another
+	// ? seems that the button is clicked twice thus backend receives matchmaking orders twice from same client
+	// ? should try again at school, i wonder whether my mac is at fault
 
+// TODO add spectate mode
+	// ? would like to implement in join menu -> just type room id of game you'd like to watch and that's it
+	// ? backend games will have an array of spectators whom will also receive updated position
+	// ? of both players and their client will then be able to draw the match
+
+// TODO find a way to send data to database and fill every appropriate field when situation calls for it
+
+// TODO cute animation showing the roll of pong value in casino
 // TODO key animation not playing on safari
-
-// TODO power ups 
-// ? they will spawn one at a time for 2 seconds
-// ? on a random y point, and on the x point for both players
-// ? resize paddle depending on malus/bonus
-// ? inverted input
-// ? black hole teleport ball
+// TODO comment EVERYTHING
 
 let should_load : boolean = false;
 
