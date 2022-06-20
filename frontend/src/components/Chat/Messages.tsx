@@ -19,7 +19,7 @@ interface CreateMessageDto {
     type: boolean;
 }
 
-function Messages(props : {user: User, users: User[], current_room: Room}) {
+function Messages(props : {user: User, users: User[], currentRoom: Room, canWrite: boolean}) {
 	
 	let [messages, setMessages] = useState<Message[]>([]);
 
@@ -28,7 +28,7 @@ function Messages(props : {user: User, users: User[], current_room: Room}) {
 	function handleSubmit(e: any) {
 		e.preventDefault();
 		const message: string = e.target[0].value;
-		const messageDto: CreateMessageDto = {content: message, user: props.user.id, room: props.current_room.id, type: true} 
+		const messageDto: CreateMessageDto = {content: message, user: props.user.id, room: props.currentRoom.id, type: true} 
 		console.log("messageDto = ", messageDto);
 		if (message)
 			socket.emit('chat message', messageDto);
@@ -37,7 +37,6 @@ function Messages(props : {user: User, users: User[], current_room: Room}) {
 
 	useEffect(() => {
 		socket.on('chat message', (msg:Message) => {
-			console.log("msg = ", msg);
 			addMessage(msg);
 			let objDiv = document.getElementById('messagebox');
             if (objDiv != null)
@@ -57,7 +56,7 @@ function Messages(props : {user: User, users: User[], current_room: Room}) {
 			<ul className='messages' id='messagebox'>
 				{messages.map(item=> (
 					<div key={item.id}>
-						{item.roomId === props.current_room.id ?
+						{item.roomId === props.currentRoom.id ?
 							<div>
 								{item.type ?
 									<div className='flexwrapper' >
@@ -89,12 +88,16 @@ function Messages(props : {user: User, users: User[], current_room: Room}) {
 					</div>
 				))}
 			</ul>
+			{props.canWrite?
 			<form className="message-form" id="form" onSubmit={handleSubmit}>
 				<Stack direction='row' spacing={1} justifyContent='space-between' className="message-form">
 					<input className='input' type="text" />
 					<button className='miauw-button'>Miauw</button>
 				</Stack>
             </form>
+			:
+			<div/>
+			}
         </Stack>
 		<Stack direction="row" spacing={1} className="cat-chat">
 			<img className="cat-chat-logo" src="https://media.istockphoto.com/vectors/minimal-cat-drawing-vector-id671786264?k=20&m=671786264&s=612x612&w=0&h=3PdcGzJGmzoe8T80LCUrTFMTDJf1r8M15kB_JRPa8H0=" alt='logo'/>

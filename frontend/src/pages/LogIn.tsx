@@ -10,6 +10,7 @@ import {Title, ButtonStyle, LinkStyle, IconStyle} from "../styles/tsxStyles/LogI
 import axios from "axios";
 
 const AuthAPI = "http://127.0.0.1:3001/auth"
+const MockAuthAPI = "http://127.0.0.1:3001/auth/mock"
 
 function LogInButton(props: {login: any})
  {
@@ -29,15 +30,31 @@ function LogInButton(props: {login: any})
       );
 }
 
+
+function MockLogInButton(props: {login: any})
+ {
+	return (
+		<ThemeProvider theme={orangeTheme}>
+                <Button 
+					onClick={props.login}
+					sx={ButtonStyle}
+                    variant="contained"
+                    startIcon={<LoginIcon />}
+                    size="large"
+                    color="primary"
+					>
+                  Mock Login
+                </Button>
+        </ThemeProvider>
+      );
+}
+
 export default function LogIn() {
 	
 	 function getRequest() {
-		axios.get('http://127.0.0.1:3001',
-		{'headers': {
-			'Origin':'http://127.0.0.1:3000',
-			'Access-Control-Allow-Origin': 'http://127.0.0.1:3000',
-		}
-	})
+		axios.get('http://127.0.0.1:3001/users/me', {
+			withCredentials: true
+		})
 		.then(res => {
 			console.log("Get request success")
 			const test_data = res.data;
@@ -59,6 +76,10 @@ export default function LogIn() {
 					<a href={AuthAPI} style={LinkStyle}>
 					  	<LogInButton login={getRequest}/>
 					</a>
+					<a href={MockAuthAPI} style={LinkStyle}>
+					  	<MockLogInButton login={getRequest}/>
+					</a>
+
 				</nav>
         	</Stack>
         );

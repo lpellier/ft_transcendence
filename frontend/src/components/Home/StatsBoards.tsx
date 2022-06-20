@@ -2,7 +2,6 @@ import {useState, useEffect} from 'react'
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import {token} from 'index';
 import {User} from 'interfaces';
 
 import axios from 'axios';
@@ -14,6 +13,7 @@ import UpdateIcon from '@mui/icons-material/Update';
 
 import { phoneSize } from 'index';
 import {StatTitle, StatBox} from "../../styles/tsxStyles/Home"
+import TouchRipple from '@mui/material/ButtonBase/TouchRipple';
 
 function BoardComponent(props: {icon: any, title: string}) {
 	return(
@@ -94,9 +94,8 @@ export default function StatsBoards() {
 
 	useEffect(() => {
 		axios.get('http://127.0.0.1:3001/users/me',{
-		   headers: {
-			   'Authorization': token,
-		   }})
+			withCredentials: true,
+		})
 		   .then(res => {
 			   console.log("Get request success")
 			   const resStats = res.data;

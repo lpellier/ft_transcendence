@@ -60,3 +60,18 @@
 .form {
 	max-width: 8vw;
 }
+
+.add-channel-form {
+	display: flex;
+	flex-direction: column;
+}
+
+.MenuItem.Mui {
+	color: black;
+  }
+  
+  /* Increase the specificity */
+  .MenuItem.Mui-selected {
+	background-color: white;
+	color: white;
+  }
