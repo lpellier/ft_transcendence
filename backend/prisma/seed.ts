@@ -8,6 +8,7 @@ async function main() {
 			name: "general",
 			ownerId: 60040,
 			visibility: "public",
+			password:""
 		}
 	})
 }
