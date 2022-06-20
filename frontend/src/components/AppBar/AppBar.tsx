@@ -134,7 +134,7 @@ export default function SearchAppBar() {
 			<AppBar position="static">
 			<Toolbar style={ BarStyle }>
 				<PongMenu user = {user} />
-				<PlayerAvatarBar image={user.avatar}/>
+				<PlayerAvatarBar image={'http://127.0.0.1:3001/avatars/' + user.id + '.png'}/>
 				<PlayerName name={""}/>
 				<Stack direction="row" spacing={2}>
 					<ProjectName />
@@ -149,7 +149,7 @@ export default function SearchAppBar() {
       <AppBar position="static">
         <Toolbar style={ BarStyle }>
         	<PongMenu user = {user}/>
-			<PlayerAvatarBar image={user.avatar}/>
+			<PlayerAvatarBar image={'http://127.0.0.1:3001/avatars/' + user.id + '.png'}/>
 			<PlayerName name={user.username}/>
 			<ProjectName />
 			<Stack direction="row" spacing={2}>

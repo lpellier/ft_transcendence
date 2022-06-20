@@ -24,6 +24,6 @@ export class JwtOtpStrategy extends PassportStrategy(Strategy, 'jwt-otp') {
 	async validate(payload: any): Promise<JwtPayload> {
 		const user = {id: payload.sub,
 			isAuthenticated: payload.isAuthenticated};
-	return user;
+		return user;
 	}
 }
