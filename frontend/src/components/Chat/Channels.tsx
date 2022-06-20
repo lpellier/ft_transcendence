@@ -6,11 +6,14 @@ import ListItemText from '@mui/material/ListItemText';
 import Divider from '@mui/material/Divider';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
-import Select from '@mui/material/Select';
+import NativeSelect from '@mui/material/NativeSelect';
 import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
 import KeyIcon from '@mui/icons-material/Key';
 import ToggleButton from '@mui/material/ToggleButton';
+import Dialog from '@mui/material/Dialog';
+import bcrypt from 'bcryptjs';
+
+import { toastThatError } from './RoomUserMod';
 
 import {useState, useEffect} from 'react'
 import {Room, User} from 'interfaces'
@@ -25,6 +28,7 @@ interface CreateRoomDto {
 	name: string;
 	userId: number;
 	visibility: string;
+	password: string;
 }
 
 export interface UserRoomDto {
@@ -33,19 +37,68 @@ export interface UserRoomDto {
 };
 
 
+function PasswordInput(props: {openPassword: boolean, setOpenPassword: React.Dispatch<React.SetStateAction<boolean>>, room: Room, setCurrentRoom: React.Dispatch<React.SetStateAction<Room>>}) {
+	
+	const handleClose = () => {
+		props.setOpenPassword(false);
+	};
+
+	function handlePasswordSubmit(e:any) {
+		const submittedPassword = e.target[0].value;
+		e.preventDefault();
+		bcrypt.compare(submittedPassword, props.room.password, function(err, result) {
+			if (result)
+			{
+				props.setCurrentRoom(props.room);
+				socket.emit('get admins', props.room.id);
+				handleClose()
+			}
+			else
+				toastThatError("wrong password");
+		})
+	}
+
+
+	return(
+		<Dialog open={props.openPassword}  onClose={handleClose}>
+			<Box component="form" onSubmit={handlePasswordSubmit}>
+			<TextField
+				autoFocus
+				margin="dense"
+				id="password"
+				label="password"
+				type="password"
+				fullWidth
+				variant="standard"
+			/>
+			</Box>
+		</Dialog>
+	)
+}
+
 function Channels(props : {user: User, users: User[], currentRoom: Room, setCurrentRoom: React.Dispatch<React.SetStateAction<Room>>, setCanWrite: React.Dispatch<React.SetStateAction<boolean>>, roomAdmins:User[]}) {
 
 	let [addRoomClicked, setAddRoomClicked] = useState<number>(0);
 	let [rooms, setRooms] = useState<Room[]>([]);
 	let [publicRooms, setPublicRooms] = useState<Room[]>([]);
 	let [showPassword, setShowPassword] = useState<number>(0);
+	let [openPassword, setOpenPassword] = useState<boolean>(false);
 
 
 	function handleRoomSubmit(e:any) {
 		e.preventDefault();
 		const room_name: string = e.target[0].value;
 		const visibility: string = e.target[1].value;
-		const createRoomDto: CreateRoomDto = {name: room_name, userId: props.user.id, visibility: visibility}
+		const password: string = e.target[3].value;
+		let   hashedPassword: string = "";
+		if (password !== "")
+		{
+			bcrypt.hash(password, 10, function(err, hash) {
+				hashedPassword = hash;
+			});
+		}
+
+		const createRoomDto: CreateRoomDto = {name: room_name, userId: props.user.id, visibility: visibility, password: hashedPassword}
 		if (room_name && visibility)
 			socket.emit('create room', createRoomDto);
 		e.target[0].value = '';
@@ -53,8 +106,15 @@ function Channels(props : {user: User, users: User[], currentRoom: Room, setCurr
 	}
 
 	function handleRoomClick(room: Room) {
-		props.setCurrentRoom(room)
-		socket.emit('get admins', room.id);
+		if (room.password === "")
+		{
+			props.setCurrentRoom(room)
+			socket.emit('get admins', room.id);
+		}
+		else
+		{
+			setOpenPassword(true);
+		}
 	}
 	useEffect(() => {
 		if (rooms.find(item => item.id === props.currentRoom.id))
@@ -123,7 +183,7 @@ function Channels(props : {user: User, users: User[], currentRoom: Room, setCurr
 	}, [])
 
 
-	function RoomList(props: {rooms: Room[], currentRoom: Room, users: User[], user: User, visibility: string, roomAdmins:User[]}) {
+	function RoomList(props: {rooms: Room[], currentRoom: Room, setCurrentRoom: React.Dispatch<React.SetStateAction<Room>>, users: User[], user: User, visibility: string, roomAdmins:User[]}) {
 		return (
 			<List>
 					{props.rooms.map(item => (
@@ -133,6 +193,7 @@ function Channels(props : {user: User, users: User[], currentRoom: Room, setCurr
 									{ item.id !== props.currentRoom.id ?
 									<ListItem className="MenuItem" button onClick={() => handleRoomClick(item)}>
 										<ListItemText primary={item.name}/>
+										<PasswordInput openPassword={openPassword} setOpenPassword={setOpenPassword} room={item} setCurrentRoom={props.setCurrentRoom}/>
 									</ListItem>
 									:
 									<Stack direction="row">
@@ -160,11 +221,12 @@ function Channels(props : {user: User, users: User[], currentRoom: Room, setCurr
 			setShowPassword(1);
 	}
 
+
 	return ( 
 		<Stack className='channels' justifyContent='space-between'>
 				<div>
-					<RoomList rooms = {publicRooms} currentRoom = {props.currentRoom} users = {props.users} user = {props.user} visibility = "public" roomAdmins={props.roomAdmins}/>
-					<RoomList rooms = {rooms} currentRoom = {props.currentRoom} users = {props.users} user = {props.user} visibility="private" roomAdmins={props.roomAdmins}/>
+					<RoomList rooms = {publicRooms} currentRoom = {props.currentRoom} setCurrentRoom={props.setCurrentRoom} users = {props.users} user = {props.user} visibility = "public" roomAdmins={props.roomAdmins}/>
+					<RoomList rooms = {rooms} currentRoom = {props.currentRoom} setCurrentRoom={props.setCurrentRoom} users = {props.users} user = {props.user} visibility="private" roomAdmins={props.roomAdmins}/>
 				</div>
 			<div>
 				<Box>
@@ -174,20 +236,22 @@ function Channels(props : {user: User, users: User[], currentRoom: Room, setCurr
 									<TextField id="roomName" label="Room name" variant="standard" />
 									<FormControl fullWidth>
 										<InputLabel id="visibility-label">visibility</InputLabel>
-										<Select
-										labelId="visibility-label"
-										id="visibility"
-										label="visibility"
-										>
-											<MenuItem value="public">public</MenuItem>
-											<MenuItem value="private">private</MenuItem>
-										</Select>
+										<NativeSelect
+											defaultValue="private"
+											inputProps={{
+												name: 'visibility',
+												id: 'uncontrolled-native',
+											}}
+											>
+											<option value="private">private</option>
+											<option value="public">public</option>
+										</NativeSelect>
 									</FormControl>
 									<ToggleButton value={showPassword} onChange={handlePasswordSelect}>
 										<KeyIcon/>
 									</ToggleButton>
 									{showPassword?
-										<TextField id="password" label="password" type="password" />
+										<TextField id="password" label="password" type="text" />
 										:
 										<div/>
 									}

@@ -16,7 +16,7 @@ export interface RoomUserDto {
     roomId: number;
 };
 
-function toastThatError(message: string) {
+export function toastThatError(message: string) {
 	toast.error(message, {
 		position: "top-center",
 		autoClose: 5000,
