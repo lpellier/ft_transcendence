@@ -9,6 +9,7 @@ import TextField from '@mui/material/TextField';
 import NativeSelect from '@mui/material/NativeSelect';
 import InputLabel from '@mui/material/InputLabel';
 import KeyIcon from '@mui/icons-material/Key';
+import KeyOffIcon from '@mui/icons-material/KeyOff';
 import ToggleButton from '@mui/material/ToggleButton';
 import Dialog from '@mui/material/Dialog';
 import bcrypt from 'bcryptjs';
@@ -251,7 +252,11 @@ function Channels(props : {user: User, users: User[], currentRoom: Room, setCurr
 										</NativeSelect>
 									</FormControl>
 									<ToggleButton value={showPassword} onChange={handlePasswordSelect}>
-										<KeyIcon/>
+										{showPassword?
+											<KeyOffIcon/>
+											:
+											<KeyIcon/>
+										}
 									</ToggleButton>
 									{showPassword?
 										<TextField id="password" label="password" type="text" />
