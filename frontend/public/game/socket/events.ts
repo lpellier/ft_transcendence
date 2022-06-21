@@ -14,6 +14,23 @@ function listenStartEvents() {
 		else if (map === "casino")
 			game.map = consts.casino_map;
 	});
+	socket.on("spectate", (r_id : string, score_limit : number, map : string, game_state : string, id_p1 : string, id_p2 : string) => {
+		game.room_id = r_id;
+		game.score_limit = score_limit;
+		errors.set_false();
+	
+		if (map === "city")
+			game.map = consts.city_map;
+		else if (map === "casino")
+			game.map = consts.casino_map;
+		game.state = game_state;
+		buttons.hide();
+		inputs.hide();
+
+		game.players.push(new Player(1, id_p1));
+		game.players.push(new Player(2, id_p2));
+		game.pong = new Pong;
+	});
 
 	socket.on("matchmaking-error", (error : string) => {
 		errors.set_false();
@@ -101,6 +118,12 @@ function listenMoveEvents() {
 			game.players[0].pos[1] = p2_state[1][1] * consts.HEIGHT / 750;
 			game.players[1].pos[0] = p1_state[1][0] * consts.WIDTH / 1200;
 			game.players[1].pos[1] = p1_state[1][1] * consts.HEIGHT / 750;
+		}
+		else { // spectate
+			game.players[0].pos[0] = p1_state[1][0] * consts.WIDTH / 1200;
+			game.players[0].pos[1] = p1_state[1][1] * consts.HEIGHT / 750;
+			game.players[1].pos[0] = p2_state[1][0] * consts.WIDTH / 1200;
+			game.players[1].pos[1] = p2_state[1][1] * consts.HEIGHT / 750;
 		}
 		game.pong.value = pong_value;
 	});

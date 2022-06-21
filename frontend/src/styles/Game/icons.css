@@ -77,3 +77,10 @@
 	right: 15%;
 	z-index: 5;
 }
+
+#icon-eye {
+	position: absolute;
+	top: 1%;
+	left: 4%;
+	z-index: 0;
+}

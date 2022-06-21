@@ -67,3 +67,16 @@ function drawInput() {
 		keys.right.show();
 	}
 }
+
+function drawSpectate() {
+	image(consts.EYE_ICON, consts.WIDTH * 0.04, consts.HEIGHT * 0.01, consts.WIDTH * 0.1, consts.HEIGHT * 0.15);
+	if (game.hover_spectator === true) {
+		push();
+		fill("rgba(0, 0, 0, 0.2)");
+		rect(consts.WIDTH * 0.04, consts.HEIGHT * 0.01, consts.WIDTH * 0.1, consts.HEIGHT * 0.15);
+		pop();
+	}
+	if (game.spectator === true) {
+		outputAnnouncement("Spectate", consts.std_font_size, consts.WIDTH * 0.32, consts.HEIGHT * 0.11, "white");
+	}
+}

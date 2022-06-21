@@ -4,15 +4,14 @@
 
 // TODO Brainstorm a better idea than walls in the middle for City
 
-// TODO Fix issue where matchmaking doesnt work properly
-	// ? hard to say when it happens, to replicate open a game on one tab and try to join it with matchamking on another
-	// ? seems that the button is clicked twice thus backend receives matchmaking orders twice from same client
-	// ? should try again at school, i wonder whether my mac is at fault
-
 // TODO add spectate mode
 	// ? would like to implement in join menu -> just type room id of game you'd like to watch and that's it
 	// ? backend games will have an array of spectators whom will also receive updated position
 	// ? of both players and their client will then be able to draw the match
+
+	// ! case where a player spectates a waiting room
+	// ! opponent left menu for spectating
+	// ! spectator may control someone
 
 // TODO find a way to send data to database and fill every appropriate field when situation calls for it
 
@@ -99,6 +98,7 @@ function draw() {
 	if (game.state === "in-menu")
 		outputAnnouncement("CyberPong 1977", consts.std_font_size * 1.5, consts.WIDTH / 2, consts.HEIGHT / 4, "white");
 	else if (game.state === "in-menu-input") {
+		drawSpectate();
 		outputAnnouncement("Enter Room ID", consts.std_font_size, consts.WIDTH / 2, consts.HEIGHT * 2 / 5, "white")
 		if (errors.game_full)
 			outputAnnouncement("This game is already full", consts.small_font_size, consts.WIDTH / 2, consts.HEIGHT / 2, "white");
@@ -130,7 +130,7 @@ function draw() {
 			game.pong.render();
 		}
 		if (game.frames_since_point < 180 && game.map.name === "casino")
-			outputAnnouncement(game.pong.value + (game.pong.value === 1 ? " point" : " points"), 25, consts.WIDTH * 0.5, consts.HEIGHT * 0.95, game.pong.color);
+			outputAnnouncement(game.pong.value + (game.pong.value === 1 ? " point" : " points"), consts.std_font_size, consts.WIDTH * 0.5, consts.HEIGHT * 0.95, game.pong.color);
 	}
 	else if (game.state === "game-over") {
 		buttons.return.show();

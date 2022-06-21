@@ -16,6 +16,7 @@ export class Game {
 	score : [number, number];
 	score_limit : number;
 	players : Player[];
+	spectators : string[];
 	pong : Pong;
 	map : GameMap;
 	frames_since_point : number;
@@ -27,6 +28,7 @@ export class Game {
 		this.room_id = room_id;
 		this.state = 'waiting_room';
 		this.players = [];
+		this.spectators = [];
 		this.score = [0, 0];
 		this.score_limit = 0;
 		this.pong = new Pong();
@@ -57,6 +59,10 @@ export class Game {
 		delete this.pong;
 		this.pong = new Pong();
 		this.frames_since_point = 0;
+	}
+
+	addSpectator(id : any) {
+		this.spectators.push(id);
 	}
 
 	addPlayer(id: any) {

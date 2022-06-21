@@ -1,4 +1,5 @@
-function createCustomButton(title : string, mPressed : any, mOver : any = highlightButton, mOut : any = resetButton, size_x : number = consts.std_width, size_y : number = consts.std_height) {
+// function createCustomButton(title : string, mPressed : any, mOver : any = highlightButton, mOut : any = resetButton, size_x : number = consts.std_width, size_y : number = consts.std_height) {
+	function createCustomButton(title : string, mPressed : any, mOver : any, mOut : any, size_x : number, size_y : number) {
 	let button = createButton(title);
 	button.style("color", "white");
 	button.style("font-size", (Math.sqrt(Math.pow(size_x, 2) + Math.pow(size_y, 2)) / 8).toString() + "px");

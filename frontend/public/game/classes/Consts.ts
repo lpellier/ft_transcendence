@@ -43,6 +43,7 @@ class Consts {
 	CROSS_ICON : any;
 	CROSS_ICON2 : any;
 	MARK_ICON : any;
+	EYE_ICON : any;
 	CITY_BACKGROUND : any;
 	TOKYO_BACKGROUND : any;
 	
@@ -70,6 +71,10 @@ class Consts {
 		this.MARK_ICON = createImg("/assets/icons/green-mark.png", "mark-icon");
 		this.MARK_ICON.size(this.small_square_diameter * 1.7, this.small_square_diameter * 1.5);
 	
+		this.EYE_ICON = loadImage("/assets/icons/eye-icon.png");
+		// this.EYE_ICON.size(this.WIDTH * 0.1, this.HEIGHT * 0.15);
+		// this.EYE_ICON.parent(document.getElementById("icon-eye"));
+
 		this.CITY_BACKGROUND = loadImage("/assets/backgrounds/city.jpg");
 		this.TOKYO_BACKGROUND = loadImage("/assets/backgrounds/tokyo.png");
 	}
@@ -127,7 +132,7 @@ class Consts {
 			this.CROSS_ICON2.size(this.small_square_diameter * 1.5, this.small_square_diameter * 1.5);
 		if (this.MARK_ICON)
 			this.MARK_ICON.size(this.small_square_diameter * 1.7, this.small_square_diameter * 1.5);
-
+	
 		this.TOP_BOUND = 10;
 		this.BOT_BOUND = this.HEIGHT - 10;
 		this.LEFT_BOUND = 0;

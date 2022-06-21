@@ -12,6 +12,9 @@ class Game {
 	frames_since_point : number;
 	map : GameMap;
 
+	spectator : boolean;
+	hover_spectator : boolean;
+
 	constructor() {
 		this.reset();
 	}
@@ -29,5 +32,7 @@ class Game {
 		this.ai = false;
 		this.frames_since_point = 0;
 		this.map = consts.original_map;
+		this.spectator = false;
+		this.hover_spectator = false;
 	}
 };
