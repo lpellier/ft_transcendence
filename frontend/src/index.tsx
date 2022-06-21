@@ -1,10 +1,6 @@
 import ReactDOM from 'react-dom';
 import AllRoutes from './routes/routes';
-import Cookie from 'universal-cookie';
 import './styles/body.css';
-
-const cookie = new Cookie;
-let token = cookie.get('jwt')
 
 const tabletSize = 768;
 const phoneSize = 530;
@@ -16,4 +12,4 @@ ReactDOM.render(
     Root
 );
 
-export {tabletSize, phoneSize, token}
+export {tabletSize, phoneSize}
