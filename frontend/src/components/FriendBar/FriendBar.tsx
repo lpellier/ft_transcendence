@@ -3,10 +3,12 @@ import react, { useState } from 'react';
 import Drawer from '@mui/material/Drawer';
 import Button from '@mui/material/Button';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
+import { TextField } from '@mui/material';
 
 export default function FriendBar() {
     
     let [open, setOpen] = useState<boolean>(false);
+    let [addFriendClicked, setAddFriendClicked] = useState<boolean>(false);
 
     function toggleFriendBar() {
         setOpen(true);
@@ -14,6 +16,10 @@ export default function FriendBar() {
 
     function closeFriendBar() {
         setOpen(false);
+    }
+
+    function addFriendClick() {
+        setAddFriendClicked(true);
     }
 
     return (
@@ -26,7 +32,14 @@ export default function FriendBar() {
                 open={open}
                 onClose={closeFriendBar}
             >
-                hello
+                <Button onClick={addFriendClick}>
+                    Add Friend
+                </Button>
+                {addFriendClicked?
+                    <TextField/>
+                    :
+                    <div/>
+                }
             </Drawer>
         </div>
     );

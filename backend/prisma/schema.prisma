@@ -16,7 +16,7 @@ model User {
   tfa           Boolean @default(false)
   otpSecret     String  @default("")
   stats			    Stats?
-  friends       Int[]
+  friendIds     Int[]
   rooms         Room[] @relation("roomUsers")
   adminRooms    Room[] @relation("roomAdmins")
   messages      Message[]
