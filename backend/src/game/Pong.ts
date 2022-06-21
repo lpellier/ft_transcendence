@@ -8,10 +8,12 @@ export class Pong {
 	diameter : number;
 	speed : number;
 	color : any;
+	value : number;
 	constructor() {
 		this.pos = [consts.MAP_WIDTH / 2 - consts.PONG_DIAMETER / 2, consts.MAP_HEIGHT / 2 - consts.PONG_DIAMETER / 2];
 		this.diameter = consts.PONG_DIAMETER;
 		this.color = consts.PONG_COLOR;
+		this.value = 1;
 
 		let side = Math.random() < 0.5 ? "left" : "right";
 		this.relaunchPong(side);

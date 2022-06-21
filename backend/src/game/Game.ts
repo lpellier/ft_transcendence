@@ -69,6 +69,12 @@ export class Game {
 			this.players.push(new Player("white", 2, id));
 	}
 
+	setNewValue() {
+		if (this.map.name != "casino")
+			return ;
+		this.pong.value = Math.floor(Math.random() * 4) + 1;
+	}
+
 	checkCollisions() : boolean {
 		// Implement acceleration here
 		if (this.frames_since_point === 0)
@@ -92,22 +98,24 @@ export class Game {
 			let intersection : [number, number, string] = utils.getLineIntersection(this.pong.center(), this.pong.centerNextFrame(), wall[2], wall[3]);
 			if (intersection[0] != -1) {
 				this.pong.velocity[1] *= -1;
-				return ;
+				return false;
 			}
 		}
 		if (this.pong.velocity[0] > 0 && this.pong.pos[0] + this.pong.diameter > right_bound) {
-			this.pong.relaunchPong("right");
-			this.score[0]++;
+			this.score[0] += this.pong.value;
 			if (this.score[0] >= this.score_limit)
 				return true;
+			this.setNewValue();
+			this.pong.relaunchPong("right");
 			this.frames_since_point = 0;
 			return false;
 		}
 		else if (this.pong.velocity[0] < 0 && this.pong.pos[0] < left_bound) {
-			this.pong.relaunchPong("left");
-			this.score[1]++;
+			this.score[1] += this.pong.value;
 			if (this.score[1] >= this.score_limit)
 				return true;
+			this.setNewValue();
+			this.pong.relaunchPong("left");
 			this.frames_since_point = 0;
 			return false;
 		}

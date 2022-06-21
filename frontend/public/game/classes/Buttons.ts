@@ -116,14 +116,14 @@ class Buttons {
 		this.return.size(consts.medium_square_diameter, consts.medium_square_diameter);
 		this.return.style("font-size", consts.medium_font_size.toString() + "px");
 	
-		this.map_original.size(consts.WIDTH * 0.2 + 25, consts.HEIGHT * 0.2 + 25);
+		this.map_original.size(consts.WIDTH * 0.2 + consts.DIAGONAL * 0.025, consts.HEIGHT * 0.2 + consts.DIAGONAL * 0.025);
 		this.map_original.style("font-size", consts.medium_font_size.toString() + "px");
 		this.map_original.style("outline", "3px solid");
 		this.map_original.style("border", "none");
-		this.map_city.size(consts.WIDTH * 0.2 + 25, consts.HEIGHT * 0.2 + 25);
+		this.map_city.size(consts.WIDTH * 0.2 + consts.DIAGONAL * 0.025, consts.HEIGHT * 0.2 + consts.DIAGONAL * 0.025);
 		this.map_city.style("font-size", consts.medium_font_size.toString() + "px");
 		this.map_city.style("border", "none");
-		this.map_casino.size(consts.WIDTH * 0.2 + 25, consts.HEIGHT * 0.2 + 25);
+		this.map_casino.size(consts.WIDTH * 0.2 + consts.DIAGONAL * 0.025, consts.HEIGHT * 0.2 + consts.DIAGONAL * 0.025);
 		this.map_casino.style("font-size", consts.medium_font_size.toString() + "px");
 		this.map_casino.style("border", "none");
 	}

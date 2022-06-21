@@ -1,28 +1,24 @@
 // ? P to quit local mode
 // ? Coding consistency : snake_case for variables | camelCase for functions | PascalCase for classes
-// ? Map indexes : 1 (normal map)
+// ? Map indexes : 1 (normal map), 2 (city map), 3 (casino map)
 
-// TODO Collision isn't working in multiplayer
+// TODO Brainstorm a better idea than walls in the middle for City
 
-// TODO local mode : pause by pressing escape -> removing sound or quitting to menu
-// TODO adding options and probably sounds
+// TODO Fix issue where matchmaking doesnt work properly
+	// ? hard to say when it happens, to replicate open a game on one tab and try to join it with matchamking on another
+	// ? seems that the button is clicked twice thus backend receives matchmaking orders twice from same client
+	// ? should try again at school, i wonder whether my mac is at fault
 
+// TODO add spectate mode
+	// ? would like to implement in join menu -> just type room id of game you'd like to watch and that's it
+	// ? backend games will have an array of spectators whom will also receive updated position
+	// ? of both players and their client will then be able to draw the match
+
+// TODO find a way to send data to database and fill every appropriate field when situation calls for it
+
+// TODO cute animation showing the roll of pong value in casino
 // TODO key animation not playing on safari
-
-// TODO different map ideas, windjammer inspired
-// TODO keep basic map
-// ? Original
-// TODO for example, each pong ball gives a random number of points
-// ? Casino
-// TODO another with walls in the middle, forcing the player to play around it
-// ? City
-
-// TODO power ups 
-// ? they will spawn one at a time for 2 seconds
-// ? on a random y point, and on the x point for both players
-// ? resize paddle depending on malus/bonus
-// ? inverted input
-// ? black hole teleport ball
+// TODO comment EVERYTHING
 
 let should_load : boolean = false;
 
@@ -133,7 +129,7 @@ function draw() {
 				game.players[i].render();
 			game.pong.render();
 		}
-		if (game.frames_since_point < 180)
+		if (game.frames_since_point < 180 && game.map.name === "casino")
 			outputAnnouncement(game.pong.value + (game.pong.value === 1 ? " point" : " points"), 25, consts.WIDTH * 0.5, consts.HEIGHT * 0.95, game.pong.color);
 	}
 	else if (game.state === "game-over") {

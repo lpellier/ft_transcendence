@@ -19,7 +19,7 @@ class GameMap {
 		this.walls =	[
 						[[5, 5], [this.width - 10, 5], [5, 10], [this.width - 5, 10]], 
 						[[5, this.height - 10], [this.width - 10, 5], [5, this.height - 10], [this.width - 5, this.height - 10]]
-					];	
+					];
 	}
 
 	cityMap() {
