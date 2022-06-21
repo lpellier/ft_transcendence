@@ -4,15 +4,6 @@
 
 // TODO Brainstorm a better idea than walls in the middle for City
 
-// TODO add spectate mode
-	// ? would like to implement in join menu -> just type room id of game you'd like to watch and that's it
-	// ? backend games will have an array of spectators whom will also receive updated position
-	// ? of both players and their client will then be able to draw the match
-
-	// ! case where a player spectates a waiting room
-	// ! opponent left menu for spectating
-	// ! spectator may control someone
-
 // TODO find a way to send data to database and fill every appropriate field when situation calls for it
 
 // TODO cute animation showing the roll of pong value in casino
@@ -93,7 +84,9 @@ function draw() {
 		outputAnnouncement("Game Creation", consts.std_font_size, consts.WIDTH / 2, consts.HEIGHT / 7, "white");
 		outputAnnouncement("score limit   ", consts.medium_font_size, consts.WIDTH * 1.20 / 5, consts.HEIGHT * 0.48, "white")
 	}
-	if (game.state === "opponent-left-menu")
+	if (game.state === "opponent-left-menu" && game.spectator === true)
+		outputAnnouncement("A player left", consts.std_font_size, consts.WIDTH / 2, consts.HEIGHT / 2, "white");
+	else if (game.state === "opponent-left-menu")
 		outputAnnouncement("Your opponent left", consts.std_font_size, consts.WIDTH / 2, consts.HEIGHT / 2, "white");
 	if (game.state === "in-menu")
 		outputAnnouncement("CyberPong 1977", consts.std_font_size * 1.5, consts.WIDTH / 2, consts.HEIGHT / 4, "white");
@@ -103,26 +96,35 @@ function draw() {
 		if (errors.game_full)
 			outputAnnouncement("This game is already full", consts.small_font_size, consts.WIDTH / 2, consts.HEIGHT / 2, "white");
 		else if (errors.game_not_found)
-			outputAnnouncement("This game doesn't exist", consts.small_font_size, consts.WIDTH / 2, consts.HEIGHT / 2, "white");
+			outputAnnouncement("This game doesn't exist", consts.small_font_size, consts.WIDTH / 2, consts.HEIGHT / 2, "white");	
 	}
 	else if (game.state === "waiting-player") {
+		if (game.spectator)
+			drawSpectate();
 		buttons.return.show();
 		consts.RETURN_ICON.show();
 		outputAnnouncement("WAITING FOR ANOTHER PLAYER", consts.medium_font_size, consts.WIDTH / 2, consts.HEIGHT / 2, "white");
 	}
 	else if (game.state === "waiting-readiness") {
+		if (game.spectator)
+			drawSpectate();
 		drawPlayerReadiness();
 		outputAnnouncement("PLEASE PRESS SPACE TO START THE GAME", consts.medium_font_size, consts.WIDTH / 2, consts.HEIGHT / 2, "white");
 	}
 	else if (game.state === "countdown") {
+		if (game.spectator)
+			drawSpectate();
 		outputCountdown();
-		if (!game.local)
+		if (!game.local && !game.spectator)
 			drawHelp();
-		drawInput();
+		if (!game.spectator)
+			drawInput();
 		for (let i : number = 0; i < game.players.length; i++)
 			game.players[i].render();
 	}
 	else if (game.state === "in-game") {
+		if (game.spectator)
+			drawSpectate();
 		movePlayers();
 		if (game.state === "in-game") {
 			for (let i : number = 0; i < game.players.length; i++)

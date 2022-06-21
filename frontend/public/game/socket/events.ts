@@ -1,5 +1,5 @@
 function listenStartEvents() {
-	socket.on("waiting_room", (r_id : string, score_limit : number, map : string) => {
+	socket.on("waiting-player", (r_id : string, score_limit : number, map : string) => {
 		game.room_id = r_id;
 		game.state = "waiting-player";
 		game.score_limit = score_limit;
@@ -40,7 +40,7 @@ function listenStartEvents() {
 			errors.game_not_found = true;	
 	});
 
-	socket.on("await_readiness", (id_p1 : string, id_p2 : string) => {
+	socket.on("waiting-readiness", (id_p1 : string, id_p2 : string) => {
 		if (game.players.length === 0) {
 			game.state = "waiting-readiness"
 			if (socket.id === id_p1) {

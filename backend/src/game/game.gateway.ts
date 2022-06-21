@@ -40,9 +40,9 @@ import * as utils from "./utils"
  function startGameFullRooms(games : Game[], server : Server) {
 	// starts every game that has 2 players after a connection
 	for (const game of games) {
-		if (game.players.length === 2 && game.state === "waiting_room") {
-			game.state = "await_readiness";
-			server.to(game.room_id).emit("await_readiness", game.players[0].id, game.players[1].id);
+		if (game.players.length === 2 && game.state === "waiting-player") {
+			game.state = "waiting-readiness";
+			server.to(game.room_id).emit("waiting-readiness", game.players[0].id, game.players[1].id);
 		}
 	}
 }
@@ -135,7 +135,7 @@ export class GameGateway {
 			existing_game.map = consts.casino_map;
 		client.join(existing_game.room_id);
 		existing_game.addPlayer(client.id);
-		this.server.to(existing_game.room_id).emit("waiting_room", existing_game.room_id, existing_game.score_limit, existing_game.map.name);
+		this.server.to(existing_game.room_id).emit("waiting-player", existing_game.room_id, existing_game.score_limit, existing_game.map.name);
 		startGameFullRooms(this.games, this.server);
 	}
 
@@ -157,9 +157,9 @@ export class GameGateway {
 				else if (game.players.length < 2) {
 					client.join(game.room_id);
 					game.addPlayer(client.id);
-					this.server.to(game.room_id).emit("waiting_room", game.room_id, game.score_limit, game.map.name);
-					game.state = "await_readiness";
-					this.server.to(game.room_id).emit("await_readiness", game.players[0].id, game.players[1].id);						
+					this.server.to(game.room_id).emit("waiting-player", game.room_id, game.score_limit, game.map.name);
+					game.state = "waiting-readiness";
+					this.server.to(game.room_id).emit("waiting-readiness", game.players[0].id, game.players[1].id);						
 				}
 				else
 					this.server.to(client.id).emit("matchmaking-error", "game_full");
@@ -174,7 +174,7 @@ export class GameGateway {
 	handleCountdown(@ConnectedSocket() client : Socket) {
 		for (let game of this.games) {
 			for (const player of game.players) {
-				if (player.id === client.id && game.state === "await_readiness") {
+				if (player.id === client.id && game.state === "waiting-readiness") {
 					if (game.players[0].ready && game.players[1].ready) {
 						game.state = "in-game"
 						let test = this.server;

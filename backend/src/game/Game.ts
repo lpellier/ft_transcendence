@@ -26,7 +26,7 @@ export class Game {
 
 	constructor(room_id: any) {
 		this.room_id = room_id;
-		this.state = 'waiting_room';
+		this.state = 'waiting-player';
 		this.players = [];
 		this.spectators = [];
 		this.score = [0, 0];
@@ -54,7 +54,7 @@ export class Game {
 	reset() {
 		for (let player of this.players)
 			player.reset(this.players.length);
-		this.state = "waiting_room";
+		this.state = "waiting-player";
 		this.score = [0, 0];
 		delete this.pong;
 		this.pong = new Pong();

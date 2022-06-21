@@ -61,7 +61,7 @@ function movePlayers() {
 function keyPressed() {
 	if (game === null)
 		return;
-	if (game.state === "waiting-readiness" && key === ' ') 
+	if (!game.spectator && game.state === "waiting-readiness" && key === ' ') 
 		socket.emit("switch_readiness", game.players[0].id);
 	if (game.state === "in-menu-input" && keyCode === ENTER) {
 		if (inputs.join.value()[0] === '#')

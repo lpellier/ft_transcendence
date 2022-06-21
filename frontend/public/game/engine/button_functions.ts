@@ -87,8 +87,17 @@ function readRoomID() {
 }
 
 function clickSpectate() {
-	if (mouseButton === LEFT)
+	if (mouseButton === LEFT) {
 		game.spectator = !game.spectator;
+		if (!game.spectator) {
+			// @ts-ignore : next-line
+			this.style("border-color", "white");	
+		}
+		else if (game.spectator) {
+			// @ts-ignore : next-line
+			this.style("border-color", "#177bad");	
+		}
+	}
 }
 
 function clickAnyone() {

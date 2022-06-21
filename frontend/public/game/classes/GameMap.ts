@@ -60,9 +60,9 @@ class GameMap {
 		pop();
 		fill(this.object_color);
 		if (ratio === 1) {
-			textSize(14);
+			textSize(consts.medium_font_size);
 			text("Room #" + game.room_id, 16, 25); // room id
-			textSize(consts.std_font_size * ratio);
+			textSize(consts.std_font_size);
 			push();
 			fill((game.score[0] > game.score[1] ? "white" : "grey")); // highlight better score
 			if (game.score[0].toString().length > 1)
