@@ -14,6 +14,7 @@ interface Room {
     name: string;
     ownerId: number;
     visibility: string;
+    password: string;
 }
 
 interface Message {

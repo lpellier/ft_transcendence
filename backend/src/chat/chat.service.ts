@@ -14,7 +14,8 @@ export class ChatService {
       data: {
         name: createRoomDto.name,
         ownerId: createRoomDto.userId,
-        visibility: createRoomDto.visibility
+        visibility: createRoomDto.visibility,
+        password: createRoomDto.password
       }
     });
     return room.id;
