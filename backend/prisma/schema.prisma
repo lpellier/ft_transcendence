@@ -50,6 +50,7 @@ model Room {
   users      User[] @relation("roomUsers")
   admins     User[] @relation("roomAdmins")
   visibility String
+  password   String
 }
 
 model Message {
