@@ -5,7 +5,10 @@ import PongMenu from './PongMenu'
 import axios from 'axios';
 import {User} from 'interfaces';
 
-import {PlayerAvatar} from	'../Avatars'
+import {PlayerAvatar} from	'../Avatars';
+
+import FriendBar from 'components/FriendBar/FriendBar';
+
 
 import AppBar from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
@@ -36,7 +39,7 @@ function SearchComponent() {
 	);
 }
 
-function AppBarButton(props: {icon: any, link: string, tooltip: any}) {
+export function AppBarButton(props: {icon: any, link: string, tooltip: any}) {
 	return (
 		<nav>
 		  <Link to={props.link} style={{ textDecoration: 'none' }}>
@@ -153,6 +156,7 @@ export default function SearchAppBar() {
 			<PlayerName name={user.username}/>
 			<ProjectName />
 			<Stack direction="row" spacing={2}>
+				<FriendBar />
 				<AppBarButton link={'/game'} tooltip={"New Game"} icon={<GamesIcon />}/>
 				<AppBarButton link={'/chat'} tooltip={"Forum"} icon={<ForumIcon />}/>
 			</Stack>

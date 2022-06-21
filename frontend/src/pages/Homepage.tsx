@@ -3,7 +3,6 @@ import Stack from '@mui/material/Stack'
 import Container from '@mui/material/Container'
 
 import SearchAppBar from 'components/AppBar/AppBar'
-import FriendBand from 'components/Home/FriendBand'
 import PlayerInfoBand from 'components/Home/PlayerInfoBand'
 import StatsBoards from 'components/Home/StatsBoards'
 
@@ -40,7 +39,6 @@ export default function Homepage() {
         	<SearchAppBar />
 			<Container>
 				<Stack direction="row" spacing={1} sx={AllHomeStyle}>
-					<FriendBand />
 					<StatsPart />
 				</Stack>
 			</Container>
