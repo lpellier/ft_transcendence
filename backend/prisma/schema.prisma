@@ -25,7 +25,7 @@ model User {
 
 model Stats {
   id     Int  @id @default(autoincrement())
-  wins   Int  @default(0)
+  victories   Int  @default(0)
   losses Int  @default(0)
   level  Int  @default(1)
   userId Int  @unique
@@ -35,8 +35,6 @@ model Stats {
 model Match {
   id		    Int			  @id @default(autoincrement())
   date	  	DateTime  @default(now())
-  winner  	String
-  loser	  	String
   ladder	  Int
   winnerId	Int
   loserId	  Int

@@ -1,4 +1,9 @@
-import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaClient, User } from '@prisma/client';
 import * as fs from 'fs/promises';
 import { authenticator } from 'otplib';
@@ -8,20 +13,19 @@ import { Profile } from './interfaces/profile.interface';
 
 @Injectable()
 export class UsersService {
-  constructor(
-    private readonly prisma: PrismaClient) {}
-  
+  constructor(private readonly prisma: PrismaClient) {}
+
   async findOrCreate(profile: any): Promise<User> {
-		let user = await this.findOne(profile.id)
+    let user = await this.findOne(profile.id);
     if (!user) {
-			user = await this.create(profile)
-		}
-		return user
+      user = await this.create(profile);
+    }
+    return user;
   }
 
   async findOne(id: number): Promise<User> {
     return this.prisma.user.findUnique({
-      where: {id: id}
+      where: { id: id },
     });
   }
 
@@ -31,54 +35,69 @@ export class UsersService {
         id: profile.id,
         username: profile.username,
         stats: {
-          create: {}
-        }
-      }
+          create: {},
+        },
+      },
     });
-    await fs.copyFile('/backend/public/avatars/default.png', '/backend/public/avatars/' + profile.id + '.png');
+    await fs.copyFile(
+      '/backend/public/avatars/default.png',
+      '/backend/public/avatars/' + profile.id + '.png',
+    );
     await this.prisma.room.update({
-      where: {id: 1},
+      where: { id: 1 },
       data: {
         users: {
           connect: {
-            id: user.id
-          }
-        }
-      }
-    })
+            id: user.id,
+          },
+        },
+      },
+    });
     return user;
-	}
-  
-  async findAll() : Promise<User[]> {
+  }
+
+  async findAll(): Promise<User[]> {
     return this.prisma.user.findMany();
   }
 
-  async getProfileWithSettings(id: number): Promise<ProfileWithSettings> {
-    const {otpSecret, ...profile} = await this.prisma.user.findUnique({
+  async getUserWithStats(id: number): Promise<any> {
+    const user = await this.prisma.user.findUnique({
       where: {
-        id: id
+        id: id,
       },
       include: {
-        stats: true
-      }
+        stats: true,
+      },
     });
+    return user;
+  }
+
+  async getProfileWithSettings(id: number): Promise<ProfileWithSettings> {
+    const user = await this.getUserWithStats(id);
+    const profile: ProfileWithSettings = {
+      id: user.id,
+      username: user.username,
+      tfa: user.tfa,
+      victories: user.stats.victories,
+      losses: user.stats.losses,
+      level: user.stats.level,
+    };
     return profile;
   }
 
   async getProfile(id: number): Promise<Profile> {
-    const profile = await this.prisma.user.findUnique({
-      where: {
-        id: id
-      },
-      include: {
-        stats: true
-      }
-    });
-    if (!profile) {
+    const user = await this.getUserWithStats(id);
+    if (!user) {
       throw new NotFoundException();
     }
-    const {tfa, otpSecret, ...result} = profile;
-    return result;
+    const profile: Profile = {
+      id: user.id,
+      username: user.username,
+      victories: user.stats.victories,
+      losses: user.stats.losses,
+      level: user.stats.level,
+    };
+    return profile;
   }
 
   async updateUser(id: number, data: UpdateUserDto): Promise<string> {
@@ -95,40 +114,40 @@ export class UsersService {
 
   async tryToChangeUsername(id: number, newUsername: string) {
     const isTaken = await this.prisma.user.findUnique({
-      where: { username: newUsername }
-    })
+      where: { username: newUsername },
+    });
     if (isTaken) {
       throw new ConflictException();
     }
     const user = await this.prisma.user.update({
       where: {
-        id: id
+        id: id,
       },
       data: {
-        username: newUsername
-      }
-    })
+        username: newUsername,
+      },
+    });
     return user.username;
   }
 
   async tryToChangeAuthentication(id: number, tfa: boolean) {
     const user = await this.prisma.user.findUnique({
       where: {
-        id: id
-      }
-    })
+        id: id,
+      },
+    });
     if (user.tfa === tfa) {
       throw new ConflictException();
     }
-    const secret = (tfa === true) ? authenticator.generateSecret() : "";
+    const secret = tfa === true ? authenticator.generateSecret() : '';
     await this.prisma.user.update({
       where: {
-        id: id
+        id: id,
       },
       data: {
         tfa: tfa,
-        otpSecret: secret
-      }
+        otpSecret: secret,
+      },
     });
     return secret;
   }
@@ -136,9 +155,9 @@ export class UsersService {
   async getMock() {
     const user = await this.prisma.user.findUnique({
       where: {
-        id: 1
-      }
-    })
+        id: 1,
+      },
+    });
     return user;
   }
 }

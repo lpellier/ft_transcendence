@@ -6,7 +6,6 @@ async function main() {
 	await prisma.user.create({
 		data:{
 			id: 1,
-			avatar: "null",
 			username: "mock",
 			stats: {
 				create: {}
