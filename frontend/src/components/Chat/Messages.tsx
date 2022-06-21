@@ -63,13 +63,13 @@ function Messages(props : {user: User, users: User[], currentRoom: Room, canWrit
 										{item.userId === props.user.id ?
 										<div className='message current flex'>
 											<li className=''>{item.content}</li> 
-											<div className='user'><img className='avatar' src={props.users.find(user => user.id === item.userId)?.avatar} alt="avatar"/>{props.users.find(user => user.id === item.userId)?.username}</div>
+											<div className='user'><img className='avatar' src={"http://127.0.0.1:3001/avatars/"+item.userId.toString()+".png"} alt="avatar"/>{props.users.find(user => user.id === item.userId)?.username}</div>
 											
 										</div>
 										:
 										<div className='message other flex'>
 											<li className=''>{item.content}</li>
-											<div className='user' ><img className='avatar' src={props.users.find(user => user.id === item.userId)?.avatar} alt="avatar"/>{props.users.find(user => user.id === item.userId)?.username}</div>
+											<div className='user' ><img className='avatar' src={"http://127.0.0.1:3001/avatars/"+item.userId.toString()+".png"} alt="avatar"/>{props.users.find(user => user.id === item.userId)?.username}</div>
 											
 										</div>
 										}
