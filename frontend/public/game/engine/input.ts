@@ -2,11 +2,9 @@ function movePlayers() {
 	if (!game.local) {
 		if (game.players[0].index == 1) {
 			if (keyIsDown(87)) {
-				player_input.push(1);
 				socket.emit("move_up", game.players[0].id);
 			}
 			else if (keyIsDown(83)) {
-				player_input.push(-1);
 				socket.emit("move_down", game.players[0].id);
 			}
 			else
@@ -14,11 +12,9 @@ function movePlayers() {
 		}
 		else if (game.players[0].index == 2) {
 			if (keyIsDown(UP_ARROW)) {
-				player_input.push(1);
 				socket.emit("move_up", game.players[0].id);
 			}
 			else if (keyIsDown(DOWN_ARROW)) {
-				player_input.push(-1);
 				socket.emit("move_down", game.players[0].id);
 			}
 			else
@@ -67,8 +63,6 @@ function keyPressed() {
 		return;
 	if (game.state === "waiting-readiness" && key === ' ') 
 		socket.emit("switch_readiness", game.players[0].id);
-	// if (game.state === "in-game" && key === 'R')
-	// 	socket.emit("restart_game", game.room_id);
 	if (game.state === "in-menu-input" && keyCode === ENTER) {
 		if (inputs.join.value()[0] === '#')
 			inputs.join.value(inputs.join.value().slice(1));

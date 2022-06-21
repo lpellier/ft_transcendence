@@ -7,7 +7,6 @@ import Channels from './Channels';
 
 import '../../styles/Chat/Chat.css';
 
-import {token} from 'index';
 import {User, Room} from 'interfaces';
 
 const SERVER = "http://127.0.0.1:3001";
@@ -57,9 +56,7 @@ function Chat() {
 
 	useEffect(() => {
 		axios.get('http://127.0.0.1:3001/users/me',{
-			headers: {
-				'Authorization': token,
-			}
+			withCredentials: true
 			})
 			.then(res => {
 				console.log("Get request success")

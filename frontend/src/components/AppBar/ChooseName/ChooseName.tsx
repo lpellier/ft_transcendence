@@ -5,7 +5,6 @@ import TextField from '@mui/material/TextField';
 
 import { NameButtonStyle } from '../../../styles/tsxStyles/AppBar/Name'
 
-import {token} from 'index';
 import axios from 'axios';
 
 import {User} from 'interfaces'
@@ -38,8 +37,8 @@ function NameInput(props: {user: User}) {
 				}
 			},
 			{
+			withCredentials: true,
 			headers: {
-				'Authorization': token,
 				'Content-Type': 'application/json'
 			}
 		})

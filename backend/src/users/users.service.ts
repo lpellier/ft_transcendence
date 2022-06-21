@@ -1,5 +1,6 @@
-import { BadRequestException, ConflictException, Injectable } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaClient, User } from '@prisma/client';
+import * as fs from 'fs/promises';
 import { authenticator } from 'otplib';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ProfileWithSettings } from './interfaces/profile-with-settings.interface';
@@ -29,12 +30,12 @@ export class UsersService {
       data: {
         id: profile.id,
         username: profile.username,
-        avatar: profile.avatar,
         stats: {
           create: {}
         }
       }
     });
+    await fs.copyFile('/backend/public/avatars/default.png', '/backend/public/avatars/' + profile.id + '.png');
     await this.prisma.room.update({
       where: {id: 1},
       data: {
@@ -65,7 +66,7 @@ export class UsersService {
   }
 
   async getProfile(id: number): Promise<Profile> {
-    const {tfa, otpSecret, ...profile} = await this.prisma.user.findUnique({
+    const profile = await this.prisma.user.findUnique({
       where: {
         id: id
       },
@@ -73,7 +74,11 @@ export class UsersService {
         stats: true
       }
     });
-    return profile;
+    if (!profile) {
+      throw new NotFoundException();
+    }
+    const {tfa, otpSecret, ...result} = profile;
+    return result;
   }
 
   async updateUser(id: number, data: UpdateUserDto): Promise<string> {
@@ -126,5 +131,14 @@ export class UsersService {
       }
     });
     return secret;
+  }
+
+  async getMock() {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id: 1
+      }
+    })
+    return user;
   }
 }

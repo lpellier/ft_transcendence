@@ -1,6 +1,7 @@
 import { ConnectedSocket, MessageBody, SubscribeMessage, WebSocketGateway, WebSocketServer } from "@nestjs/websockets";
 import { Socket, Server } from "socket.io";
 import { Game } from "./Game"
+import * as consts from "./Consts"
 import * as utils from "./utils"
 
 // ? How to create a game of pong
@@ -117,7 +118,7 @@ export class GameGateway {
 	@SubscribeMessage('matchmaking')
 	handleMatchmaking(
 		@ConnectedSocket() client : Socket,
-		@MessageBody() data : [string, boolean, number]
+		@MessageBody() data : [string, boolean, number, string]
 	) {
 		let existing_game : Game = null;
 		if (data[0] === "public" && data[1])
@@ -130,9 +131,13 @@ export class GameGateway {
 		existing_game.publicity = data[0];
 		if (existing_game.score_limit === 0)
 			existing_game.score_limit = data[2];
+		if (data[3] === "city")
+			existing_game.map = consts.city_map;
+		else if (data[3] === "casino")
+			existing_game.map = consts.casino_map;
 		client.join(existing_game.room_id);
 		existing_game.addPlayer(client.id);
-		this.server.to(existing_game.room_id).emit("waiting_room", existing_game.room_id, existing_game.score_limit);
+		this.server.to(existing_game.room_id).emit("waiting_room", existing_game.room_id, existing_game.score_limit, existing_game.map.name);
 		startGameFullRooms(this.games, this.server);
 	}
 
@@ -149,7 +154,7 @@ export class GameGateway {
 				if (game.players.length < 2) {
 					client.join(game.room_id);
 					game.addPlayer(client.id);
-					this.server.to(game.room_id).emit("waiting_room", game.room_id);
+					this.server.to(game.room_id).emit("waiting_room", game.room_id, game.score_limit, game.map.name);
 					game.state = "await_readiness";
 					this.server.to(game.room_id).emit("await_readiness", game.players[0].id, game.players[1].id);						
 				}
@@ -193,18 +198,6 @@ export class GameGateway {
 						return ;
 					}
 				}
-			}
-		}
-	}
-
-	@SubscribeMessage("restart_game")
-	handleRestart(@MessageBody() room_id : string) {
-		for (let game of this.games) {
-			if (game.room_id === room_id) {
-				game.score = [0, 0];
-				game.pong.relaunchPong("left");
-				game.frames_since_point = 0;
-				this.server.to(room_id).emit("restart-server");
 			}
 		}
 	}

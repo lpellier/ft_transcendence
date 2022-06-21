@@ -33,7 +33,7 @@
 	align-items: center;
 	justify-content: center;
 	gap: 1vw;
-	top: 30%;
+	top: 25%;
 	left: 6%;
 }
 
@@ -64,7 +64,7 @@
 #button-ai {
 	position: absolute;
 	padding: 0;
-	top: 50%;
+	top: 40%;
 	right: 6%;
 }
 
@@ -72,7 +72,7 @@
 	position: absolute;
 	display: flex;
 	left: 46%;
-	top: 50%;
+	top: 40%;
 	flex-direction: column;
 	z-index: 2;
 }
@@ -91,4 +91,20 @@
 	bottom: 5%;
 	left: 38%;
 	z-index: 0;
+}
+
+#button-map-original {
+	position: absolute;
+	bottom: 20%;
+	left: 8.5%;
+}
+#button-map-city {
+	position: absolute;
+	bottom: 20%;
+	left: 38.5%;
+}
+#button-map-casino {
+	position: absolute;
+	bottom: 20%;
+	left: 68.5%;
 }

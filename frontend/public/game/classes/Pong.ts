@@ -4,11 +4,13 @@ class Pong {
 	diameter : number;
 	speed : number;
 	color : string;
+	value: number;
 
 	constructor() {
 		this.pos = [consts.WIDTH / 2 - consts.PONG_DIAMETER / 2, consts.HEIGHT / 2 - consts.PONG_DIAMETER / 2];
 		this.diameter = consts.PONG_DIAMETER;
-		this.color = consts.PONG_COLOR;
+		this.color = game.map.object_color;
+		this.value = 1;
 
 		let side = Math.random() < 0.5 ? "left" : "right";
 		this.relaunchPong(side);
@@ -16,7 +18,7 @@ class Pong {
 
 	calculateNewPos() {
 		this.pos[0] += this.velocity[0];
-	this.pos[1] += this.velocity[1]
+		this.pos[1] += this.velocity[1]
 		checkCollisions();
 	}
 
@@ -39,6 +41,13 @@ class Pong {
 			this.velocity = [-this.speed, random_y];
 		else if (loser_side === "right")
 			this.velocity = [this.speed, random_y];
+		this.setNewValue();
+	}
+
+	setNewValue() {
+		if (game.map.name != "casino")
+			return ;
+		this.value = Math.floor(Math.random() * 4) + 1;
 	}
 
 	leftUp() : [number, number] {
@@ -94,6 +103,14 @@ class Pong {
 	}
 
 	render() {
+		if (this.value === 1)
+			this.color = "white";
+		else if (this.value === 2)
+			this.color = "yellow";
+		else if (this.value === 3)
+			this.color = "orange";
+		else if (this.value === 4)
+			this.color = "red";
 		push();
 		noStroke();
 		fill(this.color);

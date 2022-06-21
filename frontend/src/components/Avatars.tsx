@@ -1,5 +1,4 @@
 import axios from 'axios'
-import {token} from 'index'
 
 import Avatar from '@mui/material/Avatar'
 import IconButton from '@mui/material/IconButton'
@@ -55,8 +54,8 @@ function CreateAvatar(props: {img: string, style: any}) {
             },
         },
         {
+            withCredentials: true,
             headers: {
-                'Authorization': token,
                 'Content-Type': 'application/json'
             }
         })

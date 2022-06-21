@@ -1,6 +1,6 @@
-function outputAnnouncement(msg : string, text_size : number, pos_x : number, pos_y : number) {
+function outputAnnouncement(msg : string, text_size : number, pos_x : number, pos_y : number, color : string) {
 	push();
-	fill("white");
+	fill(color);
 	noStroke();
 	textSize(text_size);
 	textAlign(CENTER);
@@ -36,5 +36,5 @@ function drawPlayerReadiness() {
 }
 
 function outputCountdown() {
-	outputAnnouncement("" + game.timer, consts.std_font_size, consts.WIDTH / 2 + 5, consts.HEIGHT / 2 + 20);
+	outputAnnouncement("" + game.timer, consts.std_font_size, consts.WIDTH / 2 + 5, consts.HEIGHT / 2 + 20,"white");
 }

@@ -4,7 +4,6 @@ import {
     Route,
     Navigate
 } from "react-router-dom";
-import {token} from 'index';
 
 import LogIn from '../pages/LogIn'
 import Settingspage from '../pages/Settingspage'
@@ -17,7 +16,8 @@ import Error from '../pages/Error'
 type Props = {children: JSX.Element}
 
 function ProtectedRoute({children} : Props) {
-    if (token) {
+    // if (token) {
+    if (1) {
         // console.log("Token value : ", {token}); // ? je me suis permis de commenter
         return (
         <>{children}</>)

@@ -1,17 +1,3 @@
-// function drawPlayers() { // ? if i put predictions, i should keep this
-// 	// if (!game.local) { // ? prediction for other player based on his movement
-// 	// 	game.players[1].calculateNewPos();
-// 	// 	if (player_input.length > 0) { // ? Prediction based on input not yet processed
-// 	// 		(player_input[0] === 1 ? game.players[0].move_up() : (player_input[0] === -1 ? game.players[0].move_down() : 0));
-// 	// 		player_input.splice(0, 1);
-// 	// 	}
-// 	// }
-
-// 	// for (let i : number = 0; i < game.players.length; i++) {
-// 	// 	game.players[i].render();
-// 	// }
-// }
-
 // ? for draw help
 let arrow_anim : number = 0;
 let grow : boolean = true;
@@ -35,6 +21,29 @@ function drawHelp() {
 	else
 		triangle(consts.WIDTH * 5 / 6, consts.HEIGHT / 2, consts.WIDTH * 5 / 6 - arrow_width, consts.HEIGHT / 2 + arrow_width, consts.WIDTH * 5 / 6 - arrow_width, consts.HEIGHT / 2 - arrow_width);
 	pop();
+}
+
+function drawMinimaps() {
+	consts.original_map.originalMap();
+	push();
+	translate(consts.WIDTH * 0.1, consts.HEIGHT * 0.58);
+	consts.original_map.render(0.2);
+	pop();
+	// outputAnnouncement("Original", 25, consts.WIDTH * 0.2, consts.HEIGHT * 0.70, "white");
+
+	consts.city_map.cityMap();
+	push();
+	translate(consts.WIDTH * 0.4, consts.HEIGHT * 0.58);
+	consts.city_map.render(0.2);
+	pop();
+	// outputAnnouncement("City", 25, consts.WIDTH * 0.5, consts.HEIGHT * 0.70, "#ffffff");
+
+	consts.casino_map.casinoMap();
+	push();
+	translate(consts.WIDTH * 0.7, consts.HEIGHT * 0.58);
+	consts.casino_map.render(0.2);
+	pop();
+	// outputAnnouncement("Casino", 25, consts.WIDTH * 0.8, consts.HEIGHT * 0.70, "#ffffff");
 }
 
 function drawInput() {

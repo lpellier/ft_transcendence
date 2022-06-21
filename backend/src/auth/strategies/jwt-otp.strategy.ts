@@ -8,14 +8,22 @@ import { JwtPayload } from "../interfaces/jwt-payload.interface";
 export class JwtOtpStrategy extends PassportStrategy(Strategy, 'jwt-otp') {
 	constructor() {
 		super({
-			jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+			jwtFromRequest: ExtractJwt.fromExtractors([JwtOtpStrategy.cookieExtractor]),
 			secretOrKey: jwtConstants.secret
 		});
+	}
+
+	static cookieExtractor(req) {
+		let token = null;
+		if (req && req.cookies) {
+			token = req.cookies['jwt-otp']
+		}
+		return token;
 	}
 
 	async validate(payload: any): Promise<JwtPayload> {
 		const user = {id: payload.sub,
 			isAuthenticated: payload.isAuthenticated};
-	return user;
+		return user;
 	}
 }

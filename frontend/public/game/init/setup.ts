@@ -2,29 +2,24 @@
 // ? Coding consistency : snake_case for variables | camelCase for functions | PascalCase for classes
 // ? Map indexes : 1 (normal map)
 
+// TODO Collision isn't working in multiplayer
+
 // TODO local mode : pause by pressing escape -> removing sound or quitting to menu
 // TODO adding options and probably sounds
 
-// TODO in menu creation, button to go to map page and choose a map
-
 // TODO key animation not playing on safari
 
-// TODO add switch classic/themed mode 1977 / 2077
-// ? classic mode has no power-ups and is retro-themed
-// ? themed mode has power ups and should be coherent within a specific theme (to be defined)
-// ? CYBERPUNK themed so futuristic shit idk
-
 // TODO different map ideas, windjammer inspired
+// TODO keep basic map
+// ? Original
 // TODO for example, each pong ball gives a random number of points
 // ? Casino
 // TODO another with walls in the middle, forcing the player to play around it
-// ? Arena
-// TODO another where the goaling zone is reduced and changes depending on who scored last
-// ? Stadium
+// ? City
 
 // TODO power ups 
 // ? they will spawn one at a time for 2 seconds
-// ? on a random y point, and on the x point of either one of the players
+// ? on a random y point, and on the x point for both players
 // ? resize paddle depending on malus/bonus
 // ? inverted input
 // ? black hole teleport ball
@@ -37,7 +32,6 @@ let errors : Errors = null;
 let buttons : Buttons = null;
 let inputs : Inputs = null;
 let keys : Keys = null;
-let player_input : number[] = [];
 
 let canvas : any = null;
 let socket : any = null;
@@ -68,8 +62,7 @@ function setup() {
 	socket.on("connect", () => {
 		socket.emit("my_id", socket.id);
 	});
-	
-	
+
 	listenStartEvents();
 	listenStopEvents();
 	listenMoveEvents();
@@ -97,32 +90,33 @@ function draw() {
 	else if (should_load)
 		inMainMenu();
 	if (game.state === "waiting-player" || game.state === "waiting-readiness" || game.state === "countdown" || game.state === "in-game")
-		game.map.render();
+		game.map.render(1);
 	if (game.state === "in-menu-input" || game.state === "waiting-player" || game.state === "in-menu-create")
 		consts.RETURN_ICON.show();
 	if (game.state === "in-menu-create") {
-		outputAnnouncement("Game Creation", consts.std_font_size, consts.WIDTH / 2, consts.HEIGHT / 5);
-		outputAnnouncement("score limit   ", consts.medium_font_size, consts.WIDTH * 1.20 / 5, consts.HEIGHT * 2.9 / 5)
+		drawMinimaps();
+		outputAnnouncement("Game Creation", consts.std_font_size, consts.WIDTH / 2, consts.HEIGHT / 7, "white");
+		outputAnnouncement("score limit   ", consts.medium_font_size, consts.WIDTH * 1.20 / 5, consts.HEIGHT * 0.48, "white")
 	}
 	if (game.state === "opponent-left-menu")
-		outputAnnouncement("Your opponent left", consts.std_font_size, consts.WIDTH / 2, consts.HEIGHT / 2);
+		outputAnnouncement("Your opponent left", consts.std_font_size, consts.WIDTH / 2, consts.HEIGHT / 2, "white");
 	if (game.state === "in-menu")
-		outputAnnouncement("CyberPong 1977", consts.std_font_size * 1.5, consts.WIDTH / 2, consts.HEIGHT / 4);
+		outputAnnouncement("CyberPong 1977", consts.std_font_size * 1.5, consts.WIDTH / 2, consts.HEIGHT / 4, "white");
 	else if (game.state === "in-menu-input") {
-		outputAnnouncement("Enter Room ID", consts.std_font_size, consts.WIDTH / 2, consts.HEIGHT * 2 / 5)
+		outputAnnouncement("Enter Room ID", consts.std_font_size, consts.WIDTH / 2, consts.HEIGHT * 2 / 5, "white")
 		if (errors.game_full)
-			outputAnnouncement("This game is already full", consts.small_font_size, consts.WIDTH / 2, consts.HEIGHT / 2);
+			outputAnnouncement("This game is already full", consts.small_font_size, consts.WIDTH / 2, consts.HEIGHT / 2, "white");
 		else if (errors.game_not_found)
-			outputAnnouncement("This game doesn't exist", consts.small_font_size, consts.WIDTH / 2, consts.HEIGHT / 2);
+			outputAnnouncement("This game doesn't exist", consts.small_font_size, consts.WIDTH / 2, consts.HEIGHT / 2, "white");
 	}
 	else if (game.state === "waiting-player") {
 		buttons.return.show();
 		consts.RETURN_ICON.show();
-		outputAnnouncement("WAITING FOR ANOTHER PLAYER", consts.medium_font_size, consts.WIDTH / 2, consts.HEIGHT / 2);
+		outputAnnouncement("WAITING FOR ANOTHER PLAYER", consts.medium_font_size, consts.WIDTH / 2, consts.HEIGHT / 2, "white");
 	}
 	else if (game.state === "waiting-readiness") {
 		drawPlayerReadiness();
-		outputAnnouncement("PLEASE PRESS SPACE TO START THE GAME", consts.medium_font_size, consts.WIDTH / 2, consts.HEIGHT / 2);
+		outputAnnouncement("PLEASE PRESS SPACE TO START THE GAME", consts.medium_font_size, consts.WIDTH / 2, consts.HEIGHT / 2, "white");
 	}
 	else if (game.state === "countdown") {
 		outputCountdown();
@@ -139,10 +133,12 @@ function draw() {
 				game.players[i].render();
 			game.pong.render();
 		}
+		if (game.frames_since_point < 180)
+			outputAnnouncement(game.pong.value + (game.pong.value === 1 ? " point" : " points"), 25, consts.WIDTH * 0.5, consts.HEIGHT * 0.95, game.pong.color);
 	}
 	else if (game.state === "game-over") {
 		buttons.return.show();
 		consts.RETURN_ICON.show();
-		outputAnnouncement((game.score[0] > game.score[1] ? "Player 1 " : "Player 2 ") + "won the game!", consts.std_font_size, width / 2, height / 2)
+		outputAnnouncement((game.score[0] > game.score[1] ? "Player 1 " : "Player 2 ") + "won the game!", consts.std_font_size, width / 2, height / 2, "white")
 	}
 }

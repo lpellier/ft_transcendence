@@ -30,8 +30,7 @@ export class Game {
 		this.score = [0, 0];
 		this.score_limit = 0;
 		this.pong = new Pong();
-		this.map = new GameMap(1200, 750, []);
-		this.map.defaultMap();
+		this.map = consts.original_map;
 		this.frames_since_point = 0;
 		this.publicity = "public";
 	}
@@ -69,12 +68,6 @@ export class Game {
 		else if (this.players.length === 1)
 			this.players.push(new Player("white", 2, id));
 	}
-
-	// ? MAP BOUNDS :
-	// ? top bound : 10
-	// ? bottom bound : MAP_HEIGHT - 10
-	// ? left bound : 0
-	// ? right bound : MAP_WIDTH
 
 	checkCollisions() : boolean {
 		// Implement acceleration here
