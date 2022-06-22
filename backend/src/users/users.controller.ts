@@ -1,4 +1,15 @@
-import { Controller, Get, Body, Patch, Param, UseGuards, Req, Put, UploadedFile, UseInterceptors } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Body,
+  Patch,
+  Param,
+  UseGuards,
+  Req,
+  Put,
+  UploadedFile,
+  UseInterceptors,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
@@ -28,25 +39,26 @@ export class UsersController {
   }
 
   @Put('upload-avatar')
-  @UseInterceptors(FileInterceptor('avatar', {
-    storage: diskStorage({
-      destination: './public/avatars',
-      filename: (req: any, file, cb) => cb(null, req.user.id + '.png')
+  @UseInterceptors(
+    FileInterceptor('avatar', {
+      storage: diskStorage({
+        destination: './public/avatars',
+        filename: (req: any, file, cb) => cb(null, req.user.id + '.png'),
+      }),
+      fileFilter: (req, file, cb) => {
+        if (file.mimetype.match(/^image/)) {
+          cb(null, true);
+        } else {
+          cb(null, false);
+        }
+      },
+      limits: {
+        fileSize: 1048576,
+      },
     }),
-    fileFilter: (req, file, cb) => {
-      if (file.mimetype.match(/^image/)){
-        cb(null, true);
-      } else {
-        cb(null, false);
-      }
-    },
-    limits: {
-      fileSize: 1048576
-    }
-  }))
-  uploadAvatar(@UploadedFile() file: Express.Multer.File) {
-  }
-  
+  )
+  uploadAvatar(@UploadedFile() file: Express.Multer.File) {}
+
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<Profile> {
     return this.usersService.getProfile(+id);
