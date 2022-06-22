@@ -58,7 +58,7 @@ function setup() {
 
 function hideIcons() {
 	keys.hide();
-	consts.RETURN_ICON.hide();
+	// consts.RETURN_ICON.hide();
 	consts.MARK_ICON.hide();
 	consts.CROSS_ICON.hide();
 	consts.CROSS_ICON2.hide();
@@ -77,8 +77,10 @@ function draw() {
 		inMainMenu();
 	if (game.state === "waiting-player" || game.state === "waiting-readiness" || game.state === "countdown" || game.state === "in-game")
 		game.map.render(1);
-	if (game.state === "in-menu-input" || game.state === "waiting-player" || game.state === "in-menu-create")
-		consts.RETURN_ICON.show();
+	if (game.state === "in-menu-input" || game.state === "waiting-player" || game.state === "in-menu-create") {
+		// consts.RETURN_ICON.show();
+		image(consts.RETURN_ICON, consts.WIDTH * 0.90, consts.HEIGHT * 0.01, consts.medium_square_diameter, consts.medium_square_diameter);
+	}
 	if (game.state === "in-menu-create") {
 		drawMinimaps();
 		outputAnnouncement("Game Creation", consts.std_font_size, consts.WIDTH / 2, consts.HEIGHT / 7, "white");

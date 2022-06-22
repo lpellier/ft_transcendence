@@ -39,11 +39,6 @@
 
 #button-return {
 	position: absolute;
-	padding: 0;
-	margin: 0;
-	top: 1%;
-	right: 1%;
-	z-index: 1;
 }
 
 #button-anyone {

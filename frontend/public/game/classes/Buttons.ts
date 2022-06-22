@@ -32,6 +32,7 @@ class Buttons {
 		this.return = createCustomButton("", goToMainMenu, highlightButton, resetButton, consts.medium_square_diameter, consts.medium_square_diameter);
 		this.return.style("border", "none");
 		this.return.style("background-color", "rgba(0, 0, 0, 0)");
+		this.return.position(consts.WIDTH * 0.90, consts.HEIGHT * 0.01);
 		
 		this.anyone_can_join = createCustomButton("Anyone can join", clickAnyone, highlightButton, resetButton, consts.medium_width, consts.medium_height);
 		this.anyone_can_join.style("background-color", "rgba(0, 0, 0, 0)");
@@ -126,6 +127,8 @@ class Buttons {
 	
 		this.return.size(consts.medium_square_diameter, consts.medium_square_diameter);
 		this.return.style("font-size", consts.medium_font_size.toString() + "px");
+
+		this.return.position(consts.WIDTH * 0.90, consts.HEIGHT * 0.01);
 	
 		this.map_original.size(consts.WIDTH * 0.2 + consts.DIAGONAL * 0.025, consts.HEIGHT * 0.2 + consts.DIAGONAL * 0.025);
 		this.map_original.style("font-size", consts.medium_font_size.toString() + "px");

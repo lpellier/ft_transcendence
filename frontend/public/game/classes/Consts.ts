@@ -58,9 +58,7 @@ class Consts {
 		
 		this.FONT = loadFont("/assets/fonts/PressStart2P-Regular.ttf");
 		
-		this.RETURN_ICON = createImg("/assets/icons/return-button2.png", "return-icon");
-		this.RETURN_ICON.parent(document.getElementById("icon-return"));
-		this.RETURN_ICON.size(this.medium_square_diameter, this.medium_square_diameter);
+		this.RETURN_ICON = loadImage("/assets/icons/return-button2.png");
 		
 		this.CROSS_ICON = createImg("/assets/icons/red-cross.png", "cross-icon");
 		this.CROSS_ICON.size(this.small_square_diameter * 1.5, this.small_square_diameter * 1.5);
@@ -72,8 +70,6 @@ class Consts {
 		this.MARK_ICON.size(this.small_square_diameter * 1.7, this.small_square_diameter * 1.5);
 	
 		this.EYE_ICON = loadImage("/assets/icons/eye-icon.png");
-		// this.EYE_ICON.size(this.WIDTH * 0.1, this.HEIGHT * 0.15);
-		// this.EYE_ICON.parent(document.getElementById("icon-eye"));
 
 		this.CITY_BACKGROUND = loadImage("/assets/backgrounds/city.jpg");
 		this.TOKYO_BACKGROUND = loadImage("/assets/backgrounds/tokyo.png");
@@ -124,8 +120,8 @@ class Consts {
 		this.city_map.resize(this.WIDTH , this.HEIGHT);
 		this.casino_map.resize(this.WIDTH , this.HEIGHT);
 
-		if (this.RETURN_ICON)
-			this.RETURN_ICON.size(this.medium_square_diameter, this.medium_square_diameter);
+		// if (this.RETURN_ICON)
+		// 	this.RETURN_ICON.size(this.medium_square_diameter, this.medium_square_diameter);
 		if (this.CROSS_ICON)
 			this.CROSS_ICON.size(this.small_square_diameter * 1.5, this.small_square_diameter * 1.5);
 		if (this.CROSS_ICON2)
@@ -133,8 +129,8 @@ class Consts {
 		if (this.MARK_ICON)
 			this.MARK_ICON.size(this.small_square_diameter * 1.7, this.small_square_diameter * 1.5);
 	
-		this.TOP_BOUND = 10;
-		this.BOT_BOUND = this.HEIGHT - 10;
+		this.TOP_BOUND = this.original_map.wall_width * 2;
+		this.BOT_BOUND = this.HEIGHT - this.original_map.wall_width * 2;
 		this.LEFT_BOUND = 0;
 		this.RIGHT_BOUND = this.WIDTH;
 	}
