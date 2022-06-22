@@ -100,20 +100,14 @@ export class Game {
 		this.frames_since_point++;
 
 		// ? collision with bounds
-		for (const wall of this.map.walls) {
-			let intersection : [number, number, string] = utils.getLineIntersection(this.pong.center(), this.pong.centerNextFrame(), wall[2], wall[3]);
-			if (intersection[0] != -1) {
-				this.pong.velocity[1] *= -1;
-				this.pong.pos[1] = wall[2][1];
-				return false;
-			}
-		}
-		if (this.pong.pos[1] < consts.TOP_BOUND || this.pong.pos[1] > consts.BOT_BOUND)
+		if (this.pong.pos[1] < consts.TOP_BOUND || this.pong.pos[1] + this.pong.diameter > consts.BOT_BOUND)
 			this.pong.velocity[1] *= -1;
-		if (this.pong.pos[1] < consts.TOP_BOUND)
-			this.pong.pos[1] = consts.TOP_BOUND;
-		else if (this.pong.pos[1] > consts.BOT_BOUND)
-			this.pong.pos[1] = consts.BOT_BOUND;
+		if (this.pong.pos[1] < consts.TOP_BOUND) {
+			this.pong.pos[1] = consts.TOP_BOUND + consts.MAP_HEIGHT * 0.005;
+		}
+		else if (this.pong.pos[1] + this.pong.diameter > consts.BOT_BOUND) {
+			this.pong.pos[1] = consts.BOT_BOUND - this.pong.diameter - consts.MAP_HEIGHT * 0.005;
+		}
 		if (this.pong.velocity[0] > 0 && this.pong.pos[0] + this.pong.diameter > right_bound) {
 			this.score[0] += this.pong.value;
 			if (this.score[0] >= this.score_limit)

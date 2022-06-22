@@ -64,14 +64,6 @@ function checkCollisions() {
 	game.frames_since_point++;
 
 	// ? collision with bounds
-	// for (const wall of game.map.walls) {
-	// 	let intersection : [number, number, string] = getLineIntersection(game.pong.center(), game.pong.centerNextFrame(), wall[2], wall[3]);
-	// 	if (intersection[0] != -1) {
-	// 		game.pong.velocity[1] *= -1;
-	// 		game.pong.pos[1] = wall[2][1];
-	// 		return ;
-	// 	}
-	// }
 	if (game.pong.pos[1] < consts.TOP_BOUND || game.pong.pos[1] + game.pong.diameter > consts.BOT_BOUND)
 		game.pong.velocity[1] *= -1;
 	if (game.pong.pos[1] < consts.TOP_BOUND) {
