@@ -23,7 +23,6 @@ class Buttons {
 
 	constructor() {
 		this.reset();
-		this.createButtons();
 	}
 	
 	createButtons() {
@@ -69,18 +68,25 @@ class Buttons {
 		this.map_original.style("background", "none");
 		this.map_original.style("border", "none");
 		this.map_original.style("outline", "3px solid");
-		this.map_original.style("font-size", consts.medium_font_size.toString() + "px");
+		
 		this.map_city = createCustomButton("City", clickMapCity, highlightButton, resetButton, consts.WIDTH * 0.2 + consts.WIDTH / 48, consts.HEIGHT * 0.2 + consts.WIDTH / 48);
 		this.map_city.style("background", "none");
 		this.map_city.style("border", "none");
 		this.map_city.style("outline", "none");
-		this.map_city.style("font-size", consts.medium_font_size.toString() + "px");
 		this.map_casino = createCustomButton("Casino", clickMapCasino, highlightButton, resetButton, consts.WIDTH * 0.2 + consts.WIDTH / 48, consts.HEIGHT * 0.2 + consts.WIDTH / 48);
 		this.map_casino.style("background", "none");
 		this.map_casino.style("border", "none");
 		this.map_casino.style("outline", "none");
+
+		this.map_original.style("font-size", consts.medium_font_size.toString() + "px");
+		this.map_city.style("font-size", consts.medium_font_size.toString() + "px");
 		this.map_casino.style("font-size", consts.medium_font_size.toString() + "px");
-		
+
+
+		this.map_original.position(consts.WIDTH * 0.0855, consts.HEIGHT * 0.56);
+		this.map_city.position(consts.WIDTH * 0.3855, consts.HEIGHT * 0.56);
+		this.map_casino.position(consts.WIDTH * 0.6855, consts.HEIGHT * 0.56);
+
 		this.spectate = createCustomButton("", clickSpectate, highlightSpectateButton, resetSpectateButton, consts.WIDTH * 0.1, consts.HEIGHT * 0.1);
 		this.spectate.style("background-color", "rgba(0, 0, 0, 0)");
 
@@ -127,6 +133,10 @@ class Buttons {
 		this.map_city.style("font-size", consts.medium_font_size.toString() + "px");
 		this.map_casino.size(consts.WIDTH * 0.2 + consts.DIAGONAL * 0.025, consts.HEIGHT * 0.2 + consts.DIAGONAL * 0.025);
 		this.map_casino.style("font-size", consts.medium_font_size.toString() + "px");
+
+		this.map_original.position(consts.WIDTH * 0.0855, consts.HEIGHT * 0.56);
+		this.map_city.position(consts.WIDTH * 0.3855, consts.HEIGHT * 0.56);
+		this.map_casino.position(consts.WIDTH * 0.6855, consts.HEIGHT * 0.56);
 
 		this.spectate.size(consts.WIDTH * 0.1, consts.HEIGHT * 0.1);
 	}
@@ -184,6 +194,9 @@ class Buttons {
 		if (this.spectate)
 			this.spectate.remove();
 		this.spectate = null;
+
+		this.createButtons();
+		this.resize();
 	}
 
 	hide() {
