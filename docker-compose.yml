@@ -37,3 +37,5 @@ services:
       - 3000:3000
     command:  sh -c "npm install
               && npm start"
+    env_file:
+      - ./.env

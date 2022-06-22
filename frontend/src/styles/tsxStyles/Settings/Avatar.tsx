@@ -1,10 +1,8 @@
-const ModalStyle = {
+const ModalChooseAvatar = {
     position: 'absolute',
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: '45%',
-    height: '25%',
     bgcolor: 'rgb(195, 183, 215, 0.8)',
     border: '3px solid black',
     boxShadow: 24,
@@ -41,4 +39,4 @@ const CustomAvatarStyle = {
     pb: 3,
 }
 
-export {AvatarListStyle, ModalStyle, CustomAvatarStyle}
+export {AvatarListStyle, ModalChooseAvatar, CustomAvatarStyle}

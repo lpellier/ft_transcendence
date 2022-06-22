@@ -9,11 +9,14 @@ interface User {
     otpsecret: string;
 }
 
+const init_user = {} as User
+
 interface Room {
     id: number;
     name: string;
     ownerId: number;
     visibility: string;
+    password: string;
 }
 
 interface Message {
@@ -32,4 +35,6 @@ interface Stats {
 	userId: number;
 }
 
-export {User, Room, Message, Stats}
+const init_stats = {} as Stats
+
+export {User, init_user, Room, Message, Stats, init_stats}

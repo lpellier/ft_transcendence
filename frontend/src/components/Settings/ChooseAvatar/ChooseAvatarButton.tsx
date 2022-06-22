@@ -6,7 +6,7 @@ import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import Modal from '@mui/material/Modal';
 
 import CustomAvatar from './CustomAvatar';
-import { CustomAvatarStyle } from '../../../styles/tsxStyles/AppBar/Avatar';
+import { CustomAvatarStyle } from '../../../styles/tsxStyles/Settings/Avatar';
 import {User} from 'interfaces'
 
 export default function ChooseAvatarButton(props: {user: User}) {

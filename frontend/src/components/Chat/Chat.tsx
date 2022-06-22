@@ -19,7 +19,7 @@ function Chat() {
 	
 	let [status, setStatus] = useState('waiting for connection');
 	let [user, setUser] = useState<User>();
-	let [currentRoom, setCurrentRoom] = useState<Room> ({id: 1, name: "general", ownerId: 60040, visibility: "public"});
+	let [currentRoom, setCurrentRoom] = useState<Room> ({id: 1, name: "general", ownerId: 60040, visibility: "public", password:""});
 	let [users, setUsers] = useState<User[]>([]);
 	let [canWrite, setCanWrite] = useState<boolean>(true);
 	let [roomAdmins, setRoomAdmins] = useState<User[]>([]);

@@ -1,4 +1,4 @@
-const ModalStyle = {
+const ModalChooseName = {
     position: 'absolute',
     top: '50%',
     left: '50%',
@@ -18,4 +18,4 @@ const NameButtonStyle = {
     color: "white"
 }
 
-export { NameButtonStyle, ModalStyle}
+export { NameButtonStyle, ModalChooseName}

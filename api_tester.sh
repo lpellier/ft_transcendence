@@ -44,30 +44,28 @@ EOF
 	read
 	case $REPLY in
 		1)		curl -sL -b cookie.txt -c cookie.txt $BACKEND_URL/auth
-				auth_otp="Authorization: Bearer `grep jwt-otp cookie.txt | cut -d "	" -f 7`"
-				auth_jwt="Authorization: Bearer `grep jwt[^-] cookie.txt | cut -d "	" -f 7`"
 				;;
 		2)		read -p "Key in one-time password:" otp
-				curl -H $auth_otp -c cookie.txt -b cookie.txt -d "value=$otp" "$BACKEND_URL/auth/google-authenticator" 
-				auth_jwt="Authorization: Bearer `grep jwt[^-] cookie.txt | cut -d "	" -f 7`"
+				curl -c cookie.txt -b cookie.txt -d "value=$otp" "$BACKEND_URL/auth/google-authenticator" 
 				;;
-		3)		curl -H "$auth_jwt" "$BACKEND_URL/users/me"
+		3)		curl -b cookie.txt -c cookie.txt "$BACKEND_URL/users/me"
 				;;
-		4)		curl -X PATCH -H "Content-Type: application/json" -H "$auth_jwt" -d '{"tfa": true}' "$BACKEND_URL/users/me"
+		4)		curl -X PATCH -H "Content-Type: application/json" -b cookie.txt -c cookie.txt -d '{"tfa": true}' "$BACKEND_URL/users/me"
 				;;
-		5)		curl -X PATCH -H "Content-Type: application/json" -H "$auth_jwt" -d '{"tfa": false}' "$BACKEND_URL/users/me"
+		5)		curl -X PATCH -H "Content-Type: application/json" -b cookie.txt -c cookie.txt -d '{"tfa": false}' "$BACKEND_URL/users/me"
 				;;
 		6)		read -p "Key in new username: " newUserName
-				curl -X PATCH -H "$auth_jwt" -d "username=$newUserName" "$BACKEND_URL/users/me"
+				curl -X PATCH -b cookie.txt -c cookie.txt -d "username=$newUserName" "$BACKEND_URL/users/me"
 				;;
 		7)		read -p "Key in route to test:" route
-				curl -H "$auth_jwt" "$BACKEND_URL/$route"
+				curl -b cookie.txt -c cookie.txt "$BACKEND_URL/$route"
 				;;	
-		8)		curl -H "$auth_jwt" -b cookie.txt -c cookie.txt "$BACKEND_URL/auth/logout"
+		8)		curl -b cookie.txt -c cookie.txt "$BACKEND_URL/auth/logout"
 				auth_jwt="Authorization: Bearer `grep jwt[^-] cookie.txt | cut -d "	" -f 7`"
 				;;
-
 		9)		exit
+				;;
+		10)		curl -X PUT  -b cookie.txt -c cookie.txt -F "avatar=@/mnt/nfs/homes/bolmos-o/dev/ft_transcendence/bigfile.jpg" "$BACKEND_URL/users/upload-avatar"
 				;;
 	esac
 	read

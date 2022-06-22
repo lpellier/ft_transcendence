@@ -6,8 +6,7 @@ import WebhookIcon from '@mui/icons-material/Webhook';
 
 import {orangeTheme} from 'components/Themes'
 import {Title, ButtonStyle, LinkStyle, IconStyle} from "../styles/tsxStyles/LogIn"
-
-import axios from "axios";
+import axios from 'axios'
 
 const AuthAPI = "http://127.0.0.1:3001/auth"
 const MockAuthAPI = "http://127.0.0.1:3001/auth/mock"
