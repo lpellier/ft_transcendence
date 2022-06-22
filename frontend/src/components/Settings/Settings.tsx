@@ -30,7 +30,7 @@ function ChooseAvatarModal(props: {user: User}) {
 	return (
 		<ChooseModal
 			user={props.user} 
-			icon={<FaceIcon />}
+			icon={FaceIcon}
 			label={"Choose avatar"}
 			ModalBoxStyle={ModalChooseAvatar}
 			modalComp={<AvatarList user={props.user}/>}
@@ -42,7 +42,7 @@ function ChooseNameModal(props: {user: User}) {
 	return (
 		<ChooseModal
 			user={props.user} 
-			icon={<DriveFileRenameOutlineIcon />}
+			icon={DriveFileRenameOutlineIcon}
 			label={"Choose Name"}
 			ModalBoxStyle={ModalChooseName}
 			modalComp={<ChooseName user={props.user}/>}
@@ -54,7 +54,7 @@ function ChooseAuthModal(props: {user: User}) {
 	return (
 		<ChooseModal
 			user={props.user} 
-			icon={<VpnKeyIcon />}
+			icon={VpnKeyIcon}
 			label={"Choose Authentication"}
 			ModalBoxStyle={ModalChooseAuth}
 			modalComp={<ChooseAuth />}
