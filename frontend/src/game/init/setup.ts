@@ -10,23 +10,29 @@
 // TODO cute animation showing the roll of pong value in casino
 // TODO comment EVERYTHING
 
+// ? How to calculate bounce angle from point of intersection of pong velocity (v) and bumper (b)
+// ? when collision is detected, get the perpendicular line (pl) to the tangent (t) of the point of collision (pt)
+// ? Calculate the angle alpha between v and pl ; calculate line with angle alpha to pl
+
 class Bumper {
 	animation : any;
-	x : any;
-	y : any;
-	speed : any;
-	w : any;
-	len : any;
-	index : any;
+	x : number;
+	y : number;
+	speed : number;
+	w : number;
+	len : number;
+	index : number;
 
-	constructor(animation : any, x : any, y : any, speed : any) {
+	hit : boolean;
+
+	constructor(animation : any, x : number, y : number) {
 	  this.x = x;
 	  this.y = y;
 	  this.animation = animation;
 	  this.w = this.animation[0].width;
 	  this.len = this.animation.length;
-	  this.speed = speed;
 	  this.index = 0;
+	  this.hit = false;
 	}
   
 	show() {
@@ -38,7 +44,7 @@ class Bumper {
 		this.index += 1;
 		if (this.index >= this.len) {
 			this.index = 0;
-			hit = false;
+			this.hit = false;
 		}
 	}
   }
@@ -48,9 +54,6 @@ let spritedata : any;
 
 let animation : any[] = [];
 let bumper : any;
-
-let hit : boolean = false;
-
 
 let should_load : boolean = false;
 
@@ -81,7 +84,7 @@ function setup() {
 			animation.push(img);
 	}
 
-	bumper = new Bumper(animation, 0, 0, 0.4);
+	bumper = new Bumper(animation, 0, 0);
 
 
 	keys.init();
@@ -194,7 +197,7 @@ function draw() {
 		outputAnnouncement((game.score[0] > game.score[1] ? "Player 1 " : "Player 2 ") + "won the game!", consts.std_font_size, width / 2, height / 2, "white")
 	}
 	bumper.show();
-	if (hit)
+	if (bumper.hit)
 		bumper.animate();
 
 	// console.log(hit);

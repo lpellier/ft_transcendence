@@ -60,7 +60,7 @@ function movePlayers() {
 
 function keyPressed() {
 	if (key === ' ')
-		hit = !hit;
+		bumper.hit = !bumper.hit;
 	if (game === null)
 		return;
 	if (!game.spectator && game.state === "waiting-readiness" && key === ' ') 
