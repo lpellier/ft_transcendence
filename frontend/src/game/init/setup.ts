@@ -3,11 +3,11 @@
 // ? Map indexes : 1 (normal map), 2 (city map), 3 (casino map)
 
 // TODO Brainstorm a better idea than walls in the middle for City
+	// ? bumper in middle of map ? make an animation for bump
 
 // TODO find a way to send data to database and fill every appropriate field when situation calls for it
 
 // TODO cute animation showing the roll of pong value in casino
-// TODO key animation not playing on safari
 // TODO comment EVERYTHING
 
 let should_load : boolean = false;
