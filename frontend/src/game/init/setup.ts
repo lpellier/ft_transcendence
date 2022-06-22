@@ -10,6 +10,48 @@
 // TODO cute animation showing the roll of pong value in casino
 // TODO comment EVERYTHING
 
+class Bumper {
+	animation : any;
+	x : any;
+	y : any;
+	speed : any;
+	w : any;
+	len : any;
+	index : any;
+
+	constructor(animation : any, x : any, y : any, speed : any) {
+	  this.x = x;
+	  this.y = y;
+	  this.animation = animation;
+	  this.w = this.animation[0].width;
+	  this.len = this.animation.length;
+	  this.speed = speed;
+	  this.index = 0;
+	}
+  
+	show() {
+	  let index = this.index % this.len;
+	  image(this.animation[index], this.x, this.y);
+	}
+  
+	animate() {
+		this.index += 1;
+		if (this.index >= this.len) {
+			this.index = 0;
+			hit = false;
+		}
+	}
+  }
+
+let spritesheet : any;
+let spritedata : any;
+
+let animation : any[] = [];
+let bumper : any;
+
+let hit : boolean = false;
+
+
 let should_load : boolean = false;
 
 let consts : Consts = null;
@@ -25,10 +67,23 @@ let socket : any = null;
 function preload() {
 	consts = new Consts();
 	keys = new Keys();
+
+	spritedata = loadJSON('/assets/sprites/bumper.json');
+  	spritesheet = loadImage('/assets/sprites/bumper.png');
 }
 
 function setup() {
-	
+	let frames = spritedata.frames;
+	for (let i = 0; i < frames.length; i++) {
+		let pos = frames[i].position;
+		let img = spritesheet.get(pos.x, pos.y, pos.w, pos.h);
+		for (let j = 0; j < frames[i].time; j++)
+			animation.push(img);
+	}
+
+	bumper = new Bumper(animation, 0, 0, 0.4);
+
+
 	keys.init();
 	game = new Game();
 	inputs = new Inputs();
@@ -138,4 +193,9 @@ function draw() {
 		image(consts.RETURN_ICON, consts.WIDTH * 0.90, consts.HEIGHT * 0.01, consts.medium_square_diameter, consts.medium_square_diameter);
 		outputAnnouncement((game.score[0] > game.score[1] ? "Player 1 " : "Player 2 ") + "won the game!", consts.std_font_size, width / 2, height / 2, "white")
 	}
+	bumper.show();
+	if (hit)
+		bumper.animate();
+
+	// console.log(hit);
 }

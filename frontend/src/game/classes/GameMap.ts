@@ -18,32 +18,18 @@ class GameMap {
 	originalMap() {
 		this.object_color = "white";
 		this.background = null;
-		this.walls =	[
-						[[this.wall_width, this.wall_width], [this.width - this.wall_width * 2, this.wall_width], [this.wall_width, this.wall_width * 2], [this.width - this.wall_width, this.wall_width * 2]], 
-						[[this.wall_width, this.height - this.wall_width * 2], [this.width - this.wall_width * 2, this.wall_width], [this.wall_width, this.height - this.wall_width * 2], [this.width - this.wall_width, this.height - this.wall_width * 2]]
-					];
 	}
 
 	cityMap() {
 		this.object_color = "#ffffff";
 		if (consts)
-			this.background = consts.CITY_BACKGROUND;
-		this.walls =	[
-						[[this.wall_width, this.wall_width], [this.width - this.wall_width * 2, this.wall_width], [this.wall_width, this.wall_width * 2], [this.width - this.wall_width, this.wall_width * 2]], 
-						[[this.wall_width, this.height - this.wall_width * 2], [this.width - this.wall_width * 2, this.wall_width], [this.wall_width, this.height - this.wall_width * 2], [this.width - this.wall_width, this.height - this.wall_width * 2]],
-						[[this.width / 2, this.height / 5], [this.wall_width, this.height / 5], [0, 0], [0, 0]],
-						[[this.width / 2, this.height * 3/ 5], [this.wall_width, this.height / 5], [0, 0], [0, 0]],
-					];	
+			this.background = consts.CITY_BACKGROUND;	
 	} 
 
 	casinoMap() {
 		this.object_color = "#ffffff";
 		if (consts)
 			this.background = consts.TOKYO_BACKGROUND;
-		this.walls =	[
-						[[this.wall_width, this.wall_width], [this.width - this.wall_width * 2, this.wall_width], [this.wall_width, this.wall_width * 2], [this.width - this.wall_width, this.wall_width * 2]], 
-						[[this.wall_width, this.height - this.wall_width * 2], [this.width - this.wall_width * 2, this.wall_width], [this.wall_width, this.height - this.wall_width * 2], [this.width - this.wall_width, this.height - this.wall_width * 2]]
-					];	
 	}
 
 	render(ratio : number) {
@@ -92,6 +78,10 @@ class GameMap {
 		this.width = w;
 		this.height = h;
 		this.wall_width = this.width / 240;
+		this.walls =	[
+			[[this.wall_width, this.wall_width], [this.width - this.wall_width * 2, this.wall_width], [this.wall_width, this.wall_width * 2], [this.width - this.wall_width, this.wall_width * 2]], 
+			[[this.wall_width, this.height - this.wall_width * 2], [this.width - this.wall_width * 2, this.wall_width], [this.wall_width, this.height - this.wall_width * 2], [this.width - this.wall_width, this.height - this.wall_width * 2]]
+		];
 		if (this.index === 1)
 			this.originalMap();
 		else if (this.index === 2) {
