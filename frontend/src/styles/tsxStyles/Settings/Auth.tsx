@@ -13,7 +13,7 @@ const ButtonStackStyle = {
     textAlign: 'left',
 }
 
-const ModalStyle = {
+const ModalChooseAuth = {
     position: 'absolute',
     top: '50%',
     left: '50%',
@@ -27,4 +27,4 @@ const ModalStyle = {
     pb: 3,
   }
 
-export { ButtonStackStyle, Title, ModalStyle }
+export { ButtonStackStyle, Title, ModalChooseAuth }

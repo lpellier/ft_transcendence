@@ -1,4 +1,4 @@
-const ModalStyle = {
+const ModalChooseAvatar = {
     position: 'absolute',
     top: '50%',
     left: '50%',
@@ -41,4 +41,4 @@ const CustomAvatarStyle = {
     pb: 3,
 }
 
-export {AvatarListStyle, ModalStyle, CustomAvatarStyle}
+export {AvatarListStyle, ModalChooseAvatar, CustomAvatarStyle}

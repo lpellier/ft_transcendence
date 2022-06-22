@@ -1,18 +1,15 @@
 import {useState} from 'react';
-
 import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
-import AvatarList from './ChooseAvatar'
-import FaceIcon from '@mui/icons-material/Face';
-
-import {ButtonModalStyle, IconStyle} from '../../../styles/tsxStyles/AppBar/PongMenu'
-import {AvatarListStyle} from '../../../styles/tsxStyles/AppBar/Avatar'
-
+import {ButtonModalStyle, IconStyle} from '../../styles/tsxStyles/AppBar/PongMenu'
 import {User} from 'interfaces'
 
-export default function ChooseAvatarModal(props: {user: User}) {
+
+export default function ChooseModal(props: {user: User, icon: any, 
+	label: string, ModalBoxStyle: any, modalComp: any}) 
+{
     const [open, setOpen] = useState(false);
 
     const handleOpen = () => {
@@ -31,17 +28,17 @@ export default function ChooseAvatarModal(props: {user: User}) {
             color="secondary"
             style={ButtonModalStyle}
           >
-          <FaceIcon sx={IconStyle}/>
-          Choose avatar
+          <props.icon sx={IconStyle}/>
+          {props.label}
       </Button>
     	<Modal
           open={open}
           onClose={handleClose}
         > 
-          <Box sx={AvatarListStyle}>
-              <AvatarList user={props.user}/>
+          <Box sx={props.ModalBoxStyle}>
+			{props.modalComp}
           </Box>
         </Modal>
         </Stack>
     );
-  }
+}
