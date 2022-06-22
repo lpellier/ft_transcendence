@@ -106,24 +106,24 @@ class Game extends React.Component {
 export default class Gamepage extends React.Component {	
 	componentDidMount() {
 		addScript("https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.0/socket.io.js");
-		addScript("/game/sketch/classes/Buttons.js");
-		addScript("/game/sketch/classes/Consts.js");
-		addScript("/game/sketch/classes/Errors.js");
-		addScript("/game/sketch/classes/Keys.js");
-		addScript("/game/sketch/classes/Game.js");
-		addScript("/game/sketch/classes/Inputs.js");
-		addScript("/game/sketch/classes/Player.js");
-		addScript("/game/sketch/classes/GameMap.js");
-		addScript("/game/sketch/classes/Pong.js");
-		addScript("/game/sketch/engine/collisions.js");
-		addScript("/game/sketch/engine/draw.js");
-		addScript("/game/sketch/engine/output.js");
-		addScript("/game/sketch/init/init.js");
-		addScript("/game/sketch/init/setup.js");
-		addScript("/game/sketch/socket/events.js");
-		addScript("/game/sketch/engine/input.js");
-		addScript("/game/sketch/engine/menus.js");
-		addScript("/game/sketch/engine/button_functions.js");
+		addScript("/sketch/classes/Buttons.js");
+		addScript("/sketch/classes/Consts.js");
+		addScript("/sketch/classes/Errors.js");
+		addScript("/sketch/classes/Keys.js");
+		addScript("/sketch/classes/Game.js");
+		addScript("/sketch/classes/Inputs.js");
+		addScript("/sketch/classes/Player.js");
+		addScript("/sketch/classes/GameMap.js");
+		addScript("/sketch/classes/Pong.js");
+		addScript("/sketch/engine/collisions.js");
+		addScript("/sketch/engine/draw.js");
+		addScript("/sketch/engine/output.js");
+		addScript("/sketch/init/init.js");
+		addScript("/sketch/init/setup.js");
+		addScript("/sketch/socket/events.js");
+		addScript("/sketch/engine/input.js");
+		addScript("/sketch/engine/menus.js");
+		addScript("/sketch/engine/button_functions.js");
 		addScript("/p5/p5.js");
 	}
 
