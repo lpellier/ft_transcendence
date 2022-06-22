@@ -15,7 +15,8 @@ import ChooseAuth from './ChooseAuth/ChooseAuth'
 import {ModalChooseName} from '../../styles/tsxStyles/Settings/Name'
 import {ModalChooseAuth} from '../../styles/tsxStyles/Settings/Auth'
 import {ModalChooseAvatar} from '../../styles/tsxStyles/Settings/Avatar'
-import {User} from 'interfaces'
+import {User, init_user} from 'interfaces'
+import {getUser} from 'requests'
 
 
 const SettingStyle = {
@@ -29,7 +30,7 @@ function ChooseAvatarModal(props: {user: User}) {
 	return (
 		<ChooseModal
 			user={props.user} 
-			icon={<FaceIcon />}
+			icon={FaceIcon}
 			label={"Choose avatar"}
 			ModalBoxStyle={ModalChooseAvatar}
 			modalComp={<AvatarList user={props.user}/>}
@@ -41,7 +42,7 @@ function ChooseNameModal(props: {user: User}) {
 	return (
 		<ChooseModal
 			user={props.user} 
-			icon={<DriveFileRenameOutlineIcon />}
+			icon={DriveFileRenameOutlineIcon}
 			label={"Choose Name"}
 			ModalBoxStyle={ModalChooseName}
 			modalComp={<ChooseName user={props.user}/>}
@@ -53,7 +54,7 @@ function ChooseAuthModal(props: {user: User}) {
 	return (
 		<ChooseModal
 			user={props.user} 
-			icon={<VpnKeyIcon />}
+			icon={VpnKeyIcon}
 			label={"Choose Authentication"}
 			ModalBoxStyle={ModalChooseAuth}
 			modalComp={<ChooseAuth />}
@@ -62,21 +63,10 @@ function ChooseAuthModal(props: {user: User}) {
 }
 
 export default function Settings() {
-    let [user, setUser] = useState<User>({avatar: "", id: -1, username: "", 
-		winHistory: -1, lossHistory: -1, tfa: false, otpsecret: ""});
+    let [user, setUser] = useState<User>(init_user);
 
     useEffect(() => {
-		axios.get('http://127.0.0.1:3001/users/me',{
-			withCredentials: true
-		})
-		.then(res => {
-			console.log("Get request success")
-			const user_data = res.data;
-			setUser(user_data);
-		})
-		.catch(function (err) {
-			console.log("Get request failed : ", err)
-		});
+		getUser(setUser)
 	}, [])
 
     return (

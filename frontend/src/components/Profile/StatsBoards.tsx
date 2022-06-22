@@ -2,9 +2,8 @@ import {useState, useEffect} from 'react'
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import {User} from 'interfaces';
-
-import axios from 'axios';
+import {Stats, init_stats} from 'interfaces';
+import axios from 'axios'
 
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import TimelineIcon from '@mui/icons-material/Timeline';
@@ -13,7 +12,6 @@ import UpdateIcon from '@mui/icons-material/Update';
 
 import { phoneSize } from 'index';
 import {StatTitle, StatBox} from "../../styles/tsxStyles/Home"
-import TouchRipple from '@mui/material/ButtonBase/TouchRipple';
 
 function BoardComponent(props: {icon: any, title: string}) {
 	return(
@@ -26,8 +24,8 @@ function BoardComponent(props: {icon: any, title: string}) {
 	);
 }
 
-function StatsBox(props: {myStats: User}){
-	const totGames = props.myStats.winHistory + props.myStats.lossHistory;
+function StatsBox(props: {myStats: Stats}){
+	const totGames = props.myStats.wins + props.myStats.losses;
 
 	return (
 		<Stack spacing={1}>
@@ -35,8 +33,8 @@ function StatsBox(props: {myStats: User}){
 			icon={<TimelineIcon />} 
 			title="Stats" />
 			<Box sx={StatBox}>
-				<h3> Victories : {props.myStats.winHistory} </h3>
-				<h3> Games lost : {props.myStats.lossHistory} </h3>
+				<h3> Victories : {props.myStats.wins} </h3>
+				<h3> Games lost : {props.myStats.losses} </h3>
 				<h3> Total games : {totGames} </h3>
 			</Box>
 		</Stack>
@@ -87,23 +85,22 @@ function MatchhistoryBox(){
 
 export default function StatsBoards() {
 	const [width, setWidth] = useState(window.innerWidth);
-	let [stats, setStats] = useState<User>({avatar: "", id: -1, username: "", 
-		winHistory: -1, lossHistory: -1, tfa: false, otpsecret: ""});
+	const [stats, setStats] = useState<Stats>(init_stats);
 	//let [stats, setStats] = useState<Stats>({wins: -1, losses: -1});
 	//let [leadboard, setLeadboard] = useState<LeaderBoard>({Rank: -1, PlayerName: '', PlayerLevel: -1});
 
 	useEffect(() => {
-		axios.get('http://127.0.0.1:3001/users/me',{
-			withCredentials: true,
+		
+		axios.get('http://127.0.0.1:3001/stats',{
+			withCredentials: true
 		})
-		   .then(res => {
-			   console.log("Get request success")
-			   const resStats = res.data;
-			   setStats(resStats);
-			   console.log("res : ", resStats)
-		   })
-		   .catch(function (err) {
-			   console.log("Get request failed : ", err)
+		.then(res => {
+			console.log("Get request success")
+			const stats_data = res.data;
+			setStats(stats_data);
+		})
+		.catch(function (err) {
+			console.log("Get request failed : ", err)
 		});
 
 		const handleResizeWindow = () => setWidth(window.innerWidth);
