@@ -123,7 +123,6 @@ class Buttons {
 	
 		this.map_original.size(consts.WIDTH * 0.2 + consts.DIAGONAL * 0.025, consts.HEIGHT * 0.2 + consts.DIAGONAL * 0.025);
 		this.map_original.style("font-size", consts.medium_font_size.toString() + "px");
-		this.map_original.style("outline", "3px solid");
 		this.map_city.size(consts.WIDTH * 0.2 + consts.DIAGONAL * 0.025, consts.HEIGHT * 0.2 + consts.DIAGONAL * 0.025);
 		this.map_city.style("font-size", consts.medium_font_size.toString() + "px");
 		this.map_casino.size(consts.WIDTH * 0.2 + consts.DIAGONAL * 0.025, consts.HEIGHT * 0.2 + consts.DIAGONAL * 0.025);

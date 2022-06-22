@@ -82,4 +82,7 @@ function drawSpectate() {
 	if (game.spectator === true && game.state === "in-menu-input") {
 		outputAnnouncement("Spectate", consts.std_font_size, consts.WIDTH * 0.32, consts.HEIGHT * 0.11, "white");
 	}
+	else if (game.spectator === false && game.state === "in-menu-input") {
+		outputAnnouncement("Play", consts.std_font_size, consts.WIDTH * 0.25, consts.HEIGHT * 0.11, "white");
+	}
 }
