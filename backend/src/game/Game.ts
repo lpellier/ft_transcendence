@@ -104,9 +104,16 @@ export class Game {
 			let intersection : [number, number, string] = utils.getLineIntersection(this.pong.center(), this.pong.centerNextFrame(), wall[2], wall[3]);
 			if (intersection[0] != -1) {
 				this.pong.velocity[1] *= -1;
+				this.pong.pos[1] = wall[2][1];
 				return false;
 			}
 		}
+		if (this.pong.pos[1] < consts.TOP_BOUND || this.pong.pos[1] > consts.BOT_BOUND)
+			this.pong.velocity[1] *= -1;
+		if (this.pong.pos[1] < consts.TOP_BOUND)
+			this.pong.pos[1] = consts.TOP_BOUND;
+		else if (this.pong.pos[1] > consts.BOT_BOUND)
+			this.pong.pos[1] = consts.BOT_BOUND;
 		if (this.pong.velocity[0] > 0 && this.pong.pos[0] + this.pong.diameter > right_bound) {
 			this.score[0] += this.pong.value;
 			if (this.score[0] >= this.score_limit)
