@@ -6,7 +6,6 @@ interface User {
 	victories: number;
 	losses: number;
 	level: number;
-	progression: number;
 }
 
 const init_user = {} as User
@@ -32,7 +31,6 @@ interface Stats {
 	wins: number;
 	losses: number;
 	level: number;
-	progression: number;
 	userId: number;
 }
 

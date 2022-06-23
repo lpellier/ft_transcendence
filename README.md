@@ -29,7 +29,6 @@ Returns object of self, with settings.
   victories: number;
   losses: number;
   level: number;
-  progression: number;
 }
 ```
 
@@ -51,6 +50,5 @@ Returns object of specified user (username, avatar, stats and match_history, etc
   victories: number;
   losses: number;
   level: number;
-  progression: number;
 }
 ```

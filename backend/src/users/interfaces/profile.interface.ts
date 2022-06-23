@@ -4,5 +4,4 @@ export interface Profile {
   victories: number;
   losses: number;
   level: number;
-  progression: number;
 }
