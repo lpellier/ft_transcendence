@@ -23,6 +23,7 @@ function TFAButton() {
 	const [input, showedInput] = useState(false);
 	const [url, setUrl] = useState("");
 	const [user, setUser] = useState<User>(init_user);
+	const [secret, setSecret] = useState<string>("");
 
 	useEffect(() => {
 
@@ -39,13 +40,17 @@ function TFAButton() {
 			{
 				withCredentials: true, 
 			})
+			.then(res => {
+				const secret = res.data;
+				setSecret(secret);
+			})
 			.catch(function (err) {
 				console.log("Setting tfa failed :", err)
 			})
 	}
 
 	function getSecret() {
-		const otpUrl = "otpauth://totp/transcendance_BoopBipBoop?secret=" + user.otpsecret;
+		const otpUrl = "otpauth://totp/transcendance_BoopBipBoop?secret=" + secret;
 
 		setUrl(otpUrl)
 	}
@@ -60,7 +65,7 @@ function TFAButton() {
 			patchTfa({query:"tfa=false"})
 		}
 
-	if (user.tfa == false) {
+	if (user.tfa === false) {
 		return (
 			<Stack>
     			< Button
