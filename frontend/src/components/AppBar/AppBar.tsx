@@ -76,7 +76,7 @@ function ProjectName() {
 		  component="div"
 		  sx={{paddingLeft: '0.5em'}}
 		>
-		  		Eneana
+		  		GnaGna
 				<WebhookIcon />
 				Pong
 		</Typography>

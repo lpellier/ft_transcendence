@@ -6,9 +6,9 @@ import Popper from '@mui/material/Popper';
 
 import {toast} from 'react-toastify';
 
-import {useState, useEffect, useRef} from 'react'
+import {useState, useEffect } from 'react'
 import {Room, User} from 'interfaces'
-import {socket} from './Chat'
+import {socket} from 'index'
 
 
 export interface RoomUserDto {
@@ -185,10 +185,6 @@ function RoomUserMod(props : {currentUser: User, users: User[], room: Room, room
 				))}
 			</Stack>
 		);
-	}
-
-	interface UserModArgs {
-
 	}
 
 	function	UserModButton(props: {clickAction: Function, room:Room, title:string, clicked: number, handleSubmit: React.FormEventHandler<HTMLFormElement>, setClicked:Function, users: User[], condition: Function}) {

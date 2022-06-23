@@ -68,7 +68,7 @@ export default function LogIn() {
     return (
         	<Stack spacing={10} sx={Title}>
 				<div>
-					Eneana
+					GnaGna
 					<WebhookIcon sx={IconStyle}/>
 					Pong
 				</div>

@@ -9,6 +9,7 @@ import { FriendsService } from './friends.service';
 import { ConfigService } from '@nestjs/config';
 import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { FriendUserDto } from './dto/friend-user.dto';
 
 @UseGuards(JwtAuthGuard)
 @WebSocketGateway({
@@ -23,18 +24,19 @@ export class FriendsGateway
   constructor(private readonly friendsService: FriendsService) {}
 
   @SubscribeMessage('addFriend')
-  add(@MessageBody() id: number) {
-    return this.friendsService.add(id);
+  add(@MessageBody() friendUserDto: FriendUserDto) {
+    return this.friendsService.add(friendUserDto.userId, friendUserDto.friendId);
+
   }
 
   @SubscribeMessage('removeFriend')
-  remove(@MessageBody() id: number) {
-    return this.friendsService.remove(id);
+  remove(@MessageBody() friendUserDto: FriendUserDto) {
+    return this.friendsService.remove(friendUserDto.userId, friendUserDto.friendId);
   }
 
   @SubscribeMessage('findAllFriends')
-  findAll() {
-    return this.friendsService.findAll();
+  findAll(@MessageBody() userId: number) {
+    return this.friendsService.findAll(userId);
   }
 
   handleConnection(client) {

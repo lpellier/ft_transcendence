@@ -1,24 +1,43 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
+import { use } from 'passport';
 
 @Injectable()
 export class FriendsService {
   constructor(private prisma: PrismaClient) {}
-
-  add(id: number) {
-    // await this.prisma.user.update({
-    //   where: {
-    //     id:
-    //   }
-    // })
-    return `This action removes a #${id} friend`;
+  
+  async findAll(userId: number) {
+    const {friendIds} = await this.prisma.user.findUnique({
+      where: {id: userId}, 
+      select: {friendIds: true}
+    })
+    return(friendIds);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} friend`;
+  async add(userId: number, friendId: number) {
+    const friendIds = await this.findAll(userId);
+    
+    await this.prisma.user.update({
+      where: {id: userId}, 
+      data: {
+        friendIds: {
+          set: [...friendIds, friendId]
+        }
+      }
+    })
   }
 
-  findAll() {
-    return `This action returns all friends`;
+  async remove(userId: number, friendId: number) {
+    const friendIds = await this.findAll(userId);
+    
+    await this.prisma.user.update({
+      where: {id: userId}, 
+      data: {
+        friendIds: {
+          set: friendIds.filter((id) => id !== friendId)
+        }
+      }
+    })
   }
+
 }

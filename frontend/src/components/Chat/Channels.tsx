@@ -18,7 +18,7 @@ import { toastThatError } from './RoomUserMod';
 
 import {useState, useEffect} from 'react'
 import {Room, User} from 'interfaces'
-import {socket} from './Chat'
+import {socket} from 'index'
 import RoomUserPopper from './RoomUserMod'
 import FormControl from '@mui/material/FormControl'
 import Button from '@mui/material/Button'
@@ -138,7 +138,6 @@ function Channels(props : {user: User, users: User[], currentRoom: Room, setCurr
 		const room_name: string = e.target[0].value;
 		const visibility: string = e.target[1].value;
 		const password: string = e.target[3].value;
-		let   hashedPassword: string = "";
 		if (password !== "")
 		{
 			bcrypt.hash(password, 10, function(err, hash) {

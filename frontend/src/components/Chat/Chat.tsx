@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import io  from "socket.io-client";
 import Stack from '@mui/material/Stack'
 import Messages from './Messages';
 import Channels from './Channels';
@@ -8,12 +7,7 @@ import Channels from './Channels';
 import '../../styles/Chat/Chat.css';
 
 import {User, Room} from 'interfaces';
-
-const SERVER = "http://127.0.0.1:3001";
-export const socket = io(SERVER, {
-	withCredentials:true,
-});
-
+import {socket} from 'index';
 
 function Chat() {
 	
@@ -86,7 +80,7 @@ function Chat() {
 		else
 			socket.on('connect', init)
 		
-	}, [user])
+	}, [])
 
 	useEffect(() => {
 		const handler = (usersData: User[]) => {
