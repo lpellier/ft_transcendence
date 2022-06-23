@@ -11,7 +11,7 @@ import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { FriendUserDto } from './dto/friend-user.dto';
 
-// @UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard)
 @WebSocketGateway({
   cors: {
     origin: new ConfigService().get('FRONT_URL'),
