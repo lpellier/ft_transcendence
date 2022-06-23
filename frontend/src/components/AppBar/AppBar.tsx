@@ -2,8 +2,8 @@ import {Link} from 'react-router-dom'
 import {useState, useEffect} from 'react'
 import PongMenu from './PongMenu'
 
-import axios from 'axios';
-import {User} from 'interfaces';
+import {User, init_user} from 'interfaces';
+import {getUser} from 'requests'
 
 import {PlayerAvatar} from	'../Avatars';
 
@@ -86,7 +86,7 @@ function ProjectName() {
 function PlayerAvatarBar(props: {image: any}) {
 	return (
 		<nav>
-			<Link to="/home" style={{ textDecoration: 'none' }}>
+			<Link to="/profile" style={{ textDecoration: 'none' }}>
 				<PlayerAvatar image={props.image}/>
 			</Link>
 	  	</nav>
@@ -95,8 +95,7 @@ function PlayerAvatarBar(props: {image: any}) {
 
 export default function SearchAppBar() {
 	const [width, setWidth] = useState(window.innerWidth);
-	const [user, setUser] = useState<User>({avatar: "", id: -1, username: "", 
-			winHistory: -1, lossHistory: -1, tfa: false, otpsecret: ""});
+	const [user, setUser] = useState<User>(init_user);
 
 	useEffect(() => {
 		const handleResizeWindow = () => setWidth(window.innerWidth);
@@ -107,17 +106,7 @@ export default function SearchAppBar() {
 	}, [])
 
 	useEffect(() => {
-		axios.get('http://127.0.0.1:3001/users/me',{
-			withCredentials: true, 
-		})
-		.then(res => {
-			console.log("Get request success")
-			const test_data = res.data;
-			setUser(test_data);
-		})
-		.catch(function (err) {
-			console.log("Get request failed : ", err)
-		});
+		getUser(setUser)
 	}, [])
 
 	if (width <= phoneSize)

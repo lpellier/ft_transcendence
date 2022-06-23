@@ -16,6 +16,7 @@ export class Game {
 	score : [number, number];
 	score_limit : number;
 	players : Player[];
+	spectators : string[];
 	pong : Pong;
 	map : GameMap;
 	frames_since_point : number;
@@ -25,8 +26,9 @@ export class Game {
 
 	constructor(room_id: any) {
 		this.room_id = room_id;
-		this.state = 'waiting_room';
+		this.state = 'waiting-player';
 		this.players = [];
+		this.spectators = [];
 		this.score = [0, 0];
 		this.score_limit = 0;
 		this.pong = new Pong();
@@ -52,11 +54,15 @@ export class Game {
 	reset() {
 		for (let player of this.players)
 			player.reset(this.players.length);
-		this.state = "waiting_room";
+		this.state = "waiting-player";
 		this.score = [0, 0];
 		delete this.pong;
 		this.pong = new Pong();
 		this.frames_since_point = 0;
+	}
+
+	addSpectator(id : any) {
+		this.spectators.push(id);
 	}
 
 	addPlayer(id: any) {
@@ -67,6 +73,12 @@ export class Game {
 			this.players.push(new Player("white", 1, id));
 		else if (this.players.length === 1)
 			this.players.push(new Player("white", 2, id));
+	}
+
+	setNewValue() {
+		if (this.map.name != "casino")
+			return ;
+		this.pong.value = Math.floor(Math.random() * 4) + 1;
 	}
 
 	checkCollisions() : boolean {
@@ -88,26 +100,29 @@ export class Game {
 		this.frames_since_point++;
 
 		// ? collision with bounds
-		for (const wall of this.map.walls) {
-			let intersection : [number, number, string] = utils.getLineIntersection(this.pong.center(), this.pong.centerNextFrame(), wall[2], wall[3]);
-			if (intersection[0] != -1) {
-				this.pong.velocity[1] *= -1;
-				return ;
-			}
+		if (this.pong.pos[1] < consts.TOP_BOUND || this.pong.pos[1] + this.pong.diameter > consts.BOT_BOUND)
+			this.pong.velocity[1] *= -1;
+		if (this.pong.pos[1] < consts.TOP_BOUND) {
+			this.pong.pos[1] = consts.TOP_BOUND + consts.MAP_HEIGHT * 0.005;
+		}
+		else if (this.pong.pos[1] + this.pong.diameter > consts.BOT_BOUND) {
+			this.pong.pos[1] = consts.BOT_BOUND - this.pong.diameter - consts.MAP_HEIGHT * 0.005;
 		}
 		if (this.pong.velocity[0] > 0 && this.pong.pos[0] + this.pong.diameter > right_bound) {
-			this.pong.relaunchPong("right");
-			this.score[0]++;
+			this.score[0] += this.pong.value;
 			if (this.score[0] >= this.score_limit)
 				return true;
+			this.setNewValue();
+			this.pong.relaunchPong("right");
 			this.frames_since_point = 0;
 			return false;
 		}
 		else if (this.pong.velocity[0] < 0 && this.pong.pos[0] < left_bound) {
-			this.pong.relaunchPong("left");
-			this.score[1]++;
+			this.score[1] += this.pong.value;
 			if (this.score[1] >= this.score_limit)
 				return true;
+			this.setNewValue();
+			this.pong.relaunchPong("left");
 			this.frames_since_point = 0;
 			return false;
 		}

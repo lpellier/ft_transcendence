@@ -1,5 +1,5 @@
-import { Profile } from "./profile.interface";
+import { Profile } from './profile.interface';
 
 export interface ProfileWithSettings extends Profile {
-	tfa: boolean;
+  tfa: boolean;
 }

@@ -83,12 +83,12 @@ function GameLink() {
 function HomeLink() {
   return (
     <nav>
-      <Link to="/home" style={{ textDecoration: 'none' }}>
+      <Link to="/profile" style={{ textDecoration: 'none' }}>
         <Button
             variant="contained"
             startIcon={<HomeIcon />}
             color="secondary">
-          Home
+          Profile
         </Button>
       </Link>
     </nav>

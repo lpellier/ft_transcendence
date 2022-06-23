@@ -39,11 +39,6 @@
 
 #button-return {
 	position: absolute;
-	padding: 0;
-	margin: 0;
-	top: 1%;
-	right: 1%;
-	z-index: 1;
 }
 
 #button-anyone {
@@ -95,16 +90,23 @@
 
 #button-map-original {
 	position: absolute;
-	bottom: 20%;
-	left: 8.5%;
+	/* bottom: 20%;
+	left: 8.5%; */
 }
 #button-map-city {
 	position: absolute;
-	bottom: 20%;
-	left: 38.5%;
+	/* bottom: 20%;
+	left: 38.5%; */
 }
 #button-map-casino {
 	position: absolute;
-	bottom: 20%;
-	left: 68.5%;
+	/* bottom: 20%;
+	left: 68.5%; */
+}
+
+#button-spectate {
+	position: absolute;
+	top: 3%;
+	left: 4%;
+	z-index: 1;
 }

@@ -1,0 +1,26 @@
+{
+    "compilerOptions": {
+        "module": "none",
+        "esModuleInterop": true,
+        "target": "es6",
+		"strict": true,
+		"strictNullChecks": false,
+        "noImplicitAny": true,
+        "moduleResolution": "node",
+        "sourceMap": false,
+        "outDir": "./../../public/sketch",
+		"rootDir": ".",
+		"baseUrl": ".",
+        "paths": {
+            "*": [
+                "node_modules/"
+            ]
+        }
+    },
+	"includes": [
+		"./classes/*",
+		"./engine/*",
+		"./init/*",
+		"./socket/*"
+	]
+}
