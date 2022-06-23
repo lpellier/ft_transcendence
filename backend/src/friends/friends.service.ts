@@ -6,16 +6,17 @@ import { use } from 'passport';
 export class FriendsService {
   constructor(private prisma: PrismaClient) {}
   
-  async findAll(userId: number) {
+  async findAllIds(userId: number) {
     const {friendIds} = await this.prisma.user.findUnique({
       where: {id: userId}, 
       select: {friendIds: true}
     })
+    console.log('friendIds = ',friendIds);    
     return(friendIds);
   }
 
   async add(userId: number, friendId: number) {
-    const friendIds = await this.findAll(userId);
+    const friendIds: number[] = await this.findAllIds(userId);
     
     await this.prisma.user.update({
       where: {id: userId}, 
@@ -28,7 +29,7 @@ export class FriendsService {
   }
 
   async remove(userId: number, friendId: number) {
-    const friendIds = await this.findAll(userId);
+    const friendIds:number[] = await this.findAllIds(userId);
     
     await this.prisma.user.update({
       where: {id: userId}, 
@@ -37,6 +38,11 @@ export class FriendsService {
           set: friendIds.filter((id) => id !== friendId)
         }
       }
+    })
+  }
+
+  async findAll(ids: number[]) {
+    const friend = await this.prisma.user.findMany({
     })
   }
 

@@ -156,7 +156,7 @@ export default function SearchAppBar() {
 			<PlayerName name={user.username}/>
 			<ProjectName />
 			<Stack direction="row" spacing={2}>
-				<FriendBar />
+				<FriendBar user={user}/>
 				<AppBarButton link={'/game'} tooltip={"New Game"} icon={<GamesIcon />}/>
 				<AppBarButton link={'/chat'} tooltip={"Forum"} icon={<ForumIcon />}/>
 			</Stack>

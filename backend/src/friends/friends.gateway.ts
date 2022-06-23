@@ -11,7 +11,7 @@ import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { FriendUserDto } from './dto/friend-user.dto';
 
-@UseGuards(JwtAuthGuard)
+// @UseGuards(JwtAuthGuard)
 @WebSocketGateway({
   cors: {
     origin: new ConfigService().get('FRONT_URL'),
@@ -34,9 +34,9 @@ export class FriendsGateway
     return this.friendsService.remove(friendUserDto.userId, friendUserDto.friendId);
   }
 
-  @SubscribeMessage('findAllFriends')
-  findAll(@MessageBody() userId: number) {
-    return this.friendsService.findAll(userId);
+  @SubscribeMessage('find all friends')
+  async findAll(@MessageBody() userId: number) {
+    const friendsIds = await this.friendsService.findAllIds(userId);
   }
 
   handleConnection(client) {
