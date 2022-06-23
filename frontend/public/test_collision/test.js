@@ -72,15 +72,6 @@ class Square {
 			discriminant = Math.sqrt(discriminant);
 
 			let t1 = (-b - discriminant) / (2 * a);
-			let t2 = (-b + discriminant) / (2 * a);
-			
-			// 3x HIT cases:
-			//          -o->             --|-->  |            |  --|->
-			// Impale(t1 hit,t2 hit), Poke(t1 hit,t2>1), ExitWound(t1<0, t2 hit), 
-
-			// 3x MISS cases:
-			//       ->  o                     o ->              | -> |
-			// FallShort (t1>1,t2>1), Past (t1<0,t2<0), CompletelyInside(t1<0, t2>1)
 			
 			if( t1 >= 0 && t1 <= 1 )
 			{
@@ -89,17 +80,6 @@ class Square {
 				// Impale, Poke
 				collision = p5.Vector.add(e, t1);
 			}
-
-			// here t1 didn't intersect so we are either started
-			// inside the sphere or completely past it
-			// if( t2 >= 0 && t2 <= 1 )
-			// {
-			// 	// ExitWound
-			// 	console.log("hit from inside");
-			// }
-			
-			// // no intn: FallShort, Past, CompletelyInside
-			// console.log("miss");
 		}
 	}
 }

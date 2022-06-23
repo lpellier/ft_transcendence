@@ -16,28 +16,28 @@
 
 class Bumper {
 	animation : any;
-	x : number;
-	y : number;
+	pos : Vector;
 	speed : number;
-	w : number;
 	len : number;
 	index : number;
+	diameter : number;
 
 	hit : boolean;
+	collision : Vector;
+	bounce_vec : Vector;
 
-	constructor(animation : any, x : number, y : number) {
-	  this.x = x;
-	  this.y = y;
-	  this.animation = animation;
-	  this.w = this.animation[0].width;
-	  this.len = this.animation.length;
-	  this.index = 0;
-	  this.hit = false;
+	constructor(animation : any, x : number, y : number, diameter : number) {
+		this.pos = [x, y];
+		this.animation = animation;
+		this.len = this.animation.length;
+		this.index = 0;
+		this.hit = false;
+		this.diameter = diameter;
 	}
   
 	show() {
 	  let index = this.index % this.len;
-	  image(this.animation[index], this.x, this.y);
+	  image(this.animation[index], this.pos[0], this.pos[1], this.diameter, this.diameter);
 	}
   
 	animate() {
@@ -45,6 +45,38 @@ class Bumper {
 		if (this.index >= this.len) {
 			this.index = 0;
 			this.hit = false;
+		}
+	}
+
+	checkCollision(pong : Pong) {
+		let e = Vector(pong.center());
+		let l = pong.centerNextFrame();
+
+		let cp = this.pos;
+		let r = this.diameter / 2;
+
+		var sub = require('vectors/sub');
+
+		let d = consts.sub(l, e);
+		let f = consts.sub(e, cp);
+
+		let a = consts.dot(d, d);
+		let b = 2 * consts.dot(f, d);
+		let c = consts.dot(f, f) - r * r;
+
+		let discriminant = b * b - 4 * a * c;
+		if (discriminant >= 0) {
+			discriminant = Math.sqrt(discriminant);
+
+			let t1 = (-b - discriminant) / (2 * a);
+			
+			if( t1 >= 0 && t1 <= 1 )
+			{
+				// t1 is the intersection, and it's closer than t2
+				// (since t1 uses -b - discriminant)
+				// Impale, Poke
+				this.collision = consts.add(e, t1);
+			}
 		}
 	}
   }
@@ -84,7 +116,7 @@ function setup() {
 			animation.push(img);
 	}
 
-	bumper = new Bumper(animation, 0, 0);
+	bumper = new Bumper(animation, 0, 0, 20);
 
 
 	keys.init();
