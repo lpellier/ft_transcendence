@@ -2,8 +2,7 @@ import {useState, useEffect} from 'react'
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import {Stats, init_stats} from 'interfaces';
-import axios from 'axios'
+import {User, init_user} from 'interfaces';
 
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import TimelineIcon from '@mui/icons-material/Timeline';
@@ -12,6 +11,7 @@ import UpdateIcon from '@mui/icons-material/Update';
 
 import { phoneSize } from 'index';
 import {StatTitle, StatBox} from "../../styles/tsxStyles/Home"
+import { getUser } from 'requests';
 
 function BoardComponent(props: {icon: any, title: string}) {
 	return(
@@ -24,8 +24,8 @@ function BoardComponent(props: {icon: any, title: string}) {
 	);
 }
 
-function StatsBox(props: {myStats: Stats}){
-	const totGames = props.myStats.wins + props.myStats.losses;
+function StatsBox(props: {user: User}){
+	const totGames = props.user.victories + props.user.losses;
 
 	return (
 		<Stack spacing={1}>
@@ -33,8 +33,8 @@ function StatsBox(props: {myStats: Stats}){
 			icon={<TimelineIcon />} 
 			title="Stats" />
 			<Box sx={StatBox}>
-				<h3> Victories : {props.myStats.wins} </h3>
-				<h3> Games lost : {props.myStats.losses} </h3>
+				<h3> Victories : {props.user.victories} </h3>
+				<h3> Games lost : {props.user.losses} </h3>
 				<h3> Total games : {totGames} </h3>
 			</Box>
 		</Stack>
@@ -85,23 +85,11 @@ function MatchhistoryBox(){
 
 export default function StatsBoards() {
 	const [width, setWidth] = useState(window.innerWidth);
-	const [stats, setStats] = useState<Stats>(init_stats);
-	//let [stats, setStats] = useState<Stats>({wins: -1, losses: -1});
-	//let [leadboard, setLeadboard] = useState<LeaderBoard>({Rank: -1, PlayerName: '', PlayerLevel: -1});
+	const [user, setUser] = useState<User>(init_user);
 
 	useEffect(() => {
 		
-		axios.get('http://127.0.0.1:3001/stats',{
-			withCredentials: true
-		})
-		.then(res => {
-			console.log("Get request success")
-			const stats_data = res.data;
-			setStats(stats_data);
-		})
-		.catch(function (err) {
-			console.log("Get request failed : ", err)
-		});
+		getUser(setUser)
 
 		const handleResizeWindow = () => setWidth(window.innerWidth);
 		 window.addEventListener("resize", handleResizeWindow);
@@ -113,7 +101,7 @@ export default function StatsBoards() {
 	if (width <= phoneSize) {
 	  return (
 		<Stack spacing={1}>
-				<StatsBox myStats={stats}/>
+				<StatsBox user={user}/>
 				<TrophyBox />
 				<LeaderboardBox />
 				<MatchhistoryBox />
@@ -123,7 +111,7 @@ export default function StatsBoards() {
 	return (
 			<Stack direction="row" spacing={1}>
 				<Stack spacing={1}>
-						<StatsBox myStats={stats}/>
+						<StatsBox user={user}/>
 						<TrophyBox />
 				</Stack>
 				<Stack spacing={1}>
