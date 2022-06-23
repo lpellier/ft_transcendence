@@ -7,10 +7,6 @@
 // TODO cute animation showing the roll of pong value in casino
 // TODO comment EVERYTHING
 
-// ? How to calculate bounce angle from point of intersection of pong velocity (v) and bumper (b)
-// ? when collision is detected, get the perpendicular line (pl) to the tangent (t) of the point of collision (pt)
-// ? Calculate the angle alpha between v and pl ; calculate line with angle alpha to pl
-
 let spritesheet : any;
 let spritedata : any;
 
