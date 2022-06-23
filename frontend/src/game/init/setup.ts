@@ -2,9 +2,6 @@
 // ? Coding consistency : snake_case for variables | camelCase for functions | PascalCase for classes
 // ? Map indexes : 1 (normal map), 2 (city map), 3 (casino map)
 
-// TODO Brainstorm a better idea than walls in the middle for City
-	// ? bumper in middle of map ? make an animation for bump
-
 // TODO find a way to send data to database and fill every appropriate field when situation calls for it
 
 // TODO cute animation showing the roll of pong value in casino
@@ -50,9 +47,8 @@ function setup() {
 	}
 	let diameter = consts.DIAGONAL * 0.10;
 
-	bumpers.push(new Bumper(animation, consts.WIDTH / 2 - diameter / 2, consts.HEIGHT * 1 / 3 - diameter / 2, diameter));
-	bumpers.push(new Bumper(animation, consts.WIDTH / 2 - diameter / 2, consts.HEIGHT * 2 / 3 - diameter / 2, diameter));
-
+	bumpers.push(new Bumper(animation, consts.WIDTH / 2 - diameter / 2, consts.HEIGHT * 1 / 4 - diameter / 2, diameter));
+	bumpers.push(new Bumper(animation, consts.WIDTH / 2 - diameter / 2, consts.HEIGHT * 3 / 4 - diameter / 2, diameter));
 
 	keys.init();
 	game = new Game();
