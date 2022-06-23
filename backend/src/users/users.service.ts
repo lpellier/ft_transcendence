@@ -81,6 +81,7 @@ export class UsersService {
       victories: user.stats.victories,
       losses: user.stats.losses,
       level: user.stats.level,
+	  progression: user.stats.progression,
     };
     return profile;
   }
@@ -96,6 +97,7 @@ export class UsersService {
       victories: user.stats.victories,
       losses: user.stats.losses,
       level: user.stats.level,
+      progression: user.stats.progression,
     };
     return profile;
   }

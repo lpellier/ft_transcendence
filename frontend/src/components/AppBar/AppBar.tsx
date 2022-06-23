@@ -92,7 +92,7 @@ function PlayerAvatarBar(props: {image: any}) {
 
 export default function SearchAppBar() {
 	const [width, setWidth] = useState(window.innerWidth);
-	const [user, setUser] = useState<User>(init_user);
+	let [user, setUser] = useState<User>(init_user);
 
 	useEffect(() => {
 		const handleResizeWindow = () => setWidth(window.innerWidth);
@@ -102,16 +102,12 @@ export default function SearchAppBar() {
 		 };
 	}, [])
 
-	useEffect(() => {
-		getUser(setUser)
-	}, [])
-
 	if (width <= phoneSize)
 	{
 		return(
 			<AppBar position="static">
 			<Toolbar style={ BarStyle }>
-				<PongMenu user = {user} />
+				<PongMenu user={user} />
 				<ProjectName />
 			</Toolbar>
 		  </AppBar>
@@ -134,7 +130,7 @@ export default function SearchAppBar() {
 		  </AppBar>
 		);
 	}
-  return (
+  	return (
       <AppBar position="static">
         <Toolbar style={ BarStyle }>
         	<PongMenu user = {user}/>
