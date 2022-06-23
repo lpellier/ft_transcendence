@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Stack from '@mui/material/Stack';
 import SearchAppBar from 'components/AppBar/AppBar'
 
@@ -6,6 +6,7 @@ import "./../styles/Game/canvas.css"
 import "./../styles/Game/buttons.css"
 import "./../styles/Game/icons.css"
 import "./../styles/Game/inputs.css"
+import "socket.io-client"
 
 function addScript(url : string) : any {
     let scripts = document.getElementsByTagName("script");
@@ -26,8 +27,8 @@ function addScript(url : string) : any {
 let observer : any = null;
 let canvas : any = null;
 
-class Game extends React.Component {
-	componentDidMount() {
+function Game() {
+	useEffect(() => {
 		let canvas_parent : any = document.getElementById("canvas-parent");
 		if (canvas === null)
 			canvas = document.getElementById("defaultCanvas0");
@@ -45,16 +46,15 @@ class Game extends React.Component {
 			});
 			observer.observe(document, {subtree: true, childList: true});
 		}
-	}
+	}, []);
 
-	componentWillUnmount() {
-		if (observer) {
-			observer.disconnect();
-			observer = null;
-		}
-	}
+	// componentWillUnmount() {
+	// 	if (observer) {
+	// 		observer.disconnect();
+	// 		observer = null;
+	// 	}
+	// }
 
-	render() {
 		return (
 			<div id="canvas-parent">
 				<div id="main-menu-button-grid">
@@ -100,11 +100,10 @@ class Game extends React.Component {
 				<div id="button-opp-left-ok"/>
 			</div>
 		);
-	}
 }
 
-export default class Gamepage extends React.Component {	
-	componentDidMount() {
+export default function Gamepage() {	
+	useEffect(() => {
 		addScript("https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.0/socket.io.js");
 		addScript("/sketch/classes/Buttons.js");
 		addScript("/sketch/classes/Consts.js");
@@ -125,14 +124,12 @@ export default class Gamepage extends React.Component {
 		addScript("/sketch/engine/menus.js");
 		addScript("/sketch/engine/button_functions.js");
 		addScript("/p5/p5.js");
-	}
+	}, [])
 
-	render() {
-        return (
-			<Stack id="test_parent" spacing={5}>
-                <SearchAppBar />
-				<Game/>
-            </Stack>
-        );
-	}
+	return (
+		<Stack id="test_parent" spacing={5}>
+			<SearchAppBar />
+			<Game/>
+		</Stack>
+	);
 }
