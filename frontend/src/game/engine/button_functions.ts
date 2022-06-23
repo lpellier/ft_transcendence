@@ -39,6 +39,19 @@ function matchmaking() {
 		socket.emit("matchmaking", "public", true, 10, "original");
 }
 
+function highlightSpectateButton() {
+	// @ts-ignore: next-linee
+	this.style("color", "#d4d4d4");
+	game.hover_spectator = true;
+
+}
+function resetSpectateButton() {
+	// @ts-ignore: next-line
+	this.style("color", "white");
+	game.hover_spectator = false;
+}
+
+
 function highlightButton() {
 	// @ts-ignore: next-line
 	this.style("color", "#d4d4d4");
@@ -69,6 +82,21 @@ function readRoomID() {
 		inputs.hide();
 		inputs.join.show();
 		buttons.return.show();
+		buttons.spectate.show();
+	}
+}
+
+function clickSpectate() {
+	if (mouseButton === LEFT) {
+		game.spectator = !game.spectator;
+		if (!game.spectator) {
+			// @ts-ignore : next-line
+			this.style("border-color", "white");	
+		}
+		else if (game.spectator) {
+			// @ts-ignore : next-line
+			this.style("border-color", "#177bad");	
+		}
 	}
 }
 

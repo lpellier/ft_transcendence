@@ -1,5 +1,5 @@
 function movePlayers() {
-	if (!game.local) {
+	if (!game.local && !game.spectator) {
 		if (game.players[0].index == 1) {
 			if (keyIsDown(87)) {
 				socket.emit("move_up", game.players[0].id);
@@ -21,7 +21,7 @@ function movePlayers() {
 				socket.emit("move_null", game.players[0].id);
 		}
 	}
-	else {
+	else if (!game.spectator) {
 		if (keyIsDown(87))
 			game.players[0].moveUp();
 		else if (keyIsDown(83))
@@ -59,14 +59,16 @@ function movePlayers() {
 }
 
 function keyPressed() {
+	if (key === ' ')
+		bumper.hit = !bumper.hit;
 	if (game === null)
 		return;
-	if (game.state === "waiting-readiness" && key === ' ') 
+	if (!game.spectator && game.state === "waiting-readiness" && key === ' ') 
 		socket.emit("switch_readiness", game.players[0].id);
 	if (game.state === "in-menu-input" && keyCode === ENTER) {
 		if (inputs.join.value()[0] === '#')
 			inputs.join.value(inputs.join.value().slice(1));
-		socket.emit("find_game", inputs.join.value());
+		socket.emit("find_game", inputs.join.value(), game.spectator);
 	}
 	if (game.state === "in-menu-create" && keyCode === ENTER) {
 		if (inputs.join.value()[0] === '#')

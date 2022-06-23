@@ -5,7 +5,6 @@ function inMainMenu() {
 	game.reset();
 	errors.set_false();
 	buttons.reset();
-	buttons.createButtons();
 	inputs.reset();
 	inputs.create_inputs();
 }

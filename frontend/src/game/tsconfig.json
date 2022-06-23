@@ -8,7 +8,7 @@
         "noImplicitAny": true,
         "moduleResolution": "node",
         "sourceMap": false,
-        "outDir": "sketch",
+        "outDir": "./../../public/sketch",
 		"rootDir": ".",
 		"baseUrl": ".",
         "paths": {

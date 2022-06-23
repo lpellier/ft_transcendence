@@ -102,6 +102,7 @@ class Pong {
 		return [this.cX() + this.velocity[0], this.cY() + this.velocity[1]];
 	}
 
+	
 	render() {
 		if (this.value === 1)
 			this.color = "white";

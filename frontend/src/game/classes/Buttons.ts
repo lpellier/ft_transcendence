@@ -19,18 +19,20 @@ class Buttons {
 	map_city : any;
 	map_casino : any;
 
+	spectate : any;
+
 	constructor() {
 		this.reset();
-		this.createButtons();
 	}
 	
 	createButtons() {
-		this.create_game = createCustomButton("Create game", createGameMenu);
-		this.join = createCustomButton("Join game", readRoomID);
-		this.matchmaking = createCustomButton("Match making", matchmaking);
+		this.create_game = createCustomButton("Create game", createGameMenu, highlightButton, resetButton, consts.std_width, consts.std_height);
+		this.join = createCustomButton("Join game", readRoomID, highlightButton, resetButton, consts.std_width, consts.std_height);
+		this.matchmaking = createCustomButton("Match making", matchmaking, highlightButton, resetButton, consts.std_width, consts.std_height);
 		this.return = createCustomButton("", goToMainMenu, highlightButton, resetButton, consts.medium_square_diameter, consts.medium_square_diameter);
 		this.return.style("border", "none");
 		this.return.style("background-color", "rgba(0, 0, 0, 0)");
+		this.return.position(consts.WIDTH * 0.90, consts.HEIGHT * 0.01);
 		
 		this.anyone_can_join = createCustomButton("Anyone can join", clickAnyone, highlightButton, resetButton, consts.medium_width, consts.medium_height);
 		this.anyone_can_join.style("background-color", "rgba(0, 0, 0, 0)");
@@ -60,25 +62,35 @@ class Buttons {
 		this.minus.style("border", "none");
 		this.minus.style("font-size", consts.small_font_size.toString() + "px");
 		
-		this.opponent_left_ok = createCustomButton("OK", goToMainMenu, highlightButton, resetButton);
+		this.opponent_left_ok = createCustomButton("OK", goToMainMenu, highlightButton, resetButton, consts.std_width, consts.std_height);
 		this.opponent_left_ok.style("border", "none");
 
-		this.map_original = createCustomButton("Original", clickMapOriginal, highlightButton, resetButton, consts.WIDTH * 0.2 + 25, consts.HEIGHT * 0.2 + 25);
+		this.map_original = createCustomButton("Original", clickMapOriginal, highlightButton, resetButton, consts.WIDTH * 0.2 + consts.WIDTH / 48, consts.HEIGHT * 0.2 + consts.WIDTH / 48);
 		this.map_original.style("background", "none");
 		this.map_original.style("border", "none");
 		this.map_original.style("outline", "3px solid");
-		this.map_original.style("font-size", consts.medium_font_size.toString() + "px");
-		this.map_city = createCustomButton("City", clickMapCity, highlightButton, resetButton, consts.WIDTH * 0.2 + 25, consts.HEIGHT * 0.2 + 25);
+		
+		this.map_city = createCustomButton("City", clickMapCity, highlightButton, resetButton, consts.WIDTH * 0.2 + consts.WIDTH / 48, consts.HEIGHT * 0.2 + consts.WIDTH / 48);
 		this.map_city.style("background", "none");
 		this.map_city.style("border", "none");
 		this.map_city.style("outline", "none");
-		this.map_city.style("font-size", consts.medium_font_size.toString() + "px");
-		this.map_casino = createCustomButton("Casino", clickMapCasino, highlightButton, resetButton, consts.WIDTH * 0.2 + 25, consts.HEIGHT * 0.2 + 25);
+		this.map_casino = createCustomButton("Casino", clickMapCasino, highlightButton, resetButton, consts.WIDTH * 0.2 + consts.WIDTH / 48, consts.HEIGHT * 0.2 + consts.WIDTH / 48);
 		this.map_casino.style("background", "none");
 		this.map_casino.style("border", "none");
 		this.map_casino.style("outline", "none");
+
+		this.map_original.style("font-size", consts.medium_font_size.toString() + "px");
+		this.map_city.style("font-size", consts.medium_font_size.toString() + "px");
 		this.map_casino.style("font-size", consts.medium_font_size.toString() + "px");
-		
+
+
+		this.map_original.position(consts.WIDTH * 0.0855, consts.HEIGHT * 0.56);
+		this.map_city.position(consts.WIDTH * 0.3855, consts.HEIGHT * 0.56);
+		this.map_casino.position(consts.WIDTH * 0.6855, consts.HEIGHT * 0.56);
+
+		this.spectate = createCustomButton("", clickSpectate, highlightSpectateButton, resetSpectateButton, consts.WIDTH * 0.1, consts.HEIGHT * 0.1);
+		this.spectate.style("background-color", "rgba(0, 0, 0, 0)");
+
 		this.hide();
 		this.addParent();
 	
@@ -115,17 +127,21 @@ class Buttons {
 	
 		this.return.size(consts.medium_square_diameter, consts.medium_square_diameter);
 		this.return.style("font-size", consts.medium_font_size.toString() + "px");
+
+		this.return.position(consts.WIDTH * 0.90, consts.HEIGHT * 0.01);
 	
 		this.map_original.size(consts.WIDTH * 0.2 + consts.DIAGONAL * 0.025, consts.HEIGHT * 0.2 + consts.DIAGONAL * 0.025);
 		this.map_original.style("font-size", consts.medium_font_size.toString() + "px");
-		this.map_original.style("outline", "3px solid");
-		this.map_original.style("border", "none");
 		this.map_city.size(consts.WIDTH * 0.2 + consts.DIAGONAL * 0.025, consts.HEIGHT * 0.2 + consts.DIAGONAL * 0.025);
 		this.map_city.style("font-size", consts.medium_font_size.toString() + "px");
-		this.map_city.style("border", "none");
 		this.map_casino.size(consts.WIDTH * 0.2 + consts.DIAGONAL * 0.025, consts.HEIGHT * 0.2 + consts.DIAGONAL * 0.025);
 		this.map_casino.style("font-size", consts.medium_font_size.toString() + "px");
-		this.map_casino.style("border", "none");
+
+		this.map_original.position(consts.WIDTH * 0.0855, consts.HEIGHT * 0.56);
+		this.map_city.position(consts.WIDTH * 0.3855, consts.HEIGHT * 0.56);
+		this.map_casino.position(consts.WIDTH * 0.6855, consts.HEIGHT * 0.56);
+
+		this.spectate.size(consts.WIDTH * 0.1, consts.HEIGHT * 0.1);
 	}
 
 	reset() {
@@ -177,6 +193,13 @@ class Buttons {
 		if (this.map_casino)
 			this.map_casino.remove();
 		this.map_casino = null;
+
+		if (this.spectate)
+			this.spectate.remove();
+		this.spectate = null;
+
+		this.createButtons();
+		this.resize();
 	}
 
 	hide() {
@@ -199,6 +222,8 @@ class Buttons {
 		this.map_original.hide();
 		this.map_city.hide();
 		this.map_casino.hide();
+
+		this.spectate.hide();
 	}
 
 	clickAnyone() {
@@ -252,5 +277,7 @@ class Buttons {
 		this.map_original.parent(document.getElementById("button-map-original"));
 		this.map_city.parent(document.getElementById("button-map-city"));
 		this.map_casino.parent(document.getElementById("button-map-casino"));
+
+		this.spectate.parent(document.getElementById("button-spectate"));
 	}
 };

@@ -3,6 +3,8 @@ class GameMap {
 	index : number;
 	width : number;
 	height : number;
+
+	wall_width : number;
 	background : any;
 	object_color : string;
 	name : string;
@@ -16,32 +18,18 @@ class GameMap {
 	originalMap() {
 		this.object_color = "white";
 		this.background = null;
-		this.walls =	[
-						[[5, 5], [this.width - 10, 5], [5, 10], [this.width - 5, 10]], 
-						[[5, this.height - 10], [this.width - 10, 5], [5, this.height - 10], [this.width - 5, this.height - 10]]
-					];
 	}
 
 	cityMap() {
 		this.object_color = "#ffffff";
 		if (consts)
-			this.background = consts.CITY_BACKGROUND;
-		this.walls =	[
-						[[5, 5], [this.width - 10, 5], [5, 10], [this.width - 5, 10]], 
-						[[5, this.height - 10], [this.width - 10, 5], [5, this.height - 10], [this.width - 5, this.height - 10]],
-						[[this.width / 2, this.height / 5], [5, this.height / 5], [0, 0], [0, 0]],
-						[[this.width / 2, this.height * 3/ 5], [5, this.height / 5], [0, 0], [0, 0]],
-					];	
+			this.background = consts.CITY_BACKGROUND;	
 	} 
 
 	casinoMap() {
 		this.object_color = "#ffffff";
 		if (consts)
 			this.background = consts.TOKYO_BACKGROUND;
-		this.walls =	[
-						[[5, 5], [this.width - 10, 5], [5, 10], [this.width - 5, 10]], 
-						[[5, this.height - 10], [this.width - 10, 5], [5, this.height - 10], [this.width - 5, this.height - 10]]
-					];	
 	}
 
 	render(ratio : number) {
@@ -60,9 +48,9 @@ class GameMap {
 		pop();
 		fill(this.object_color);
 		if (ratio === 1) {
-			textSize(14);
-			text("Room #" + game.room_id, 16, 25); // room id
-			textSize(consts.std_font_size * ratio);
+			textSize(consts.small_font_size / 2);
+			text("Room #" + game.room_id, consts.WIDTH * 0.02, consts.HEIGHT * 0.03 + consts.small_font_size / 2); // room id
+			textSize(consts.std_font_size);
 			push();
 			fill((game.score[0] > game.score[1] ? "white" : "grey")); // highlight better score
 			if (game.score[0].toString().length > 1)
@@ -78,8 +66,8 @@ class GameMap {
 		
 		push();
 		stroke(this.object_color);
-		for (let i : number = top_bound; i < bot_bound; i += 20 * ratio * 2)
-			rect(map_width / 2, i, 5 * ratio, 10 * ratio); // line in the middle
+		for (let i : number = top_bound; i < bot_bound; i += this.wall_width * 8 * ratio)
+			rect(map_width / 2, i, this.wall_width * ratio, this.wall_width * 2 * ratio); // line in the middle
 		for (const wall of this.walls) // bounds
 			rect(wall[0][0] * ratio, wall[0][1] * ratio, wall[1][0] * ratio, wall[1][1] * ratio);
 		pop();
@@ -89,6 +77,11 @@ class GameMap {
 	resize(w : number, h : number) {
 		this.width = w;
 		this.height = h;
+		this.wall_width = this.width / 240;
+		this.walls =	[
+			[[this.wall_width, this.wall_width], [this.width - this.wall_width * 2, this.wall_width], [this.wall_width, this.wall_width * 2], [this.width - this.wall_width, this.wall_width * 2]], 
+			[[this.wall_width, this.height - this.wall_width * 2], [this.width - this.wall_width * 2, this.wall_width], [this.wall_width, this.height - this.wall_width * 2], [this.width - this.wall_width, this.height - this.wall_width * 2]]
+		];
 		if (this.index === 1)
 			this.originalMap();
 		else if (this.index === 2) {
