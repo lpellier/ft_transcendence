@@ -1,3 +1,4 @@
+
 interface User {
 	id: number;
 	username: string;
@@ -12,7 +13,7 @@ const init_user = {} as User
 interface Room {
     id: number;
     name: string;
-	ownerId: number;
+    ownerId: number;
     visibility: string;
     password: string;
 }
@@ -25,4 +26,14 @@ interface Message {
     type: boolean;
 }
 
-export {User, init_user, Room, Message}
+interface Stats {
+	id: number;
+	wins: number;
+	losses: number;
+	level: number;
+	userId: number;
+}
+
+const init_stats = {} as Stats
+
+export {User, init_user, Room, Message, Stats, init_stats}

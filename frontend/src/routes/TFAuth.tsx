@@ -1,7 +1,8 @@
+import {useState, useEffect} from 'react'
 import Box from '@mui/material/Box'
 import Stack from '@mui/material/Stack'
-import {User} from 'interfaces'
-import PinField from '../components/TFAuth/PinField'
+import TextField from '@mui/material/TextField'
+import axios from 'axios'
 
 const BoxStyle = {
 	width: '30vw',
@@ -23,7 +24,44 @@ const TitleStyle = {
 	textShadow: '1px 1px 2px black',
 }
 
-export default function TFAuth(props: {user: User}) {
+function PinField(props: {input: string, setPininput: any}) {
+
+	function handleSubmit(e: any)
+	{
+		e.preventDefault();
+		props.setPininput({input: e.target[0].value});
+		e.target[0].value = "";
+	}
+
+	useEffect(() => {
+
+		axios.post('http://127.0.0.1:3001/auth/google-authenticator',
+		{value: JSON.stringify(props.input)},
+		{
+			withCredentials: true,
+		})
+		.then(function (response) {
+			console.log("Post request success");
+		  })
+		.catch(function (err) {
+			console.log("Post request failed : ", err)
+		});
+
+	}, [props.input])
+
+	return (
+		<form id='' onSubmit={handleSubmit}>
+			<TextField
+				type="text"
+				label={"Here !"}
+				variant="standard"
+			/>
+		</form>
+	);
+}
+
+export default function TFAuth() {
+	const [pinInput, setPininput] = useState<string>("");
 
 	return (
 		<Box sx={BoxStyle}>
@@ -31,7 +69,7 @@ export default function TFAuth(props: {user: User}) {
 				<h1 style={TitleStyle} >
 					Hey, insert your Pin !
 				</h1>
-				<PinField user={props.user} />
+				<PinField  input={pinInput} setPininput={setPininput}/>
 			</Stack>
 		</Box>
 	)

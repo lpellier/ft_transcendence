@@ -1,4 +1,5 @@
 import axios from 'axios'
+
 import Avatar from '@mui/material/Avatar'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
@@ -46,7 +47,7 @@ function CreateAvatar(props: {img: string, style: any}) {
     
     const handleClick = () => {
 
-		axios.put('http://127.0.0.1:3001/users/me',
+        axios.put('http://127.0.0.1:3001/users/me',
         {
             data: {
                 avatar: props.img,

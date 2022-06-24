@@ -31,7 +31,7 @@
 	],
 	"exclude": [
 		"src/components/Game",
-		"src/game",
+		"src/Game",
 		"src/pages/Gamepage/Game",
 		"src/pages/Gamepage/p5"
 	]

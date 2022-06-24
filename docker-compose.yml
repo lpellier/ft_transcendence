@@ -36,7 +36,7 @@ services:
     ports:
       - 3000:3000
     command:  sh -c "npm install
-               && npx tsc -p src/game
+               && npx tsc -p src/components/Game
                && npm start"
     env_file:
       - ./.env

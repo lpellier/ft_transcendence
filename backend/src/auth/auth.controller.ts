@@ -20,15 +20,6 @@ export class AuthController {
 		res.cookie(authentication.type, authentication.token, { sameSite: 'strict' , httpOnly: true });
 	}
 
-	@Get('mock')
-	@Redirect('http://127.0.0.1:3000/profile')
-	async mockLogin(@Req() req, @Res({passthrough: true}) res: Response) {
-		const user = await this.authService.getMock();
-		const isAuthenticated = !user.tfa;
-		const authentication = await this.authService.login(user.id, isAuthenticated);
-		res.cookie(authentication.type, authentication.token, { sameSite: 'strict' , httpOnly: true });
-	}
-
 	@UseGuards(JwtOtpAuthGuard)
 	@Post('google-authenticator')
 	async google_authenticator_login(@Req() req, @Res({passthrough: true}) res: Response, @Body() otp: ValidateOtpDto) {

@@ -1,10 +1,13 @@
 import { useState, useEffect } from "react";
+import Button from '@mui/material/Button';
+import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button'
-import Stack from '@mui/material/Stack'
-import { NameButtonStyle } from '../../../styles/tsxStyles/Settings/Name';
-import {User} from 'interfaces';
+
+import { NameButtonStyle } from '../../../styles/tsxStyles/Settings/Name'
+
 import axios from 'axios';
+
+import {User} from 'interfaces'
 
 function NameButton() {
 	return (
@@ -27,7 +30,7 @@ function NameInput(props: {user: User}) {
 	}
 
 	useEffect(() => {
-		axios.patch('http://127.0.0.1:3001/users/me',
+		axios.put('http://127.0.0.1:3001/users/me',
 			{
 				data: {
 					username: new_username,
@@ -40,9 +43,8 @@ function NameInput(props: {user: User}) {
 			}
 		})
 		.catch(function (err) {
-			console.log("Patch request failed : ", err)
+			console.log("Put request failed : ", err)
 		});
-
 	}, [new_username])
 
 	return (
@@ -65,7 +67,7 @@ export default function ChooseName(props: {user: User}) {
         return (
 				<Stack spacing={2} style={{justifyContent: 'center'}}>
                     <NameButton />
-					<NameInput user={props.user} />
+					<NameInput user={props.user}/>
                 </Stack>
         );
 }

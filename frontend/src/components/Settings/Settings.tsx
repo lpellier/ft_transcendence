@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react'
+import axios from 'axios';
+
 import Stack from '@mui/material/Stack'
 import Box from '@mui/material/Box'
 import ChooseModal from './Modal'
@@ -13,8 +15,7 @@ import ChooseAuth from './ChooseAuth/ChooseAuth'
 import {ModalChooseName} from '../../styles/tsxStyles/Settings/Name'
 import {ModalChooseAuth} from '../../styles/tsxStyles/Settings/Auth'
 import {ModalChooseAvatar} from '../../styles/tsxStyles/Settings/Avatar'
-import {User, init_user} from 'interfaces'
-import {getUser} from 'requests'
+import {User} from 'interfaces'
 
 
 const SettingStyle = {
@@ -43,7 +44,7 @@ function ChooseNameModal(props: {user: User}) {
 			icon={DriveFileRenameOutlineIcon}
 			label={"Choose Name"}
 			ModalBoxStyle={ModalChooseName}
-			modalComp={<ChooseName user={props.user} />}
+			modalComp={<ChooseName user={props.user}/>}
 		/>
 	)
 }
@@ -55,24 +56,19 @@ function ChooseAuthModal(props: {user: User}) {
 			icon={VpnKeyIcon}
 			label={"Choose Authentication"}
 			ModalBoxStyle={ModalChooseAuth}
-			modalComp={<ChooseAuth />}
+			modalComp={<ChooseAuth user={props.user}/>}
 		/>
 	)
 }
 
-export default function Settings() {
-    let [user, setUser] = useState<User>(init_user);
-
-    useEffect(() => {
-		getUser(setUser)
-	}, [])
+export default function Settings(props: {user: User}) {
 
     return (
         <Box sx={SettingStyle}>
             <Stack spacing={5}>
-            	<ChooseAvatarModal user={user}/>
-                <ChooseNameModal user={user}/>
-                <ChooseAuthModal user={user}/>
+            	<ChooseAvatarModal user={props.user}/>
+                <ChooseNameModal user={props.user}/>
+                <ChooseAuthModal user={props.user}/>
 		    </Stack>
         </Box>
     )

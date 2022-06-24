@@ -151,13 +151,4 @@ export class UsersService {
     });
     return secret;
   }
-
-  async getMock() {
-    const user = await this.prisma.user.findUnique({
-      where: {
-        id: 1,
-      },
-    });
-    return user;
-  }
 }
