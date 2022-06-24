@@ -15,25 +15,6 @@ function getUser(setter: any) {
 	});
 }
 
-function putUser(Query: string) {
-
-	axios.put('http://127.0.0.1:3001/users/me',
-	{
-		data: {
-			Query,
-		}
-	},
-	{
-		withCredentials: true,
-		headers: {
-			'Content-Type': 'application/json'
-	}
-	})
-	.catch(function (err) {
-		console.log("Put request failed : ", err)
-	});
-}
-
 function reqLogout() {
 
 	axios.get('http://127.0.0.1:3001/auth/logout',
@@ -49,4 +30,4 @@ function reqLogout() {
 }
 
 
-export {getUser, reqLogout, putUser}
+export {getUser, reqLogout}

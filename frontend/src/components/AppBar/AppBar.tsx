@@ -1,7 +1,7 @@
 import {Link} from 'react-router-dom'
 import {useState, useEffect} from 'react'
 import PongMenu from './PongMenu'
-import {User, init_user} from 'interfaces'
+import {User, init_user} from 'interfaces';
 import {getUser} from 'requests'
 import {PlayerAvatar} from	'../Avatars'
 import AppBar from '@mui/material/AppBar'
@@ -79,17 +79,16 @@ function ProjectName() {
 function PlayerAvatarBar(props: {image: any}) {
 	return (
 		<nav>
-			<Link to="/home" style={{ textDecoration: 'none' }}>
+			<Link to="/profile" style={{ textDecoration: 'none' }}>
 				<PlayerAvatar image={props.image}/>
 			</Link>
 	  	</nav>
 	);
 }
 
-export default function SearchAppBar() {
+function SearchAppBarContent(props: {user: User}) {
 	const [width, setWidth] = useState(window.innerWidth);
-	const [user, setUser] = useState<User>(init_user);
-
+	
 	useEffect(() => {
 		const handleResizeWindow = () => setWidth(window.innerWidth);
 		 window.addEventListener("resize", handleResizeWindow);
@@ -98,28 +97,24 @@ export default function SearchAppBar() {
 		 };
 	}, [])
 
-	useEffect(() => {
-		getUser(setUser);
-	}, [])
-
-	if (width <= phoneSize)
+	if (props.user.id && width <= phoneSize)
 	{
 		return(
 			<AppBar position="static">
 			<Toolbar style={ BarStyle }>
-				<PongMenu user = {user} />
+				<PongMenu user={props.user} />
 				<ProjectName />
 			</Toolbar>
 		  </AppBar>
 		);
 	}
-	if (width <= tabletSize)
+	if (props.user.id && width <= tabletSize)
 	{
 		return(
 			<AppBar position="static">
 			<Toolbar style={ BarStyle }>
-				<PongMenu user = {user} />
-				<PlayerAvatarBar image={user.avatar}/>
+				<PongMenu user = {props.user} />
+				<PlayerAvatarBar image={'http://127.0.0.1:3001/avatars/' + '%7B' + props.user.id.toString() + '%7D.png'}/>
 				<PlayerName name={""}/>
 				<Stack direction="row" spacing={2}>
 					<ProjectName />
@@ -130,12 +125,13 @@ export default function SearchAppBar() {
 		  </AppBar>
 		);
 	}
-  return (
-      <AppBar position="static">
+	if (props.user.id) {
+	return (
+		<AppBar position="static">
         <Toolbar style={ BarStyle }>
-        	<PongMenu user = {user}/>
-			<PlayerAvatarBar image={user.avatar}/>
-			<PlayerName name={user.username}/>
+        	<PongMenu user = {props.user}/>
+			<PlayerAvatarBar image={'http://127.0.0.1:3001/avatars/' + props.user.id.toString() + '.png'}/>
+			<PlayerName name={props.user.username}/>
 			<ProjectName />
 			<Stack direction="row" spacing={2}>
 				<AppBarButton link={'/game'} tooltip={"New Game"} icon={<GamesIcon />}/>
@@ -144,5 +140,23 @@ export default function SearchAppBar() {
         	<SearchComponent />
         </Toolbar>
       </AppBar>
-  );
+	);
+	}
+	return (
+		<div>
+			Loading
+		</div>
+	);
+}
+
+export default function SearchAppBar() {
+	let [user, setUser] = useState<User>(init_user);
+
+	useEffect(() => {
+		getUser(setUser)
+	}, [])
+
+	return (
+		< SearchAppBarContent user={user}/>
+	)
 }

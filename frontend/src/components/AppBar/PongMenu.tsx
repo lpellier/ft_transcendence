@@ -57,8 +57,19 @@ function GameLink() {
 	return ( <ALink linkto={"/game"} title={"Game"} icon={<GamesIcon />}/> )
 }
 
-function HomeLink() {
-	return ( <ALink linkto={"/home"} title={"Home"} icon={<HomeIcon />} /> )
+function ProfileLink() {
+  return (
+    <nav>
+      <Link to="/profile" style={{ textDecoration: 'none' }}>
+        <Button
+            variant="contained"
+            startIcon={<HomeIcon />}
+            color="secondary">
+          Profile
+        </Button>
+      </Link>
+    </nav>
+  );
 }
 
 function ChatLink() {
@@ -68,7 +79,7 @@ function ChatLink() {
 function PhoneButton() {
   return (
     <div>
-      <MenuItem> <HomeLink /> </MenuItem>
+      <MenuItem> <ProfileLink /> </MenuItem>
       <MenuItem> <GameLink /> </MenuItem>
       <MenuItem> <ChatLink /> </MenuItem>
     </div>

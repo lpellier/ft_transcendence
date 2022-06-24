@@ -7,7 +7,7 @@ Redirection from 42 API, redirects to front homepage (/home) if authentication i
 
 ## Route /users
 
-### /users		GET
+### /users		GET (NOT READY)
 Returns list of objects of all users:
 ```js
 [
@@ -20,12 +20,15 @@ Returns list of objects of all users:
 ```
 
 ### /users/me  		 GET 
-Returns object of self: 
+Returns object of self, with settings. 
 ```js
 {
-  id:	int,
-  username: string,
-  ...
+  id: number;
+  username: string;
+  tfa: boolean;
+  victories: number;
+  losses: number;
+  level: number;
 }
 ```
 
@@ -42,10 +45,10 @@ Update with one of the optional elements (only one). Return string if successful
 Returns object of specified user (username, avatar, stats and match_history, etc.) Verify ~/backend/prisma/schema.prisma for more information. 
 ```js
 {
-  id: int,
-  username: string, 
-  avatar: string,
-  stats: []
-  ...
+  id: number;
+  username: string;
+  victories: number;
+  losses: number;
+  level: number;
 }
 ```

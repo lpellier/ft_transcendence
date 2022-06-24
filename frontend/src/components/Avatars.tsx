@@ -1,5 +1,4 @@
-import {putUser} from "requests"
-
+import axios from 'axios'
 import Avatar from '@mui/material/Avatar'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
@@ -46,7 +45,22 @@ function PlayerAvatar(props: {image: string}) {
 function CreateAvatar(props: {img: string, style: any}) {
     
     const handleClick = () => {
-		putUser("avatar: props.img");
+
+		axios.put('http://127.0.0.1:3001/users/me',
+        {
+            data: {
+                avatar: props.img,
+            },
+        },
+        {
+            withCredentials: true,
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .catch(function (err) {
+            console.log("Put request failed : ", err)
+        });
     }
     
     return (

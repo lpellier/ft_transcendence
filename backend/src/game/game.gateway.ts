@@ -40,9 +40,9 @@ import * as utils from "./utils"
  function startGameFullRooms(games : Game[], server : Server) {
 	// starts every game that has 2 players after a connection
 	for (const game of games) {
-		if (game.players.length === 2 && game.state === "waiting_room") {
-			game.state = "await_readiness";
-			server.to(game.room_id).emit("await_readiness", game.players[0].id, game.players[1].id);
+		if (game.players.length === 2 && game.state === "waiting-player") {
+			game.state = "waiting-readiness";
+			server.to(game.room_id).emit("waiting-readiness", game.players[0].id, game.players[1].id);
 		}
 	}
 }
@@ -59,7 +59,7 @@ export class GameGateway {
 	clients : string[] = [];
 	games : Game[] = [];
 
-	timestep : number = 20; // ms
+	timestep : number = 15; // ms
 
 	handleDisconnect(client : Socket) {
 		let index = -1;
@@ -72,7 +72,6 @@ export class GameGateway {
 						clearInterval(game.update_interval);
 						clearInterval(game.ball_update_interval);
 						this.games.splice(this.games.indexOf(game), 1);
-						// console.log(client.id, "just disconnected -", this.clients.length, this.clients.length === 1 ? "user  total" : "users total");
 						return ;
 					}
 				}
@@ -112,7 +111,6 @@ export class GameGateway {
 	@SubscribeMessage('my_id')
 	getConnection(@MessageBody() client_id : string) {
 		this.clients.push(client_id);
-		// console.log(client_id, "just connected    -", this.clients.length, this.clients.length === 1 ? "user  total" : "users total");
 	}
 
 	@SubscribeMessage('matchmaking')
@@ -137,7 +135,7 @@ export class GameGateway {
 			existing_game.map = consts.casino_map;
 		client.join(existing_game.room_id);
 		existing_game.addPlayer(client.id);
-		this.server.to(existing_game.room_id).emit("waiting_room", existing_game.room_id, existing_game.score_limit, existing_game.map.name);
+		this.server.to(existing_game.room_id).emit("waiting-player", existing_game.room_id, existing_game.score_limit, existing_game.map.name);
 		startGameFullRooms(this.games, this.server);
 	}
 
@@ -145,18 +143,23 @@ export class GameGateway {
 	@SubscribeMessage('find_game')
 	handleJoinGame(
 		@ConnectedSocket() client : Socket,
-		@MessageBody() room_id : string
+		@MessageBody() data : [string, boolean] // room_id, spectator
 	) {
 		let found : boolean = false;
 		for (let game of this.games) {
-			if (game.room_id === room_id) {
+			if (game.room_id === data[0]) {
 				found = true;
-				if (game.players.length < 2) {
+				if (data[1] === true) {
+					client.join(game.room_id);
+					game.addSpectator(client.id);
+					this.server.to(client.id).emit("spectate", game.room_id, game.score_limit, game.map.name, game.state, game.players[0].id, game.players[1].id); // need to handle case where only one user is connected
+				}
+				else if (game.players.length < 2) {
 					client.join(game.room_id);
 					game.addPlayer(client.id);
-					this.server.to(game.room_id).emit("waiting_room", game.room_id, game.score_limit, game.map.name);
-					game.state = "await_readiness";
-					this.server.to(game.room_id).emit("await_readiness", game.players[0].id, game.players[1].id);						
+					this.server.to(game.room_id).emit("waiting-player", game.room_id, game.score_limit, game.map.name);
+					game.state = "waiting-readiness";
+					this.server.to(game.room_id).emit("waiting-readiness", game.players[0].id, game.players[1].id);						
 				}
 				else
 					this.server.to(client.id).emit("matchmaking-error", "game_full");
@@ -165,14 +168,15 @@ export class GameGateway {
 		if (!found)
 			this.server.to(client.id).emit("matchmaking-error", "game_not_found");
 	}
+	
 
 	@SubscribeMessage("countdown_start")
 	handleCountdown(@ConnectedSocket() client : Socket) {
 		for (let game of this.games) {
 			for (const player of game.players) {
-				if (player.id === client.id && game.state === "await_readiness") {
+				if (player.id === client.id && game.state === "waiting-readiness") {
 					if (game.players[0].ready && game.players[1].ready) {
-						game.state = "game_started"
+						game.state = "in-game"
 						let test = this.server;
 						for (let i = 1; i < 5; i++) {
 							setTimeout(() => {
@@ -190,7 +194,7 @@ export class GameGateway {
 											game.pong.pos,
 											[game.players[0].id, game.players[0].pos],
 											[game.players[1].id, game.players[1].pos],
-											game.score);
+											game.score, game.pong.value);
 									}, this.timestep);
 								}
 							}, i * 1000);
@@ -204,7 +208,6 @@ export class GameGateway {
 
 	@SubscribeMessage("switch_readiness")
 	handleSwitchReadiness(
-		@ConnectedSocket() client : Socket,
 		@MessageBody() client_id : string
 	) {
 		for (const game of this.games) {
@@ -221,7 +224,7 @@ export class GameGateway {
 	@SubscribeMessage("move_up")
 	handleMoveUp(@MessageBody() client_id : string) {
 		for (const game of this.games) {
-			if (game.players.length === 2 && game.state === "game_started") {
+			if (game.players.length === 2 && game.state === "in-game") {
 				for (const player of game.players) {
 					if (player.id === client_id) {
 						player.moveUp();
@@ -235,7 +238,7 @@ export class GameGateway {
 	@SubscribeMessage("move_down")
 	handleMoveDown(@MessageBody() client_id : string) {
 		for (const game of this.games) {
-			if (game.players.length === 2 && game.state === "game_started") {
+			if (game.players.length === 2 && game.state === "in-game") {
 				for (const player of game.players) {
 					if (player.id === client_id) {
 						player.moveDown();
@@ -249,7 +252,7 @@ export class GameGateway {
 	@SubscribeMessage("move_null")
 	handleMoveNull(@MessageBody() client_id : string) {
 		for (const game of this.games) {
-			if (game.players.length === 2 && game.state === "game_started") {
+			if (game.players.length === 2 && game.state === "in-game") {
 				for (const player of game.players) {
 					if (player.id === client_id) {
 						player.velocity[1] = 0;

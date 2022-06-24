@@ -18,13 +18,12 @@ export class JwtOtpStrategy extends PassportStrategy(Strategy, 'jwt-otp') {
 		if (req && req.cookies) {
 			token = req.cookies['jwt-otp']
 		}
-		console.log(token)
 		return token;
 	}
 
 	async validate(payload: any): Promise<JwtPayload> {
 		const user = {id: payload.sub,
 			isAuthenticated: payload.isAuthenticated};
-	return user;
+		return user;
 	}
 }

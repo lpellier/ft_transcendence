@@ -13,12 +13,22 @@ export class AuthController {
 
 	@UseGuards(OAuth2AuthGuard)
 	@Get()
-	@Redirect('http://127.0.0.1:3000/home')
+	@Redirect('http://127.0.0.1:3000/profile')
 	async login(@Req() req, @Res({passthrough: true}) res: Response) {
 		const isAuthenticated = !req.user.tfa;
 		const authentication = await this.authService.login(req.user.id, isAuthenticated);
 		res.cookie(authentication.type, authentication.token, { sameSite: 'strict' , httpOnly: true });
 	}
+
+	@Get('mock')
+	@Redirect('http://127.0.0.1:3000/profile')
+	async mockLogin(@Req() req, @Res({passthrough: true}) res: Response) {
+		const user = await this.authService.getMock();
+		const isAuthenticated = !user.tfa;
+		const authentication = await this.authService.login(user.id, isAuthenticated);
+		res.cookie(authentication.type, authentication.token, { sameSite: 'strict' , httpOnly: true });
+	}
+
 
 	@UseGuards(JwtOtpAuthGuard)
 	@Post('google-authenticator')

@@ -24,7 +24,6 @@ export class ChatGateway {
 		let roomId = await this.chatService.createRoom(createRoomDto);
 		await this.chatService.addUserToRoom(createRoomDto.userId, roomId);
 		await this.chatService.addAdminToRoom(createRoomDto.userId, roomId);
-		//console.log('create room called', createRoomDto)
 		client.emit('create room');
 	}
 
