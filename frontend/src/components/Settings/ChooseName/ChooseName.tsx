@@ -7,7 +7,6 @@ import { NameButtonStyle } from '../../../styles/tsxStyles/Settings/Name';
 import {User} from 'interfaces';
 import axios from 'axios';
 
-
 function NameButton() {
 	return (
 		<Button disabled 

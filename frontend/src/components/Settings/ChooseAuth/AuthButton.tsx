@@ -31,37 +31,43 @@ function TFAButton() {
 
 	}, [])
 
-	function patchTfa(props: {query: string}) {
+	function patchTfaTrue() {
 
 		axios.patch(
 			'http://127.0.0.1:3001/users/me', 
-			props.query,
+			{tfa: true},
 			{
 				withCredentials: true, 
 			})
 			.then(res => {
 				const secret = res.data;
-				setSecret(secret);
+				setUrl("otpauth://totp/transcendance_BoopBipBoop?secret=" + secret);
 			})
 			.catch(function (err) {
 				console.log("Setting tfa failed :", err)
 			})
 	}
 
-	function getSecret() {
-		const otpUrl = "otpauth://totp/transcendance_BoopBipBoop?secret=" + secret;
+	function patchTfaFalse() {
 
-		setUrl(otpUrl)
+		axios.patch(
+			'http://127.0.0.1:3001/users/me', 
+			{tfa: false},
+			{
+				withCredentials: true,
+			})
+			.catch(function (err) {
+				console.log("Setting tfa failed :", err)
+			})
 	}
 
 	function showFlashcode() {
-			getSecret()
+			patchTfaTrue()
 			showedInput(true)
-			patchTfa({query:"tfa=true"})
-		}
+	}
 
 	function deactivateTfa() {
-		patchTfa({query:"tfa=false"})
+		patchTfaFalse()
 	}
 
 	if (user.tfa === false) {
