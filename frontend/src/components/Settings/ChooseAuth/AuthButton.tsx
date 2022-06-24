@@ -3,13 +3,12 @@ import Button from '@mui/material/Button'
 import Box from '@mui/material/Box'
 import Stack from '@mui/material/Stack'
 import QRCode from 'react-qr-code'
-
 import axios from 'axios'
 import {getUser} from 'requests'
 import {User, init_user} from 'interfaces'
 
 function GenerateQRCode(props: {url: string}) {
-
+	
 	return (
 		<Box sx={{'& > :not(style)': {m: 1,},}}>
 			<Stack spacing={1}>
@@ -23,16 +22,14 @@ function TFAButton() {
 	const [input, showedInput] = useState(false);
 	const [url, setUrl] = useState("");
 	const [user, setUser] = useState<User>(init_user);
-	const [secret, setSecret] = useState<string>("");
-
+	
+	
 	useEffect(() => {
-
 		getUser(setUser)
-
 	}, [])
-
+	
 	function patchTfaTrue() {
-
+		
 		axios.patch(
 			'http://127.0.0.1:3001/users/me', 
 			{tfa: true},

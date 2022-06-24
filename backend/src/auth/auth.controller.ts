@@ -29,7 +29,6 @@ export class AuthController {
 		res.cookie(authentication.type, authentication.token, { sameSite: 'strict' , httpOnly: true });
 	}
 
-
 	@UseGuards(JwtOtpAuthGuard)
 	@Post('google-authenticator')
 	async google_authenticator_login(@Req() req, @Res({passthrough: true}) res: Response, @Body() otp: ValidateOtpDto) {

@@ -43,7 +43,7 @@ function ChooseNameModal(props: {user: User}) {
 			icon={DriveFileRenameOutlineIcon}
 			label={"Choose Name"}
 			ModalBoxStyle={ModalChooseName}
-			modalComp={<ChooseName user={props.user}/>}
+			modalComp={<ChooseName user={props.user} />}
 		/>
 	)
 }
