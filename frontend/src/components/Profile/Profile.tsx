@@ -4,22 +4,23 @@ import PlayerInfoBand from 'components/Profile/PlayerInfoBand'
 import StatsBoards from 'components/Profile/StatsBoards'
 
 import {StatsPartStyle, AllHomeStyle} from '../../styles/tsxStyles/Home'
+import {User} from 'interfaces'
 
-function StatsPart() {
+function StatsPart(props: {user: User}) {
 	return(
 		<Stack spacing={1} sx={StatsPartStyle}>
 			<PlayerInfoBand level={5}/>
-			<StatsBoards />
+			<StatsBoards user={props.user}/>
 		</Stack>
 	);
 }
 
-export default function Profile() {
+export default function Profile(props: {user: User}) {
 
     return (
 			<Container>
 				<Stack direction="row" spacing={1} sx={AllHomeStyle}>
-					<StatsPart />
+					<StatsPart user={props.user}/>
 				</Stack>
 			</Container>
     );

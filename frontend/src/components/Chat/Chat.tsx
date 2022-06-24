@@ -1,9 +1,7 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import Stack from '@mui/material/Stack'
 import Messages from './Messages';
 import Channels from './Channels';
-// import io  from "socket.io-client";
 import Box from '@mui/material/Box';
 
 
@@ -12,10 +10,6 @@ import '../../styles/Chat/Chat.css';
 import {User, Room} from 'interfaces';
 import {socket} from 'index';
 
-// const SERVER = "http://127.0.0.1:3001";
-// export const socket = io(SERVER, {
-// 	withCredentials:true,
-// });
 
 const ChatBoxStyle = {	
     width: '80vw',

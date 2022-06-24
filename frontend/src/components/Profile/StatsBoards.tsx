@@ -83,14 +83,11 @@ function MatchhistoryBox(){
 		);
 }
 
-export default function StatsBoards() {
+export default function StatsBoards(props: {user: User}) {
 	const [width, setWidth] = useState(window.innerWidth);
-	const [user, setUser] = useState<User>(init_user);
 
 	useEffect(() => {
 		
-		getUser(setUser)
-
 		const handleResizeWindow = () => setWidth(window.innerWidth);
 		 window.addEventListener("resize", handleResizeWindow);
 		 return () => {
@@ -101,7 +98,7 @@ export default function StatsBoards() {
 	if (width <= phoneSize) {
 	  return (
 		<Stack spacing={1}>
-				<StatsBox user={user}/>
+				<StatsBox user={props.user}/>
 				<TrophyBox />
 				<LeaderboardBox />
 				<MatchhistoryBox />
@@ -109,15 +106,15 @@ export default function StatsBoards() {
 	  );
 	}
 	return (
-			<Stack direction="row" spacing={1}>
-				<Stack spacing={1}>
-						<StatsBox user={user}/>
-						<TrophyBox />
-				</Stack>
-				<Stack spacing={1}>
-						<LeaderboardBox />
-						<MatchhistoryBox />
-				</Stack>
+		<Stack direction="row" spacing={1}>
+			<Stack spacing={1}>
+					<StatsBox user={props.user}/>
+					<TrophyBox />
 			</Stack>
+			<Stack spacing={1}>
+					<LeaderboardBox />
+					<MatchhistoryBox />
+			</Stack>
+		</Stack>
 	);
 }

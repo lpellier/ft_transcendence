@@ -2,7 +2,7 @@ import Stack from '@mui/material/Stack'
 import SearchAppBar from 'components/AppBar/AppBar'
 import Profile from 'components/Profile/Profile'
 import Chat from 'components/Chat/Chat'
-import Game from './components/Game'
+import Game from './routes/Game'
 import Settings from 'components/Settings/Settings'
 
 import {useState, useEffect} from 'react'
@@ -62,7 +62,7 @@ export default function App() {
                 <div>
                     <SearchAppBar user={user} component={component} setComponent={setComponent}/>
                     {component === "Profile"?
-                        <Profile/>
+                        <Profile user={user}/>
                     :
                         <div>
                             {component === "Game"?
