@@ -30,7 +30,7 @@ export function toastThatError(message: string) {
 	});
 }
 
-function toastIt(message: string) {
+export function toastIt(message: string) {
 	toast.success(message, {
 		position: "top-center",
 		autoClose: 5000,

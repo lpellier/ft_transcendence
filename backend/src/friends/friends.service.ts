@@ -42,8 +42,15 @@ export class FriendsService {
   }
 
   async findAll(ids: number[]) {
-    const friend = await this.prisma.user.findMany({
+    const friends = await this.prisma.user.findMany({
+      where: {id: {in: ids}}
     })
+    return (friends);
+  }
+
+  async getAllUsers() {
+    let users = await this.prisma.user.findMany();
+    return (users);
   }
 
 }

@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import Stack from '@mui/material/Stack';
-import SearchAppBar from 'components/AppBar/AppBar'
 
 import "./../styles/Game/canvas.css"
 import "./../styles/Game/buttons.css"
@@ -27,7 +26,7 @@ function addScript(url : string) : any {
 let observer : any = null;
 let canvas : any = null;
 
-function Game() {
+function GameComponent() {
 	useEffect(() => {
 		let canvas_parent : any = document.getElementById("canvas-parent");
 		if (canvas === null)
@@ -48,61 +47,54 @@ function Game() {
 		}
 	}, []);
 
-	// componentWillUnmount() {
-	// 	if (observer) {
-	// 		observer.disconnect();
-	// 		observer = null;
-	// 	}
-	// }
-
-		return (
-			<div id="canvas-parent">
-				<div id="main-menu-button-grid">
-					<div id="button-create"/>
-					<div id="button-join"/>
-					<div id="button-matchmaking"/>
-				</div>
-				<div id="create-menu-button-grid">
-					<div id="button-anyone"/>
-					<div id="button-invitation"/>
-					<div id="button-local"/>
-				</div>
-				<div id="button-ai"/>
-				<div id="button-validate"/>
-				<div id="button-return"/>
-				<div id="button-map-original"/>
-				<div id="button-map-city"/>
-				<div id="button-map-casino"/>
-				<div id="button-spectate"/>
-				<div id="icon-eye"/>
-				<div id="background-city"/>
-				<div id="icon-return"/>
-				<div id="icon-player_one"/>
-				<div id="icon-player_two"/>
-				<div id="buttons-plus-minus">	
-					<div id="button-plus"/>
-					<div id="button-minus"/>
-				</div>
-				<div id="input-join"/>
-				<div id="input-score_limit"/>
-				<div id="wasd-keys">
-					<div id="w-key"/>
-					<div id="a-key"/>
-					<div id="s-key"/>
-					<div id="d-key"/>
-				</div>
-				<div id="arrow-keys">
-					<div id="up-key"/>
-					<div id="left-key"/>
-					<div id="down-key"/>
-					<div id="right-key"/>
-				</div>
-				<div id="button-opp-left-ok"/>
+	return (
+		<div id="canvas-parent">
+			<div id="main-menu-button-grid">
+				<div id="button-create"/>
+				<div id="button-join"/>
+				<div id="button-matchmaking"/>
 			</div>
-		);
+			<div id="create-menu-button-grid">
+				<div id="button-anyone"/>
+				<div id="button-invitation"/>
+				<div id="button-local"/>
+			</div>
+			<div id="button-ai"/>
+			<div id="button-validate"/>
+			<div id="button-return"/>
+			<div id="button-map-original"/>
+			<div id="button-map-city"/>
+			<div id="button-map-casino"/>
+			<div id="button-spectate"/>
+			<div id="icon-eye"/>
+			<div id="background-city"/>
+			<div id="icon-return"/>
+			<div id="icon-player_one"/>
+			<div id="icon-player_two"/>
+			<div id="buttons-plus-minus">	
+				<div id="button-plus"/>
+				<div id="button-minus"/>
+			</div>
+			<div id="input-join"/>
+			<div id="input-score_limit"/>
+			<div id="wasd-keys">
+				<div id="w-key"/>
+				<div id="a-key"/>
+				<div id="s-key"/>
+				<div id="d-key"/>
+			</div>
+			<div id="arrow-keys">
+				<div id="up-key"/>
+				<div id="left-key"/>
+				<div id="down-key"/>
+				<div id="right-key"/>
+			</div>
+			<div id="button-opp-left-ok"/>
+		</div>
+	);
 }
 
-export default function Gamepage() {	
+export default function Game() {	
 	useEffect(() => {
 		addScript("https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.0/socket.io.js");
 		addScript("/sketch/classes/Buttons.js");
@@ -128,8 +120,7 @@ export default function Gamepage() {
 
 	return (
 		<Stack id="test_parent" spacing={5}>
-			<SearchAppBar />
-			<Game/>
+			<GameComponent />
 		</Stack>
 	);
 }

@@ -15,6 +15,7 @@ export const socket = io(SERVER, {
 });
 
 ReactDOM.render(
+
     <AllRoutes />,
     Root
 );

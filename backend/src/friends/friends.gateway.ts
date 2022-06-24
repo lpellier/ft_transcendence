@@ -4,14 +4,16 @@ import {
   MessageBody,
   OnGatewayConnection,
   OnGatewayDisconnect,
+  ConnectedSocket,
 } from '@nestjs/websockets';
 import { FriendsService } from './friends.service';
 import { ConfigService } from '@nestjs/config';
 import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { FriendUserDto } from './dto/friend-user.dto';
+import { Socket } from "socket.io";
 
-@UseGuards(JwtAuthGuard)
+// @UseGuards(JwtAuthGuard)
 @WebSocketGateway({
   cors: {
     origin: new ConfigService().get('FRONT_URL'),
@@ -23,10 +25,10 @@ export class FriendsGateway
 {
   constructor(private readonly friendsService: FriendsService) {}
 
-  @SubscribeMessage('addFriend')
-  add(@MessageBody() friendUserDto: FriendUserDto) {
-    return this.friendsService.add(friendUserDto.userId, friendUserDto.friendId);
-
+  @SubscribeMessage('add friend')
+  add(@ConnectedSocket() client:Socket, @MessageBody() friendUserDto: FriendUserDto) {
+    this.friendsService.add(friendUserDto.userId, friendUserDto.friendId);
+    client.emit('friend added');
   }
 
   @SubscribeMessage('removeFriend')
@@ -35,8 +37,11 @@ export class FriendsGateway
   }
 
   @SubscribeMessage('find all friends')
-  async findAll(@MessageBody() userId: number) {
-    const friendsIds = await this.friendsService.findAllIds(userId);
+  async findAll(@ConnectedSocket() client:Socket , @MessageBody() userId: number) {
+    const friendsIds: number[] = await this.friendsService.findAllIds(userId);
+    const friends = await this.friendsService.findAll(friendsIds);
+    console.log('friends = ', friends);
+    client.emit('found friends', friends);
   }
 
   handleConnection(client) {
@@ -46,6 +51,15 @@ export class FriendsGateway
   handleDisconnect(client) {
     console.log('client disconnected');
   }
+
+  @SubscribeMessage('get all users')
+	async handleNewUser(@ConnectedSocket () client : Socket) {
+
+		const allUsers =  await this.friendsService.getAllUsers();
+    client.emit('got all users', allUsers);
+    // }
+		// console.log('new user called', newUserDto)
+	}
 
   // @SubscribeMessage('findOneFriend')
   // findOne(@MessageBody() id: number) {
