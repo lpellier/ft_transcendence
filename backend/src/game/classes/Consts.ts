@@ -14,6 +14,9 @@ export const MAP_WIDTH : number = 1200;
 export const MAP_HEIGHT : number = 750;
 export const PLAYER_SPEED : number = 7;
 
+export const DIAGONAL = Math.sqrt(Math.pow(MAP_WIDTH, 2) + Math.pow(MAP_HEIGHT, 2));
+	
+
 export const TOP_BOUND : number = 10;
 export const BOT_BOUND : number = MAP_HEIGHT - 10;
 export const LEFT_BOUND : number = 0;

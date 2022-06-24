@@ -95,6 +95,13 @@ function listenMoveEvents() {
 		}
 	});
 
+	socket.on("bump", (index : number) => {
+		if (index === 0)
+			bumpers[0].hit = true;
+		if (index === 1)
+			bumpers[1].hit = true;
+	});
+
 	socket.on("updated_pos", (
 		pong_pos : [number, number],
 		p1_state : [string, [number, number]],

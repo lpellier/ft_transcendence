@@ -1,7 +1,7 @@
 import { ConnectedSocket, MessageBody, SubscribeMessage, WebSocketGateway, WebSocketServer } from "@nestjs/websockets";
 import { Socket, Server } from "socket.io";
-import { Game } from "./Game"
-import * as consts from "./Consts"
+import { Game } from "./classes/Game"
+import * as consts from "./classes/Consts"
 import * as utils from "./utils"
 
 // ? How to create a game of pong
@@ -183,7 +183,7 @@ export class GameGateway {
 								this.server.to(game.room_id).emit("countdown-server");
 								if (i === 4) {
 									game.update_interval = setInterval(() => {
-										if (game.pong.calculateNewPos(game)) {
+										if (game.pong.calculateNewPos(game, this.server)) {
 											test.to(game.room_id).emit("game-over");
 											clearInterval(game.update_interval);
 											clearInterval(game.ball_update_interval);
