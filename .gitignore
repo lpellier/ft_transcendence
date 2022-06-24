@@ -5,6 +5,6 @@ frontend/node_modules
 frontend/dist
 frontend_old/node_modules
 frontend_old/dist
-frontend/public/game/sketch
+frontend/public/sketch
 cookie.txt
 .env
