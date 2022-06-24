@@ -1,12 +1,11 @@
 
 interface User {
-    id: number;
-    avatar: string;
-    username: string;
-	winHistory: number;
-	lossHistory: number;
-    tfa: boolean;
-    otpsecret: string;
+	id: number;
+	username: string;
+	tfa: boolean;
+	victories: number;
+	losses: number;
+	level: number;
 }
 
 const init_user = {} as User

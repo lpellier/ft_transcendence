@@ -42,6 +42,7 @@ class GameMap {
 		noStroke();
 		if (this.background)
 			image(this.background, 0, 0, map_width, map_height);
+
 		push();
 		fill("rgba(0, 0, 0, 0.60)");
 		rect(0, 0, map_width, map_height);
@@ -72,6 +73,10 @@ class GameMap {
 			rect(wall[0][0] * ratio, wall[0][1] * ratio, wall[1][0] * ratio, wall[1][1] * ratio);
 		pop();
 		pop();
+		if (this.name === "city")
+			for (let bumper of bumpers)
+				bumper.render(ratio);
+
 	}
 
 	resize(w : number, h : number) {

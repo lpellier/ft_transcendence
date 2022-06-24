@@ -2,145 +2,10 @@
 // ? Coding consistency : snake_case for variables | camelCase for functions | PascalCase for classes
 // ? Map indexes : 1 (normal map), 2 (city map), 3 (casino map)
 
-// TODO Brainstorm a better idea than walls in the middle for City
-	// ? bumper in middle of map ? make an animation for bump
-
 // TODO find a way to send data to database and fill every appropriate field when situation calls for it
 
 // TODO cute animation showing the roll of pong value in casino
 // TODO comment EVERYTHING
-
-// ? How to calculate bounce angle from point of intersection of pong velocity (v) and bumper (b)
-// ? when collision is detected, get the perpendicular line (pl) to the tangent (t) of the point of collision (pt)
-// ? Calculate the angle alpha between v and pl ; calculate line with angle alpha to pl
-
-function sub(v1 : Vector, v2 : Vector) : Vector {
-	let ret : Vector = new Vector([v1.x, v1.y]);
-	ret.x -= v2.x;
-	ret.y -= v2.y;
-	return ret;
-}
-
-class Vector {
-	x : number;
-	y : number;
-
-	constructor(pos : [number, number]) {
-		this.x = pos[0];
-		this.y = pos[1];
-	}
-
-	add(other : Vector) {
-		this.x += other.x;
-		this.y += other.y;
-	}
-
-	mult(nbr : number) {
-		this.x *= nbr;
-		this.y *= nbr;
-	}
-
-	mag() {
-		return (Math.sqrt(this.x * this.x + this.y * this.y));
-	}
-
-	normalize() {
-		this.x /= this.mag();
-		this.y /= this.mag();
-	}
-
-	dot(other : Vector) : number {
-		let ret : number = 0;
-
-		ret += this.x * other.x;
-		ret += this.y * other.y;
-		return ret;
-	}
-}
-
-class Bumper {
-	animation : any;
-	pos : Vector;
-	center : Vector;
-	speed : number;
-	len : number;
-	index : number;
-	diameter : number;
-
-	hit : boolean;
-	collision : Vector;
-	bounce_vec : Vector;
-
-	constructor(animation : any, x : number, y : number, diameter : number) {
-		this.pos = new Vector([x, y]);
-		this.center = new Vector([x + diameter / 2, y + diameter / 2])
-		this.collision = new Vector([0, 0]);
-		this.bounce_vec = new Vector([0, 0]);
-		this.animation = animation;
-		this.len = this.animation.length;
-		this.index = 0;
-		this.hit = false;
-		this.diameter = diameter;
-	}
-  
-	show() {
-	  let index = this.index % this.len;
-	  image(this.animation[index], this.pos.x, this.pos.y, this.diameter, this.diameter);
-	}
-  
-	animate() {
-		this.index += 1;
-		if (this.index >= this.len) {
-			this.index = 0;
-			this.hit = false;
-		}
-	}
-
-	render() {
-		this.show();
-		if (this.hit)
-			this.animate();
-	}
-
-	checkCollision(pong : Pong) {
-		let e = new Vector(pong.center());
-		let l = new Vector(pong.centerNextFrame());
-
-		let cp = this.center;
-		let r = (this.diameter * 0.85) / 2;
-
-		let d = sub(l, e);
-		let f = sub(e, cp);
-
-		let a = d.dot(d);
-		let b = 2 * f.dot(d);
-		let c = f.dot(f) - r * r;
-
-		let discriminant = b * b - 4 * a * c;
-		if (discriminant >= 0) {
-			discriminant = Math.sqrt(discriminant);
-
-			let t1 = (-b - discriminant) / (2 * a);
-			
-			if( t1 >= 0 && t1 <= 1 )
-			{
-				// t1 is the intersection, and it's closer than t2
-				// (since t1 uses -b - discriminant)
-				// Impale, Poke
-				this.collision.x = e.x + t1;
-				this.collision.y = e.y;
-				this.hit = true;
-				
-				this.bounce_vec = sub(this.collision, this.center);
-				this.bounce_vec.normalize();
-				let vec_pong = new Vector(pong.velocity);
-				this.bounce_vec.mult(vec_pong.mag());
-				pong.velocity[0] = this.bounce_vec.x;
-				pong.velocity[1] = this.bounce_vec.y;
-			}
-		}
-	}
-  }
 
 let spritesheet : any;
 let spritedata : any;
@@ -178,9 +43,8 @@ function setup() {
 	}
 	let diameter = consts.DIAGONAL * 0.10;
 
-	bumpers.push(new Bumper(animation, consts.WIDTH / 2 - diameter / 2, consts.HEIGHT * 1 / 3 - diameter / 2, diameter));
-	bumpers.push(new Bumper(animation, consts.WIDTH / 2 - diameter / 2, consts.HEIGHT * 2 / 3 - diameter / 2, diameter));
-
+	bumpers.push(new Bumper(animation, consts.WIDTH / 2 - diameter / 2, consts.HEIGHT * 1 / 4 - diameter / 2, diameter));
+	bumpers.push(new Bumper(animation, consts.WIDTH / 2 - diameter / 2, consts.HEIGHT * 3 / 4 - diameter / 2, diameter));
 
 	keys.init();
 	game = new Game();

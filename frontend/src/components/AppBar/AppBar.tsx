@@ -130,5 +130,5 @@ export default function SearchAppBar(props: {user: User, component: string, setC
 			</Stack>
         </Toolbar>
       </AppBar>
-  );
+	);
 }

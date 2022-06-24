@@ -98,6 +98,8 @@ export default function Game() {
 	useEffect(() => {
 		addScript("https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.0/socket.io.js");
 		addScript("/sketch/classes/Buttons.js");
+		addScript("/sketch/classes/Vector.js");
+		addScript("/sketch/classes/Bumper.js");
 		addScript("/sketch/classes/Consts.js");
 		addScript("/sketch/classes/Errors.js");
 		addScript("/sketch/classes/Keys.js");
@@ -115,7 +117,7 @@ export default function Game() {
 		addScript("/sketch/engine/input.js");
 		addScript("/sketch/engine/menus.js");
 		addScript("/sketch/engine/button_functions.js");
-		addScript("/p5/p5.js");
+		addScript("https://cdn.jsdelivr.net/npm/p5@1.4.1/lib/p5.js");
 	}, [])
 
 	return (
