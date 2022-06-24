@@ -48,64 +48,59 @@ function Game() {
 		}
 	}, []);
 
-	// componentWillUnmount() {
-	// 	if (observer) {
-	// 		observer.disconnect();
-	// 		observer = null;
-	// 	}
-	// }
-
-		return (
-			<div id="canvas-parent">
-				<div id="main-menu-button-grid">
-					<div id="button-create"/>
-					<div id="button-join"/>
-					<div id="button-matchmaking"/>
-				</div>
-				<div id="create-menu-button-grid">
-					<div id="button-anyone"/>
-					<div id="button-invitation"/>
-					<div id="button-local"/>
-				</div>
-				<div id="button-ai"/>
-				<div id="button-validate"/>
-				<div id="button-return"/>
-				<div id="button-map-original"/>
-				<div id="button-map-city"/>
-				<div id="button-map-casino"/>
-				<div id="button-spectate"/>
-				<div id="icon-eye"/>
-				<div id="background-city"/>
-				<div id="icon-return"/>
-				<div id="icon-player_one"/>
-				<div id="icon-player_two"/>
-				<div id="buttons-plus-minus">	
-					<div id="button-plus"/>
-					<div id="button-minus"/>
-				</div>
-				<div id="input-join"/>
-				<div id="input-score_limit"/>
-				<div id="wasd-keys">
-					<div id="w-key"/>
-					<div id="a-key"/>
-					<div id="s-key"/>
-					<div id="d-key"/>
-				</div>
-				<div id="arrow-keys">
-					<div id="up-key"/>
-					<div id="left-key"/>
-					<div id="down-key"/>
-					<div id="right-key"/>
-				</div>
-				<div id="button-opp-left-ok"/>
+	return (
+		<div id="canvas-parent">
+			<div id="main-menu-button-grid">
+				<div id="button-create"/>
+				<div id="button-join"/>
+				<div id="button-matchmaking"/>
 			</div>
-		);
+			<div id="create-menu-button-grid">
+				<div id="button-anyone"/>
+				<div id="button-invitation"/>
+				<div id="button-local"/>
+			</div>
+			<div id="button-ai"/>
+			<div id="button-validate"/>
+			<div id="button-return"/>
+			<div id="button-map-original"/>
+			<div id="button-map-city"/>
+			<div id="button-map-casino"/>
+			<div id="button-spectate"/>
+			<div id="icon-eye"/>
+			<div id="background-city"/>
+			<div id="icon-return"/>
+			<div id="icon-player_one"/>
+			<div id="icon-player_two"/>
+			<div id="buttons-plus-minus">	
+				<div id="button-plus"/>
+				<div id="button-minus"/>
+			</div>
+			<div id="input-join"/>
+			<div id="input-score_limit"/>
+			<div id="wasd-keys">
+				<div id="w-key"/>
+				<div id="a-key"/>
+				<div id="s-key"/>
+				<div id="d-key"/>
+			</div>
+			<div id="arrow-keys">
+				<div id="up-key"/>
+				<div id="left-key"/>
+				<div id="down-key"/>
+				<div id="right-key"/>
+			</div>
+			<div id="button-opp-left-ok"/>
+		</div>
+	);
 }
 
 export default function Gamepage() {	
 	useEffect(() => {
 		addScript("https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.0/socket.io.js");
 		addScript("/sketch/classes/Buttons.js");
+		addScript("/sketch/classes/Vector.js");
+		addScript("/sketch/classes/Bumper.js");
 		addScript("/sketch/classes/Consts.js");
 		addScript("/sketch/classes/Errors.js");
 		addScript("/sketch/classes/Keys.js");
@@ -123,7 +118,7 @@ export default function Gamepage() {
 		addScript("/sketch/engine/input.js");
 		addScript("/sketch/engine/menus.js");
 		addScript("/sketch/engine/button_functions.js");
-		addScript("/p5/p5.js");
+		addScript("https://cdn.jsdelivr.net/npm/p5@1.4.1/lib/p5.js");
 	}, [])
 
 	return (
