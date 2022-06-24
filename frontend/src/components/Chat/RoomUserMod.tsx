@@ -6,9 +6,11 @@ import Popper from '@mui/material/Popper';
 
 import {toast} from 'react-toastify';
 
-import {useState, useEffect, useRef} from 'react'
+import {useState, useEffect } from 'react'
 import {Room, User} from 'interfaces'
-import {socket} from './Chat'
+import {socket} from 'index'
+// import {socket} from './Chat'
+
 
 
 export interface RoomUserDto {
@@ -28,7 +30,7 @@ export function toastThatError(message: string) {
 	});
 }
 
-function toastIt(message: string) {
+export function toastIt(message: string) {
 	toast.success(message, {
 		position: "top-center",
 		autoClose: 5000,
@@ -185,10 +187,6 @@ function RoomUserMod(props : {currentUser: User, users: User[], room: Room, room
 				))}
 			</Stack>
 		);
-	}
-
-	interface UserModArgs {
-
 	}
 
 	function	UserModButton(props: {clickAction: Function, room:Room, title:string, clicked: number, handleSubmit: React.FormEventHandler<HTMLFormElement>, setClicked:Function, users: User[], condition: Function}) {

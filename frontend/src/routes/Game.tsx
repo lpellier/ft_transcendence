@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import Stack from '@mui/material/Stack';
-import SearchAppBar from 'components/AppBar/AppBar'
 
 import "./../styles/Game/canvas.css"
 import "./../styles/Game/buttons.css"
@@ -27,7 +26,7 @@ function addScript(url : string) : any {
 let observer : any = null;
 let canvas : any = null;
 
-function Game() {
+function GameComponent() {
 	useEffect(() => {
 		let canvas_parent : any = document.getElementById("canvas-parent");
 		if (canvas === null)
@@ -95,7 +94,7 @@ function Game() {
 	);
 }
 
-export default function Gamepage() {	
+export default function Game() {	
 	useEffect(() => {
 		addScript("https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.0/socket.io.js");
 		addScript("/sketch/classes/Buttons.js");
@@ -123,8 +122,7 @@ export default function Gamepage() {
 
 	return (
 		<Stack id="test_parent" spacing={5}>
-			<SearchAppBar />
-			<Game/>
+			<GameComponent />
 		</Stack>
 	);
 }
