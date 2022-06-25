@@ -44,10 +44,20 @@ class Pong {
 		this.setNewValue();
 	}
 
-	setNewValue() {
+	setNewValue() { // values (0 -> -1) (1 - 4 -> 1) (5 - 7 -> 2) (8 - 9 -> 3) (10 -> 4)
 		if (game.map.name != "casino")
 			return ;
-		this.value = Math.floor(Math.random() * 4) + 1;
+		let rand : number = Math.floor(Math.random() * 11);
+		if (rand === 0)
+			this.value = -1;
+		else if (rand <= 4)
+			this.value = 1;
+		else if (rand <= 7)
+			this.value = 2;
+		else if (rand <= 9)
+			this.value = 3;
+		else if (rand === 10)
+			this.value = 4;
 	}
 
 	leftUp() : [number, number] {
@@ -104,14 +114,16 @@ class Pong {
 
 	
 	render() {
+		if (this.value === -1)
+			this.color = "#80ff80" // green
 		if (this.value === 1)
 			this.color = "white";
 		else if (this.value === 2)
-			this.color = "yellow";
+			this.color = "#ffff4d"; // yellow
 		else if (this.value === 3)
-			this.color = "orange";
+			this.color = "#ffa64d"; // orange
 		else if (this.value === 4)
-			this.color = "red";
+			this.color = "#ff4d4d"; // red
 		push();
 		noStroke();
 		fill(this.color);
