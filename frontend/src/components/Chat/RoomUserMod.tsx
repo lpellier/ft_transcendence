@@ -4,43 +4,17 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import Box from '@mui/material/Box';
 import Popper from '@mui/material/Popper';
 
-import {toast} from 'react-toastify';
-
 import {useState, useEffect } from 'react'
 import {Room, User} from 'interfaces'
 import {socket} from 'index'
-// import {socket} from './Chat'
 
+import { toastIt, toastThatError } from 'App';
 
 
 export interface RoomUserDto {
     userId: number;
     roomId: number;
 };
-
-export function toastThatError(message: string) {
-	toast.error(message, {
-		position: "top-center",
-		autoClose: 5000,
-		hideProgressBar: false,
-		closeOnClick: true,
-		pauseOnHover: true,
-		draggable: true,
-		progress: undefined,
-	});
-}
-
-export function toastIt(message: string) {
-	toast.success(message, {
-		position: "top-center",
-		autoClose: 5000,
-		hideProgressBar: false,
-		closeOnClick: true,
-		pauseOnHover: true,
-		draggable: true,
-		progress: undefined,
-	});
-}
 
 function RoomUserMod(props : {currentUser: User, users: User[], room: Room, roomAdmins: User[]}) {
 

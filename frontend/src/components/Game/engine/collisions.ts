@@ -73,7 +73,10 @@ function checkCollisions() {
 		game.pong.pos[1] = consts.BOT_BOUND - game.pong.diameter - consts.HEIGHT * 0.005;
 	}
 	if (game.pong.velocity[0] > 0 && game.pong.pos[0] + game.pong.diameter > consts.RIGHT_BOUND) {
-		game.score[0] += game.pong.value;
+		if (game.pong.value === -1 && game.score[1] > 0)
+			game.score[1]--;
+		else
+			game.score[0] += game.pong.value;
 		game.pong.relaunchPong("right");
 		if (game.score[0] >= game.score_limit)
 			game.state = "game-over";
@@ -81,7 +84,10 @@ function checkCollisions() {
 		return ;
 	}
 	else if (game.pong.velocity[0] < 0 && game.pong.pos[0] < consts.LEFT_BOUND) {
-		game.score[1] += game.pong.value;
+		if (game.pong.value === -1 && game.score[0] > 0)
+			game.score[0]--;
+		else
+			game.score[1] += game.pong.value;
 		game.pong.relaunchPong("left");
 		if (game.score[1] >= game.score_limit)
 			game.state = "game-over";

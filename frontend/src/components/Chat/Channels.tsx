@@ -14,7 +14,7 @@ import ToggleButton from '@mui/material/ToggleButton';
 import Dialog from '@mui/material/Dialog';
 import bcrypt from 'bcryptjs';
 
-import { toastThatError } from './RoomUserMod';
+import { toastThatError } from 'App';
 
 import {useState, useEffect} from 'react'
 import {Room, User} from 'interfaces'

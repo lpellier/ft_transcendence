@@ -3,7 +3,7 @@ import { Server } from "socket.io"
 import { Player } from "./Player";
 import { Pong } from "./Pong";
 import { GameMap } from "./GameMap";
-import * as utils from "./utils";
+import * as utils from "./../utils";
 
 const top_bound : number = 10;
 const bot_bound : number = consts.MAP_HEIGHT - 10;
@@ -81,7 +81,7 @@ export class Game {
 		this.pong.value = Math.floor(Math.random() * 4) + 1;
 	}
 
-	checkCollisions() : boolean {
+	checkCollisions(server : Server) : boolean {
 		// Implement acceleration here
 		if (this.frames_since_point === 0)
 			this.pong.speed = consts.PONG_BASE_SPEED;
@@ -98,6 +98,17 @@ export class Game {
 		}
 
 		this.frames_since_point++;
+
+		if (this.map.name === "city") {
+			if (this.map.bumpers[0].checkCollision(this.pong)) {
+				server.to(this.room_id).emit("bump", 0);
+				return false;
+			}
+			else if (this.map.bumpers[1].checkCollision(this.pong))  {
+				server.to(this.room_id).emit("bump", 1);
+				return false;
+			}
+		}
 
 		// ? collision with bounds
 		if (this.pong.pos[1] < consts.TOP_BOUND || this.pong.pos[1] + this.pong.diameter > consts.BOT_BOUND)

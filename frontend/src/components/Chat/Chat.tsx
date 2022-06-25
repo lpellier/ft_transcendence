@@ -11,6 +11,7 @@ import {User, Room} from 'interfaces';
 import {socket} from 'index';
 
 
+
 const ChatBoxStyle = {	
     width: '80vw',
     minWidth: '320px',
@@ -23,10 +24,6 @@ const ChatBoxStyle = {
     backgroundPosition: 'bottom left',
 	backgroundRepeat: 'no-repeat',
     filter: 'drop-shadow(20px 20px 1px black)',
-}
-
-const ChatPageStyle = {
-    alignItems: 'center',
 }
 
 function Chat(props: {user: User, users: User[]}) {
@@ -74,7 +71,7 @@ function Chat(props: {user: User, users: User[]}) {
 			socket.emit('get rooms', props.user.id);
 			socket.emit('get public rooms', props.user.id);
 			socket.emit('get all messages', props.user.id);
-			socket.emit('new user', {userId: props.user.id, roomId: currentRoom.id});
+			// socket.emit('new user', {userId: props.user.id, roomId: 1});
 		}
 		if (!socket.connected)
 			setStatus('disconnected');
@@ -87,7 +84,7 @@ function Chat(props: {user: User, users: User[]}) {
 	
 	return (
 		<Box sx={ChatBoxStyle}>
-		{status}
+			{status}
 			{props.user?
 				<Stack direction='row' spacing='2' className='chmsg'>
 					<Channels user={props.user} users={props.users} currentRoom={currentRoom} setCurrentRoom = {setCurrentRoom} setCanWrite = {setCanWrite} roomAdmins={roomAdmins}/>
