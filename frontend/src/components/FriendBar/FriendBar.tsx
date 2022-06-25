@@ -20,6 +20,18 @@ interface FriendUserDto {
     friendId: number;
 }
 
+function UserList(props: {users: User[], friends: User[]}) {
+    return (
+        <List>
+        {props.users.map(item => {
+            <ListItem>
+                <ListItemText primary={item.username}/>
+            </ListItem>
+        })}
+        </List>
+    )
+}
+
 export default function FriendBar(props: {user: User, users: User[]}) {
     
     let [open, setOpen] = useState<boolean>(false);
@@ -101,6 +113,7 @@ export default function FriendBar(props: {user: User, users: User[]}) {
                 {addFriendClicked?
                     <Stack component="form" onSubmit={addFriendSubmit} spacing={1}>
                         <TextField id="roomName" label="friend name" variant="standard" />
+                        <UserList users={props.users} friends={friends}/>
                         <Button variant="contained" color="success" type="submit">
                             Add
                         </Button>

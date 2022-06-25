@@ -104,9 +104,7 @@ export default function SearchAppBar(props: {user: User, users: User[], componen
   return (
       <AppBar position="static">
         <Toolbar style={ BarStyle }>
-			<Button onClick={() => props.setComponent("Profile")}>
-				<PlayerAvatar image={'http://127.0.0.1:3001/avatars/' + props.user.id + '.png'}/>
-			</Button>
+			<PlayerAvatar image={'http://127.0.0.1:3001/avatars/' + props.user.id + '.png'} onClick={() => props.setComponent("Profile")}/>
 			<PlayerName name={props.user.username}/>
 			<ProjectName />
 			<Stack direction="row" spacing={2}>

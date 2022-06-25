@@ -73,7 +73,7 @@ export default function App() {
 
     useEffect(() => {
 		axios.get('http://127.0.0.1:3001/users/me',{
-		withCredentials: true
+            withCredentials: true
         })
         .then(res => {
             console.log("Get user request success")
