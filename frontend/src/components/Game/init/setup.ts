@@ -2,6 +2,11 @@
 // ? Coding consistency : snake_case for variables | camelCase for functions | PascalCase for classes
 // ? Map indexes : 1 (normal map), 2 (city map), 3 (casino map)
 
+// ? casino enhancement : more chances to get lower valued pongs
+// ? add a -1 pong to remove a point from opponent
+
+// ? more player speed
+
 // TODO find a way to send data to database and fill every appropriate field when situation calls for it
 
 // TODO cute animation showing the roll of pong value in casino

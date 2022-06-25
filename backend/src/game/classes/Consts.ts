@@ -12,9 +12,9 @@ export const PONG_COLOR : string = "white";
 
 export const MAP_WIDTH : number = 1200;
 export const MAP_HEIGHT : number = 750;
-export const PLAYER_SPEED : number = 7;
 
 export const DIAGONAL = Math.sqrt(Math.pow(MAP_WIDTH, 2) + Math.pow(MAP_HEIGHT, 2));
+export const PLAYER_SPEED : number = DIAGONAL / 125;
 	
 
 export const TOP_BOUND : number = 10;
