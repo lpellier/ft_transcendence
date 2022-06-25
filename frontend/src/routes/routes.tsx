@@ -7,11 +7,7 @@ import {
 import {useState, useEffect} from 'react'
 import axios from 'axios'
 import LogIn from './LogIn'
-import Settingspage from './Settingspage'
-import Profile from './Profile'
-import Gamepage from './Gamepage'
-import Chatpage from './Chatpage'
-import Error from './Error'
+import App from '../App'
 
 
 function ProtectedRoute(props: {children: JSX.Element, auth: any}) {
@@ -50,11 +46,7 @@ export default function AllRoutes()  {
 		<BrowserRouter>
 	        <Routes>
 	            <Route path="/" element={<LogIn />} />
-	            <Route path="profile" element={ <ProtectedRoute auth={isAuth} ><Profile /></ProtectedRoute>} />
-	            <Route path="game" element={ <ProtectedRoute auth={isAuth} ><Gamepage /></ProtectedRoute>} />
-	            <Route path="chat" element={ <ProtectedRoute auth={isAuth} ><Chatpage /></ProtectedRoute>} />
-	            <Route path="error" element={ <ProtectedRoute auth={isAuth} ><Error /></ProtectedRoute>} />
-	            <Route path="settings" element={ <ProtectedRoute auth={isAuth} ><Settingspage /></ProtectedRoute>} />
+	            <Route path="profile" element={ <ProtectedRoute auth={isAuth} ><App /></ProtectedRoute>} />
 	        </Routes>
 	    </BrowserRouter>
 	)

@@ -5,7 +5,6 @@ import Stack from '@mui/material/Stack'
 import QRCode from 'react-qr-code'
 
 import axios from 'axios'
-import {getUser} from 'requests'
 import {User, init_user} from 'interfaces'
 
 function GenerateQRCode(props: {url: string}) {
@@ -19,17 +18,11 @@ function GenerateQRCode(props: {url: string}) {
 	)
 }
 
-function TFAButton() {
+function TFAButton(props: {user: User}) {
 	const [input, showedInput] = useState(false);
 	const [url, setUrl] = useState("");
-	const [user, setUser] = useState<User>(init_user);
+
 	const [secret, setSecret] = useState<string>("");
-
-	useEffect(() => {
-
-		getUser(setUser)
-
-	}, [])
 
 
 	function patchTfa(props: {query: string}) {
@@ -65,7 +58,7 @@ function TFAButton() {
 			patchTfa({query:"tfa=false"})
 		}
 
-	if (user.tfa === false) {
+	if (props.user.tfa == false) {
 		return (
 			<Stack>
     			< Button
