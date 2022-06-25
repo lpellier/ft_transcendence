@@ -25,7 +25,6 @@ export class Player {
 
 		this.real_id = +user[0];
 		this.real_name = user[1];
-		console.log(this.real_id, this.real_name)
 	}
 
 	reset(players_len : number) {

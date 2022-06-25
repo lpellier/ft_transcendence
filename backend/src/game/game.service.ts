@@ -21,7 +21,7 @@ export class GameService {
 
     async incrementVictories(user_id : number) {
         const victories = await this.prisma.stats.update({
-            where: {id: user_id},
+            where: {userId: user_id},
             data: {
                 victories: {increment: 1}
             }
@@ -30,7 +30,7 @@ export class GameService {
 
     async incrementLosses(user_id : number) {
         const losses = await this.prisma.stats.update({
-            where: {id: user_id},
+            where: {userId: user_id},
             data: {
                 losses: {increment: 1}
             }
