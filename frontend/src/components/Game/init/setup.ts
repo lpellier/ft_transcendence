@@ -4,10 +4,6 @@
 
 // ? add a break
 
-// ? reupdate pos bumperswhen window resiwed
-
-// TODO find a way to send data to database and fill every appropriate field when situation calls for it
-
 // TODO cute animation showing the roll of pong value in casino
 // TODO comment EVERYTHING
 
