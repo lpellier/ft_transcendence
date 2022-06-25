@@ -30,7 +30,7 @@ export class ChatGateway {
 	@SubscribeMessage('add user to room')
 	async handleAddUserToRoom(@MessageBody() addUserDto: UserRoomDto) {
 		await this.chatService.addUserToRoom(addUserDto.userId, addUserDto.roomId);
-		console.log('add user to room called', addUserDto)
+		// console.log('add user to room called', addUserDto)
 		this.server.emit('add user to room');
 	}
 
@@ -121,6 +121,6 @@ export class ChatGateway {
 		await this.chatService.addUserToRoom(newUserDto.userId, 1);
 		const allUsers =  await this.chatService.getAllUsers();
 		this.server.emit('new user', allUsers);
-		console.log('new user called', newUserDto)
+		// console.log('new user called', newUserDto)
 	}
 }

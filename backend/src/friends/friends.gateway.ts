@@ -40,7 +40,6 @@ export class FriendsGateway
   async findAll(@ConnectedSocket() client:Socket , @MessageBody() userId: number) {
     const friendsIds: number[] = await this.friendsService.findAllIds(userId);
     const friends = await this.friendsService.findAll(friendsIds);
-    console.log('friends = ', friends);
     client.emit('found friends', friends);
   }
 
