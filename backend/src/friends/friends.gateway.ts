@@ -23,7 +23,7 @@ import { Socket } from "socket.io";
 export class FriendsGateway
   implements OnGatewayConnection, OnGatewayDisconnect
 {
-  constructor(private readonly friendsService: FriendsService) {}
+  constructor(private readonly friendsService: FrdiendsService) {}
 
   @SubscribeMessage('add friend')
   add(@ConnectedSocket() client:Socket, @MessageBody() friendUserDto: FriendUserDto) {
