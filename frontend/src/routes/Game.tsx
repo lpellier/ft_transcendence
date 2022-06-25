@@ -6,6 +6,7 @@ import "./../styles/Game/buttons.css"
 import "./../styles/Game/icons.css"
 import "./../styles/Game/inputs.css"
 import "socket.io-client"
+import { User } from "interfaces";
 
 function addScript(url : string) : any {
     let scripts = document.getElementsByTagName("script");
@@ -94,8 +95,15 @@ function GameComponent() {
 	);
 }
 
-export default function Game() {	
+export default function Game( props: {user: User}) {	
 	useEffect(() => {
+		let user = document.createElement("div");
+		user.setAttribute("user_name", props.user.username);
+		user.setAttribute("user_id", props.user.id.toString());
+		user.id = "user";
+		
+		document.head.append(user);
+
 		addScript("https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.0/socket.io.js");
 		addScript("/sketch/classes/Buttons.js");
 		addScript("/sketch/classes/Vector.js");

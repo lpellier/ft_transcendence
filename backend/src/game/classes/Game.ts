@@ -65,14 +65,14 @@ export class Game {
 		this.spectators.push(id);
 	}
 
-	addPlayer(id: any) {
+	addPlayer(id: any, user : [string, string]) {
 		for (let player of this.players)
 			if (player.id === id)
 				return ;
 		if (this.players.length === 0)
-			this.players.push(new Player("white", 1, id));
+			this.players.push(new Player("white", 1, id, user));
 		else if (this.players.length === 1)
-			this.players.push(new Player("white", 2, id));
+			this.players.push(new Player("white", 2, id, user));
 	}
 
 	setNewValue() {

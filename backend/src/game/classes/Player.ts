@@ -10,7 +10,10 @@ export class Player {
 	id : any;
 	ready : boolean;
 
-	constructor(color: any, index : number, id : any) {
+	real_id : number;
+	real_name : string;
+
+	constructor(color: any, index : number, id : any, user : [string, string]) {
 		this.pos = [(index === 1 ? consts.MAP_WIDTH / 12 : consts.MAP_WIDTH * 11 / 12), consts.MAP_HEIGHT / 2 - consts.PLAYER_HEIGHT / 2];
 		this.velocity = [0, consts.PLAYER_SPEED];
 		this.width = consts.PLAYER_WIDTH;
@@ -19,6 +22,10 @@ export class Player {
 		this.index = index;
 		this.id = id;
 		this.ready = false;
+
+		this.real_id = +user[0];
+		this.real_name = user[1];
+		console.log(this.real_id, this.real_name)
 	}
 
 	reset(players_len : number) {

@@ -95,7 +95,7 @@ export default function App() {
                     :
                         <div>
                             {component === "Game"?
-                                <Game/>
+                                <Game user={user}/>
                             :
                                 <div>
                                     {component === "Chat"?

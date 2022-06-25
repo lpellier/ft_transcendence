@@ -7,6 +7,8 @@
 
 // ? add a break
 
+// ? reupdate pos bumperswhen window resiwed
+
 // TODO find a way to send data to database and fill every appropriate field when situation calls for it
 
 // TODO cute animation showing the roll of pong value in casino
@@ -29,6 +31,9 @@ let keys : Keys = null;
 
 let canvas : any = null;
 let socket : any = null;
+
+let user_name : string;
+let user_id : string;
 
 function preload() {
 	consts = new Consts();
@@ -57,7 +62,9 @@ function setup() {
 	errors = new Errors();
 	buttons = new Buttons();
 	
-	
+	user_name = document.getElementById("user").getAttribute("user_name");
+	user_id = document.getElementById("user").getAttribute("user_id");
+
 	canvas = createCanvas(consts.WIDTH, consts.HEIGHT);
 	canvas.parent(document.getElementById("canvas-parent"));
 	background(0);
@@ -68,7 +75,7 @@ function setup() {
 	socket = io("http://127.0.0.1:3001");
 	
 	socket.on("connect", () => {
-		socket.emit("my_id", socket.id);
+		socket.emit("my_id", socket.id, user_id, user_name);
 	});
 
 	listenStartEvents();
@@ -165,6 +172,5 @@ function draw() {
 		buttons.return.show();
 		image(consts.RETURN_ICON, consts.WIDTH * 0.90, consts.HEIGHT * 0.01, consts.medium_square_diameter, consts.medium_square_diameter);
 		outputAnnouncement((game.score[0] > game.score[1] ? "Player 1 " : "Player 2 ") + "won the game!", consts.std_font_size, width / 2, height / 2, "white")
-	}
-	
+	}	
 }

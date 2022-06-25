@@ -34,9 +34,6 @@ class Pong {
 		this.speed = consts.PONG_BASE_SPEED;
 		let random_y = Math.random() < 0.5 ? -1 : 1;
 
-		// ? Comment allows for testing horizontal collisions
-		// this.pos = random_y === 1 ? [consts.WIDTH / 12 + consts.PLAYER_WIDTH / 2, 50] : [consts.WIDTH / 12 + consts.PLAYER_WIDTH / 2, 50];
-		// this.velocity = random_y === 1 ? [0, -this.speed] : [0, this.speed];
 		if (loser_side === "left")
 			this.velocity = [-this.speed, random_y];
 		else if (loser_side === "right")
