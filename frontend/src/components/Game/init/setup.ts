@@ -2,9 +2,6 @@
 // ? Coding consistency : snake_case for variables | camelCase for functions | PascalCase for classes
 // ? Map indexes : 1 (normal map), 2 (city map), 3 (casino map)
 
-// ? casino enhancement : more chances to get lower valued pongs
-// ? add a -1 pong to remove a point from opponent
-
 // ? add a break
 
 // ? reupdate pos bumperswhen window resiwed
@@ -53,8 +50,8 @@ function setup() {
 	}
 	let diameter = consts.DIAGONAL * 0.10;
 
-	bumpers.push(new Bumper(animation, consts.WIDTH / 2 - diameter / 2, consts.HEIGHT * 1 / 4 - diameter / 2, diameter));
-	bumpers.push(new Bumper(animation, consts.WIDTH / 2 - diameter / 2, consts.HEIGHT * 3 / 4 - diameter / 2, diameter));
+	bumpers.push(new Bumper(animation, consts.WIDTH / 2 - diameter / 2, consts.HEIGHT * 1 / 4 - diameter / 2, diameter, 1));
+	bumpers.push(new Bumper(animation, consts.WIDTH / 2 - diameter / 2, consts.HEIGHT * 3 / 4 - diameter / 2, diameter, 2));
 
 	keys.init();
 	game = new Game();

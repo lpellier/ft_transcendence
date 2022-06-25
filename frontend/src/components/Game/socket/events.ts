@@ -152,6 +152,10 @@ function resizeEverything() {
 	buttons.resize();
 	keys.resize();
 	inputs.resize();
+0
+	for (let bumper of bumpers) {
+		bumper.resize();
+	}
 }
 
 function windowResized() {

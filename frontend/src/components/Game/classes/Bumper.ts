@@ -8,11 +8,13 @@ class Bumper {
 	index : number;
 	diameter : number;
 
+	index_bumper : number;
+
 	hit : boolean;
 	collision : Vector;
 	bounce_vec : Vector;
 
-	constructor(animation : any, x : number, y : number, diameter : number) {
+	constructor(animation : any, x : number, y : number, diameter : number, index : number) {
 		this.pos = new Vector([x, y]);
 		this.center = new Vector([x + diameter / 2, y + diameter / 2])
 		this.collision = new Vector([0, 0]);
@@ -22,6 +24,19 @@ class Bumper {
 		this.index = 0;
 		this.hit = false;
 		this.diameter = diameter;
+		this.index_bumper = index;
+	}
+
+	resize() {
+		let diameter = consts.DIAGONAL * 0.10;
+
+		this.diameter = diameter;
+
+		this.pos.x = consts.WIDTH / 2 - diameter / 2;
+		if (this.index_bumper === 1)
+			this.pos.y = consts.HEIGHT * 1 / 4 - diameter / 2;	
+		else if (this.index_bumper === 2)
+			this.pos.y = consts.HEIGHT * 3 / 4 - diameter / 2;	
 	}
   
 	show(ratio : number) {
