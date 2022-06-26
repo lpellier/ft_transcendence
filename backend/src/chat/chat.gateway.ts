@@ -134,7 +134,7 @@ export class ChatGateway {
 	async handleNewUser(@ConnectedSocket () client : Socket,@MessageBody() newUserDto: UserRoomDto) {
 		await this.chatService.addUserToRoom(newUserDto.userId, 1);
 		const allUsers =  await this.chatService.getAllUsers();
-		this.server.emit('new user', allUsers);
+		this.server.emit('new user', allUsers, newUserDto.userId);
 		// console.log('new user called', newUserDto)
 	}
 
