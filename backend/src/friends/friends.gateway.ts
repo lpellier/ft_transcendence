@@ -28,7 +28,7 @@ export class FriendsGateway
   @SubscribeMessage('add friend')
   add(@ConnectedSocket() client:Socket, @MessageBody() friendUserDto: FriendUserDto) {
     this.friendsService.add(friendUserDto.userId, friendUserDto.friendId);
-    client.emit('add friends');
+    client.emit('add friend');
   }
 
   @SubscribeMessage('removeFriend')
