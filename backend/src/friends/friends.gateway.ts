@@ -28,7 +28,7 @@ export class FriendsGateway
   @SubscribeMessage('add friend')
   add(@ConnectedSocket() client:Socket, @MessageBody() friendUserDto: FriendUserDto) {
     this.friendsService.add(friendUserDto.userId, friendUserDto.friendId);
-    client.emit('friend added');
+    client.emit('add friends');
   }
 
   @SubscribeMessage('removeFriend')
@@ -36,11 +36,11 @@ export class FriendsGateway
     return this.friendsService.remove(friendUserDto.userId, friendUserDto.friendId);
   }
 
-  @SubscribeMessage('find all friends')
+  @SubscribeMessage('get friends')
   async findAll(@ConnectedSocket() client:Socket , @MessageBody() userId: number) {
     const friendsIds: number[] = await this.friendsService.findAllIds(userId);
     const friends = await this.friendsService.findAll(friendsIds);
-    client.emit('found friends', friends);
+    client.emit('get friends', friends);
   }
 
   handleConnection(client) {

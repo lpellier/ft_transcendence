@@ -9,6 +9,7 @@ import '../../styles/Chat/Chat.css';
 
 import {User, Room} from 'interfaces';
 import {socket} from 'index';
+import { Container } from '@mui/system';
 
 
 
@@ -71,6 +72,8 @@ function Chat(props: {user: User, users: User[]}) {
 			socket.emit('get rooms', props.user.id);
 			socket.emit('get public rooms', props.user.id);
 			socket.emit('get all messages', props.user.id);
+			socket.emit('get dm rooms', props.user.id);
+			socket.emit('get all dms');
 			// socket.emit('new user', {userId: props.user.id, roomId: 1});
 		}
 		if (!socket.connected)
@@ -82,12 +85,15 @@ function Chat(props: {user: User, users: User[]}) {
 			socket.on('connect', init)
 	}, [props.user])
 	
+
 	return (
-		<Box sx={ChatBoxStyle}>
+		<Box sx={ChatBoxStyle} style={{ alignItems: 'center' }}>
 			{status}
 			{props.user?
 				<Stack direction='row' spacing='2' className='chmsg'>
-					<Channels user={props.user} users={props.users} currentRoom={currentRoom} setCurrentRoom = {setCurrentRoom} setCanWrite = {setCanWrite} roomAdmins={roomAdmins}/>
+					<Box>
+						<Channels user={props.user} users={props.users} currentRoom={currentRoom} setCurrentRoom = {setCurrentRoom} setCanWrite = {setCanWrite} roomAdmins={roomAdmins}/>
+					</Box>
 					<Messages user={props.user} users={props.users} currentRoom={currentRoom} canWrite = {canWrite} />
 				</Stack>
 				:

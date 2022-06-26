@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from 'react';
 import Drawer from '@mui/material/Drawer';
 import Button from '@mui/material/Button';
@@ -48,9 +47,9 @@ export default function FriendBar(props: {user: User, users: User[]}) {
 
     useEffect(() => {
         const handler = () => {socket.emit('find all friends', props.user?.id)}
-        socket.on('friend added', handler);
+        socket.on('add friend', handler);
         return () => {
-            socket.off('friend added', handler);
+            socket.off('add friend', handler);
         }
     })
 
@@ -64,9 +63,9 @@ export default function FriendBar(props: {user: User, users: User[]}) {
 
     useEffect(() => {
         const handler = (data: User[]) => {setFriends(data);};
-        socket.on('found friends', handler);
+        socket.on('get friends', handler);
         return () => {
-            socket.off('found friends', handler);
+            socket.off('get friends', handler);
         }
     })
 
@@ -107,7 +106,7 @@ export default function FriendBar(props: {user: User, users: User[]}) {
                     open={open}
                     onClose={closeFriendBar}
                 >
-                <Button onClick={addFriendClick}>
+                <Button onClick={addFriendClick} variant="contained">
                     Add Friend
                 </Button>
                 {addFriendClicked?
@@ -127,7 +126,7 @@ export default function FriendBar(props: {user: User, users: User[]}) {
                 <List>
                     {friends.map(item => (
                         <div key={item.id}>
-                            <ListItem button onClick={() => setOpen(false)}>
+                            <ListItem >
                                 <ListItemText primary={item.username}/>
                             </ListItem>
                         </div>

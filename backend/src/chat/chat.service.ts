@@ -4,6 +4,8 @@ import { Injectable } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
 import { CreateRoomDto } from './dto/create-room.dto';
 import { CreateMessageDto } from './dto/create-message.dto'
+import { IsNotEmpty} from 'class-validator';
+
 
 @Injectable()
 export class ChatService {
@@ -78,7 +80,6 @@ export class ChatService {
         content: data.content,
         userId: data.user,
         roomId: data.room,
-        type: true
       }
     });
     return message;
@@ -142,5 +143,15 @@ export class ChatService {
       include: {messages: true}
     })
     return room.messages;
+  }
+
+  async updatePassword(roomId: number, password: string) {
+    const updatedRoom = await this.prisma.room.update({
+        where: {id: roomId},
+        data: {
+          password: password,
+        }
+    })
+    return updatedRoom.id;
   }
 }
