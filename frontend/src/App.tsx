@@ -99,7 +99,7 @@ export default function App() {
                             :
                                 <div>
                                     {component === "Chat"?
-                                        <Chat user={user} users={users}/>
+                                        <Chat user={user} users={users} setComponent={setComponent}/>
                                     :
                                         <div>
                                             {component === "Settings"?
