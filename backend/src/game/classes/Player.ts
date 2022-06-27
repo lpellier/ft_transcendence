@@ -74,19 +74,19 @@ export class Player {
 		}
 	}
 
-	leftUp() : [number, number] {
-		return [this.pos[0], this.pos[1]];
+	leftUp(side : boolean) : [number, number] {
+		return [this.pos[0] - consts.PONG_DIAMETER / 2, this.pos[1] - consts.PONG_DIAMETER / 2];
 	}
 
-	leftDown() : [number, number] {
-		return [this.pos[0], this.pos[1] + this.height]
+	leftDown(side : boolean) : [number, number] {
+		return [this.pos[0] - consts.PONG_DIAMETER / 2, this.pos[1] + this.height + consts.PONG_DIAMETER / 2]
 	}
 
-	rightUp() : [number, number] {
-		return [this.pos[0] + this.width, this.pos[1]];
+	rightUp(side : boolean) : [number, number] {
+		return [this.pos[0] + this.width + consts.PONG_DIAMETER / 2, this.pos[1] - consts.PONG_DIAMETER / 2];
 	}
 
-	rightDown() : [number, number] {
-		return [this.pos[0] + this.width, this.pos[1] + this.height];
+	rightDown(side : boolean) : [number, number] {
+		return [this.pos[0] + this.width + consts.PONG_DIAMETER / 2, this.pos[1] + this.height + consts.PONG_DIAMETER / 2];
 	}
 };

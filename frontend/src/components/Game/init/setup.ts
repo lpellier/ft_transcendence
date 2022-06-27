@@ -2,7 +2,7 @@
 // ? Coding consistency : snake_case for variables | camelCase for functions | PascalCase for classes
 // ? Map indexes : 1 (normal map), 2 (city map), 3 (casino map)
 
-// ? add a break
+// ? output both player names at start of match and winner name at the end
 
 // TODO cute animation showing the roll of pong value in casino
 // TODO comment EVERYTHING
@@ -96,7 +96,7 @@ function draw() {
 	}
 	else if (should_load)
 		inMainMenu();
-	if (game.state === "waiting-player" || game.state === "waiting-readiness" || game.state === "countdown" || game.state === "in-game")
+	if (game.state === "waiting-player" || game.state === "waiting-readiness" || game.state === "countdown" || game.state === "relaunch-countdown" || game.state === "in-game")
 		game.map.render(1);
 	if (game.state === "in-menu-input" || game.state === "waiting-player" || game.state === "in-menu-create")
 		image(consts.RETURN_ICON, consts.WIDTH * 0.90, consts.HEIGHT * 0.01, consts.medium_square_diameter, consts.medium_square_diameter);
@@ -136,12 +136,21 @@ function draw() {
 		if (game.spectator)
 			drawSpectate();
 		outputCountdown();
+		drawBallIntent();
 		if (!game.local && !game.spectator)
 			drawHelp();
 		if (!game.spectator)
 			drawInput();
 		for (let i : number = 0; i < game.players.length; i++)
 			game.players[i].render();
+	}
+	else if (game.state === "relaunch-countdown") {
+		outputCountdown();
+		movePlayers();
+		for (let player of game.players)
+			player.render();
+		game.pong.render();
+		drawBallIntent();
 	}
 	else if (game.state === "in-game") {
 		if (game.spectator)
@@ -151,12 +160,9 @@ function draw() {
 			for (let i : number = 0; i < game.players.length; i++)
 				game.players[i].render();
 			game.pong.render();
-			if (game.map.name === "city") {
-				for (let bumper of bumpers) {
+			if (game.map.name === "city")
+				for (let bumper of bumpers)
 					bumper.render();
-					bumper.checkCollision(game.pong);
-				}
-			}
 		}
 		if (game.frames_since_point < 180 && game.map.name === "casino")
 			outputAnnouncement(game.pong.value + (game.pong.value === 1 || game.pong.value === -1 ? " point" : " points"), consts.std_font_size, consts.WIDTH * 0.5, consts.HEIGHT * 0.95, game.pong.color);

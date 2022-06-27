@@ -27,18 +27,6 @@ function relativeIntersection(intersection_point : [number, number, string], p1 
 	else
 		return middle[0] / ((p2[0] - p1[0]) / 2) * ((5 * Math.PI) / 12);
 }
-	
-function debugCollisions(player : Player) {
-	push();
-	fill("red");
-	stroke("red");
-	strokeWeight(5);
-	line(game.pong.center()[0], game.pong.center()[1], game.pong.cX() + game.pong.velocity[0] * 3, game.pong.cY() + game.pong.velocity[1] * 3);
-	line(player.leftDown()[0], player.leftDown()[1], player.rightDown()[0], player.rightDown()[1]);
-	line(player.leftUp()[0], player.leftUp()[1], player.rightUp()[0], player.rightUp()[1]);
-	line(player.rightUp()[0], player.rightUp()[1], player.rightDown()[0], player.rightDown()[1]);
-	pop();
-}
 
 // ? MAP BOUNDS :
 // ? top bound : 10
@@ -77,6 +65,15 @@ function checkCollisions() {
 			game.score[1]--;
 		else
 			game.score[0] += game.pong.value;
+		game.state = "relaunch-countdown";
+		game.timer = 2;
+		for (let i = 0; i < 3; i++) {
+			setTimeout(() => {
+				game.timer--;
+				if (game.timer === -1 && game.state === "relaunch-countdown")
+					game.state = "in-game";
+			}, i * 1000);
+		}
 		game.pong.relaunchPong("right");
 		if (game.score[0] >= game.score_limit)
 			game.state = "game-over";
@@ -88,13 +85,26 @@ function checkCollisions() {
 			game.score[0]--;
 		else
 			game.score[1] += game.pong.value;
-		game.pong.relaunchPong("left");
+			game.state = "relaunch-countdown";
+			game.timer = 2;
+			for (let i = 0; i < 3; i++) {
+				setTimeout(() => {
+					game.timer--;
+					if (game.timer === -1 && game.state === "relaunch-countdown")
+						game.state = "in-game";
+				}, i * 1000);
+			}
+			game.pong.relaunchPong("left");
 		if (game.score[1] >= game.score_limit)
 			game.state = "game-over";
 		game.frames_since_point = 0;
 		return ;
 	}
 	
+	if (game.map.name === "city")
+		for (let bumper of bumpers)
+			bumper.checkCollision(game.pong);
+
 	let player = (game.pong.pos[0] < consts.WIDTH / 2 ? game.players[0] : game.players[1]);
 
 	// debugCollisions(player);
@@ -127,10 +137,10 @@ function checkCollisions() {
 
 function collisionPaddle(player : Player, intersection_point : [number, number, string][]) : number {
 	let paddle_side_hit :	[[number, number], [number, number]] = player.index === 1 ? 
-							[player.rightUp(), player.rightDown()] : [player.leftUp(), player.leftDown()];
-	let paddle_bot_hit : [[number, number], [number, number]] = [player.leftDown(), player.rightDown()];
-	let paddle_top_hit : [[number, number], [number, number]] = [player.leftUp(), player.rightUp()];
-	
+							[player.rightUp(true), player.rightDown(true)] : [player.leftUp(true), player.leftDown(true)];
+	let paddle_bot_hit : [[number, number], [number, number]] = [player.leftDown(false), player.rightDown(false)];
+	let paddle_top_hit : [[number, number], [number, number]] = [player.leftUp(false), player.rightUp(false)];
+
 	intersection_point[0] = getLineIntersection(game.pong.center(), game.pong.centerNextFrame(), paddle_side_hit[0], paddle_side_hit[1]);
 	intersection_point[0][2] = "side";
 	if (intersection_point[0][0] != -1)

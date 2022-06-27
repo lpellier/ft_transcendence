@@ -60,11 +60,16 @@ function listenStartEvents() {
 	});
 	
 	socket.on("countdown-server", () => {
-		if (game.state === "countdown") {
+		if (game.state === "countdown" || game.state === "relaunch-countdown") {
 			game.timer--;
 			if (game.timer === -1)
 				game.state = "in-game";
 		}
+	});
+
+	socket.on("relaunch", () => {
+		game.state = "relaunch-countdown";
+		game.timer = 1;
 	});
 }
 
@@ -113,31 +118,31 @@ function listenMoveEvents() {
 		score : [number, number],
 		pong_value : number
 	) => {
-		if (game.state != "in-game")
-			return ;
-		game.score = score;
-		game.pong.pos[0] = pong_pos[0] * consts.WIDTH / 1200;
-		game.pong.pos[1] = pong_pos[1] * consts.HEIGHT / 750;
-		if (p1_state[0] === socket.id) {
-			game.players[0].pos[0] = p1_state[1][0] * consts.WIDTH / 1200;
-			game.players[0].pos[1] = p1_state[1][1] * consts.HEIGHT / 750;
-			game.players[1].pos[0] = p2_state[1][0] * consts.WIDTH / 1200;
-			game.players[1].pos[1] = p2_state[1][1] * consts.HEIGHT / 750;
-		}
-		else if (p2_state[0] === socket.id) {
-			game.players[0].pos[0] = p2_state[1][0] * consts.WIDTH / 1200;
-			game.players[0].pos[1] = p2_state[1][1] * consts.HEIGHT / 750;
-			game.players[1].pos[0] = p1_state[1][0] * consts.WIDTH / 1200;
-			game.players[1].pos[1] = p1_state[1][1] * consts.HEIGHT / 750;
-		}
-		else { // spectate
-			game.players[0].pos[0] = p1_state[1][0] * consts.WIDTH / 1200;
-			game.players[0].pos[1] = p1_state[1][1] * consts.HEIGHT / 750;
-			game.players[1].pos[0] = p2_state[1][0] * consts.WIDTH / 1200;
-			game.players[1].pos[1] = p2_state[1][1] * consts.HEIGHT / 750;
-		}
-		game.pong.value = pong_value;
-	});
+			if (game.state === "in-game" || game.state === "relaunch-countdown") {
+				game.score = score;
+				game.pong.pos[0] = pong_pos[0] * consts.WIDTH / 1200;
+				game.pong.pos[1] = pong_pos[1] * consts.HEIGHT / 750;
+				if (p1_state[0] === socket.id) {
+					game.players[0].pos[0] = p1_state[1][0] * consts.WIDTH / 1200;
+					game.players[0].pos[1] = p1_state[1][1] * consts.HEIGHT / 750;
+					game.players[1].pos[0] = p2_state[1][0] * consts.WIDTH / 1200;
+					game.players[1].pos[1] = p2_state[1][1] * consts.HEIGHT / 750;
+				}
+				else if (p2_state[0] === socket.id) {
+					game.players[0].pos[0] = p2_state[1][0] * consts.WIDTH / 1200;
+					game.players[0].pos[1] = p2_state[1][1] * consts.HEIGHT / 750;
+					game.players[1].pos[0] = p1_state[1][0] * consts.WIDTH / 1200;
+					game.players[1].pos[1] = p1_state[1][1] * consts.HEIGHT / 750;
+				}
+				else { // spectate
+					game.players[0].pos[0] = p1_state[1][0] * consts.WIDTH / 1200;
+					game.players[0].pos[1] = p1_state[1][1] * consts.HEIGHT / 750;
+					game.players[1].pos[0] = p2_state[1][0] * consts.WIDTH / 1200;
+					game.players[1].pos[1] = p2_state[1][1] * consts.HEIGHT / 750;
+				}
+				game.pong.value = pong_value;	
+			}
+		});
 }
 
 function resizeEverything() {

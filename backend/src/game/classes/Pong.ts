@@ -8,19 +8,17 @@ export class Pong {
 	velocity : [number, number];
 	diameter : number;
 	speed : number;
-	color : any;
 	value : number;
 	constructor() {
 		this.pos = [consts.MAP_WIDTH / 2 - consts.PONG_DIAMETER / 2, consts.MAP_HEIGHT / 2 - consts.PONG_DIAMETER / 2];
 		this.diameter = consts.PONG_DIAMETER;
-		this.color = consts.PONG_COLOR;
 		this.value = 1;
 
 		let side = Math.random() < 0.5 ? "left" : "right";
 		this.relaunchPong(side);
 	}
 
-	calculateNewPos(game : Game, server : Server) : boolean {
+	calculateNewPos(game : Game, server : Server) : string {
 		this.pos[0] += this.velocity[0];
 		this.pos[1] += this.velocity[1];
 		return game.checkCollisions(server);

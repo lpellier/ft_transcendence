@@ -33,9 +33,10 @@ function movePlayers() {
 			// ? chaser ai code
 			let player_pos = game.players[1].pos[1] + game.players[0].height / 2;
 			let pos_diff = player_pos - game.pong.cY();
-			if (pos_diff > 10)
+
+			if (pos_diff > consts.HEIGHT / 150)
 				game.players[1].moveUp();
-			else if (pos_diff < -10)
+			else if (pos_diff < -consts.HEIGHT / 150)
 				game.players[1].moveDown();
 			else
 				game.players[1].velocity[1] = 0;
@@ -54,7 +55,8 @@ function movePlayers() {
 			return ;
 		}
 
-		game.pong.calculateNewPos();
+		if (game.state != "relaunch-countdown" && game.local)
+			game.pong.calculateNewPos();
 	}
 }
 

@@ -126,5 +126,6 @@ class Pong {
 		fill(this.color);
 		rect(this.pos[0], this.pos[1], this.diameter, this.diameter);
 		pop();
+
 	}
 }
