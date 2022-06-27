@@ -24,6 +24,7 @@ import RoomUserPopper from './RoomUserMod'
 import FormControl from '@mui/material/FormControl'
 import Button from '@mui/material/Button'
 
+import DirectMessaging from './DirectMessaging';
 
 
 interface CreateRoomDto {
@@ -95,7 +96,7 @@ function RoomList(props: {rooms: Room[], currentRoom: Room, setCurrentRoom: Reac
 		<List>
 				{props.rooms.map(item => (
 					<div key={item.id}>
-						{item.visibility === props.visibility ?
+						{item.visibility === props.visibility  && item.ownerId !== 0?
 							<div>
 								{ item.id !== props.currentRoom.id ?
 								<ListItem className="MenuItem" button onClick={() => handleRoomClick(item)}>
@@ -127,6 +128,8 @@ function Channels(props : {user: User, users: User[], currentRoom: Room, setCurr
 	let [rooms, setRooms] = useState<Room[]>([]);
 	let [publicRooms, setPublicRooms] = useState<Room[]>([]);
 	let [showPassword, setShowPassword] = useState<number>(0);
+	let [tab, setTab] = useState<string>('channels');
+
 	
 	async function handleRoomSubmit(e:any) {
 		function addtoDb(password:string, room_name:string, visibility:string) {
@@ -198,6 +201,16 @@ function Channels(props : {user: User, users: User[], currentRoom: Room, setCurr
 	})
 
 	useEffect(() => {
+		const handler = () => {
+			socket.emit('get rooms', props.user.id)
+		};
+		socket.on('create dm room', handler);
+		return ( () => {
+			socket.off('create dm room', handler);
+		})
+	})
+
+	useEffect(() => {
 		const handler = (rooms_list: Room[]) => {
 			setRooms(rooms_list);
 			rooms_list.forEach(room => {
@@ -226,13 +239,15 @@ function Channels(props : {user: User, users: User[], currentRoom: Room, setCurr
 			setShowPassword(1);
 	}
 
-	return ( 
-		<Stack className='channels' justifyContent='space-between'>
-				<div>
-					<RoomList rooms = {publicRooms} currentRoom = {props.currentRoom} setCurrentRoom = {props.setCurrentRoom} users = {props.users} user = {props.user} visibility = "public" roomAdmins={props.roomAdmins} />
-					<RoomList rooms = {rooms} currentRoom = {props.currentRoom} setCurrentRoom = {props.setCurrentRoom} users = {props.users} user = {props.user} visibility="private" roomAdmins={props.roomAdmins} />
-				</div>
-			<div>
+	return (
+		<div>
+		<Stack className='channels' >
+			<Stack direction='row'>
+				<Button variant="contained" onClick={() => setTab('channels')}>Channels</Button>
+				<Button variant="contained" onClick={() => setTab('dms')}>DMs</Button>
+			</Stack>
+			{tab === 'channels'?
+			<Stack justifyContent='space-between'>
 				<Box>
 					{addRoomClicked ?
 							<Stack>
@@ -273,11 +288,19 @@ function Channels(props : {user: User, users: User[], currentRoom: Room, setCurr
 								</Button>
 							</Stack>
 						:
-						<button onClick={() => setAddRoomClicked(1)}>Create Room</button>
+						<Button onClick={() => setAddRoomClicked(1)} variant='contained' sx={{ width: '100%' }}>Create Room</Button>
 					}
 				</Box>
-			</div>
+				<div>
+					<RoomList rooms = {publicRooms} currentRoom = {props.currentRoom} setCurrentRoom = {props.setCurrentRoom} users = {props.users} user = {props.user} visibility = "public" roomAdmins={props.roomAdmins} />
+					<RoomList rooms = {rooms} currentRoom = {props.currentRoom} setCurrentRoom = {props.setCurrentRoom} users = {props.users} user = {props.user} visibility="private" roomAdmins={props.roomAdmins} />
+				</div>
+			</Stack>
+			:
+			<DirectMessaging user={props.user} users={props.users} rooms={rooms} currentRoom={props.currentRoom} setCurrentRoom={props.setCurrentRoom}/>
+			}
 		</Stack>
+		</div>
 	);
 }
 

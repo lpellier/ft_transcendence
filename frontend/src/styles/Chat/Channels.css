@@ -72,6 +72,5 @@
   
   /* Increase the specificity */
   .MenuItem.Mui-selected {
-	background-color: white;
 	color: white;
   }

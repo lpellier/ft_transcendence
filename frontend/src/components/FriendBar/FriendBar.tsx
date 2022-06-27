@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from 'react';
 import Drawer from '@mui/material/Drawer';
 import Button from '@mui/material/Button';
@@ -7,6 +6,9 @@ import { TextField } from '@mui/material';
 import { User } from 'interfaces';
 import { socket } from 'index';
 import { toastThatError, toastIt } from 'App';
+
+import '../../styles/Chat/Channels.css';
+
 
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -20,14 +22,27 @@ interface FriendUserDto {
     friendId: number;
 }
 
-function UserList(props: {users: User[], friends: User[]}) {
+function UserList(props: {currentUser: User, users: User[], friends: User[]}) {
+    console.log('users = ', props.users);
     return (
-        <List>
-        {props.users.map(item => {
-            <ListItem>
-                <ListItemText primary={item.username}/>
-            </ListItem>
-        })}
+        <List className='user-list'>
+        {props.users.map(item => (
+            <div key={item.id}>
+                {props.friends.find(friend => friend.id === item.id)?
+                    <div/>
+                :
+                    <div>
+                        {props.currentUser.id !== item.id?
+                            <ListItem>
+                                <ListItemText primary={item.username}/>
+                            </ListItem>
+                        :
+                        <div/>
+                        }
+                    </div>
+                }
+            </div>
+        ))}
         </List>
     )
 }
@@ -37,20 +52,34 @@ export default function FriendBar(props: {user: User, users: User[]}) {
     let [open, setOpen] = useState<boolean>(false);
     let [addFriendClicked, setAddFriendClicked] = useState<boolean>(false);
     let [friends, setFriends] = useState<User[]>([]);
+    let [statusMap, setStatusMap] = useState<Map<number, string> >(new Map<number, string>());
 
     function toggleFriendBar() {
         setOpen(true);
     }
 
     useEffect(() => {
-        socket.emit('find all friends', props.user.id);
+        socket.on('new connection', (userId: number) => {
+            console.log('new connection -> ', userId);
+            setStatusMap(statusMap.set(userId, 'online'));
+        })
     }, [])
 
     useEffect(() => {
-        const handler = () => {socket.emit('find all friends', props.user?.id)}
-        socket.on('friend added', handler);
+        socket.on('new disconnection', (userId: number) => {
+            setStatusMap(statusMap.set(userId, 'offline'));
+        })
+    }, [])
+
+    useEffect(() => {
+        socket.emit('get friends', props.user.id);
+    }, [])
+
+    useEffect(() => {
+        const handler = () => {socket.emit('get friends', props.user?.id)}
+        socket.on('add friend', handler);
         return () => {
-            socket.off('friend added', handler);
+            socket.off('add friend', handler);
         }
     })
 
@@ -64,9 +93,9 @@ export default function FriendBar(props: {user: User, users: User[]}) {
 
     useEffect(() => {
         const handler = (data: User[]) => {setFriends(data);};
-        socket.on('found friends', handler);
+        socket.on('get friends', handler);
         return () => {
-            socket.off('found friends', handler);
+            socket.off('get friends', handler);
         }
     })
 
@@ -107,13 +136,13 @@ export default function FriendBar(props: {user: User, users: User[]}) {
                     open={open}
                     onClose={closeFriendBar}
                 >
-                <Button onClick={addFriendClick}>
+                <Button onClick={addFriendClick} variant="contained">
                     Add Friend
                 </Button>
                 {addFriendClicked?
                     <Stack component="form" onSubmit={addFriendSubmit} spacing={1}>
                         <TextField id="roomName" label="friend name" variant="standard" />
-                        <UserList users={props.users} friends={friends}/>
+                        <UserList currentUser={props.user} users={props.users} friends={friends}/>
                         <Button variant="contained" color="success" type="submit">
                             Add
                         </Button>
@@ -127,8 +156,8 @@ export default function FriendBar(props: {user: User, users: User[]}) {
                 <List>
                     {friends.map(item => (
                         <div key={item.id}>
-                            <ListItem button onClick={() => setOpen(false)}>
-                                <ListItemText primary={item.username}/>
+                            <ListItem >
+                                <ListItemText primary={item.username} secondary={statusMap.get(item.id)? statusMap.get(item.id) : 'offline'}/>
                             </ListItem>
                         </div>
                     ))

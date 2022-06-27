@@ -50,6 +50,8 @@ function Messages(props : {user: User, users: User[], currentRoom: Room, canWrit
 		})
 	}, [])
 
+	console.log('currentRoom = ', props.currentRoom);
+	console.log('messages = ', messages);
     return (
 	<Container >
         <Stack className='chat' spacing={2} justifyContent='space-between'>
@@ -57,31 +59,20 @@ function Messages(props : {user: User, users: User[], currentRoom: Room, canWrit
 				{messages.map(item=> (
 					<div key={item.id}>
 						{item.roomId === props.currentRoom.id ?
-							<div>
-								{item.type ?
-									<div className='flexwrapper' >
-										{item.userId === props.user.id ?
-										<div className='message current flex'>
-											<li className=''>{item.content}</li> 
-											<div className='user'><img className='avatar' src={"http://127.0.0.1:3001/avatars/"+item.userId.toString()+".png"} alt="avatar"/>{props.users.find(user => user.id === item.userId)?.username}</div>
-											
-										</div>
-										:
-										<div className='message other flex'>
-											<li className=''>{item.content}</li>
-											<div className='user' ><img className='avatar' src={"http://127.0.0.1:3001/avatars/"+item.userId.toString()+".png"} alt="avatar"/>{props.users.find(user => user.id === item.userId)?.username}</div>
-											
-										</div>
-										}
+								<div className='flexwrapper' >
+									{item.userId === props.user.id ?
+									<div className='message current flex'>
+										<li className=''>{item.content}</li> 
+										<div className='user'><img className='avatar' src={"http://127.0.0.1:3001/avatars/"+item.userId.toString()+".png"} alt="avatar"/>{props.users.find(user => user.id === item.userId)?.username}</div>
 									</div>
-								:
-									<div className='flexwrapper'>
-										<div className='newuser'>
-											{item.content}
-										</div>
+									:
+									<div className='message other flex'>
+										<li className=''>{item.content}</li>
+										<div className='user' ><img className='avatar' src={"http://127.0.0.1:3001/avatars/"+item.userId.toString()+".png"} alt="avatar"/>{props.users.find(user => user.id === item.userId)?.username}</div>
+										
 									</div>
-								}
-							</div>
+									}
+								</div>
 							:
 							<div/>
 						}
