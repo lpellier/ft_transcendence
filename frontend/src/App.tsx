@@ -49,11 +49,9 @@ export default function App() {
     const [component, setComponent] = useState<string>('Profile');
 	const [user, setUser] = useState<User>();
     let [users, setUsers] = useState<User[]>([]);
-    let [online, setOnline] = useState<number[]>([]);
 
     useEffect(() => {
-		const handler = (usersData: User[], userId: number) => {
-            setOnline(state => [...state, userId]);
+		const handler = (usersData: User[]) => {
 			setUsers(usersData);
 		}
 		socket.on('new user', handler);

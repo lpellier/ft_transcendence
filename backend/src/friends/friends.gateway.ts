@@ -14,6 +14,8 @@ import { FriendUserDto } from './dto/friend-user.dto';
 import { Socket } from "socket.io";
 
 // @UseGuards(JwtAuthGuard)
+let socketUser = new Map<number, number>();
+
 @WebSocketGateway({
   cors: {
     origin: new ConfigService().get('FRONT_URL'),
@@ -25,10 +27,12 @@ export class FriendsGateway
 {
   constructor(private readonly friendsService: FriendsService) {}
 
+
   @SubscribeMessage('add friend')
   add(@ConnectedSocket() client:Socket, @MessageBody() friendUserDto: FriendUserDto) {
     this.friendsService.add(friendUserDto.userId, friendUserDto.friendId);
     client.emit('add friend');
+    
   }
 
   @SubscribeMessage('removeFriend')
@@ -43,22 +47,13 @@ export class FriendsGateway
     client.emit('get friends', friends);
   }
 
-  handleConnection(client) {
+  handleConnection(@ConnectedSocket() client:Socket) {
     console.log('client connected');
   }
 
-  handleDisconnect(client) {
+  handleDisconnect(@ConnectedSocket() client:Socket) {
     console.log('client disconnected');
   }
-
-  @SubscribeMessage('get all users')
-	async handleNewUser(@ConnectedSocket () client : Socket) {
-
-		const allUsers =  await this.friendsService.getAllUsers();
-    client.emit('got all users', allUsers);
-    // }
-		// console.log('new user called', newUserDto)
-	}
 
   // @SubscribeMessage('findOneFriend')
   // findOne(@MessageBody() id: number) {

@@ -72,8 +72,6 @@ function Chat(props: {user: User, users: User[]}) {
 			socket.emit('get rooms', props.user.id);
 			socket.emit('get public rooms', props.user.id);
 			socket.emit('get all messages', props.user.id);
-			socket.emit('get dm rooms', props.user.id);
-			socket.emit('get all dms');
 			// socket.emit('new user', {userId: props.user.id, roomId: 1});
 		}
 		if (!socket.connected)

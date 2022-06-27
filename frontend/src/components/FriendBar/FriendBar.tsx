@@ -52,11 +52,24 @@ export default function FriendBar(props: {user: User, users: User[]}) {
     let [open, setOpen] = useState<boolean>(false);
     let [addFriendClicked, setAddFriendClicked] = useState<boolean>(false);
     let [friends, setFriends] = useState<User[]>([]);
+    let [statusMap, setStatusMap] = useState<Map<number, string> >(new Map<number, string>());
 
     function toggleFriendBar() {
         setOpen(true);
     }
 
+    useEffect(() => {
+        socket.on('new connection', (userId: number) => {
+            console.log('new connection -> ', userId);
+            setStatusMap(statusMap.set(userId, 'online'));
+        })
+    }, [])
+
+    useEffect(() => {
+        socket.on('new disconnection', (userId: number) => {
+            setStatusMap(statusMap.set(userId, 'offline'));
+        })
+    }, [])
 
     useEffect(() => {
         socket.emit('get friends', props.user.id);
@@ -144,7 +157,7 @@ export default function FriendBar(props: {user: User, users: User[]}) {
                     {friends.map(item => (
                         <div key={item.id}>
                             <ListItem >
-                                <ListItemText primary={item.username} secondary="offline"/>
+                                <ListItemText primary={item.username} secondary={statusMap.get(item.id)? statusMap.get(item.id) : 'offline'}/>
                             </ListItem>
                         </div>
                     ))
