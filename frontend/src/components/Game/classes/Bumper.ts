@@ -37,6 +37,8 @@ class Bumper {
 			this.pos.y = consts.HEIGHT * 1 / 4 - diameter / 2;	
 		else if (this.index_bumper === 2)
 			this.pos.y = consts.HEIGHT * 3 / 4 - diameter / 2;	
+		this.center.x = this.pos.x + diameter / 2;
+		this.center.y = this.pos.y + diameter / 2;
 	}
   
 	show(ratio : number) {
