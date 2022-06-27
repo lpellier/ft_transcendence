@@ -4,6 +4,8 @@
 
 // ? output both player names at start of match and winner name at the end
 
+// ? add off/on button for sfx and music
+
 // sometimes weird thing keeps my paddle moving
 
 // TODO cute animation showing the roll of pong value in casino
