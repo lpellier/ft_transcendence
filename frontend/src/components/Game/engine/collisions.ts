@@ -137,9 +137,9 @@ function checkCollisions() {
 
 function collisionPaddle(player : Player, intersection_point : [number, number, string][]) : number {
 	let paddle_side_hit :	[[number, number], [number, number]] = player.index === 1 ? 
-							[player.rightUp(true), player.rightDown(true)] : [player.leftUp(true), player.leftDown(true)];
-	let paddle_bot_hit : [[number, number], [number, number]] = [player.leftDown(false), player.rightDown(false)];
-	let paddle_top_hit : [[number, number], [number, number]] = [player.leftUp(false), player.rightUp(false)];
+							[player.rightUp(), player.rightDown()] : [player.leftUp(), player.leftDown()];
+	let paddle_bot_hit : [[number, number], [number, number]] = [player.leftDown(), player.rightDown()];
+	let paddle_top_hit : [[number, number], [number, number]] = [player.leftUp(), player.rightUp()];
 
 	intersection_point[0] = getLineIntersection(game.pong.center(), game.pong.centerNextFrame(), paddle_side_hit[0], paddle_side_hit[1]);
 	intersection_point[0][2] = "side";

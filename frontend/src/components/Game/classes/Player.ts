@@ -65,19 +65,19 @@ class Player {
 		this.calculateNewPos();
 	}
 
-	leftUp(side : boolean) : [number, number] {
+	leftUp() : [number, number] {
 		return [this.pos[0] - game.pong.diameter / 2, this.pos[1] - game.pong.diameter / 2];
 	}
 
-	leftDown(side : boolean) : [number, number] {
+	leftDown() : [number, number] {
 		return [this.pos[0] - game.pong.diameter / 2, this.pos[1] + this.height + game.pong.diameter / 2]
 	}
 
-	rightUp(side : boolean) : [number, number] {
+	rightUp() : [number, number] {
 		return [this.pos[0] + this.width + game.pong.diameter / 2, this.pos[1] - game.pong.diameter / 2];
 	}
 
-	rightDown(side : boolean) : [number, number] {
+	rightDown() : [number, number] {
 		return [this.pos[0] + this.width + game.pong.diameter / 2, this.pos[1] + this.height + game.pong.diameter / 2];
 	}
 }
