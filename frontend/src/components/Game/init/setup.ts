@@ -4,8 +4,8 @@
 
 // ? output both player names at start of match and winner name at the end
 
-// ? add off/on button for sfx and music
-
+// ? add off/on button for sfx and music -> they should be present on main menu and waiting-player/readiness menu
+	// ? both icons clickacble and each time they're clicked the sound is adjusted by 25% with a visual indication of total volume
 // sometimes weird thing keeps my paddle moving
 
 // TODO cute animation showing the roll of pong value in casino
