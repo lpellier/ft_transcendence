@@ -4,6 +4,8 @@
 
 // ? output both player names at start of match and winner name at the end
 
+// sometimes weird thing keeps my paddle moving
+
 // TODO cute animation showing the roll of pong value in casino
 // TODO comment EVERYTHING
 
@@ -29,6 +31,7 @@ let user_name : string;
 let user_id : string;
 
 function preload() {
+	// soundFormats("mp3");
 	consts = new Consts();
 	keys = new Keys();
 
@@ -76,6 +79,7 @@ function setup() {
 	listenMoveEvents();
 	
 	resizeEverything();
+	game.setState("in-menu");
 }
 
 function hideIcons() {
@@ -86,13 +90,14 @@ function hideIcons() {
 }
 
 function draw() {
+	consts.playAppropriateMusic();
 	clear(0, 0, 0, 0);
 	hideIcons();
 	background(0);
 	if (!document.getElementById("canvas-parent")) {
 		socket.emit("quit-ongoing-game");
 		should_load = true;
-		return ;
+		consts.switchMusic("none");
 	}
 	else if (should_load)
 		inMainMenu();
@@ -164,7 +169,7 @@ function draw() {
 				for (let bumper of bumpers)
 					bumper.render();
 		}
-		if (game.frames_since_point < 180 && game.map.name === "casino")
+		if (game.frames_since_point > 10 && game.frames_since_point < 180 && game.map.name === "casino")
 			outputAnnouncement(game.pong.value + (game.pong.value === 1 || game.pong.value === -1 ? " point" : " points"), consts.std_font_size, consts.WIDTH * 0.5, consts.HEIGHT * 0.95, game.pong.color);
 	}
 	else if (game.state === "game-over") {

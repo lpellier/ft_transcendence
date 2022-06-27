@@ -95,7 +95,9 @@ class Bumper {
 				this.bounce_vec.mult(vec_pong.mag());
 				pong.velocity[0] = this.bounce_vec.x;
 				pong.velocity[1] = this.bounce_vec.y;
+				return true;
 			}
 		}
+		return false;
 	}
   }

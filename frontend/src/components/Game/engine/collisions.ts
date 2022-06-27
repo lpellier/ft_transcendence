@@ -65,18 +65,18 @@ function checkCollisions() {
 			game.score[1]--;
 		else
 			game.score[0] += game.pong.value;
-		game.state = "relaunch-countdown";
+		game.setState("relaunch-countdown");
 		game.timer = 2;
 		for (let i = 0; i < 3; i++) {
 			setTimeout(() => {
 				game.timer--;
 				if (game.timer === -1 && game.state === "relaunch-countdown")
-					game.state = "in-game";
+					game.setState("in-game");
 			}, i * 1000);
 		}
 		game.pong.relaunchPong("right");
 		if (game.score[0] >= game.score_limit)
-			game.state = "game-over";
+			game.setState("game-over");
 		game.frames_since_point = 0;
 		return ;
 	}
@@ -85,25 +85,30 @@ function checkCollisions() {
 			game.score[0]--;
 		else
 			game.score[1] += game.pong.value;
-			game.state = "relaunch-countdown";
+			game.setState("relaunch-countdown");
 			game.timer = 2;
 			for (let i = 0; i < 3; i++) {
 				setTimeout(() => {
 					game.timer--;
 					if (game.timer === -1 && game.state === "relaunch-countdown")
-						game.state = "in-game";
+						game.setState("in-game");
 				}, i * 1000);
 			}
 			game.pong.relaunchPong("left");
 		if (game.score[1] >= game.score_limit)
-			game.state = "game-over";
+			game.setState("game-over");
 		game.frames_since_point = 0;
 		return ;
 	}
 	
-	if (game.map.name === "city")
-		for (let bumper of bumpers)
-			bumper.checkCollision(game.pong);
+	if (game.map.name === "city") {
+		for (let bumper of bumpers) {
+			if (bumper.checkCollision(game.pong)) {
+				consts.playRandomBumperSound();
+				return ;
+			}
+		}
+	}
 
 	let player = (game.pong.pos[0] < consts.WIDTH / 2 ? game.players[0] : game.players[1]);
 
@@ -115,6 +120,7 @@ function checkCollisions() {
 	angle = collisionPaddle(player, intersection_point);
 	
 	if (intersection_point[0][0] != -1) {
+		consts.playRandomPaddleSound();
 		let max_angle_percentage : number = Math.abs(angle) / (Math.PI * 5 / 12); // ? number that lets me add speed to acute angled shots
 		// ? for bot / top collisions
 		if (intersection_point[0][2] === "top" || intersection_point[0][2] === "bot") {

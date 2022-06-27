@@ -1,7 +1,6 @@
 function listenStartEvents() {
 	socket.on("waiting-player", (r_id : string, score_limit : number, map : string) => {
 		game.room_id = r_id;
-		game.state = "waiting-player";
 		game.score_limit = score_limit;
 		errors.set_false();
 		buttons.hide();
@@ -13,6 +12,7 @@ function listenStartEvents() {
 			game.map = consts.city_map;
 		else if (map === "casino")
 			game.map = consts.casino_map;
+		game.setState("waiting-player");
 	});
 	socket.on("spectate", (r_id : string, score_limit : number, map : string, game_state : string, id_p1 : string, id_p2 : string) => {
 		game.room_id = r_id;
@@ -23,7 +23,7 @@ function listenStartEvents() {
 			game.map = consts.city_map;
 		else if (map === "casino")
 			game.map = consts.casino_map;
-		game.state = game_state;
+		game.setState(game_state);
 		buttons.hide();
 		inputs.hide();
 
@@ -43,10 +43,10 @@ function listenStartEvents() {
 	socket.on("waiting-readiness", (id_p1 : string, id_p2 : string) => {
 		if (game.players.length == 2 && game.players[1].id === "null") {
 			game.players[1].id = id_p2;
-			game.state = "waiting-readiness"
+			game.setState("waiting-readiness");
 		}
 		if (game.players.length === 0) {
-			game.state = "waiting-readiness"
+			game.setState("waiting-readiness");
 			if (socket.id === id_p1) {
 				game.players.push(new Player(1, id_p1));
 				game.players.push(new Player(2, id_p2));
@@ -63,12 +63,12 @@ function listenStartEvents() {
 		if (game.state === "countdown" || game.state === "relaunch-countdown") {
 			game.timer--;
 			if (game.timer === -1)
-				game.state = "in-game";
+				game.setState("in-game");
 		}
 	});
 
 	socket.on("relaunch", () => {
-		game.state = "relaunch-countdown";
+		game.setState("relaunch-countdown");
 		game.timer = 1;
 	});
 }
@@ -80,12 +80,12 @@ function listenStopEvents() {
 
 	socket.on("restart-server", () => {
 		game.timer = 3;
-		game.state = "in-game";
+		game.setState("in-game");
 		game.score = [0, 0];
 	});
 
 	socket.on("game-over", () => {
-		game.state = "game-over";
+		game.setState("game-over");
 	});
 }
 
@@ -99,7 +99,7 @@ function listenMoveEvents() {
 				count++;
 		}
 		if (count === game.players.length) {
-			game.state = "countdown";
+			game.setState("countdown");
 			socket.emit("countdown_start");
 		}
 	});

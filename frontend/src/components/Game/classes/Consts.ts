@@ -46,7 +46,20 @@ class Consts {
 	EYE_ICON : any;
 	CITY_BACKGROUND : any;
 	TOKYO_BACKGROUND : any;
-	
+
+	PADDLE_HIT_1 : any;
+	PADDLE_HIT_2 : any;
+
+	BUMPER_HIT_1 : any;
+	BUMPER_HIT_2 : any;
+
+	CASINO_MUSIC : any;
+	CITY_MUSIC : any;
+	ORIGINAL_MUSIC : any;
+	MENU_MUSIC : any;
+
+	music_playing : string;
+
 	constructor() {
 		this.WIDTH = 1200;
 		this.HEIGHT = 750;
@@ -73,6 +86,129 @@ class Consts {
 
 		this.CITY_BACKGROUND = loadImage("/assets/backgrounds/city.jpg");
 		this.TOKYO_BACKGROUND = loadImage("/assets/backgrounds/tokyo.png");
+
+		this.PADDLE_HIT_1 = new Audio("/assets/sfx/paddle_hit_1.mp3");
+		this.PADDLE_HIT_2 = new Audio("/assets/sfx/paddle_hit_2.mp3");
+
+		this.BUMPER_HIT_1 = new Audio("/assets/sfx/bumper_hit_1.mp3");
+		this.BUMPER_HIT_2 = new Audio("/assets/sfx/bumper_hit_2.mp3");
+
+		this.CASINO_MUSIC = new Audio("/assets/music/casino.mp3");
+		this.CASINO_MUSIC.loop = true;
+		this.CASINO_MUSIC.volume = 1;
+		
+		this.CITY_MUSIC = new Audio("/assets/music/city.mp3");
+		this.CITY_MUSIC.loop = true;
+		this.CITY_MUSIC.volume = 1;
+		
+		this.ORIGINAL_MUSIC = new Audio("/assets/music/original.mp3");
+		this.ORIGINAL_MUSIC.loop = true;
+		this.ORIGINAL_MUSIC.volume = 1;
+		
+		this.MENU_MUSIC = new Audio("/assets/music/menu.mp3");
+		this.MENU_MUSIC.loop = true;
+		this.MENU_MUSIC.volume = 1;
+
+		this.music_playing = "none";
+	}
+
+	playRandomPaddleSound() {
+		let rand : number = Math.floor(Math.random() * 2);
+		if (rand === 0)
+			this.PADDLE_HIT_1.play();
+		else if (rand === 1)
+			this.PADDLE_HIT_2.play();
+	}
+	
+	playRandomBumperSound() {
+		let rand : number = Math.floor(Math.random() * 2);
+		if (rand === 0)
+			this.BUMPER_HIT_1.play();
+		else if (rand === 1)
+			this.BUMPER_HIT_2.play();
+	}
+
+	musicPlaying() : any {
+		if (this.music_playing === "menu")
+			return this.MENU_MUSIC;
+		else if (this.music_playing === "casino")
+			return this.CASINO_MUSIC;
+		else if (this.music_playing === "city")
+			return this.CITY_MUSIC;
+		else if (this.music_playing === "original")
+			return this.ORIGINAL_MUSIC;
+		else
+			return "none"
+	}
+
+	fadeMusicDown(music : any) {
+		for (let i = 0; i < 10; i++) {
+			setTimeout(() => {
+				if (music.volume >= 0.1)
+					music.volume -= 0.1;
+				if (i === 9)
+					music.pause();
+			}, i * 200);
+		}
+	}
+	
+	fadeMusicUp(music : any) {
+		music.fastSeek(0);
+		music.play();
+		music.volume = 0;
+		for (let j = 0; j < 10; j++) {
+			setTimeout(() => {
+				if (music.volume <= 0.9)
+					music.volume += 0.1;
+				if (j === 9)
+					music.volume = 1;
+			}, j * 200);
+		}
+	}
+
+	switchMusic(music : string) {
+		let tmp_music = this.musicPlaying();
+		if (tmp_music != "none") {
+			if (music === "menu") {
+				this.fadeMusicDown(tmp_music);
+				this.fadeMusicUp(this.MENU_MUSIC);
+			}
+			else if (music === "original") {
+				this.fadeMusicDown(tmp_music);
+				this.fadeMusicUp(this.ORIGINAL_MUSIC);
+			}
+			else if (music === "city") {
+				this.fadeMusicDown(tmp_music);
+				this.fadeMusicUp(this.CITY_MUSIC);
+			}
+			else if (music === "casino") {
+				this.fadeMusicDown(tmp_music);
+				this.fadeMusicUp(this.CASINO_MUSIC);
+			}
+			if (music === "none")
+				this.fadeMusicDown(tmp_music);
+			this.music_playing = music;
+		}
+		else {
+			if (music === "menu")
+				this.fadeMusicUp(this.MENU_MUSIC);
+			else if (music === "original")
+				this.fadeMusicUp(this.ORIGINAL_MUSIC);
+			else if (music === "city")
+				this.fadeMusicUp(this.CITY_MUSIC);
+			else if (music === "casino")
+				this.fadeMusicUp(this.CASINO_MUSIC);
+			this.music_playing = music;
+		}
+	}
+
+	playAppropriateMusic() {
+		if ((game.state === "countdown" ||game.state  === "spectate" || game.state === "in-game" || game.state === "waiting-readiness" || game.state === "waiting-player") && this.music_playing === "menu")
+			this.switchMusic(game.map.name);
+		else if ((game.state === "in-menu" || game.state === "in-menu-create" || game.state === "in-menu-input") && this.music_playing != "menu")
+			this.switchMusic("menu");
+		// else if ((game.state === "game-over" || game.state === "opponent-left-menu") && this.music_playing != "none")
+		// 	this.switchMusic("none");
 	}
 
 	setWindowSize() {
