@@ -35,4 +35,9 @@ class Game {
 		this.spectator = false;
 		this.hover_spectator = false;
 	}
+
+	setState(state : string) {
+		this.state = state;
+		consts.playAppropriateMusic();
+	}
 };

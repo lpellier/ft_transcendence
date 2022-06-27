@@ -2,12 +2,11 @@
 // ? Coding consistency : snake_case for variables | camelCase for functions | PascalCase for classes
 // ? Map indexes : 1 (normal map), 2 (city map), 3 (casino map)
 
-// ? casino enhancement : more chances to get lower valued pongs
-// ? add a -1 pong to remove a point from opponent
+// ? output both player names at start of match and winner name at the end
 
-// ? add a break
+// ? add off/on button for sfx and music
 
-// TODO find a way to send data to database and fill every appropriate field when situation calls for it
+// sometimes weird thing keeps my paddle moving
 
 // TODO cute animation showing the roll of pong value in casino
 // TODO comment EVERYTHING
@@ -30,7 +29,11 @@ let keys : Keys = null;
 let canvas : any = null;
 let socket : any = null;
 
+let user_name : string;
+let user_id : string;
+
 function preload() {
+	// soundFormats("mp3");
 	consts = new Consts();
 	keys = new Keys();
 
@@ -48,8 +51,8 @@ function setup() {
 	}
 	let diameter = consts.DIAGONAL * 0.10;
 
-	bumpers.push(new Bumper(animation, consts.WIDTH / 2 - diameter / 2, consts.HEIGHT * 1 / 4 - diameter / 2, diameter));
-	bumpers.push(new Bumper(animation, consts.WIDTH / 2 - diameter / 2, consts.HEIGHT * 3 / 4 - diameter / 2, diameter));
+	bumpers.push(new Bumper(animation, consts.WIDTH / 2 - diameter / 2, consts.HEIGHT * 1 / 4 - diameter / 2, diameter, 1));
+	bumpers.push(new Bumper(animation, consts.WIDTH / 2 - diameter / 2, consts.HEIGHT * 3 / 4 - diameter / 2, diameter, 2));
 
 	keys.init();
 	game = new Game();
@@ -57,7 +60,9 @@ function setup() {
 	errors = new Errors();
 	buttons = new Buttons();
 	
-	
+	user_name = document.getElementById("user").getAttribute("user_name");
+	user_id = document.getElementById("user").getAttribute("user_id");
+
 	canvas = createCanvas(consts.WIDTH, consts.HEIGHT);
 	canvas.parent(document.getElementById("canvas-parent"));
 	background(0);
@@ -68,7 +73,7 @@ function setup() {
 	socket = io("http://127.0.0.1:3001");
 	
 	socket.on("connect", () => {
-		socket.emit("my_id", socket.id);
+		socket.emit("my_id", socket.id, user_id, user_name);
 	});
 
 	listenStartEvents();
@@ -76,6 +81,7 @@ function setup() {
 	listenMoveEvents();
 	
 	resizeEverything();
+	game.setState("in-menu");
 }
 
 function hideIcons() {
@@ -86,17 +92,18 @@ function hideIcons() {
 }
 
 function draw() {
+	consts.playAppropriateMusic();
 	clear(0, 0, 0, 0);
 	hideIcons();
 	background(0);
 	if (!document.getElementById("canvas-parent")) {
 		socket.emit("quit-ongoing-game");
 		should_load = true;
-		return ;
+		consts.switchMusic("none");
 	}
 	else if (should_load)
 		inMainMenu();
-	if (game.state === "waiting-player" || game.state === "waiting-readiness" || game.state === "countdown" || game.state === "in-game")
+	if (game.state === "waiting-player" || game.state === "waiting-readiness" || game.state === "countdown" || game.state === "relaunch-countdown" || game.state === "in-game")
 		game.map.render(1);
 	if (game.state === "in-menu-input" || game.state === "waiting-player" || game.state === "in-menu-create")
 		image(consts.RETURN_ICON, consts.WIDTH * 0.90, consts.HEIGHT * 0.01, consts.medium_square_diameter, consts.medium_square_diameter);
@@ -136,12 +143,21 @@ function draw() {
 		if (game.spectator)
 			drawSpectate();
 		outputCountdown();
+		drawBallIntent();
 		if (!game.local && !game.spectator)
 			drawHelp();
 		if (!game.spectator)
 			drawInput();
 		for (let i : number = 0; i < game.players.length; i++)
 			game.players[i].render();
+	}
+	else if (game.state === "relaunch-countdown") {
+		outputCountdown();
+		movePlayers();
+		for (let player of game.players)
+			player.render();
+		game.pong.render();
+		drawBallIntent();
 	}
 	else if (game.state === "in-game") {
 		if (game.spectator)
@@ -151,20 +167,16 @@ function draw() {
 			for (let i : number = 0; i < game.players.length; i++)
 				game.players[i].render();
 			game.pong.render();
-			if (game.map.name === "city") {
-				for (let bumper of bumpers) {
+			if (game.map.name === "city")
+				for (let bumper of bumpers)
 					bumper.render();
-					bumper.checkCollision(game.pong);
-				}
-			}
 		}
-		if (game.frames_since_point < 180 && game.map.name === "casino")
+		if (game.frames_since_point > 10 && game.frames_since_point < 180 && game.map.name === "casino")
 			outputAnnouncement(game.pong.value + (game.pong.value === 1 || game.pong.value === -1 ? " point" : " points"), consts.std_font_size, consts.WIDTH * 0.5, consts.HEIGHT * 0.95, game.pong.color);
 	}
 	else if (game.state === "game-over") {
 		buttons.return.show();
 		image(consts.RETURN_ICON, consts.WIDTH * 0.90, consts.HEIGHT * 0.01, consts.medium_square_diameter, consts.medium_square_diameter);
 		outputAnnouncement((game.score[0] > game.score[1] ? "Player 1 " : "Player 2 ") + "won the game!", consts.std_font_size, width / 2, height / 2, "white")
-	}
-	
+	}	
 }

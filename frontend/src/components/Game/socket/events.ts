@@ -1,7 +1,6 @@
 function listenStartEvents() {
 	socket.on("waiting-player", (r_id : string, score_limit : number, map : string) => {
 		game.room_id = r_id;
-		game.state = "waiting-player";
 		game.score_limit = score_limit;
 		errors.set_false();
 		buttons.hide();
@@ -13,6 +12,7 @@ function listenStartEvents() {
 			game.map = consts.city_map;
 		else if (map === "casino")
 			game.map = consts.casino_map;
+		game.setState("waiting-player");
 	});
 	socket.on("spectate", (r_id : string, score_limit : number, map : string, game_state : string, id_p1 : string, id_p2 : string) => {
 		game.room_id = r_id;
@@ -23,7 +23,7 @@ function listenStartEvents() {
 			game.map = consts.city_map;
 		else if (map === "casino")
 			game.map = consts.casino_map;
-		game.state = game_state;
+		game.setState(game_state);
 		buttons.hide();
 		inputs.hide();
 
@@ -43,10 +43,10 @@ function listenStartEvents() {
 	socket.on("waiting-readiness", (id_p1 : string, id_p2 : string) => {
 		if (game.players.length == 2 && game.players[1].id === "null") {
 			game.players[1].id = id_p2;
-			game.state = "waiting-readiness"
+			game.setState("waiting-readiness");
 		}
 		if (game.players.length === 0) {
-			game.state = "waiting-readiness"
+			game.setState("waiting-readiness");
 			if (socket.id === id_p1) {
 				game.players.push(new Player(1, id_p1));
 				game.players.push(new Player(2, id_p2));
@@ -60,11 +60,16 @@ function listenStartEvents() {
 	});
 	
 	socket.on("countdown-server", () => {
-		if (game.state === "countdown") {
+		if (game.state === "countdown" || game.state === "relaunch-countdown") {
 			game.timer--;
 			if (game.timer === -1)
-				game.state = "in-game";
+				game.setState("in-game");
 		}
+	});
+
+	socket.on("relaunch", () => {
+		game.setState("relaunch-countdown");
+		game.timer = 1;
 	});
 }
 
@@ -75,12 +80,12 @@ function listenStopEvents() {
 
 	socket.on("restart-server", () => {
 		game.timer = 3;
-		game.state = "in-game";
+		game.setState("in-game");
 		game.score = [0, 0];
 	});
 
 	socket.on("game-over", () => {
-		game.state = "game-over";
+		game.setState("game-over");
 	});
 }
 
@@ -94,7 +99,7 @@ function listenMoveEvents() {
 				count++;
 		}
 		if (count === game.players.length) {
-			game.state = "countdown";
+			game.setState("countdown");
 			socket.emit("countdown_start");
 		}
 	});
@@ -108,36 +113,38 @@ function listenMoveEvents() {
 
 	socket.on("updated_pos", (
 		pong_pos : [number, number],
+		pong_vel : [number, number],
 		p1_state : [string, [number, number]],
 		p2_state : [string, [number, number]],
 		score : [number, number],
 		pong_value : number
 	) => {
-		if (game.state != "in-game")
-			return ;
-		game.score = score;
-		game.pong.pos[0] = pong_pos[0] * consts.WIDTH / 1200;
-		game.pong.pos[1] = pong_pos[1] * consts.HEIGHT / 750;
-		if (p1_state[0] === socket.id) {
-			game.players[0].pos[0] = p1_state[1][0] * consts.WIDTH / 1200;
-			game.players[0].pos[1] = p1_state[1][1] * consts.HEIGHT / 750;
-			game.players[1].pos[0] = p2_state[1][0] * consts.WIDTH / 1200;
-			game.players[1].pos[1] = p2_state[1][1] * consts.HEIGHT / 750;
-		}
-		else if (p2_state[0] === socket.id) {
-			game.players[0].pos[0] = p2_state[1][0] * consts.WIDTH / 1200;
-			game.players[0].pos[1] = p2_state[1][1] * consts.HEIGHT / 750;
-			game.players[1].pos[0] = p1_state[1][0] * consts.WIDTH / 1200;
-			game.players[1].pos[1] = p1_state[1][1] * consts.HEIGHT / 750;
-		}
-		else { // spectate
-			game.players[0].pos[0] = p1_state[1][0] * consts.WIDTH / 1200;
-			game.players[0].pos[1] = p1_state[1][1] * consts.HEIGHT / 750;
-			game.players[1].pos[0] = p2_state[1][0] * consts.WIDTH / 1200;
-			game.players[1].pos[1] = p2_state[1][1] * consts.HEIGHT / 750;
-		}
-		game.pong.value = pong_value;
-	});
+			if (game.state === "in-game" || game.state === "relaunch-countdown" || game.state === "countdown") {
+				game.score = score;
+				game.pong.pos[0] = pong_pos[0] * consts.WIDTH / 1200;
+				game.pong.pos[1] = pong_pos[1] * consts.HEIGHT / 750;
+				game.pong.velocity = pong_vel;
+				if (p1_state[0] === socket.id) {
+					game.players[0].pos[0] = p1_state[1][0] * consts.WIDTH / 1200;
+					game.players[0].pos[1] = p1_state[1][1] * consts.HEIGHT / 750;
+					game.players[1].pos[0] = p2_state[1][0] * consts.WIDTH / 1200;
+					game.players[1].pos[1] = p2_state[1][1] * consts.HEIGHT / 750;
+				}
+				else if (p2_state[0] === socket.id) {
+					game.players[0].pos[0] = p2_state[1][0] * consts.WIDTH / 1200;
+					game.players[0].pos[1] = p2_state[1][1] * consts.HEIGHT / 750;
+					game.players[1].pos[0] = p1_state[1][0] * consts.WIDTH / 1200;
+					game.players[1].pos[1] = p1_state[1][1] * consts.HEIGHT / 750;
+				}
+				else { // spectate
+					game.players[0].pos[0] = p1_state[1][0] * consts.WIDTH / 1200;
+					game.players[0].pos[1] = p1_state[1][1] * consts.HEIGHT / 750;
+					game.players[1].pos[0] = p2_state[1][0] * consts.WIDTH / 1200;
+					game.players[1].pos[1] = p2_state[1][1] * consts.HEIGHT / 750;
+				}
+				game.pong.value = pong_value;	
+			}
+		});
 }
 
 function resizeEverything() {
@@ -152,6 +159,10 @@ function resizeEverything() {
 	buttons.resize();
 	keys.resize();
 	inputs.resize();
+0
+	for (let bumper of bumpers) {
+		bumper.resize();
+	}
 }
 
 function windowResized() {

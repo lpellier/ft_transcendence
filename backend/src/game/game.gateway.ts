@@ -3,6 +3,8 @@ import { Socket, Server } from "socket.io";
 import { Game } from "./classes/Game"
 import * as consts from "./classes/Consts"
 import * as utils from "./utils"
+import { GameService } from "./game.service"
+
 
 // ? How to create a game of pong
 // ? First, server sends page to which clients can connect
@@ -53,10 +55,12 @@ import * as utils from "./utils"
 	}
 })
 export class GameGateway {
+	constructor(private readonly game_service: GameService) {}
 	@WebSocketServer()
 	server: Server;
 
 	clients : string[] = [];
+	users : [string, string][] = [];
 	games : Game[] = [];
 
 	timestep : number = 15; // ms
@@ -65,12 +69,12 @@ export class GameGateway {
 		let index = -1;
 		if ((index = this.clients.indexOf(client.id)) != -1) {
 			this.clients.splice(index, 1);
+			this.users.splice(index, 1);
 			for (let game of this.games) {
 				for (const player of game.players) {
 					if (player.id === client.id) {
 						this.server.to(game.room_id).emit("player-disconnect");
 						clearInterval(game.update_interval);
-						clearInterval(game.ball_update_interval);
 						this.games.splice(this.games.indexOf(game), 1);
 						return ;
 					}
@@ -86,7 +90,6 @@ export class GameGateway {
 				if (player.id === client.id) {
 					this.server.to(game.room_id).emit("player-disconnect");
 					clearInterval(game.update_interval);
-					clearInterval(game.ball_update_interval);
 					this.games.splice(this.games.indexOf(game), 1);
 					return ;
 				}
@@ -99,7 +102,6 @@ export class GameGateway {
 			for (let player of game.players) {
 				if (player.id === client.id) {
 					clearInterval(game.update_interval);
-					clearInterval(game.ball_update_interval);
 					this.games.splice(this.games.indexOf(game), 1);
 					return ;
 				}
@@ -109,8 +111,9 @@ export class GameGateway {
 
 	// ? acts as handleConnection because when calling handleConnection, multiple sockets seem to connect
 	@SubscribeMessage('my_id')
-	getConnection(@MessageBody() client_id : string) {
-		this.clients.push(client_id);
+	getConnection(@MessageBody() data : [string, string, string]) {
+		this.clients.push(data[0]);
+		this.users.push([data[1], data[2]]);
 	}
 
 	@SubscribeMessage('matchmaking')
@@ -134,7 +137,7 @@ export class GameGateway {
 		else if (data[3] === "casino")
 			existing_game.map = consts.casino_map;
 		client.join(existing_game.room_id);
-		existing_game.addPlayer(client.id);
+		existing_game.addPlayer(client.id, this.users[this.clients.indexOf(client.id)]);
 		this.server.to(existing_game.room_id).emit("waiting-player", existing_game.room_id, existing_game.score_limit, existing_game.map.name);
 		startGameFullRooms(this.games, this.server);
 	}
@@ -156,7 +159,7 @@ export class GameGateway {
 				}
 				else if (game.players.length < 2) {
 					client.join(game.room_id);
-					game.addPlayer(client.id);
+					game.addPlayer(client.id, this.users[this.clients.indexOf(client.id)]);
 					this.server.to(game.room_id).emit("waiting-player", game.room_id, game.score_limit, game.map.name);
 					game.state = "waiting-readiness";
 					this.server.to(game.room_id).emit("waiting-readiness", game.players[0].id, game.players[1].id);						
@@ -168,7 +171,62 @@ export class GameGateway {
 		if (!found)
 			this.server.to(client.id).emit("matchmaking-error", "game_not_found");
 	}
-	
+
+	startCountDown(game : Game) {
+		game.state = "in-game"
+		let test = this.server;
+		test.to(game.room_id).emit("updated_pos",
+			game.pong.pos, game.pong.velocity,
+			[game.players[0].id, game.players[0].pos],
+			[game.players[1].id, game.players[1].pos],
+			game.score, game.pong.value);
+		for (let i = 1; i < 5; i++)
+			setTimeout(() => {
+				test.to(game.room_id).emit("countdown-server");
+				if (i === 4) {
+					let calculate_state : string = "none";
+					game.update_interval = setInterval(() => {
+						if (calculate_state === "none")
+							calculate_state = game.pong.calculateNewPos(game, this.server);
+						if (calculate_state === "over") {
+							test.to(game.room_id).emit("game-over");
+							clearInterval(game.update_interval);
+							var w_id : number, l_id : number;
+							if (game.score[0] > game.score[1]) {
+								w_id = game.players[0].real_id;
+								l_id = game.players[1].real_id;
+							}
+							else {
+								w_id = game.players[1].real_id;
+								l_id = game.players[0].real_id;
+							}
+							this.game_service.incrementVictories(w_id);
+							this.game_service.incrementLosses(l_id);
+							this.game_service.createMatch({ladder: 0, winnerId : w_id, loserId: l_id});
+							this.games.splice(this.games.indexOf(game), 1);
+							return ;
+						}
+						else if (calculate_state === "relaunch") {
+							calculate_state = "null";
+							test.to(game.room_id).emit("relaunch");
+							for (var j = 1; j < 3; j++) {
+								setTimeout((index : number) => {
+									test.to(game.room_id).emit("countdown-server");
+									if (index === 2) {
+										calculate_state = "none";
+									}
+								}, j * 1000, j);
+							}
+						}
+						test.to(game.room_id).emit("updated_pos",
+							game.pong.pos, game.pong.velocity,
+							[game.players[0].id, game.players[0].pos],
+							[game.players[1].id, game.players[1].pos],
+							game.score, game.pong.value);
+					}, this.timestep);
+				}
+			}, i * 1000);	
+	}
 
 	@SubscribeMessage("countdown_start")
 	handleCountdown(@ConnectedSocket() client : Socket) {
@@ -176,29 +234,7 @@ export class GameGateway {
 			for (const player of game.players) {
 				if (player.id === client.id && game.state === "waiting-readiness") {
 					if (game.players[0].ready && game.players[1].ready) {
-						game.state = "in-game"
-						let test = this.server;
-						for (let i = 1; i < 5; i++) {
-							setTimeout(() => {
-								this.server.to(game.room_id).emit("countdown-server");
-								if (i === 4) {
-									game.update_interval = setInterval(() => {
-										if (game.pong.calculateNewPos(game, this.server)) {
-											test.to(game.room_id).emit("game-over");
-											clearInterval(game.update_interval);
-											clearInterval(game.ball_update_interval);
-											this.games.splice(this.games.indexOf(game), 1);
-											return ;
-										}
-										test.to(game.room_id).emit("updated_pos",
-											game.pong.pos,
-											[game.players[0].id, game.players[0].pos],
-											[game.players[1].id, game.players[1].pos],
-											game.score, game.pong.value);
-									}, this.timestep);
-								}
-							}, i * 1000);
-						}
+						this.startCountDown(game);
 						return ;
 					}
 				}

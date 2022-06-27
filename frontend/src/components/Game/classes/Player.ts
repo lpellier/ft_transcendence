@@ -66,18 +66,18 @@ class Player {
 	}
 
 	leftUp() : [number, number] {
-		return [this.pos[0], this.pos[1]];
+		return [this.pos[0] - game.pong.diameter / 2, this.pos[1] - game.pong.diameter / 2];
 	}
 
 	leftDown() : [number, number] {
-		return [this.pos[0], this.pos[1] + this.height]
+		return [this.pos[0] - game.pong.diameter / 2, this.pos[1] + this.height + game.pong.diameter / 2]
 	}
 
 	rightUp() : [number, number] {
-		return [this.pos[0] + this.width, this.pos[1]];
+		return [this.pos[0] + this.width + game.pong.diameter / 2, this.pos[1] - game.pong.diameter / 2];
 	}
 
 	rightDown() : [number, number] {
-		return [this.pos[0] + this.width, this.pos[1] + this.height];
+		return [this.pos[0] + this.width + game.pong.diameter / 2, this.pos[1] + this.height + game.pong.diameter / 2];
 	}
 }

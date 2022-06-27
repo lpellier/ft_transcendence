@@ -27,18 +27,6 @@ function relativeIntersection(intersection_point : [number, number, string], p1 
 	else
 		return middle[0] / ((p2[0] - p1[0]) / 2) * ((5 * Math.PI) / 12);
 }
-	
-function debugCollisions(player : Player) {
-	push();
-	fill("red");
-	stroke("red");
-	strokeWeight(5);
-	line(game.pong.center()[0], game.pong.center()[1], game.pong.cX() + game.pong.velocity[0] * 3, game.pong.cY() + game.pong.velocity[1] * 3);
-	line(player.leftDown()[0], player.leftDown()[1], player.rightDown()[0], player.rightDown()[1]);
-	line(player.leftUp()[0], player.leftUp()[1], player.rightUp()[0], player.rightUp()[1]);
-	line(player.rightUp()[0], player.rightUp()[1], player.rightDown()[0], player.rightDown()[1]);
-	pop();
-}
 
 // ? MAP BOUNDS :
 // ? top bound : 10
@@ -77,9 +65,18 @@ function checkCollisions() {
 			game.score[1]--;
 		else
 			game.score[0] += game.pong.value;
+		game.setState("relaunch-countdown");
+		game.timer = 2;
+		for (let i = 0; i < 3; i++) {
+			setTimeout(() => {
+				game.timer--;
+				if (game.timer === -1 && game.state === "relaunch-countdown")
+					game.setState("in-game");
+			}, i * 1000);
+		}
 		game.pong.relaunchPong("right");
 		if (game.score[0] >= game.score_limit)
-			game.state = "game-over";
+			game.setState("game-over");
 		game.frames_since_point = 0;
 		return ;
 	}
@@ -88,13 +85,31 @@ function checkCollisions() {
 			game.score[0]--;
 		else
 			game.score[1] += game.pong.value;
-		game.pong.relaunchPong("left");
+			game.setState("relaunch-countdown");
+			game.timer = 2;
+			for (let i = 0; i < 3; i++) {
+				setTimeout(() => {
+					game.timer--;
+					if (game.timer === -1 && game.state === "relaunch-countdown")
+						game.setState("in-game");
+				}, i * 1000);
+			}
+			game.pong.relaunchPong("left");
 		if (game.score[1] >= game.score_limit)
-			game.state = "game-over";
+			game.setState("game-over");
 		game.frames_since_point = 0;
 		return ;
 	}
 	
+	if (game.map.name === "city") {
+		for (let bumper of bumpers) {
+			if (bumper.checkCollision(game.pong)) {
+				consts.playRandomBumperSound();
+				return ;
+			}
+		}
+	}
+
 	let player = (game.pong.pos[0] < consts.WIDTH / 2 ? game.players[0] : game.players[1]);
 
 	// debugCollisions(player);
@@ -105,6 +120,7 @@ function checkCollisions() {
 	angle = collisionPaddle(player, intersection_point);
 	
 	if (intersection_point[0][0] != -1) {
+		consts.playRandomPaddleSound();
 		let max_angle_percentage : number = Math.abs(angle) / (Math.PI * 5 / 12); // ? number that lets me add speed to acute angled shots
 		// ? for bot / top collisions
 		if (intersection_point[0][2] === "top" || intersection_point[0][2] === "bot") {
@@ -130,7 +146,7 @@ function collisionPaddle(player : Player, intersection_point : [number, number, 
 							[player.rightUp(), player.rightDown()] : [player.leftUp(), player.leftDown()];
 	let paddle_bot_hit : [[number, number], [number, number]] = [player.leftDown(), player.rightDown()];
 	let paddle_top_hit : [[number, number], [number, number]] = [player.leftUp(), player.rightUp()];
-	
+
 	intersection_point[0] = getLineIntersection(game.pong.center(), game.pong.centerNextFrame(), paddle_side_hit[0], paddle_side_hit[1]);
 	intersection_point[0][2] = "side";
 	if (intersection_point[0][0] != -1)

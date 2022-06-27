@@ -1,6 +1,28 @@
 // ? for draw help
 let arrow_anim : number = 0;
+let arrow_anim2 : number = 0;
 let grow : boolean = true;
+let grow2 : boolean = true;
+
+function drawBallIntent() {
+	let arrow_width = 10 + arrow_anim2;
+	if (grow2)
+		arrow_anim2 += 0.1;
+	else
+		arrow_anim2 -= 0.1;
+	if (arrow_anim2 >= 5)
+		grow2 = false;
+	else if (arrow_anim2 <= 0)
+		grow2 = true;
+	push();
+	fill("white");
+	noStroke();
+	if (game.pong.velocity[0] < 0)
+		triangle(consts.WIDTH / 2.5, consts.HEIGHT / 2 + arrow_width / 2, consts.WIDTH / 2.5 + arrow_width, consts.HEIGHT / 2 + arrow_width + arrow_width / 2, consts.WIDTH / 2.5 + arrow_width, consts.HEIGHT / 2 - arrow_width + arrow_width / 2);
+	else
+		triangle(consts.WIDTH * 1.5 / 2.5, consts.HEIGHT / 2 + arrow_width / 2, consts.WIDTH * 1.5 / 2.5 - arrow_width, consts.HEIGHT / 2 + arrow_width + arrow_width / 2, consts.WIDTH * 1.5 / 2.5 - arrow_width, consts.HEIGHT / 2 - arrow_width + arrow_width / 2);
+	pop();
+}
 
 function drawHelp() {
 	let index = game.players[0].index;

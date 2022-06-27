@@ -22,7 +22,7 @@ function createGameMenu() {
 		buttons.map_original.show();
 		buttons.map_city.show();
 		buttons.map_casino.show();
-		game.state = "in-menu-create";
+		game.setState("in-menu-create");
 	}
 }
 
@@ -77,7 +77,7 @@ function minusScoreLimit() {
 
 function readRoomID() {
 	if (mouseButton === LEFT) {
-		game.state = "in-menu-input";
+		game.setState("in-menu-input");;
 		buttons.hide();
 		inputs.hide();
 		inputs.join.show();
@@ -132,7 +132,7 @@ function clickMapOriginal() {
 		// @ts-ignore : next-line
 		this.style("outline", "3px solid");
 		buttons.map_city.style("outline", "none");
-		buttons.map_casino.style("outline", "none");
+			buttons.map_casino.style("outline", "none");
 		game.map = consts.original_map;
 	}
 }
@@ -165,11 +165,11 @@ function startLocal() {
 			setTimeout(() => {
 				game.timer--;
 				if (game.timer === -1 && game.state === "countdown") {
-					game.state = "in-game";
+					game.setState("in-game");
 				}
 			}, i * 1000);
 		}
-		game.state = "countdown";
+		game.setState("countdown");
 		game.players.push(new Player(1, "first"));
 		game.players.push(new Player(2, "second"));		
 		game.pong = new Pong();
