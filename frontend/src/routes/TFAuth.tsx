@@ -1,9 +1,13 @@
+import {Navigate} from 'react-router-dom'
 import {useState, useEffect} from 'react'
 import Box from '@mui/material/Box'
 import Stack from '@mui/material/Stack'
 import TextField from '@mui/material/TextField'
 import axios from 'axios'
-import { valueToPercent } from '@mui/base'
+import {getUser} from 'requests'
+import { User, init_user } from 'interfaces'
+
+const profileUrl= "http://127.0.0.1:3000/profile"
 
 const BoxStyle = {
 	width: '30vw',
@@ -26,38 +30,41 @@ const TitleStyle = {
 }
 
 function PinField(props: {value: string, setPininput: any}) {
+	const [hasSubmited, sethasSubmited] = useState<boolean>(false)
+	const [user, setUser] = useState<User>(init_user)
 
 	function handleSubmit(e: any)
 	{
 		e.preventDefault();
 		props.setPininput({value: e.target[0].value});
 		e.target[0].value = "";
+		
+		sethasSubmited(true);
+		getUser(setUser);
 	}
 
 	useEffect(() => {
-
-		axios.post('http://127.0.0.1:3001/auth/google-authenticator',
-		JSON.parse(JSON.stringify(props.value)),
-		{
-			withCredentials: true,
-		})
-		.then(function (response) {
-			console.log("Post request success");
-		  })
-		.catch(function (err) {
-			console.log("Post request failed : ", err)
-		});
-
-	}, [props.value])
+		getUser(setUser)
+	}, [user])
 
 	return (
-		<form id='' onSubmit={handleSubmit}>
-			<TextField
-				type="text"
-				label={"Here !"}
-				variant="standard"
-			/>
-		</form>
+		<div>
+			<form onSubmit={handleSubmit}>
+				<TextField
+					type="text"
+					label={"Here !"}
+					variant="standard"
+					/>
+			</form>
+			{hasSubmited === true ?
+				<Navigate replace to="profile" />
+					:
+					window.location.href === "http://127.0.0.1:3000/" ?
+						<h3> Wrong login </h3>
+						:
+				<div/>
+			}
+		</div>
 	);
 }
 
@@ -70,9 +77,8 @@ export default function TFAuth() {
 				<h1 style={TitleStyle} >
 					Hey, insert your Pin !
 				</h1>
-				<PinField  value={pinInput} setPininput={setPininput}/>
+				<PinField value={pinInput} setPininput={setPininput}/>
 			</Stack>
 		</Box>
 	)
-
 }

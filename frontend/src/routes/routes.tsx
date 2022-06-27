@@ -5,6 +5,7 @@ import {
     Navigate
 } from "react-router-dom";
 import {useState, useEffect} from 'react'
+import {User, init_user} from 'interfaces'
 import axios from 'axios'
 import LogIn from './LogIn'
 import TFAuth from './TFAuth'
@@ -26,8 +27,8 @@ function ProtectedRoute(props: {children: JSX.Element, auth: any}) {
 }
 
 export default function AllRoutes()  {
-	const [isAuth, setAuth] = useState(true);
-	const [user, setUser] = useState();
+	const [isAuth, setAuth] = useState(false);
+	const [user, setUser] = useState<User>(init_user);
 
 	useEffect (() => {
 		axios.get('http://127.0.0.1:3001/users/me', {
@@ -43,15 +44,15 @@ export default function AllRoutes()  {
 			console.log("Authentication get request failed : ", err)
 		})
 		console.log("Auth is : ", isAuth)
-	}, [user])
+	}, [])
 
 	return (
 		<BrowserRouter>
-	        <Routes>
-	            <Route path="/" element={<LogIn />} />
-	            <Route path="/tfauth" element={<TFAuth />} />
-	            <Route path="profile" element={ <ProtectedRoute auth={isAuth} ><App /></ProtectedRoute>} />
-	        </Routes>
+	    	<Routes>
+	    	    <Route path="/" element={<LogIn user={user} />} />
+	    	    <Route path="/tfauth" element={<TFAuth />} />
+	    	    <Route path="profile" element={ <ProtectedRoute auth={isAuth} ><App /></ProtectedRoute>} />
+	    	</Routes>
 	    </BrowserRouter>
 	)
 }
