@@ -2,7 +2,7 @@ import {useState, useEffect} from 'react'
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import {User, init_user} from 'interfaces';
+import {User} from 'interfaces';
 
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import TimelineIcon from '@mui/icons-material/Timeline';
@@ -11,7 +11,6 @@ import UpdateIcon from '@mui/icons-material/Update';
 
 import { phoneSize } from 'index';
 import {StatTitle, StatBox} from "../../styles/tsxStyles/Home"
-import { getUser } from 'requests';
 
 function BoardComponent(props: {icon: any, title: string}) {
 	return(
