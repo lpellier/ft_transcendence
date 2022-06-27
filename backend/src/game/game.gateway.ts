@@ -172,13 +172,14 @@ export class GameGateway {
 			this.server.to(client.id).emit("matchmaking-error", "game_not_found");
 	}
 
-	startRelaunch(game : Game) {
-		
-	}
-
 	startCountDown(game : Game) {
 		game.state = "in-game"
 		let test = this.server;
+		test.to(game.room_id).emit("updated_pos",
+			game.pong.pos, game.pong.velocity,
+			[game.players[0].id, game.players[0].pos],
+			[game.players[1].id, game.players[1].pos],
+			game.score, game.pong.value);
 		for (let i = 1; i < 5; i++)
 			setTimeout(() => {
 				test.to(game.room_id).emit("countdown-server");
@@ -211,7 +212,6 @@ export class GameGateway {
 							for (var j = 1; j < 3; j++) {
 								setTimeout((index : number) => {
 									test.to(game.room_id).emit("countdown-server");
-									console.log(index);
 									if (index === 2) {
 										calculate_state = "none";
 									}
@@ -219,7 +219,7 @@ export class GameGateway {
 							}
 						}
 						test.to(game.room_id).emit("updated_pos",
-							game.pong.pos,
+							game.pong.pos, game.pong.velocity,
 							[game.players[0].id, game.players[0].pos],
 							[game.players[1].id, game.players[1].pos],
 							game.score, game.pong.value);

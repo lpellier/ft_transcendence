@@ -113,15 +113,17 @@ function listenMoveEvents() {
 
 	socket.on("updated_pos", (
 		pong_pos : [number, number],
+		pong_vel : [number, number],
 		p1_state : [string, [number, number]],
 		p2_state : [string, [number, number]],
 		score : [number, number],
 		pong_value : number
 	) => {
-			if (game.state === "in-game" || game.state === "relaunch-countdown") {
+			if (game.state === "in-game" || game.state === "relaunch-countdown" || game.state === "countdown") {
 				game.score = score;
 				game.pong.pos[0] = pong_pos[0] * consts.WIDTH / 1200;
 				game.pong.pos[1] = pong_pos[1] * consts.HEIGHT / 750;
+				game.pong.velocity = pong_vel;
 				if (p1_state[0] === socket.id) {
 					game.players[0].pos[0] = p1_state[1][0] * consts.WIDTH / 1200;
 					game.players[0].pos[1] = p1_state[1][1] * consts.HEIGHT / 750;

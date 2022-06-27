@@ -1,17 +1,19 @@
 // ? for draw help
 let arrow_anim : number = 0;
+let arrow_anim2 : number = 0;
 let grow : boolean = true;
+let grow2 : boolean = true;
 
 function drawBallIntent() {
-	let arrow_width = 10 + arrow_anim;
-	if (grow)
-		arrow_anim += 0.1;
+	let arrow_width = 10 + arrow_anim2;
+	if (grow2)
+		arrow_anim2 += 0.1;
 	else
-		arrow_anim -= 0.1;
-	if (arrow_anim >= 5)
-		grow = false;
-	else if (arrow_anim <= 0)
-		grow = true;
+		arrow_anim2 -= 0.1;
+	if (arrow_anim2 >= 5)
+		grow2 = false;
+	else if (arrow_anim2 <= 0)
+		grow2 = true;
 	push();
 	fill("white");
 	noStroke();
