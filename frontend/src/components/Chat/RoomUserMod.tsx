@@ -9,6 +9,7 @@ import {Room, User} from 'interfaces'
 import {socket} from 'index'
 
 import { toastIt, toastThatError } from 'App';
+import bcrypt from 'bcryptjs';
 
 
 export interface RoomUserDto {
@@ -184,6 +185,28 @@ function RoomUserMod(props : {currentUser: User, users: User[], room: Room, room
 		);
 	}
 
+	let [passwordClicked, setPasswordClicked] = useState<boolean>(false);
+
+	function PasswordMod(props: {setPasswordClicked: React.Dispatch<React.SetStateAction<boolean>>}) {
+		return (
+			<button onClick={() => props.setPasswordClicked(true)}>Change Password</button>
+		)
+	}
+
+	function handleNewPasswordSubmit(e: any) {
+		e.preventDefault();
+
+		let password:string = e.target[0].value;
+		if (password !== "")
+		{
+			bcrypt.hash(password, 10, function(err, hash) {
+				socket.emit('update password', {roomId: props.room.id, password: hash})
+			})
+		}
+		else
+			socket.emit('update password', {roomId: props.room.id, password: ""})
+		setPasswordClicked(false);
+	}
 
 	return (
 		<Stack>
@@ -224,6 +247,23 @@ function RoomUserMod(props : {currentUser: User, users: User[], room: Room, room
 				users={props.roomAdmins} 
 				condition={(item:User) => {return(item.id === props.currentUser.id)}}
 			/>
+			{props.currentUser.id === props.room.ownerId?
+				<div>
+					<PasswordMod setPasswordClicked={setPasswordClicked}/>
+					{passwordClicked?
+							<Stack direction="row" >
+							<form onSubmit={handleNewPasswordSubmit}>
+								<input type="text" placeholder="new password" className="form"/>
+							</form>
+							<button title="cancel" onClick={() => setPasswordClicked(false)}>❌</button>
+						</Stack>
+					:
+						<div/>
+					}
+				</div>
+				:
+				<div/>
+			}
 		</Stack>
 	)
 }

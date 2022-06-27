@@ -5,7 +5,12 @@ import { ChatService } from './chat.service';
 import { UserRoomDto } from "./dto/user-room.dto";
 import { CreateRoomDto } from './dto/create-room.dto';
 import { CreateMessageDto } from "./dto/create-message.dto";
+import { CreateDMRoomDto } from "./dto/create-dm-room.dto"
+import { UpdatePasswordDto } from "./dto/update-password.dto"
+import { threadId } from "worker_threads";
+import { runInThisContext } from "vm";
 
+let socketUser = new Map<string, number>();
 
 @WebSocketGateway({
   cors: {
@@ -25,6 +30,17 @@ export class ChatGateway {
 		await this.chatService.addUserToRoom(createRoomDto.userId, roomId);
 		await this.chatService.addAdminToRoom(createRoomDto.userId, roomId);
 		client.emit('create room');
+	}
+
+	@SubscribeMessage('create dm room') 
+	async handleCreateDMRoom(@ConnectedSocket () client : Socket, @MessageBody()  createDMRoomDto: CreateDMRoomDto) {		
+		const createRoomDto: CreateRoomDto = {name: createDMRoomDto.name, userId: 0, visibility: "private", password: ''}
+		let roomId = await this.chatService.createRoom(createRoomDto);
+		await this.chatService.addUserToRoom(createDMRoomDto.user1Id, roomId);
+		await this.chatService.addUserToRoom(createDMRoomDto.user2Id, roomId);
+		this.server.emit('create dm room');
+		console.log('create dm room called');
+		// this.server.emit('add user to room');
 	}
 
 	@SubscribeMessage('add user to room')
@@ -72,7 +88,7 @@ export class ChatGateway {
 	async handlemessage(@MessageBody() createMessageDto: CreateMessageDto) {
 		let msg = await this.chatService.storeMessage(createMessageDto);
 		this.server.to(createMessageDto.room.toString()).emit('chat message', msg);
-		//console.log('chat message called', createMessageDto)
+		console.log('chat message called', createMessageDto)
 
 	}
 
@@ -120,7 +136,22 @@ export class ChatGateway {
 	async handleNewUser(@ConnectedSocket () client : Socket,@MessageBody() newUserDto: UserRoomDto) {
 		await this.chatService.addUserToRoom(newUserDto.userId, 1);
 		const allUsers =  await this.chatService.getAllUsers();
+		socketUser.set(client.id, newUserDto.userId);
 		this.server.emit('new user', allUsers);
+		this.server.emit('new connection', newUserDto.userId);
 		// console.log('new user called', newUserDto)
 	}
+
+	@SubscribeMessage('update password')
+	async handeUpdstePassword(@MessageBody() updatePasswordDto: UpdatePasswordDto) {
+		await this.chatService.updatePassword(updatePasswordDto.roomId, updatePasswordDto.password);
+		this.server.emit('password updated', updatePasswordDto.roomId);
+		this.server.emit('create room');
+	}
+
+	handleDisconnect(@ConnectedSocket() client:Socket) {
+		console.log('client disconnected');
+		this.server.emit('disconnection', socketUser.get(client.id))
+	}
+
 }

@@ -19,7 +19,7 @@ model User {
   friendIds     Int[]
   rooms         Room[] @relation("roomUsers")
   adminRooms    Room[] @relation("roomAdmins")
-  messages      Message[]
+  messages      Message[]  
   winHistory	  Match[] @relation("win")
   lossHistory	  Match[] @relation("loss")
 }
@@ -59,7 +59,6 @@ model Message {
   content   String
   userId    Int
   roomId    Int
-  Room      Room   @relation(fields: [roomId], references: [id])
-  User      User   @relation(fields: [userId], references: [id])
-  type      Boolean
+  Room      Room    @relation(fields: [roomId], references: [id])
+  User      User    @relation(fields: [userId], references: [id])
 }
