@@ -2,27 +2,23 @@
 // ? Coding consistency : snake_case for variables | camelCase for functions | PascalCase for classes
 // ? Map indexes : 1 (normal map), 2 (city map), 3 (casino map)
 
-// ? output both player names at start of match and winner name at the end
+// TODO ISSUES
+	// ? when screen is small, collision issue with bounds
+	// ? countdown timer badly centered
+	// ? when opening the site on a page for the first time, game doesn't load until refresh
+	// ? issue with music when i switch menus too fast
 
-// ? adjust max bounce angle
+// TODO IMPROVEMENTS
+	// ? output both player names at start of match and winner name at the end
+	// ? adjust max bounce angle
+	// ? add player xp and level
+	// ? implement better ai
+	// ? add off/on button for sfx and music -> they should be present on main menu and waiting-player/readiness menu
+		// ? both icons clickacble and each time they're clicked the sound is adjusted by 25% with a visual indication of total volume
+	
+	
+	
 
-// ? add player xp and level
-
-// ? when screen is small, collision issue with bounds
-// ? countdown timer badly centered
-
-// ? when opening the site on a page for the first time, game doesn't load until refresh
-
-// ? issue with music when i switch menus too fast
-
-// ? add off/on button for sfx and music
-	// ? find sprites, both buttons clickable and adjust sound level by 25% with a visual indication
-
-// ? implement better ai
-
-// ? add off/on button for sfx and music -> they should be present on main menu and waiting-player/readiness menu
-	// ? both icons clickacble and each time they're clicked the sound is adjusted by 25% with a visual indication of total volume
-// sometimes weird thing keeps my paddle moving
 
 // TODO cute animation showing the roll of pong value in casino
 // TODO comment EVERYTHING
