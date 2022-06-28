@@ -63,6 +63,7 @@ function GameComponent() {
 			<div id="button-ai"/>
 			<div id="button-validate"/>
 			<div id="button-return"/>
+			<div id="button-sound"/>
 			<div id="button-map-original"/>
 			<div id="button-map-city"/>
 			<div id="button-map-casino"/>

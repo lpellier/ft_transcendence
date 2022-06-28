@@ -62,6 +62,10 @@ function listenStartEvents() {
 	socket.on("countdown-server", () => {
 		if (game.state === "countdown" || game.state === "relaunch-countdown") {
 			game.timer--;
+			if (game.timer === 0)
+			consts.playBip(consts.BIP_FINAL);
+			else if (game.timer > 0)
+				consts.playBip(consts.BIP);
 			if (game.timer === -1)
 				game.setState("in-game");
 		}
@@ -70,18 +74,13 @@ function listenStartEvents() {
 	socket.on("relaunch", () => {
 		game.setState("relaunch-countdown");
 		game.timer = 1;
+		consts.playBip(consts.BIP);
 	});
 }
 
 function listenStopEvents() {
 	socket.on("player-disconnect", (index : number) => {
 		opponentLeftMenu();
-	});
-
-	socket.on("restart-server", () => {
-		game.timer = 3;
-		game.setState("in-game");
-		game.score = [0, 0];
 	});
 
 	socket.on("game-over", () => {
@@ -101,14 +100,24 @@ function listenMoveEvents() {
 		if (count === game.players.length) {
 			game.setState("countdown");
 			socket.emit("countdown_start");
+			consts.playBip(consts.BIP);
 		}
 	});
 
-	socket.on("bump", (index : number) => {
+	socket.on("bumper-hit", (index : number) => {
+		consts.playRandomBumperSound();
 		if (index === 0)
 			bumpers[0].hit = true;
 		if (index === 1)
 			bumpers[1].hit = true;
+	});
+
+	socket.on("player-hit", () => {
+		consts.playRandomPaddleSound();
+	});
+	
+	socket.on("wall-hit", () => {
+		consts.playRandomWallSound();
 	});
 
 	socket.on("updated_pos", (
@@ -120,7 +129,12 @@ function listenMoveEvents() {
 		pong_value : number
 	) => {
 			if (game.state === "in-game" || game.state === "relaunch-countdown" || game.state === "countdown") {
-				game.score = score;
+				if (game.score[0] != score[0] || game.score[1] != score[1]) {
+					frame_count_shake = 0;
+					consts.playScore();
+				}
+				game.score[0] = score[0];
+				game.score[1] = score[1];
 				game.pong.pos[0] = pong_pos[0] * consts.WIDTH / 1200;
 				game.pong.pos[1] = pong_pos[1] * consts.HEIGHT / 750;
 				game.pong.velocity = pong_vel;
