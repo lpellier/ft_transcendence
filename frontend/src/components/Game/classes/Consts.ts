@@ -153,7 +153,7 @@ class Consts {
 	}
 	
 	fadeMusicUp(music : any) {
-		music.fastSeek(0);
+		music.currentTime = 0;
 		music.play();
 		music.volume = 0;
 		for (let j = 0; j < 10; j++) {
