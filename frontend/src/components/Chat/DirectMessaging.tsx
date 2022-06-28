@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { User, Room, Message } from 'interfaces';
+import { User, Room } from 'interfaces';
 
 import '../../styles/Chat/Channels.css';
 import '../../styles/Chat/DirectMessaging.css'
@@ -9,7 +9,8 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import { socket } from 'index';
 import PersonIcon from '@mui/icons-material/Person';
-import { IconButton } from '@mui/material';
+import BlockIcon from '@mui/icons-material/Block';
+import { Backdrop, ButtonGroup, IconButton, Button, Stack, Alert } from '@mui/material';
 
 
 interface CreateDMRoomDto {
@@ -18,38 +19,72 @@ interface CreateDMRoomDto {
     user2Id: number;
 }
 
-function UserList(props: {currentUser: User, users: User[], rooms: Room[], setCurrentRoom: React.Dispatch<React.SetStateAction<Room>>, search: string}) {
-    
-
-    return (     
-        <List className='user-list'>
-            {props.users.map(user => (
-                <div key={user.id}>
-                {user.id !== props.currentUser.id?
-                    <div>
-                        {user.username.includes(props.search)?
-                            <ListItem >
-                                <ListItemText primary={user.username}/>
-                            </ListItem >
-                        :
-                            <div/>
-                        }
-                    </div>
-                :
-                    <div/>
-                }
-                </div>
-            ))
-            }
-        </List>
-    )
-}
 
 export default function DirectMessaging(props: {user: User, users: User[], rooms: Room[], currentRoom: Room, setCurrentRoom: React.Dispatch<React.SetStateAction<Room>>, setComponent: React.Dispatch<React.SetStateAction<string>>}) {
-
+    
     let [showUserList, setShowUserList] = useState<boolean>(false);
     let [search, setSearch] = useState<string>("");
+    let [blocked, setBlocked] = useState<User[]>([]);
+    
+    useEffect(() => {
+        socket.emit('get blocked', props.user.id);
+    }, [props.user.id])
 
+    useEffect(() => {
+        const handler = () => {socket.emit('get blocked', props.user?.id)}
+        socket.on('add blocked', handler);
+        return () => {
+            socket.off('add blocked', handler);
+        }
+    })
+
+    console.log("blocked = ", blocked);
+
+    useEffect(() => {
+        const handler = (data: User[]) => {setBlocked(data);};
+        socket.on('get blocked', handler);
+        return () => {
+            socket.off('get blocked', handler);
+        }
+    })
+
+    function    parseUser(roomName: string) {
+        const user1Id:number = parseInt(roomName.split('-')[0]);
+        const user2Id:number = parseInt(roomName.split('-')[1]);
+        let   otherId:number;
+        if (user1Id === props.user.id)
+            otherId = user2Id;
+        else
+            otherId = user1Id;
+        const otherUser = props.users.find(user => otherId === user.id);
+        return otherUser;
+    }
+    
+    function UserList(props: {currentUser: User, users: User[], rooms: Room[], setCurrentRoom: React.Dispatch<React.SetStateAction<Room>>, search: string}) {
+    
+        return (     
+            <List className='user-list'>
+                {props.users.map(user => (
+                    <div key={user.id}>
+                    {user.id !== props.currentUser.id && blocked.find(blockedUser => blockedUser.username === user.username) === undefined?
+                        <div>
+                            {user.username.includes(props.search)?
+                                <ListItem >
+                                    <ListItemText primary={user.username}/>
+                                </ListItem >
+                            :
+                                <div/>
+                            }
+                        </div>
+                    :
+                        <div/>
+                    }
+                    </div>
+                ))
+            }
+            </List>
+        )
+    }
 
     function handleFocus(event: any) {
         setShowUserList(true);
@@ -109,21 +144,50 @@ export default function DirectMessaging(props: {user: User, users: User[], rooms
 			socket.off('create dm room', handler);
 		})
 	})
+    
+    
+    function UserMod(props: {user: User, users: User[], room: Room, setComponent: React.Dispatch<React.SetStateAction<string>>}) {
+        
+        let [showBackdrop, setShowBackdrop] = useState<boolean>(false);
+        
+        
+        function    goToProfile(userId: number | undefined) {
+            props.setComponent("Profile");
+        }
+        
+        function    blockUser(blockedId: number | undefined) {
+            socket.emit('add blocked', {userId: props.user.id, blockedId: blockedId} );
+            setShowBackdrop(false);
+        }
 
-    function    parseUser(roomName: string) {
-        const user1Id:number = parseInt(roomName.split('-')[0]);
-        const user2Id:number = parseInt(roomName.split('-')[1]);
-        let   otherId:number;
-        if (user1Id === props.user.id)
-            otherId = user2Id;
-        else
-            otherId = user1Id;
-        const otherUser = props.users.find(user => otherId === user.id);
-        return otherUser?.username;
-    }
-
-    function    goToProfile(userId: number) {
-        props.setComponent("Profile");
+        return (
+            <div>
+                <Stack direction="row" justifyContent="space-between">
+                    <ListItemText primary={parseUser(props.room.name)?.username}/>
+                    <Stack direction="row" >
+                        <IconButton onClick={() => goToProfile(parseUser(props.room.name)?.id)} ><PersonIcon/></IconButton>
+                        <IconButton onClick={() => setShowBackdrop(true)} ><BlockIcon/></IconButton>
+                    </Stack>
+                </Stack>
+                <Backdrop
+                    open={showBackdrop}
+                >
+                    <Stack alignItems="center">
+                        <Alert severity="warning">
+                            Are you sure you want to block {parseUser(props.room.name)?.username}?
+                        </Alert>
+                        <ButtonGroup>
+                            <Button variant="contained" color="success" onClick={() => blockUser(parseUser(props.room.name)?.id)}>
+                                Yes
+                            </Button>
+                            <Button variant="contained" color="error" onClick={() => setShowBackdrop(false)}>
+                                No
+                            </Button>
+                        </ButtonGroup>
+                    </Stack>
+                </Backdrop>
+            </div>
+        );
     }
 
     return (
@@ -142,19 +206,18 @@ export default function DirectMessaging(props: {user: User, users: User[], rooms
                 <div/>
             } 
             <List>
-                {props.rooms.map(item => (
-                    <div key={item.id}>
-                        {item.ownerId == 0?
+                {props.rooms.map(room => (
+                    <div key={room.id}>
+                        {room.ownerId === 0 && blocked.find(user => parseUser(room.name)?.username === user.username) === undefined?
                             <div>
-                                { item.id !== props.currentRoom.id ?
+                                { room.id !== props.currentRoom.id ?
 
-                                    <ListItem button className="MenuItem" onClick={() => props.setCurrentRoom(item) } >
-                                        <ListItemText primary={parseUser(item.name)}/>
-                                        <IconButton onClick={() => goToProfile(item.id)} ><PersonIcon/></IconButton>
+                                    <ListItem button className="MenuItem" onClick={() => props.setCurrentRoom(room) } sx={{ alignContent:"center" }} >
+                                        <UserMod user={props.user} users={props.users} room={room} setComponent={props.setComponent}/>
                                     </ListItem>
                                 :
-                                    <ListItem className="MenuItem" selected >
-                                        <ListItemText primary={parseUser(item.name)}/>
+                                    <ListItem className="MenuItem" selected  sx={{ alignContent:"center"}}>
+                                           <UserMod user={props.user} users={props.users} room={room} setComponent={props.setComponent}/>
                                     </ListItem>
                                 }
                             </div>

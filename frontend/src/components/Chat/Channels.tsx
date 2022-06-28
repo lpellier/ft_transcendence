@@ -25,6 +25,7 @@ import FormControl from '@mui/material/FormControl'
 import Button from '@mui/material/Button'
 
 import DirectMessaging from './DirectMessaging';
+import { ButtonGroup } from '@mui/material';
 
 
 interface CreateRoomDto {
@@ -243,8 +244,10 @@ function Channels(props : {user: User, users: User[], currentRoom: Room, setCurr
 		<div>
 		<Stack className='channels' >
 			<Stack direction='row'>
-				<Button variant="contained" onClick={() => setTab('channels')}>Channels</Button>
-				<Button variant="contained" onClick={() => setTab('dms')}>DMs</Button>
+				<ButtonGroup>
+					<Button variant="contained" onClick={() => setTab('channels')}>Channels</Button>
+					<Button variant="contained" onClick={() => setTab('dms')}>DMs</Button>
+				</ButtonGroup>
 			</Stack>
 			{tab === 'channels'?
 			<Stack justifyContent='space-between'>
