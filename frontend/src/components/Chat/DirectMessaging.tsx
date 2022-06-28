@@ -8,7 +8,8 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import { socket } from 'index';
-
+import PersonIcon from '@mui/icons-material/Person';
+import { IconButton } from '@mui/material';
 
 
 interface CreateDMRoomDto {
@@ -44,7 +45,7 @@ function UserList(props: {currentUser: User, users: User[], rooms: Room[], setCu
     )
 }
 
-export default function DirectMessaging(props: {user: User, users: User[], rooms: Room[], currentRoom: Room, setCurrentRoom: React.Dispatch<React.SetStateAction<Room>>}) {
+export default function DirectMessaging(props: {user: User, users: User[], rooms: Room[], currentRoom: Room, setCurrentRoom: React.Dispatch<React.SetStateAction<Room>>, setComponent: React.Dispatch<React.SetStateAction<string>>}) {
 
     let [showUserList, setShowUserList] = useState<boolean>(false);
     let [search, setSearch] = useState<string>("");
@@ -121,6 +122,10 @@ export default function DirectMessaging(props: {user: User, users: User[], rooms
         return otherUser?.username;
     }
 
+    function    goToProfile(userId: number) {
+        props.setComponent("Profile");
+    }
+
     return (
         <div>
             <form onSubmit={handleOnSubmit} >
@@ -145,6 +150,7 @@ export default function DirectMessaging(props: {user: User, users: User[], rooms
 
                                     <ListItem button className="MenuItem" onClick={() => props.setCurrentRoom(item) } >
                                         <ListItemText primary={parseUser(item.name)}/>
+                                        <IconButton onClick={() => goToProfile(item.id)} ><PersonIcon/></IconButton>
                                     </ListItem>
                                 :
                                     <ListItem className="MenuItem" selected >
