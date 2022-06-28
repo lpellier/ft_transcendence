@@ -54,6 +54,9 @@ class Consts {
 	BUMPER_HIT_1 : any;
 	BUMPER_HIT_2 : any;
 
+	BIP : any;
+	BIP_FINAL : any;
+
 	CASINO_MUSIC : any;
 	CITY_MUSIC : any;
 	ORIGINAL_MUSIC : any;
@@ -96,6 +99,9 @@ class Consts {
 		this.BUMPER_HIT_1 = new Audio("/assets/sfx/bumper_hit_1.mp3");
 		this.BUMPER_HIT_2 = new Audio("/assets/sfx/bumper_hit_2.mp3");
 
+		this.BIP = new Audio("/assets/sfx/bip.mp3");
+		this.BIP_FINAL = new Audio("/assets/sfx/bip-final.mp3");
+
 		this.max_volume = 0.25;
 
 		this.CASINO_MUSIC = new Audio("/assets/music/casino.mp3");
@@ -117,6 +123,12 @@ class Consts {
 
 
 		this.music_playing = "none";
+	}
+
+	playBip(bip : any) {
+		bip.currentTime = 0;
+		bip.volume = this.max_volume;
+		bip.play();
 	}
 
 	playRandomPaddleSound() {

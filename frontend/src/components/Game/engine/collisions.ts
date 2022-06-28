@@ -70,6 +70,10 @@ function checkCollisions() {
 		for (let i = 0; i < 3; i++) {
 			setTimeout(() => {
 				game.timer--;
+				if (game.timer === 0)
+					consts.playBip(consts.BIP_FINAL);
+				else if (game.timer > 0)
+					consts.playBip(consts.BIP);
 				if (game.timer === -1 && game.state === "relaunch-countdown")
 					game.setState("in-game");
 			}, i * 1000);
@@ -85,16 +89,20 @@ function checkCollisions() {
 			game.score[0]--;
 		else
 			game.score[1] += game.pong.value;
-			game.setState("relaunch-countdown");
-			game.timer = 2;
-			for (let i = 0; i < 3; i++) {
-				setTimeout(() => {
-					game.timer--;
-					if (game.timer === -1 && game.state === "relaunch-countdown")
-						game.setState("in-game");
-				}, i * 1000);
-			}
-			game.pong.relaunchPong("left");
+		game.setState("relaunch-countdown");
+		game.timer = 2;
+		for (let i = 0; i < 3; i++) {
+			setTimeout(() => {
+				game.timer--;
+				if (game.timer === 0)
+					consts.playBip(consts.BIP_FINAL);
+				else if (game.timer > 0)
+					consts.playBip(consts.BIP);
+				if (game.timer === -1 && game.state === "relaunch-countdown")
+					game.setState("in-game");
+			}, i * 1000);
+		}
+		game.pong.relaunchPong("left");
 		if (game.score[1] >= game.score_limit)
 			game.setState("game-over");
 		game.frames_since_point = 0;

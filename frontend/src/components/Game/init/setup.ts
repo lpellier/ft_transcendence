@@ -9,14 +9,16 @@
 	// ? ball speed not adjusted right away when resizing screen
 
 // TODO IMPROVEMENTS
+	// ? correct sound color
 	// ? output both player names at start of match and winner name at the end
+	// ? add more sounds : count down, wall hit, goal
 	// ? adjust max bounce angle
 	// ? add player xp and level
 	// ? implement better ai
 	// ? handle edge cases like players leaving in middle of game for stats (count as defeat)
+	// ? cute animation showing the roll of pong value in casino
+	// ? comment EVERYTHING
 
-// TODO cute animation showing the roll of pong value in casino
-// TODO comment EVERYTHING
 
 let spritesheet : any;
 let spritedata : any;
@@ -38,6 +40,8 @@ let socket : any = null;
 
 let user_name : string;
 let user_id : string;
+
+let log_count : number = 0;
 
 function preload() {
 	// soundFormats("mp3");

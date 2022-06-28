@@ -171,6 +171,10 @@ function startLocal() {
 		for (let i = 0; i < 5; i++) {
 			setTimeout(() => {
 				game.timer--;
+				if (game.timer === 0)
+					consts.playBip(consts.BIP_FINAL);
+				else if (game.timer >= 0)
+					consts.playBip(consts.BIP);
 				if (game.timer === -1 && game.state === "countdown") {
 					game.setState("in-game");
 				}

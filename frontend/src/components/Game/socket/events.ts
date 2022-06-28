@@ -62,6 +62,10 @@ function listenStartEvents() {
 	socket.on("countdown-server", () => {
 		if (game.state === "countdown" || game.state === "relaunch-countdown") {
 			game.timer--;
+			if (game.timer === 0)
+			consts.playBip(consts.BIP_FINAL);
+			else if (game.timer > 0)
+				consts.playBip(consts.BIP);
 			if (game.timer === -1)
 				game.setState("in-game");
 		}
@@ -70,18 +74,13 @@ function listenStartEvents() {
 	socket.on("relaunch", () => {
 		game.setState("relaunch-countdown");
 		game.timer = 1;
+		consts.playBip(consts.BIP);
 	});
 }
 
 function listenStopEvents() {
 	socket.on("player-disconnect", (index : number) => {
 		opponentLeftMenu();
-	});
-
-	socket.on("restart-server", () => {
-		game.timer = 3;
-		game.setState("in-game");
-		game.score = [0, 0];
 	});
 
 	socket.on("game-over", () => {
@@ -101,6 +100,7 @@ function listenMoveEvents() {
 		if (count === game.players.length) {
 			game.setState("countdown");
 			socket.emit("countdown_start");
+			consts.playBip(consts.BIP);
 		}
 	});
 
