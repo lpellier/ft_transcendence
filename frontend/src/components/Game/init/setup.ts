@@ -4,7 +4,18 @@
 
 // ? output both player names at start of match and winner name at the end
 
-// ? adjst max angle for pong bounce
+// ? adjust max bounce angle
+
+// ? add player xp and level
+
+// ? when screen is small, collision issue with bounds
+// ? countdown timer badly centered
+
+
+// ? issue with music when i switch menus too fast
+
+// ? add off/on button for sfx and music
+	// ? find sprites, both buttons clickable and adjust sound level by 25% with a visual indication
 
 // ? implement better ai
 
