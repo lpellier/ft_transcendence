@@ -43,7 +43,7 @@ function LogInButton()
 	);
 }
 
-export default function LogIn(props: {user: User, auth: boolean}) {
+export default function LogIn(props: {user: User | undefined, auth: boolean}) {
 
     return (
         <Stack spacing={10} sx={Title}>

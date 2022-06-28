@@ -35,9 +35,10 @@ export class FriendsGateway
     
   }
 
-  @SubscribeMessage('removeFriend')
-  remove(@MessageBody() friendUserDto: FriendUserDto) {
-    return this.friendsService.remove(friendUserDto.userId, friendUserDto.friendId);
+  @SubscribeMessage('remove friend')
+  remove(@ConnectedSocket() client:Socket,@MessageBody() friendUserDto: FriendUserDto) {
+    this.friendsService.remove(friendUserDto.userId, friendUserDto.friendId);
+    client.emit('add friend');
   }
 
   @SubscribeMessage('get friends')
