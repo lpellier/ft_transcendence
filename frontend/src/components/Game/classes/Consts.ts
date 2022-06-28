@@ -94,7 +94,7 @@ class Consts {
 
 		this.PLAYER_WIDTH = this.WIDTH / 80;
 		this.PLAYER_HEIGHT = this.HEIGHT / 9;
-		this.PLAYER_SPEED = this.DIAGONAL / 200;
+		this.PLAYER_SPEED = this.DIAGONAL / 125;
 
 		this.PONG_DIAMETER = this.DIAGONAL / 120;
 		this.PONG_BASE_SPEED = this.PLAYER_SPEED;

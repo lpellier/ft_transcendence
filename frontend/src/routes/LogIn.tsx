@@ -28,30 +28,6 @@ const style = {
 
 function LogInButton()
 {
-
-	// useEffect (() => {
-	// 	console.log("win location: ", window.location.href)
-	// 	console.log("condition: ", window.location.href === "http://127.0.0.1:3000/")
-	// 	{ window.location.href === "http://127.0.0.1:3000/" ?
-	// 		<TFAuth/>
-	// 			:
-	// 		<div />
-	// 	}
-	// }, [])
-
-	function handleClick() {
-
-		if (window.location.href === "http://127.0.0.1:3000")
-		{ 
-			const loginWin = window.open("http://127.0.0.1:3000/tfauth", 
-				'_blank', 'width=1200,height=1200,left=200,top=200');
-		}
-
-		return (
-			<div/>
-		)
-	}
-
 	return (
 		<ThemeProvider theme={orangeTheme}>
         	        <Button
@@ -60,7 +36,6 @@ function LogInButton()
         	            startIcon={<LoginIcon />}
         	            size="large"
         	            color="primary"
-						onClick={handleClick}
 					>
         	          Log in
         	        </Button>
@@ -68,20 +43,26 @@ function LogInButton()
 	);
 }
 
-export default function LogIn(props: {user: User}) {
+export default function LogIn(props: {user: User, auth: boolean}) {
 
     return (
-        	<Stack spacing={10} sx={Title}>
-				<div>
-					GnaGna
-					<WebhookIcon sx={IconStyle}/>
-					Pong
-				</div>
-				<nav>
-					<a href={AuthAPI} style={LinkStyle}>
-						<LogInButton />
-					</a>
-				</nav>
-        	</Stack>
+		<div>
+			{props.auth === true ?
+				<Navigate to="/profile" />
+					:
+        		<Stack spacing={10} sx={Title}>
+					<div>
+						GnaGna
+						<WebhookIcon sx={IconStyle}/>
+						Pong
+					</div>
+					<nav>
+						<a href={AuthAPI} style={LinkStyle}>
+							<LogInButton />
+						</a>
+					</nav>
+        		</Stack>
+			}
+		</div>
 	);
 }

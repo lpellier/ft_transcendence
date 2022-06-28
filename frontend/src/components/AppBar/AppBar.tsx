@@ -4,7 +4,6 @@ import {User} from 'interfaces';
 import {PlayerAvatar} from	'../Avatars';
 
 import FriendBar from 'components/FriendBar/FriendBar';
-import { ToastContainer } from 'react-toastify';
 
 
 import AppBar from '@mui/material/AppBar'
@@ -100,29 +99,16 @@ function ProjectName() {
 	);
 }
 
-export default function SearchAppBar(props: {user: User, component: string, setComponent: React.Dispatch<React.SetStateAction<string>>}) {
+export default function SearchAppBar(props: {user: User, users: User[], component: string, setComponent: React.Dispatch<React.SetStateAction<string>>}) {
 
   return (
       <AppBar position="static">
-		<ToastContainer
-                position="top-center"
-                autoClose={5000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-		/>
         <Toolbar style={ BarStyle }>
-			<Button onClick={() => props.setComponent("Profile")}>
-				<PlayerAvatar image={'http://127.0.0.1:3001/avatars/' + props.user.id + '.png'}/>
-			</Button>
+			<PlayerAvatar image={'http://127.0.0.1:3001/avatars/' + props.user.id + '.png'} onClick={() => props.setComponent("Profile")}/>
 			<PlayerName name={props.user.username}/>
 			<ProjectName />
 			<Stack direction="row" spacing={2}>
-				<FriendBar user={props.user}/>
+				<FriendBar user={props.user} users={props.users}/>
 				<AppBarButton onClick={() => props.setComponent("Game")} tooltip={"New Game"} icon={<GamesIcon />}/>
 				<AppBarButton onClick={() => props.setComponent("Chat")} tooltip={"Forum"} icon={<ForumIcon />}/>
 				<AppBarButton onClick={() => props.setComponent("Settings")} tooltip={"Settings"} icon={<SettingsIcon />}/>

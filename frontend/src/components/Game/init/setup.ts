@@ -2,6 +2,11 @@
 // ? Coding consistency : snake_case for variables | camelCase for functions | PascalCase for classes
 // ? Map indexes : 1 (normal map), 2 (city map), 3 (casino map)
 
+// ? casino enhancement : more chances to get lower valued pongs
+// ? add a -1 pong to remove a point from opponent
+
+// ? add a break
+
 // TODO find a way to send data to database and fill every appropriate field when situation calls for it
 
 // TODO cute animation showing the roll of pong value in casino
@@ -154,7 +159,7 @@ function draw() {
 			}
 		}
 		if (game.frames_since_point < 180 && game.map.name === "casino")
-			outputAnnouncement(game.pong.value + (game.pong.value === 1 ? " point" : " points"), consts.std_font_size, consts.WIDTH * 0.5, consts.HEIGHT * 0.95, game.pong.color);
+			outputAnnouncement(game.pong.value + (game.pong.value === 1 || game.pong.value === -1 ? " point" : " points"), consts.std_font_size, consts.WIDTH * 0.5, consts.HEIGHT * 0.95, game.pong.color);
 	}
 	else if (game.state === "game-over") {
 		buttons.return.show();

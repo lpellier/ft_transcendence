@@ -10,9 +10,38 @@ import {useState, useEffect} from 'react'
 import {User} from 'interfaces';
 
 import axios from 'axios'
+import {toast} from 'react-toastify';
+
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 import {socket} from 'index';
 
+
+export function toastThatError(message: string) {
+    toast.error(message, {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        });
+}
+
+export function toastIt(message: string) {
+    toast.success(message, {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        });
+}
 
 
 export default function App() {
@@ -44,7 +73,7 @@ export default function App() {
 
     useEffect(() => {
 		axios.get('http://127.0.0.1:3001/users/me',{
-		withCredentials: true
+            withCredentials: true
         })
         .then(res => {
             console.log("Get user request success")
@@ -60,7 +89,7 @@ export default function App() {
 		<Stack spacing={2}>
             {user?
                 <div>
-                    <SearchAppBar user={user} component={component} setComponent={setComponent}/>
+                    <SearchAppBar user={user} users={users} component={component} setComponent={setComponent}/>
                     {component === "Profile"?
                         <Profile user={user}/>
                     :
@@ -83,11 +112,22 @@ export default function App() {
                                 </div>
                             }
                         </div>
-                    } 
+                    }
                 </div>
             :
                 <div/>
             }
+            <ToastContainer
+                position="top-center"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover={false}
+            />
 		</Stack>
     );
 }

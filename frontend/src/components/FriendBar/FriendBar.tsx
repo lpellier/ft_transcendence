@@ -1,12 +1,12 @@
 
-import { useDebugValue, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Drawer from '@mui/material/Drawer';
 import Button from '@mui/material/Button';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import { TextField } from '@mui/material';
 import { User } from 'interfaces';
 import { socket } from 'index';
-import { toastThatError, toastIt } from 'components/Chat/RoomUserMod';
+import { toastThatError, toastIt } from 'App';
 
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -20,20 +20,30 @@ interface FriendUserDto {
     friendId: number;
 }
 
-export default function FriendBar(props: {user: User}) {
+function UserList(props: {users: User[], friends: User[]}) {
+    return (
+        <List>
+        {props.users.map(item => {
+            <ListItem>
+                <ListItemText primary={item.username}/>
+            </ListItem>
+        })}
+        </List>
+    )
+}
+
+export default function FriendBar(props: {user: User, users: User[]}) {
     
     let [open, setOpen] = useState<boolean>(false);
     let [addFriendClicked, setAddFriendClicked] = useState<boolean>(false);
     let [friends, setFriends] = useState<User[]>([]);
-    let [users, setUsers] = useState<User[]>([]);
 
     function toggleFriendBar() {
         setOpen(true);
     }
 
     useEffect(() => {
-        socket.emit('get all users')
-        socket.emit('find all friends', props.user?.id);
+        socket.emit('find all friends', props.user.id);
     }, [])
 
     useEffect(() => {
@@ -60,25 +70,20 @@ export default function FriendBar(props: {user: User}) {
         }
     })
 
-    useEffect(() => {
-        socket.on('got all users', (data) => {
-            setUsers(data);
-        })
-    }, [])
 
     function addFriendSubmit(e: any) {
         e.preventDefault();
         console.log('add friend called');
         const username: string = e.target[0].value;
         console.log('username = ', username);
-        if( users.find(user => user.username === username) )
+        if( props.users.find(user => user.username === username) )
         {
             console.log('user exists')
             if( friends.find(user=> user.username === username))
                 toastThatError('this user is already your friend');
             else
             {
-                let friendId: any = users.find(user => user.username === username)?.id;
+                let friendId: any = props.users.find(user => user.username === username)?.id;
                 const friendUser: FriendUserDto = {userId: props.user.id, friendId: friendId };
                 socket.emit('add friend', friendUser);
                 setAddFriendClicked(false);
@@ -108,6 +113,7 @@ export default function FriendBar(props: {user: User}) {
                 {addFriendClicked?
                     <Stack component="form" onSubmit={addFriendSubmit} spacing={1}>
                         <TextField id="roomName" label="friend name" variant="standard" />
+                        <UserList users={props.users} friends={friends}/>
                         <Button variant="contained" color="success" type="submit">
                             Add
                         </Button>

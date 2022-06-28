@@ -1,6 +1,7 @@
 import { ConsoleLogger } from "@nestjs/common";
 import * as consts from "./Consts"
 import { Game } from "./Game"
+import { Server } from "socket.io"
 
 export class Pong {
 	pos : [number, number]
@@ -19,10 +20,10 @@ export class Pong {
 		this.relaunchPong(side);
 	}
 
-	calculateNewPos(game : Game) : boolean {
+	calculateNewPos(game : Game, server : Server) : boolean {
 		this.pos[0] += this.velocity[0];
 		this.pos[1] += this.velocity[1];
-		return game.checkCollisions();
+		return game.checkCollisions(server);
 	}
 
 	relaunchPong(loser_side : string) {

@@ -35,6 +35,8 @@ export class AuthService {
 
 	async validateGoogleAuthenticatorToken(userId: number, otp: ValidateOtpDto) {
 		const { otpSecret } = await this.usersService.findOne(userId);
+		console.log('validating ', otp.value)
+		console.log(authenticator.generate(otpSecret))
 		const validated = authenticator.check(otp.value, otpSecret);
 		return validated;
 	}

@@ -27,8 +27,10 @@ function ProtectedRoute(props: {children: JSX.Element, auth: any}) {
 }
 
 export default function AllRoutes()  {
-	const [isAuth, setAuth] = useState(false);
+	const [isAuth, setAuth] = useState(true);
 	const [user, setUser] = useState<User>(init_user);
+
+	console.log("user is : ", user)
 
 	useEffect (() => {
 		axios.get('http://127.0.0.1:3001/users/me', {
@@ -49,7 +51,7 @@ export default function AllRoutes()  {
 	return (
 		<BrowserRouter>
 	    	<Routes>
-	    	    <Route path="/" element={<LogIn user={user} />} />
+	    	    <Route path="/" element={<LogIn user={user} auth={isAuth} />} />
 	    	    <Route path="/tfauth" element={<TFAuth />} />
 	    	    <Route path="profile" element={ <ProtectedRoute auth={isAuth} ><App /></ProtectedRoute>} />
 	    	</Routes>

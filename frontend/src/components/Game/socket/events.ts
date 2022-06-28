@@ -41,6 +41,10 @@ function listenStartEvents() {
 	});
 
 	socket.on("waiting-readiness", (id_p1 : string, id_p2 : string) => {
+		if (game.players.length == 2 && game.players[1].id === "null") {
+			game.players[1].id = id_p2;
+			game.state = "waiting-readiness"
+		}
 		if (game.players.length === 0) {
 			game.state = "waiting-readiness"
 			if (socket.id === id_p1) {
@@ -93,6 +97,13 @@ function listenMoveEvents() {
 			game.state = "countdown";
 			socket.emit("countdown_start");
 		}
+	});
+
+	socket.on("bump", (index : number) => {
+		if (index === 0)
+			bumpers[0].hit = true;
+		if (index === 1)
+			bumpers[1].hit = true;
 	});
 
 	socket.on("updated_pos", (

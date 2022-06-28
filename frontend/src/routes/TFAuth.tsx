@@ -29,23 +29,32 @@ const TitleStyle = {
 	textShadow: '1px 1px 2px black',
 }
 
-function PinField(props: {value: string, setPininput: any}) {
-	const [hasSubmited, sethasSubmited] = useState<boolean>(false)
-	const [user, setUser] = useState<User>(init_user)
+function PinField(props: {value: string, setPininput: any, setRedirect: any}) {
+
+	useEffect(() => {
+		console.log(props.value, typeof props.value)
+
+		axios.post(
+		'http://127.0.0.1:3001/auth/google-authenticator', 
+		props.value,
+		{
+			withCredentials: true, 
+		})
+		.then(res => {
+			console.log("Post request success :")
+			props.setRedirect(true)
+		})
+		.catch(function (err) {
+			console.log("Post request failed :", err)
+		})
+	}, [props.value])
 
 	function handleSubmit(e: any)
 	{
 		e.preventDefault();
 		props.setPininput({value: e.target[0].value});
 		e.target[0].value = "";
-		
-		sethasSubmited(true);
-		getUser(setUser);
 	}
-
-	useEffect(() => {
-		getUser(setUser)
-	}, [user])
 
 	return (
 		<div>
@@ -56,20 +65,13 @@ function PinField(props: {value: string, setPininput: any}) {
 					variant="standard"
 					/>
 			</form>
-			{hasSubmited === true ?
-				<Navigate replace to="profile" />
-					:
-					window.location.href === "http://127.0.0.1:3000/" ?
-						<h3> Wrong login </h3>
-						:
-				<div/>
-			}
 		</div>
 	);
 }
 
 export default function TFAuth() {
 	const [pinInput, setPininput] = useState<string>("");
+	const [redirect, setRedirect] = useState<boolean>(false);
 
 	return (
 		<Box sx={BoxStyle}>
@@ -77,7 +79,7 @@ export default function TFAuth() {
 				<h1 style={TitleStyle} >
 					Hey, insert your Pin !
 				</h1>
-				<PinField value={pinInput} setPininput={setPininput}/>
+				<PinField value={pinInput} setPininput={setPininput} setRedirect={setRedirect}/>
 			</Stack>
 		</Box>
 	)
