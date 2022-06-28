@@ -4,6 +4,7 @@ import {User} from 'interfaces';
 import {PlayerAvatar} from	'../Avatars';
 
 import FriendBar from 'components/FriendBar/FriendBar';
+import { ToastContainer } from 'react-toastify';
 
 
 import AppBar from '@mui/material/AppBar'
@@ -103,8 +104,21 @@ export default function SearchAppBar(props: {user: User, users: User[], componen
 
   return (
       <AppBar position="static">
+		<ToastContainer
+                position="top-center"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+		/>
         <Toolbar style={ BarStyle }>
+			<Button onClick={() => props.setComponent("Profile")}>
 			<PlayerAvatar image={'http://127.0.0.1:3001/avatars/' + props.user.id + '.png'} onClick={() => props.setComponent("Profile")}/>
+			</Button>
 			<PlayerName name={props.user.username}/>
 			<ProjectName />
 			<Stack direction="row" spacing={2}>
