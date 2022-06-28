@@ -13,7 +13,6 @@ function getUser(setter: any) {
 	.catch(function (err) {
 		console.log("Get user request failed : ", err)
 	});
-
 }
 
 function reqLogout() {

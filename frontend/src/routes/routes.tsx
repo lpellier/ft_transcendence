@@ -6,6 +6,7 @@ import {
 } from "react-router-dom";
 import axios from 'axios'
 import LogIn from './LogIn'
+import TFAuth from './TFAuth'
 import App from '../App'
 import Profile from '../components/Profile/Profile'
 
@@ -79,6 +80,7 @@ export default function AllRoutes()  {
 		})
 		.then(res => {
 			setAuth(true);
+			setUser(res.data)
 			console.log("Authentication get request success")
 		})
 		.catch(function (err) {
@@ -87,20 +89,20 @@ export default function AllRoutes()  {
 		})
 		console.log("Auth is : ", isAuth)
 	}, [isAuth])
-
 	
-
 	return (
 		<BrowserRouter>
 	        <Routes>
 	            <Route path="/login" element={<LogIn />} />
 	            <Route path="/" element={ <ProtectedRoute auth={isAuth}><App user={user} users={users}/></ProtectedRoute>}>
+					<Route path="tfauth" element={<TFAuth setAuth={setAuth}/>} />
 					<Route path="profile" element={ < Profile user={user}/>}/>
 					<Route path="chat" element={<Chat user={user} users={users}/>}/>
 					<Route path="game" element={<Game user={user}/>}/>
 					<Route path="settings" element={<Settings user={user}/>}/>
 				</Route>
 			</Routes>
+
 	    </BrowserRouter>
 	)
 }

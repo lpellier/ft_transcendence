@@ -3,7 +3,8 @@ import {Link} from 'react-router-dom'
 import {User} from 'interfaces';
 import {PlayerAvatar} from	'../Avatars';
 
-import FriendBar from '../FriendBar/FriendBar';
+import FriendBar from 'components/FriendBar/FriendBar';
+import { ToastContainer } from 'react-toastify';
 
 
 import AppBar from '@mui/material/AppBar'
@@ -103,6 +104,17 @@ export default function SearchAppBar(props: {user: User, users: User[]}) {
 
   return (
       <AppBar position="static">
+		<ToastContainer
+                position="top-center"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+		/>
         <Toolbar style={ BarStyle }>
 		<nav>
 			<Link to="profile" style={{ textDecoration: 'none' }}>
