@@ -120,7 +120,10 @@ function listenMoveEvents() {
 		pong_value : number
 	) => {
 			if (game.state === "in-game" || game.state === "relaunch-countdown" || game.state === "countdown") {
-				game.score = score;
+				if (game.score[0] != score[0] || game.score[1] != score[1])
+					frame_count_shake = 0;
+				game.score[0] = score[0];
+				game.score[1] = score[1];
 				game.pong.pos[0] = pong_pos[0] * consts.WIDTH / 1200;
 				game.pong.pos[1] = pong_pos[1] * consts.HEIGHT / 750;
 				game.pong.velocity = pong_vel;

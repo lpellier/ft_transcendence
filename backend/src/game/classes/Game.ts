@@ -23,6 +23,8 @@ export class Game {
 	publicity : string;
 	update_interval : any;
 
+	invert : boolean;
+
 	constructor(room_id: any) {
 		this.room_id = room_id;
 		this.state = 'waiting-player';
@@ -34,6 +36,7 @@ export class Game {
 		this.map = consts.original_map;
 		this.frames_since_point = 0;
 		this.publicity = "public";
+		this.invert = false;
 	}
 
 	spaceAvailable() {
@@ -80,6 +83,37 @@ export class Game {
 		this.pong.value = Math.floor(Math.random() * 4) + 1;
 	}
 
+	increment_score() {
+		if (!this.invert) {
+			if (this.pong.value === -1 && this.score[1] > 0)
+				this.score[1]--;
+			else
+				this.score[0] += this.pong.value;
+		}
+		else {
+			if (this.pong.value === -1 && this.score[0] > 0)
+				this.score[0]--;
+			else
+				this.score[1] += this.pong.value;
+		}
+	}
+
+	over() : boolean {
+		if (this.score[0] >= this.score_limit || this.score[1] >= this.score_limit)
+			return true;
+		return false;
+	}
+
+	scorePoint() : string {
+		if (!this.invert)
+			this.pong.relaunchPong("right");
+		else
+			this.pong.relaunchPong("left");
+		this.setNewValue();
+		this.frames_since_point = 0;
+		return "relaunch";
+	}
+
 	checkCollisions(server : Server) : string {
 		// Implement acceleration here
 		if (this.frames_since_point === 0)
@@ -119,21 +153,11 @@ export class Game {
 			this.pong.pos[1] = consts.BOT_BOUND - this.pong.diameter - consts.MAP_HEIGHT * 0.005;
 		}
 		if (this.pong.velocity[0] > 0 && this.pong.pos[0] + this.pong.diameter > right_bound) {
-			this.score[0] += this.pong.value;
-			if (this.score[0] >= this.score_limit)
-				return "over";
-			this.setNewValue();
-			this.pong.relaunchPong("right");
-			this.frames_since_point = 0;
+			this.invert = false;
 			return "relaunch";
 		}
 		else if (this.pong.velocity[0] < 0 && this.pong.pos[0] < left_bound) {
-			this.score[1] += this.pong.value;
-			if (this.score[1] >= this.score_limit)
-				return "over";
-			this.setNewValue();
-			this.pong.relaunchPong("left");
-			this.frames_since_point = 0;
+			this.invert = true;
 			return "relaunch";
 		}
 		

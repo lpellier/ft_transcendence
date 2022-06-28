@@ -30,7 +30,7 @@ function drawBallIntent() {
 	noStroke();
 	if (game.pong.velocity[0] < 0)
 		triangle(consts.WIDTH / 2.5, consts.HEIGHT / 2 + arrow_width / 2, consts.WIDTH / 2.5 + arrow_width, consts.HEIGHT / 2 + arrow_width + arrow_width / 2, consts.WIDTH / 2.5 + arrow_width, consts.HEIGHT / 2 - arrow_width + arrow_width / 2);
-	else
+	else if (game.pong.velocity[0] > 0)
 		triangle(consts.WIDTH * 1.5 / 2.5, consts.HEIGHT / 2 + arrow_width / 2, consts.WIDTH * 1.5 / 2.5 - arrow_width, consts.HEIGHT / 2 + arrow_width + arrow_width / 2, consts.WIDTH * 1.5 / 2.5 - arrow_width, consts.HEIGHT / 2 - arrow_width + arrow_width / 2);
 	pop();
 }

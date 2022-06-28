@@ -7,9 +7,10 @@
 	// ? when opening the site on a page for the first time, game doesn't load until refresh
 	// ? arrow to designate player that gets service is not responsive
 	// ? ball speed not adjusted right away when resizing screen
+	// ? Countdown sound playing at end of game (local only)
 
 // TODO IMPROVEMENTS
-	// ? correct sound color
+	// ? shake occurs before timer resets
 	// ? output both player names at start of match and winner name at the end
 	// ? add more sounds : count down, wall hit, goal
 	// ? adjust max bounce angle
@@ -41,7 +42,7 @@ let socket : any = null;
 let user_name : string;
 let user_id : string;
 
-let log_count : number = 0;
+let frame_count_shake : number;
 
 function preload() {
 	// soundFormats("mp3");
@@ -93,6 +94,7 @@ function setup() {
 	
 	resizeEverything();
 	game.setState("in-menu");
+	frame_count_shake = 0;
 }
 
 function hideIcons() {
@@ -104,6 +106,11 @@ function hideIcons() {
 
 function draw() {
 	consts.playAppropriateMusic();
+	push();
+	if ((game.score[0] != 0 || game.score[1] != 0) && (game.state === "in-game" || game.state === "relaunch-countdown") && frame_count_shake < 30) {
+		frame_count_shake++;
+		translate(Math.floor(random(-5, 6)), Math.floor(random(-5, 6)))
+	}
 	clear(0, 0, 0, 0);
 	hideIcons();
 	background(0);
@@ -194,4 +201,12 @@ function draw() {
 		drawSound();
 		buttons.sound.show();
 	}
+	// if (game.state === "in-menu") { // ? I felt like color of sound icon was sticking out so i tried to dampen it but now i don't know
+		// push();
+		// fill("rgba(0, 0, 0, 0.10)");
+		// noStroke();
+		// rect(consts.WIDTH * 0.8, consts.HEIGHT * 0.02, consts.small_square_diameter * 3, consts.small_square_diameter * 1.65);
+		// pop();
+	// }
+	pop();
 }

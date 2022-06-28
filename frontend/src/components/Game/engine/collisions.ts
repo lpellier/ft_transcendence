@@ -60,54 +60,10 @@ function checkCollisions() {
 	else if (game.pong.pos[1] + game.pong.diameter > consts.BOT_BOUND) {
 		game.pong.pos[1] = consts.BOT_BOUND - game.pong.diameter - consts.HEIGHT * 0.005;
 	}
-	if (game.pong.velocity[0] > 0 && game.pong.pos[0] + game.pong.diameter > consts.RIGHT_BOUND) {
-		if (game.pong.value === -1 && game.score[1] > 0)
-			game.score[1]--;
-		else
-			game.score[0] += game.pong.value;
-		game.setState("relaunch-countdown");
-		game.timer = 2;
-		for (let i = 0; i < 3; i++) {
-			setTimeout(() => {
-				game.timer--;
-				if (game.timer === 0)
-					consts.playBip(consts.BIP_FINAL);
-				else if (game.timer > 0)
-					consts.playBip(consts.BIP);
-				if (game.timer === -1 && game.state === "relaunch-countdown")
-					game.setState("in-game");
-			}, i * 1000);
-		}
-		game.pong.relaunchPong("right");
-		if (game.score[0] >= game.score_limit)
-			game.setState("game-over");
-		game.frames_since_point = 0;
-		return ;
-	}
-	else if (game.pong.velocity[0] < 0 && game.pong.pos[0] < consts.LEFT_BOUND) {
-		if (game.pong.value === -1 && game.score[0] > 0)
-			game.score[0]--;
-		else
-			game.score[1] += game.pong.value;
-		game.setState("relaunch-countdown");
-		game.timer = 2;
-		for (let i = 0; i < 3; i++) {
-			setTimeout(() => {
-				game.timer--;
-				if (game.timer === 0)
-					consts.playBip(consts.BIP_FINAL);
-				else if (game.timer > 0)
-					consts.playBip(consts.BIP);
-				if (game.timer === -1 && game.state === "relaunch-countdown")
-					game.setState("in-game");
-			}, i * 1000);
-		}
-		game.pong.relaunchPong("left");
-		if (game.score[1] >= game.score_limit)
-			game.setState("game-over");
-		game.frames_since_point = 0;
-		return ;
-	}
+	if (game.pong.velocity[0] > 0 && game.pong.pos[0] + game.pong.diameter > consts.RIGHT_BOUND)
+		return game.scorePoint(false);
+	else if (game.pong.velocity[0] < 0 && game.pong.pos[0] < consts.LEFT_BOUND)
+		return game.scorePoint(true);
 	
 	if (game.map.name === "city") {
 		for (let bumper of bumpers) {
