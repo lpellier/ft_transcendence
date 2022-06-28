@@ -1,11 +1,11 @@
-import {useState, useEffect} from 'react'
+import {useState} from 'react'
 import Button from '@mui/material/Button'
 import Box from '@mui/material/Box'
 import Stack from '@mui/material/Stack'
 import QRCode from 'react-qr-code'
 
 import axios from 'axios'
-import {User, init_user} from 'interfaces'
+import {User} from 'interfaces'
 
 function GenerateQRCode(props: {url: string}) {
 
@@ -58,7 +58,7 @@ function TFAButton(props: {user: User}) {
 			patchTfa({query:"tfa=false"})
 		}
 
-	if (props.user.tfa == false) {
+	if (props.user.tfa === false) {
 		return (
 			<Stack>
     			< Button

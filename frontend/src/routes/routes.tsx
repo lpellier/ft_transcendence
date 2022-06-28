@@ -40,7 +40,7 @@ export default function AllRoutes()  {
 			console.log("Authentication get request failed : ", err)
 		})
 		console.log("Auth is : ", isAuth)
-	}, [])
+	}, [isAuth])
 
 	return (
 		<BrowserRouter>
