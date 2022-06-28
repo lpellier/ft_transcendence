@@ -11,6 +11,7 @@
 // ? when screen is small, collision issue with bounds
 // ? countdown timer badly centered
 
+// ? when opening the site on a page for the first time, game doesn't load until refresh
 
 // ? issue with music when i switch menus too fast
 
