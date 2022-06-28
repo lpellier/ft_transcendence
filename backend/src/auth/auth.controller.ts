@@ -19,6 +19,7 @@ export class AuthController {
 		const authentication = await this.authService.login(req.user.id, isAuthenticated);
 		res.cookie(authentication.type, authentication.token, { sameSite: 'strict', httpOnly: true });
 		if (isAuthenticated === true) {
+			console.log("user is authenticated")
 			return ({ url: 'http://127.0.0.1:3000/profile' })
 		} else {
 			return ({ url: 'http://127.0.0.1:3000/tfauth' })
@@ -48,5 +49,6 @@ export class AuthController {
 	@Get('logout')
 	async logout(@Res({ passthrough: true }) res: Response) {
 		res.cookie('jwt', "", { expires: new Date(), sameSite: 'strict', httpOnly: true });
+		res.cookie('jwt-otp', "", { expires: new Date(), sameSite: 'strict', httpOnly: true });
 	}
 }

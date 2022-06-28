@@ -46,23 +46,17 @@ function LogInButton()
 export default function LogIn(props: {user: User, auth: boolean}) {
 
     return (
-		<div>
-			{props.auth === true ?
-				<Navigate to="/profile" />
-					:
-        		<Stack spacing={10} sx={Title}>
-					<div>
-						GnaGna
-						<WebhookIcon sx={IconStyle}/>
-						Pong
-					</div>
-					<nav>
-						<a href={AuthAPI} style={LinkStyle}>
-							<LogInButton />
-						</a>
-					</nav>
-        		</Stack>
-			}
-		</div>
+        <Stack spacing={10} sx={Title}>
+			<div>
+				GnaGna
+				<WebhookIcon sx={IconStyle}/>
+				Pong
+			</div>
+			<nav>
+				<a href={AuthAPI} style={LinkStyle}>
+					<LogInButton />
+				</a>
+			</nav>
+        </Stack>
 	);
 }

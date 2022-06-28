@@ -29,7 +29,7 @@ const TitleStyle = {
 	textShadow: '1px 1px 2px black',
 }
 
-function PinField(props: {value: string, setPininput: any, setRedirect: any}) {
+function PinField(props: {value: string, setPininput: any, setRedirect: any, setAuth: any}) {
 
 	useEffect(() => {
 		console.log(props.value, typeof props.value)
@@ -42,7 +42,8 @@ function PinField(props: {value: string, setPininput: any, setRedirect: any}) {
 		})
 		.then(res => {
 			console.log("Post request success :")
-			props.setRedirect(true)
+			props.setRedirect(res.data)
+			props.setAuth(res.data)
 		})
 		.catch(function (err) {
 			console.log("Post request failed :", err)
@@ -69,7 +70,7 @@ function PinField(props: {value: string, setPininput: any, setRedirect: any}) {
 	);
 }
 
-export default function TFAuth() {
+export default function TFAuth(props: {setAuth: any}) {
 	const [pinInput, setPininput] = useState<string>("");
 	const [redirect, setRedirect] = useState<boolean>(false);
 
@@ -79,7 +80,12 @@ export default function TFAuth() {
 				<h1 style={TitleStyle} >
 					Hey, insert your Pin !
 				</h1>
-				<PinField value={pinInput} setPininput={setPininput} setRedirect={setRedirect}/>
+				<PinField value={pinInput} setPininput={setPininput} setRedirect={setRedirect} setAuth={props.setAuth}/>
+				{redirect === true ?
+					<Navigate to="/profile" />
+						:
+					<div/>
+				}
 			</Stack>
 		</Box>
 	)

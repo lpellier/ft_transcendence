@@ -46,13 +46,13 @@ export default function AllRoutes()  {
 			console.log("Authentication get request failed : ", err)
 		})
 		console.log("Auth is : ", isAuth)
-	}, [])
+	}, [isAuth])
 
 	return (
 		<BrowserRouter>
 	    	<Routes>
 	    	    <Route path="/" element={<LogIn user={user} auth={isAuth} />} />
-	    	    <Route path="/tfauth" element={<TFAuth />} />
+	    	    <Route path="/tfauth" element={<TFAuth setAuth={setAuth}/>} />
 	    	    <Route path="profile" element={ <ProtectedRoute auth={isAuth} ><App /></ProtectedRoute>} />
 	    	</Routes>
 	    </BrowserRouter>
