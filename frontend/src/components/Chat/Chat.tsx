@@ -3,27 +3,26 @@ import Stack from '@mui/material/Stack'
 import Messages from './Messages';
 import Channels from './Channels';
 import Box from '@mui/material/Box';
-
-
 import '../../styles/Chat/Chat.css';
-
 import {User, Room} from 'interfaces';
 import {socket} from 'index';
 
-
-
-const ChatBoxStyle = {	
-    width: '80vw',
+const ChatBoxComponentStyle = {	
+    width: '80%',
     minWidth: '320px',
-    height: '70vh',
+    height: '70%',
 
 	border: '3px solid black',
     backgroundColor: 'rgb(120, 110, 220, 0.95)',
-	// backgroundImage: 'url("https://cdn.pixabay.com/photo/2017/09/13/22/18/stretching-2747269_960_720.png")',
-	backgroundSize: '20%',
     backgroundPosition: 'bottom left',
 	backgroundRepeat: 'no-repeat',
     filter: 'drop-shadow(20px 20px 1px black)',
+}
+
+const ChatBoxStyle = {
+	display: 'flex', 
+	justifyContent: 'center', 
+	paddingTop: '4%',
 }
 
 function Chat(props: {user: User, users: User[], setComponent: React.Dispatch<React.SetStateAction<string>>}) {
@@ -62,7 +61,7 @@ function Chat(props: {user: User, users: User[], setComponent: React.Dispatch<Re
 			socket.off('admin removed from room', handler);
 		}
 	})
-		
+
 	useEffect(() => {
 	const init = () => {
 		setStatus('connected');
@@ -71,7 +70,6 @@ function Chat(props: {user: User, users: User[], setComponent: React.Dispatch<Re
 			socket.emit('get rooms', props.user.id);
 			socket.emit('get public rooms', props.user.id);
 			socket.emit('get all messages', props.user.id);
-			// socket.emit('new user', {userId: props.user.id, roomId: 1});
 		}
 		if (!socket.connected)
 			setStatus('disconnected');
@@ -81,21 +79,20 @@ function Chat(props: {user: User, users: User[], setComponent: React.Dispatch<Re
 		else
 			socket.on('connect', init)
 	}, [props.user])
-	
 
 	return (
-		<Box sx={ChatBoxStyle} style={{ alignItems: 'center' }}>
-			{status}
-			{props.user?
-				<Stack direction='row' spacing='2' className='chmsg'>
-					<Box>
+		<Box sx={ChatBoxStyle}>
+			<Box sx={ChatBoxComponentStyle} >
+				{status}
+				{props.user?
+					<Stack direction='row' spacing='2' className='chmsg'>
 						<Channels user={props.user} users={props.users} currentRoom={currentRoom} setCurrentRoom = {setCurrentRoom} setCanWrite = {setCanWrite} roomAdmins={roomAdmins} setComponent={props.setComponent} />
-					</Box>
-					<Messages user={props.user} users={props.users} currentRoom={currentRoom} canWrite = {canWrite} />
-				</Stack>
-				:
-				<div/>
-			}
+						<Messages user={props.user} users={props.users} currentRoom={currentRoom} canWrite = {canWrite} />
+					</Stack>
+						:
+						<div/>
+					}
+			</Box>
 		</Box>
 	);
 }

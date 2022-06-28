@@ -1,11 +1,8 @@
 import {Link} from 'react-router-dom'
-
 import {User} from 'interfaces';
 import {PlayerAvatar} from	'../Avatars';
-
 import FriendBar from 'components/FriendBar/FriendBar';
 import { ToastContainer } from 'react-toastify';
-
 
 import AppBar from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
@@ -17,11 +14,10 @@ import GamesIcon from '@mui/icons-material/Games'
 import SettingsIcon from '@mui/icons-material/Settings';
 import Tooltip from '@mui/material/Tooltip'
 import WebhookIcon from '@mui/icons-material/Webhook'
-
 import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
-import axios from 'axios';
 
-import { BarStyle } from '../../styles/tsxStyles/AppBar/AppBar'
+import axios from 'axios';
+import { BarStyle, ProjectNameStyle } from '../../styles/tsxStyles/AppBar/AppBar'
 
 
 function LogOutLink() {
@@ -91,10 +87,10 @@ function ProjectName() {
 		  variant="h4"
 		  noWrap
 		  component="div"
-		  sx={{paddingLeft: '0.5em'}}
+		  sx={ProjectNameStyle}
 		>
-		  		GnaGna
-				<WebhookIcon />
+		  	GnaGna
+			<WebhookIcon />
 				Pong
 		</Typography>
 	);
@@ -117,7 +113,7 @@ export default function SearchAppBar(props: {user: User, users: User[], componen
 		/>
         <Toolbar style={ BarStyle }>
 			<Button onClick={() => props.setComponent("Profile")}>
-			<PlayerAvatar image={'http://127.0.0.1:3001/avatars/' + props.user.id + '.png'} onClick={() => props.setComponent("Profile")}/>
+				<PlayerAvatar image={'http://127.0.0.1:3001/avatars/' + props.user.id + '.png'} onClick={() => props.setComponent("Profile")}/>
 			</Button>
 			<PlayerName name={props.user.username}/>
 			<ProjectName />

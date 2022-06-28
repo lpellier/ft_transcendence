@@ -22,7 +22,6 @@ const steps = [
     },
 ];
 
-
 export default function DotsMobileStepper() {
   const theme = useTheme();
   const [activeStep, setActiveStep] = React.useState(0);
@@ -45,14 +44,14 @@ export default function DotsMobileStepper() {
       activeStep={activeStep}
       style={{ backgroundColor: "transparent" }}
       nextButton={
-          <Button size="small" onClick={handleNext} disabled={activeStep === 2}>
-          Next
-          {theme.direction === 'rtl' ? (
-              <KeyboardArrowLeft />
-              ) : (
-                  <KeyboardArrowRight />
-                  )}
-        </Button>
+			<Button size="small" onClick={handleNext} disabled={activeStep === 2}>
+			Next
+			{theme.direction === 'rtl' ? (
+			    <KeyboardArrowLeft />
+			    ) : (
+			        <KeyboardArrowRight />
+			        )}
+			</Button>
       }
       backButton={
           <Button size="small" onClick={handleBack} disabled={activeStep === 0}>

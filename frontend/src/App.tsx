@@ -6,18 +6,14 @@ import Game from './routes/Game'
 import Settings from 'components/Settings/Settings'
 
 import {useState, useEffect} from 'react'
-
 import {User} from 'interfaces';
-
 import axios from 'axios'
-import {toast} from 'react-toastify';
 
+import {toast} from 'react-toastify';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-
 import {socket} from 'index';
-
 
 export function toastThatError(message: string) {
     toast.error(message, {
@@ -42,7 +38,6 @@ export function toastIt(message: string) {
         progress: undefined,
         });
 }
-
 
 export default function App() {
 

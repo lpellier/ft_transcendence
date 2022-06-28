@@ -13,20 +13,27 @@ import KeyOffIcon from '@mui/icons-material/KeyOff';
 import ToggleButton from '@mui/material/ToggleButton';
 import Dialog from '@mui/material/Dialog';
 import bcrypt from 'bcryptjs';
+import { ThemeProvider } from '@mui/styles';
+import { orangeTheme } from '../Themes';
 
 import { toastThatError } from 'App';
 
 import {useState, useEffect} from 'react'
 import {Room, User} from 'interfaces'
 import {socket} from 'index'
-// import {socket} from './Chat'
 import RoomUserPopper from './RoomUserMod'
 import FormControl from '@mui/material/FormControl'
 import Button from '@mui/material/Button'
 
 import DirectMessaging from './DirectMessaging';
 import { ButtonGroup } from '@mui/material';
+import { makeStyles } from "@material-ui/core/styles";
 
+const useStyles = makeStyles({
+	input: {
+	  color: "white"
+	}
+  });
 
 interface CreateRoomDto {
 	name: string;
@@ -40,8 +47,8 @@ export interface UserRoomDto {
     roomId: number;
 };
 
-
-function PasswordInput(props: {openPassword: boolean, setOpenPassword: React.Dispatch<React.SetStateAction<boolean>>, room: Room, setCurrentRoom: React.Dispatch<React.SetStateAction<Room>>}) {
+function PasswordInput(props: {openPassword: boolean, setOpenPassword: React.Dispatch<React.SetStateAction<boolean>>, 
+	room: Room, setCurrentRoom: React.Dispatch<React.SetStateAction<Room>>}) {
 	
 	const handleClose = () => {
 		props.setOpenPassword(false);
@@ -62,18 +69,17 @@ function PasswordInput(props: {openPassword: boolean, setOpenPassword: React.Dis
 		})
 	}
 
-
 	return(
 		<Dialog open={props.openPassword}  onClose={handleClose}>
 			<Box component="form" onSubmit={handlePasswordSubmit}>
-			<TextField
-				autoFocus
-				margin="dense"
-				id="password"
-				label="password"
-				type="password"
-				fullWidth
-				variant="standard"
+				<TextField
+					autoFocus
+					margin="dense"
+					id="password"
+					label="password"
+					type="password"
+					fullWidth
+					variant="standard"
 				/>
 			</Box>
 		</Dialog>
@@ -124,6 +130,7 @@ function RoomList(props: {rooms: Room[], currentRoom: Room, setCurrentRoom: Reac
 }
 
 function Channels(props : {user: User, users: User[], currentRoom: Room, setCurrentRoom: React.Dispatch<React.SetStateAction<Room>>, setCanWrite: React.Dispatch<React.SetStateAction<boolean>>, roomAdmins:User[], setComponent: React.Dispatch<React.SetStateAction<string>>}) {
+	const classes = useStyles();
 
 	let [addRoomClicked, setAddRoomClicked] = useState<number>(0);
 	let [rooms, setRooms] = useState<Room[]>([]);
@@ -255,20 +262,25 @@ function Channels(props : {user: User, users: User[], currentRoom: Room, setCurr
 					{addRoomClicked ?
 							<Stack>
 								<Stack component="form" onSubmit={handleRoomSubmit} spacing={1}>
-									<TextField id="roomName" label="Room name" variant="standard" />
-									<FormControl fullWidth>
-										<InputLabel id="visibility-label">visibility</InputLabel>
-										<NativeSelect
-											defaultValue="private"
-											inputProps={{
-												name: 'visibility',
-												id: 'uncontrolled-native',
-											}}
-											>
-											<option value="private">private</option>
-											<option value="public">public</option>
-										</NativeSelect>
-									</FormControl>
+									<TextField 
+										id="roomName" 
+										label="Room name" 
+										variant="standard"
+										sx={{ input: { color: 'white' } }}
+									/>
+										<FormControl fullWidth>
+											<InputLabel id="visibility-label">visibility</InputLabel>
+											<NativeSelect
+												defaultValue="private"
+												inputProps={{
+													name: 'visibility',
+													id: 'uncontrolled-native',
+												}}
+												>
+												<option value="private">private</option>
+												<option value="public">public</option>
+											</NativeSelect>
+										</FormControl>
 									<ToggleButton value={showPassword} onChange={handlePasswordSelect}>
 										{showPassword?
 											<KeyOffIcon/>
@@ -291,7 +303,7 @@ function Channels(props : {user: User, users: User[], currentRoom: Room, setCurr
 								</Button>
 							</Stack>
 						:
-						<Button onClick={() => setAddRoomClicked(1)} variant='contained' sx={{ width: '100%' }}>Create Room</Button>
+						<Button onClick={() => setAddRoomClicked(1)} variant='contained' color="primary" sx={{ width: '100%' }}>Create Room</Button>
 					}
 				</Box>
 				<div>
