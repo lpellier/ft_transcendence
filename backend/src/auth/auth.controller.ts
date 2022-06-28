@@ -39,7 +39,9 @@ export class AuthController {
 		if (validated === true) {
 			const authentication = await this.authService.login(req.user.id, true);
 			res.cookie(authentication.type, authentication.token, { sameSite: 'strict', httpOnly: true });
+			return true
 		}
+		return false
 	}
 
 	@UseGuards(JwtAuthGuard)
