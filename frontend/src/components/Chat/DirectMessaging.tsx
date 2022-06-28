@@ -160,7 +160,7 @@ export default function DirectMessaging(props: {user: User, users: User[], rooms
                 <Stack direction="row" justifyContent="space-between">
                     <ListItemText primary={parseUser(props.room.name)?.username}/>
                     <Stack direction="row" >
-                        <Link to="profile"><PersonIcon/></Link>
+                        <Link to="/profile"><PersonIcon/></Link>
                         <IconButton onClick={() => setShowBackdrop(true)} ><BlockIcon/></IconButton>
                     </Stack>
                 </Stack>
