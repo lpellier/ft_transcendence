@@ -56,11 +56,11 @@ function checkCollisions() {
 		game.pong.velocity[1] *= -1;
 		if (game.pong.pos[1] < consts.TOP_BOUND)
 			game.pong.pos[1] = consts.TOP_BOUND + consts.HEIGHT * 0.005;
+		else if (game.pong.pos[1] + game.pong.diameter > consts.BOT_BOUND) 
+			game.pong.pos[1] = consts.BOT_BOUND - game.pong.diameter - consts.HEIGHT * 0.005;
 		consts.playRandomWallSound();
 		return ;
 	}
-	else if (game.pong.pos[1] + game.pong.diameter > consts.BOT_BOUND) 
-		game.pong.pos[1] = consts.BOT_BOUND - game.pong.diameter - consts.HEIGHT * 0.005;
 	if (game.pong.velocity[0] > 0 && game.pong.pos[0] + game.pong.diameter > consts.RIGHT_BOUND)
 		return game.scorePoint(true);
 	else if (game.pong.velocity[0] < 0 && game.pong.pos[0] < consts.LEFT_BOUND)

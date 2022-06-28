@@ -4,6 +4,7 @@ import { Player } from "./Player";
 import { Pong } from "./Pong";
 import { GameMap } from "./GameMap";
 import * as utils from "./../utils";
+import { Socket } from "dgram";
 
 const top_bound : number = 10;
 const bot_bound : number = consts.MAP_HEIGHT - 10;
@@ -134,23 +135,25 @@ export class Game {
 
 		if (this.map.name === "city") {
 			if (this.map.bumpers[0].checkCollision(this.pong)) {
-				server.to(this.room_id).emit("bump", 0);
+				server.to(this.room_id).emit("bumper-hit", 0);
 				return "none";
 			}
 			else if (this.map.bumpers[1].checkCollision(this.pong))  {
-				server.to(this.room_id).emit("bump", 1);
+				server.to(this.room_id).emit("bumper-hit", 1);
 				return "none";
 			}
 		}
 
 		// ? collision with bounds
-		if (this.pong.pos[1] < consts.TOP_BOUND || this.pong.pos[1] + this.pong.diameter > consts.BOT_BOUND)
+		if (this.pong.pos[1] < consts.TOP_BOUND || this.pong.pos[1] + this.pong.diameter > consts.BOT_BOUND) {
+			if (this.pong.pos[1] < consts.TOP_BOUND) {
+				this.pong.pos[1] = consts.TOP_BOUND + consts.MAP_HEIGHT * 0.005;
+			}
+			else if (this.pong.pos[1] + this.pong.diameter > consts.BOT_BOUND) {
+				this.pong.pos[1] = consts.BOT_BOUND - this.pong.diameter - consts.MAP_HEIGHT * 0.005;
+			}
 			this.pong.velocity[1] *= -1;
-		if (this.pong.pos[1] < consts.TOP_BOUND) {
-			this.pong.pos[1] = consts.TOP_BOUND + consts.MAP_HEIGHT * 0.005;
-		}
-		else if (this.pong.pos[1] + this.pong.diameter > consts.BOT_BOUND) {
-			this.pong.pos[1] = consts.BOT_BOUND - this.pong.diameter - consts.MAP_HEIGHT * 0.005;
+			server.to(this.room_id).emit("wall-hit");
 		}
 		if (this.pong.velocity[0] > 0 && this.pong.pos[0] + this.pong.diameter > right_bound) {
 			this.invert = false;
@@ -169,6 +172,7 @@ export class Game {
 		angle = this.collisionPaddle(player, intersection_point);
 		
 		if (intersection_point[0][0] != -1) {
+			server.to(this.room_id).emit("player-hit");
 			let max_angle_percentage : number = Math.abs(angle) / (Math.PI * 5 / 12); // ? number that lets me add speed to acute angled shots
 			// ? for bot / top collisions
 			if (intersection_point[0][2] === "top" || intersection_point[0][2] === "bot") {

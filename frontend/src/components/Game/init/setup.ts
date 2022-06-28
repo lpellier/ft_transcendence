@@ -13,6 +13,8 @@
 	// ? add player xp and level
 	// ? handle edge cases like players leaving in middle of game for stats (count as defeat)
 
+	// ? coutdown bip going at it at end game
+
 	// ? output final score on game over screen
 	// ? output both player names at start of match and winner name at the end
 	

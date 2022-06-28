@@ -104,11 +104,20 @@ function listenMoveEvents() {
 		}
 	});
 
-	socket.on("bump", (index : number) => {
+	socket.on("bumper-hit", (index : number) => {
+		consts.playRandomBumperSound();
 		if (index === 0)
 			bumpers[0].hit = true;
 		if (index === 1)
 			bumpers[1].hit = true;
+	});
+
+	socket.on("player-hit", () => {
+		consts.playRandomPaddleSound();
+	});
+	
+	socket.on("wall-hit", () => {
+		consts.playRandomWallSound();
 	});
 
 	socket.on("updated_pos", (
@@ -120,8 +129,10 @@ function listenMoveEvents() {
 		pong_value : number
 	) => {
 			if (game.state === "in-game" || game.state === "relaunch-countdown" || game.state === "countdown") {
-				if (game.score[0] != score[0] || game.score[1] != score[1])
+				if (game.score[0] != score[0] || game.score[1] != score[1]) {
 					frame_count_shake = 0;
+					consts.playScore();
+				}
 				game.score[0] = score[0];
 				game.score[1] = score[1];
 				game.pong.pos[0] = pong_pos[0] * consts.WIDTH / 1200;
