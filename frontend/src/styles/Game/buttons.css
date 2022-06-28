@@ -41,6 +41,10 @@
 	position: absolute;
 }
 
+#button-sound {
+	position: absolute;
+}
+
 #button-anyone {
 	flex-grow: 1;
 	z-index: 2;

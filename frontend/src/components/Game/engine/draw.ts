@@ -4,6 +4,17 @@ let arrow_anim2 : number = 0;
 let grow : boolean = true;
 let grow2 : boolean = true;
 
+function drawSound() {
+	image(consts.SOUND_ICON, consts.WIDTH * 0.8, consts.HEIGHT * 0.02, consts.small_square_diameter * 1.65, consts.small_square_diameter * 1.65);
+	let rect_size = consts.small_square_diameter * 1.65 / 6;
+	push();
+	fill("white");
+	noStroke();
+	for (let i = 0; i < consts.max_volume * 4; i++)
+		rect(consts.WIDTH * 0.88, consts.HEIGHT * 0.030 + rect_size * i + rect_size / 3 * i, rect_size, rect_size);
+	pop();
+}
+
 function drawBallIntent() {
 	let arrow_width = 10 + arrow_anim2;
 	if (grow2)

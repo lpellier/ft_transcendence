@@ -3,6 +3,13 @@ function goToMainMenu() {
 		inMainMenu();
 }
 
+function clickSound() {
+	consts.max_volume += 0.25;
+	if (consts.max_volume > 1)
+		consts.max_volume = 0;
+	consts.musicPlaying().volume = consts.max_volume;
+}
+
 function createGameMenu() {
 	if (mouseButton === LEFT) {
 		buttons.hide();

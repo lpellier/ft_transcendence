@@ -43,10 +43,10 @@ class Player {
 
 	calculateNewPos() {
 		this.pos[1] += this.velocity[1];
-		if (this.pos[1] < 10) // 10 for boundaries
-			this.pos[1] = 10;
-		if (this.pos[1] + this.height > consts.HEIGHT - 10) // -10 for boundaries
-			this.pos[1] = consts.HEIGHT - 10 - this.height;
+		if (this.pos[1] < consts.TOP_BOUND) // 10 for boundaries
+			this.pos[1] = consts.TOP_BOUND;
+		if (this.pos[1] + this.height > consts.BOT_BOUND) // -10 for boundaries
+			this.pos[1] = consts.BOT_BOUND - this.height;
 	}
 	
 	distanceTo(point : [number, number]) : number {

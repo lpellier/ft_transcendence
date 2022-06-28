@@ -3,22 +3,17 @@
 // ? Map indexes : 1 (normal map), 2 (city map), 3 (casino map)
 
 // TODO ISSUES
-	// ? when screen is small, collision issue with bounds
 	// ? countdown timer badly centered
 	// ? when opening the site on a page for the first time, game doesn't load until refresh
-	// ? issue with music when i switch menus too fast
+	// ? arrow to designate player that gets service is not responsive
+	// ? ball speed not adjusted right away when resizing screen
 
 // TODO IMPROVEMENTS
 	// ? output both player names at start of match and winner name at the end
 	// ? adjust max bounce angle
 	// ? add player xp and level
 	// ? implement better ai
-	// ? add off/on button for sfx and music -> they should be present on main menu and waiting-player/readiness menu
-		// ? both icons clickacble and each time they're clicked the sound is adjusted by 25% with a visual indication of total volume
-	
-	
-	
-
+	// ? handle edge cases like players leaving in middle of game for stats (count as defeat)
 
 // TODO cute animation showing the roll of pong value in casino
 // TODO comment EVERYTHING
@@ -190,5 +185,9 @@ function draw() {
 		buttons.return.show();
 		image(consts.RETURN_ICON, consts.WIDTH * 0.90, consts.HEIGHT * 0.01, consts.medium_square_diameter, consts.medium_square_diameter);
 		outputAnnouncement((game.score[0] > game.score[1] ? "Player 1 " : "Player 2 ") + "won the game!", consts.std_font_size, width / 2, height / 2, "white")
-	}	
+	}
+	if (game.state === "in-menu" || game.state === "waiting-player" || game.state === "waiting-readiness") {
+		drawSound();
+		buttons.sound.show();
+	}
 }

@@ -44,6 +44,7 @@ class Consts {
 	CROSS_ICON2 : any;
 	MARK_ICON : any;
 	EYE_ICON : any;
+	SOUND_ICON : any;
 	CITY_BACKGROUND : any;
 	TOKYO_BACKGROUND : any;
 
@@ -59,6 +60,7 @@ class Consts {
 	MENU_MUSIC : any;
 
 	music_playing : string;
+	max_volume : number;
 
 	constructor() {
 		this.WIDTH = 1200;
@@ -83,6 +85,7 @@ class Consts {
 		this.MARK_ICON.size(this.small_square_diameter * 1.7, this.small_square_diameter * 1.5);
 	
 		this.EYE_ICON = loadImage("/assets/icons/eye-icon.png");
+		this.SOUND_ICON = loadImage("/assets/icons/sfx_icon.png");
 
 		this.CITY_BACKGROUND = loadImage("/assets/backgrounds/city.jpg");
 		this.TOKYO_BACKGROUND = loadImage("/assets/backgrounds/tokyo.png");
@@ -93,26 +96,33 @@ class Consts {
 		this.BUMPER_HIT_1 = new Audio("/assets/sfx/bumper_hit_1.mp3");
 		this.BUMPER_HIT_2 = new Audio("/assets/sfx/bumper_hit_2.mp3");
 
+		this.max_volume = 0.25;
+
 		this.CASINO_MUSIC = new Audio("/assets/music/casino.mp3");
 		this.CASINO_MUSIC.loop = true;
-		this.CASINO_MUSIC.volume = 1;
+		this.CASINO_MUSIC.volume = this.max_volume;
 		
 		this.CITY_MUSIC = new Audio("/assets/music/city.mp3");
 		this.CITY_MUSIC.loop = true;
-		this.CITY_MUSIC.volume = 1;
+		this.CITY_MUSIC.volume = this.max_volume;
 		
 		this.ORIGINAL_MUSIC = new Audio("/assets/music/original.mp3");
 		this.ORIGINAL_MUSIC.loop = true;
-		this.ORIGINAL_MUSIC.volume = 1;
+		this.ORIGINAL_MUSIC.volume = this.max_volume;
 		
 		this.MENU_MUSIC = new Audio("/assets/music/menu.mp3");
 		this.MENU_MUSIC.loop = true;
-		this.MENU_MUSIC.volume = 1;
+		this.MENU_MUSIC.volume = this.max_volume;
+
+
 
 		this.music_playing = "none";
 	}
 
 	playRandomPaddleSound() {
+		this.PADDLE_HIT_1.volume = consts.max_volume;
+		this.PADDLE_HIT_2.volume = consts.max_volume;
+
 		let rand : number = Math.floor(Math.random() * 2);
 		if (rand === 0)
 			this.PADDLE_HIT_1.play();
@@ -121,6 +131,9 @@ class Consts {
 	}
 	
 	playRandomBumperSound() {
+		this.BUMPER_HIT_1.volume = consts.max_volume;
+		this.BUMPER_HIT_2.volume = consts.max_volume;
+
 		let rand : number = Math.floor(Math.random() * 2);
 		if (rand === 0)
 			this.BUMPER_HIT_1.play();
@@ -142,28 +155,30 @@ class Consts {
 	}
 
 	fadeMusicDown(music : any) {
-		for (let i = 0; i < 10; i++) {
-			setTimeout(() => {
-				if (music.volume >= 0.1)
-					music.volume -= 0.1;
-				if (i === 9)
-					music.pause();
-			}, i * 200);
-		}
+		music.pause();
+		// for (let i = 0; i < 10; i++) {
+		// 	setTimeout(() => {
+		// 		if (music.volume >= 0.1)
+		// 			music.volume -= 0.1;
+		// 		if (i === 9)
+		// 			music.pause();
+		// 	}, i * 200);
+		// }
 	}
 	
 	fadeMusicUp(music : any) {
 		music.currentTime = 0;
+		music.volume = this.max_volume;
 		music.play();
-		music.volume = 0;
-		for (let j = 0; j < 10; j++) {
-			setTimeout(() => {
-				if (music.volume <= 0.9)
-					music.volume += 0.1;
-				if (j === 9)
-					music.volume = 1;
-			}, j * 200);
-		}
+		// music.volume = 0;
+		// for (let j = 0; j < 10; j++) {
+		// 	setTimeout(() => {
+		// 		if (music.volume <= 0.9)
+		// 			music.volume += 0.1;
+		// 		if (j === 9)
+		// 			music.volume = 1;
+		// 	}, j * 200);
+		// }
 	}
 
 	switchMusic(music : string) {
