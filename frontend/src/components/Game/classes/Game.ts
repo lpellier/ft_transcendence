@@ -44,6 +44,7 @@ class Game {
 
 	scorePoint(invert : boolean) {
 		frame_count_shake = 0;
+		consts.playScore();
 		this.pong.velocity = [0, 0];
 		this.pong.pos = [consts.WIDTH / 2 - consts.PONG_DIAMETER / 2, consts.HEIGHT / 2 - consts.PONG_DIAMETER / 2];
 		if (!invert) {
@@ -72,7 +73,7 @@ class Game {
 						this.setState("in-game");
 				}, i * 1000);
 			}
-			if (!invert)
+			if (invert)
 				this.pong.relaunchPong("right");
 			else
 				this.pong.relaunchPong("left");

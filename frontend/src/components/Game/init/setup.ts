@@ -7,17 +7,21 @@
 	// ? when opening the site on a page for the first time, game doesn't load until refresh
 	// ? arrow to designate player that gets service is not responsive
 	// ? ball speed not adjusted right away when resizing screen
-	// ? Countdown sound playing at end of game (local only)
 
 // TODO IMPROVEMENTS
-	// ? shake occurs before timer resets
-	// ? output both player names at start of match and winner name at the end
-	// ? add more sounds : count down, wall hit, goal
-	// ? adjust max bounce angle
+	// ? take into account score when recording on database
 	// ? add player xp and level
-	// ? implement better ai
 	// ? handle edge cases like players leaving in middle of game for stats (count as defeat)
+
+	// ? output final score on game over screen
+	// ? output both player names at start of match and winner name at the end
+	
+	// ? adjust max bounce angle
+	// ? implement better ai
+	
+	// ? reset bumper animation if hit again
 	// ? cute animation showing the roll of pong value in casino
+	
 	// ? comment EVERYTHING
 
 

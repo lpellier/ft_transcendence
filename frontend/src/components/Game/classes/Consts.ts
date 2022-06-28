@@ -53,9 +53,14 @@ class Consts {
 
 	BUMPER_HIT_1 : any;
 	BUMPER_HIT_2 : any;
+	
+	WALL_HIT_1 : any;
+	WALL_HIT_2 : any;
 
 	BIP : any;
 	BIP_FINAL : any;
+
+	SCORE : any;
 
 	CASINO_MUSIC : any;
 	CITY_MUSIC : any;
@@ -99,8 +104,13 @@ class Consts {
 		this.BUMPER_HIT_1 = new Audio("/assets/sfx/bumper_hit_1.mp3");
 		this.BUMPER_HIT_2 = new Audio("/assets/sfx/bumper_hit_2.mp3");
 
+		this.WALL_HIT_1 = new Audio("/assets/sfx/wall_hit_1.mp3");
+		this.WALL_HIT_2 = new Audio("/assets/sfx/wall_hit_2.mp3");
+
 		this.BIP = new Audio("/assets/sfx/bip.mp3");
 		this.BIP_FINAL = new Audio("/assets/sfx/bip-final.mp3");
+
+		this.SCORE = new Audio("/assets/sfx/score.mp3");
 
 		this.max_volume = 0.25;
 
@@ -120,8 +130,6 @@ class Consts {
 		this.MENU_MUSIC.loop = true;
 		this.MENU_MUSIC.volume = this.max_volume;
 
-
-
 		this.music_playing = "none";
 	}
 
@@ -129,6 +137,12 @@ class Consts {
 		bip.currentTime = 0;
 		bip.volume = this.max_volume;
 		bip.play();
+	}
+
+	playScore() {
+		this.SCORE.currentTime = 0;
+		this.SCORE.volume = this.max_volume;
+		this.SCORE.play();
 	}
 
 	playRandomPaddleSound() {
@@ -140,6 +154,17 @@ class Consts {
 			this.PADDLE_HIT_1.play();
 		else if (rand === 1)
 			this.PADDLE_HIT_2.play();
+	}
+	
+	playRandomWallSound() {
+		this.WALL_HIT_1.volume = consts.max_volume;
+		this.WALL_HIT_2.volume = consts.max_volume;
+
+		let rand : number = Math.floor(Math.random() * 2);
+		if (rand === 0)
+			this.WALL_HIT_1.play();
+		else if (rand === 1)
+			this.WALL_HIT_2.play();
 	}
 	
 	playRandomBumperSound() {

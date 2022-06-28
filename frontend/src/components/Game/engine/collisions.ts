@@ -52,18 +52,19 @@ function checkCollisions() {
 	game.frames_since_point++;
 
 	// ? collision with bounds
-	if (game.pong.pos[1] < consts.TOP_BOUND || game.pong.pos[1] + game.pong.diameter > consts.BOT_BOUND)
+	if (game.pong.pos[1] < consts.TOP_BOUND || game.pong.pos[1] + game.pong.diameter > consts.BOT_BOUND) {
 		game.pong.velocity[1] *= -1;
-	if (game.pong.pos[1] < consts.TOP_BOUND) {
-		game.pong.pos[1] = consts.TOP_BOUND + consts.HEIGHT * 0.005;
+		if (game.pong.pos[1] < consts.TOP_BOUND)
+			game.pong.pos[1] = consts.TOP_BOUND + consts.HEIGHT * 0.005;
+		consts.playRandomWallSound();
+		return ;
 	}
-	else if (game.pong.pos[1] + game.pong.diameter > consts.BOT_BOUND) {
+	else if (game.pong.pos[1] + game.pong.diameter > consts.BOT_BOUND) 
 		game.pong.pos[1] = consts.BOT_BOUND - game.pong.diameter - consts.HEIGHT * 0.005;
-	}
 	if (game.pong.velocity[0] > 0 && game.pong.pos[0] + game.pong.diameter > consts.RIGHT_BOUND)
-		return game.scorePoint(false);
-	else if (game.pong.velocity[0] < 0 && game.pong.pos[0] < consts.LEFT_BOUND)
 		return game.scorePoint(true);
+	else if (game.pong.velocity[0] < 0 && game.pong.pos[0] < consts.LEFT_BOUND)
+		return game.scorePoint(false);
 	
 	if (game.map.name === "city") {
 		for (let bumper of bumpers) {
