@@ -25,6 +25,7 @@ import FormControl from '@mui/material/FormControl'
 import Button from '@mui/material/Button'
 
 import DirectMessaging from './DirectMessaging';
+import { ButtonGroup } from '@mui/material';
 
 
 interface CreateRoomDto {
@@ -122,7 +123,7 @@ function RoomList(props: {rooms: Room[], currentRoom: Room, setCurrentRoom: Reac
 	)
 }
 
-function Channels(props : {user: User, users: User[], currentRoom: Room, setCurrentRoom: React.Dispatch<React.SetStateAction<Room>>, setCanWrite: React.Dispatch<React.SetStateAction<boolean>>, roomAdmins:User[], setComponent: React.Dispatch<React.SetStateAction<string>>}) {
+function Channels(props : {user: User, users: User[], currentRoom: Room, setCurrentRoom: React.Dispatch<React.SetStateAction<Room>>, setCanWrite: React.Dispatch<React.SetStateAction<boolean>>, roomAdmins:User[]}) {
 
 	let [addRoomClicked, setAddRoomClicked] = useState<number>(0);
 	let [rooms, setRooms] = useState<Room[]>([]);
@@ -243,8 +244,10 @@ function Channels(props : {user: User, users: User[], currentRoom: Room, setCurr
 		<div>
 		<Stack className='channels' >
 			<Stack direction='row'>
-				<Button variant="contained" onClick={() => setTab('channels')}>Channels</Button>
-				<Button variant="contained" onClick={() => setTab('dms')}>DMs</Button>
+				<ButtonGroup>
+					<Button variant="contained" onClick={() => setTab('channels')}>Channels</Button>
+					<Button variant="contained" onClick={() => setTab('dms')}>DMs</Button>
+				</ButtonGroup>
 			</Stack>
 			{tab === 'channels'?
 			<Stack justifyContent='space-between'>
@@ -297,7 +300,7 @@ function Channels(props : {user: User, users: User[], currentRoom: Room, setCurr
 				</div>
 			</Stack>
 			:
-			<DirectMessaging user={props.user} users={props.users} rooms={rooms} currentRoom={props.currentRoom} setCurrentRoom={props.setCurrentRoom} setComponent={props.setComponent}/>
+			<DirectMessaging user={props.user} users={props.users} rooms={rooms} currentRoom={props.currentRoom} setCurrentRoom={props.setCurrentRoom} />
 			}
 		</Stack>
 		</div>
