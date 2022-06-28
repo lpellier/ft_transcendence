@@ -9,6 +9,7 @@
 	// ? ball speed not adjusted right away when resizing screen
 
 // TODO IMPROVEMENTS
+	// ? need to test casino in multiplayer
 	// ? take into account score when recording on database
 	// ? add player xp and level
 	// ? handle edge cases like players leaving in middle of game for stats (count as defeat)
