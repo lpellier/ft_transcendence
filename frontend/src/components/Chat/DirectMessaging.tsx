@@ -11,7 +11,7 @@ import { socket } from 'index';
 import PersonIcon from '@mui/icons-material/Person';
 import BlockIcon from '@mui/icons-material/Block';
 import { Backdrop, ButtonGroup, IconButton, Button, Stack, Alert } from '@mui/material';
-
+import {Link} from 'react-router-dom'
 
 interface CreateDMRoomDto {
     name: string;
@@ -20,7 +20,7 @@ interface CreateDMRoomDto {
 }
 
 
-export default function DirectMessaging(props: {user: User, users: User[], rooms: Room[], currentRoom: Room, setCurrentRoom: React.Dispatch<React.SetStateAction<Room>>, setComponent: React.Dispatch<React.SetStateAction<string>>}) {
+export default function DirectMessaging(props: {user: User, users: User[], rooms: Room[], currentRoom: Room, setCurrentRoom: React.Dispatch<React.SetStateAction<Room>>}) {
     
     let [showUserList, setShowUserList] = useState<boolean>(false);
     let [search, setSearch] = useState<string>("");
@@ -146,14 +146,9 @@ export default function DirectMessaging(props: {user: User, users: User[], rooms
 	})
     
     
-    function UserMod(props: {user: User, users: User[], room: Room, setComponent: React.Dispatch<React.SetStateAction<string>>}) {
+    function UserMod(props: {user: User, users: User[], room: Room}) {
         
         let [showBackdrop, setShowBackdrop] = useState<boolean>(false);
-        
-        
-        function    goToProfile(userId: number | undefined) {
-            props.setComponent("Profile");
-        }
         
         function    blockUser(blockedId: number | undefined) {
             socket.emit('add blocked', {userId: props.user.id, blockedId: blockedId} );
@@ -165,7 +160,7 @@ export default function DirectMessaging(props: {user: User, users: User[], rooms
                 <Stack direction="row" justifyContent="space-between">
                     <ListItemText primary={parseUser(props.room.name)?.username}/>
                     <Stack direction="row" >
-                        <IconButton onClick={() => goToProfile(parseUser(props.room.name)?.id)} ><PersonIcon/></IconButton>
+                        <Link to="profile"><PersonIcon/></Link>
                         <IconButton onClick={() => setShowBackdrop(true)} ><BlockIcon/></IconButton>
                     </Stack>
                 </Stack>
@@ -213,11 +208,11 @@ export default function DirectMessaging(props: {user: User, users: User[], rooms
                                 { room.id !== props.currentRoom.id ?
 
                                     <ListItem button className="MenuItem" onClick={() => props.setCurrentRoom(room) } sx={{ alignContent:"center" }} >
-                                        <UserMod user={props.user} users={props.users} room={room} setComponent={props.setComponent}/>
+                                        <UserMod user={props.user} users={props.users} room={room}/>
                                     </ListItem>
                                 :
                                     <ListItem className="MenuItem" selected  sx={{ alignContent:"center"}}>
-                                           <UserMod user={props.user} users={props.users} room={room} setComponent={props.setComponent}/>
+                                           <UserMod user={props.user} users={props.users} room={room}/>
                                     </ListItem>
                                 }
                             </div>

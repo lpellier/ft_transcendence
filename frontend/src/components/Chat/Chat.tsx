@@ -26,7 +26,7 @@ const ChatBoxStyle = {
     filter: 'drop-shadow(20px 20px 1px black)',
 }
 
-function Chat(props: {user: User, users: User[], setComponent: React.Dispatch<React.SetStateAction<string>>}) {
+function Chat(props: {user: User | undefined, users: User[]}) {
 	
 	let [status, setStatus] = useState('waiting for connection');
 	let [currentRoom, setCurrentRoom] = useState<Room> ({id: 1, name: "general", ownerId: 60040, visibility: "public", password:""});
@@ -84,18 +84,19 @@ function Chat(props: {user: User, users: User[], setComponent: React.Dispatch<Re
 	
 
 	return (
+
 		<Box sx={ChatBoxStyle} style={{ alignItems: 'center' }}>
 			{status}
-			{props.user?
+				{props.user?
 				<Stack direction='row' spacing='2' className='chmsg'>
 					<Box>
-						<Channels user={props.user} users={props.users} currentRoom={currentRoom} setCurrentRoom = {setCurrentRoom} setCanWrite = {setCanWrite} roomAdmins={roomAdmins} setComponent={props.setComponent} />
+						<Channels user={props.user} users={props.users} currentRoom={currentRoom} setCurrentRoom = {setCurrentRoom} setCanWrite = {setCanWrite} roomAdmins={roomAdmins} />
 					</Box>
 					<Messages user={props.user} users={props.users} currentRoom={currentRoom} canWrite = {canWrite} />
 				</Stack>
 				:
 				<div/>
-			}
+				}
 		</Box>
 	);
 }

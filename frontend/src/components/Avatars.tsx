@@ -32,10 +32,10 @@ import Sloth from       "../images/Avatar/Sloth.png"
 const BigAvatar = {border: 2, width: 150, height: 150}
 const SmallAvatar = {border: 2, width: 50, height: 50}
 
-function PlayerAvatar(props: {image: string , onClick: any} ) {
+function PlayerAvatar(props: {image: string } ) {
     
     return(
-        <IconButton onClick={props.onClick}>
+        <IconButton >
             <Tooltip title="Home" placement="bottom">
                 <Avatar src={props.image}  sx={SmallAvatar}/>
             </Tooltip>

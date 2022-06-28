@@ -59,15 +59,19 @@ function ChooseAuthModal(props: {user: User}) {
 	)
 }
 
-export default function Settings(props: {user: User}) {
+export default function Settings(props: {user: User | undefined}) {
 
     return (
         <Box sx={SettingStyle}>
+			{props.user?
             <Stack spacing={5}>
             	<ChooseAvatarModal user={props.user}/>
                 <ChooseNameModal user={props.user}/>
                 <ChooseAuthModal user={props.user}/>
 		    </Stack>
+			:
+			<div/>
+			}
         </Box>
     )
 }
