@@ -95,11 +95,12 @@ function GameComponent() {
 	);
 }
 
-export default function Game( props: {user: User}) {	
+export default function Game( props: {user: User | undefined}) {	
 	useEffect(() => {
 		let user = document.createElement("div");
-		user.setAttribute("user_name", props.user.username);
-		user.setAttribute("user_id", props.user.id.toString());
+		const propsUser: any =props.user;
+		user.setAttribute("user_name", propsUser.username);
+		user.setAttribute("user_id", propsUser.id.toString());
 		user.id = "user";
 		
 		document.head.append(user);
@@ -126,7 +127,7 @@ export default function Game( props: {user: User}) {
 		addScript("/sketch/engine/menus.js");
 		addScript("/sketch/engine/button_functions.js");
 		addScript("https://cdn.jsdelivr.net/npm/p5@1.4.1/lib/p5.js");
-		}, [])
+		}, [props.user?.id])
 
 	return (
 		<Stack id="test_parent" spacing={5}>
