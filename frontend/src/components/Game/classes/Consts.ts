@@ -104,8 +104,8 @@ class Consts {
 		this.BUMPER_HIT_1 = new Audio("/assets/sfx/bumper_hit_1.mp3");
 		this.BUMPER_HIT_2 = new Audio("/assets/sfx/bumper_hit_2.mp3");
 
-		this.WALL_HIT_1 = new Audio("/assets/sfx/wall_hit_1.mp3");
-		this.WALL_HIT_2 = new Audio("/assets/sfx/wall_hit_2.mp3");
+		this.WALL_HIT_1 = new Audio("/assets/sfx/paddle_hit_1.mp3");
+		this.WALL_HIT_2 = new Audio("/assets/sfx/paddle_hit_2.mp3");
 
 		this.BIP = new Audio("/assets/sfx/bip.mp3");
 		this.BIP_FINAL = new Audio("/assets/sfx/bip-final.mp3");
