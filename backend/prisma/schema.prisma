@@ -17,6 +17,7 @@ model User {
   otpSecret     String  @default("")
   stats			    Stats?
   friendIds     Int[]
+  blockedIds    Int[]
   rooms         Room[] @relation("roomUsers")
   adminRooms    Room[] @relation("roomAdmins")
   messages      Message[]  
