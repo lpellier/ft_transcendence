@@ -18,7 +18,6 @@ export default function ChooseAvatarButton(props: {user: User}) {
 
   const handleClose = () => {
     setOpen(false);
-
   };
 
   return (
@@ -35,7 +34,7 @@ export default function ChooseAvatarButton(props: {user: User}) {
         onClose={handleClose}
       >
         <Box sx={CustomAvatarStyle}>
-        	<CustomAvatar />
+        	<CustomAvatar setOpen={setOpen}/>
         </Box>
       </Modal>
     </Stack>

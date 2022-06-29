@@ -9,6 +9,9 @@ import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import {useState} from 'react'
 import axios from 'axios'
 
+const Input = styled('input')({
+	display: 'none',
+  });
 
 function CustomButton(props: {content:string, theme: any, onClick: any}) {
 	return(
@@ -32,7 +35,7 @@ function YesButton(props: {onClick: any}) {
 	);
 }
 
-function UploadButton() {
+function UploadButton(props: {setOpen: any}) {
 	const [selectedFile, setSelectedFile] = useState<any>();
 	const [isSelected, setisSelected] = useState(false);
 
@@ -57,6 +60,7 @@ function UploadButton() {
 		})
 		.then(res => {
 			console.log("Put avatar request success")
+			props.setOpen(false)
 		})
 		.catch(err => {
 			console.log("Put avatar request failed : ", err)
@@ -64,12 +68,17 @@ function UploadButton() {
 	};
 
 	function closeModal() {
-
+		props.setOpen(false)
 	}
 	
 	return (
 		<div>
-			<input type="file" name="file" onChange={changeHandler} />
+			<label htmlFor="icon-button-file">
+				<Input type="file" id="icon-button-file" name="file" onChange={changeHandler} />
+				<IconButton color="primary" aria-label="upload picture" component="span">
+					<PhotoCamera />
+  				</IconButton>
+			</label>
 			{isSelected ? 
 			<div>
 				<p>Filename: {selectedFile.name}</p>
@@ -77,7 +86,7 @@ function UploadButton() {
 				<p>Size in bytes: {selectedFile.size}</p>
 			</div>
 				:
-				<p>Select a file to show details</p>
+				<p>No file selected yet</p>
 			}
 			<Stack direction="row" spacing={3}>
 				<YesButton onClick={handleSubmit}/>
@@ -87,17 +96,18 @@ function UploadButton() {
 	  );
 }
 		
-export default function CustomAvatar() {
+export default function CustomAvatar(props: {setOpen: any}) {
   return (
     <Stack spacing={2} style={{marginTop: '5%'}}>
-    <Stack direction="row" spacing={2} style={{marginTop: '5%'}}>
-   		<Button
-        	variant="contained"
-        	color="secondary">
-    		Choose file :
-    	</Button>
-    	<UploadButton />
-	</Stack>
+    	<Stack direction="row" spacing={2} style={{marginTop: '5%'}}>
+   			<Button
+    	    	variant="contained"
+    	    	color="secondary"
+				>
+    			Choose file :
+    		</Button>
+    		<UploadButton setOpen={props.setOpen}/>
+		</Stack>
     </Stack>
   );
 }
