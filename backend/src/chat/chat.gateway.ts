@@ -7,8 +7,9 @@ import { CreateRoomDto } from './dto/create-room.dto';
 import { CreateMessageDto } from "./dto/create-message.dto";
 import { CreateDMRoomDto } from "./dto/create-dm-room.dto"
 import { UpdatePasswordDto } from "./dto/update-password.dto"
-import { threadId } from "worker_threads";
-import { runInThisContext } from "vm";
+	
+import * as bcrypt from 'bcrypt';
+
 
 let socketUser = new Map<string, number>();
 
@@ -26,14 +27,35 @@ export class ChatGateway {
 
 	@SubscribeMessage('create room') 
 	async handleCreateRoom(@ConnectedSocket () client : Socket, @MessageBody()  createRoomDto: CreateRoomDto) {		
-		let roomId = await this.chatService.createRoom(createRoomDto);
-		await this.chatService.addUserToRoom(createRoomDto.userId, roomId);
-		await this.chatService.addAdminToRoom(createRoomDto.userId, roomId);
-		client.emit('create room');
+		
+		console.log('create room called', createRoomDto);
+		let roomId: number
+		const handler = async (err, hashed: string) => {
+		   if (err) {
+			   console.log(err);
+		   } else {
+			  roomId = await this.chatService.createRoom({name: createRoomDto.name, userId: createRoomDto.userId, visibility: createRoomDto.visibility, password: hashed});
+			   await this.chatService.addUserToRoom(createRoomDto.userId, roomId);
+			   await this.chatService.addAdminToRoom(createRoomDto.userId, roomId);
+			   client.emit('create room');
+		   }
+	   }
+		if (createRoomDto.password !== "")
+		{
+			bcrypt.hash(createRoomDto.password, 10, handler);
+		}
+		else
+		{
+			let roomId = await this.chatService.createRoom({name: createRoomDto.name, userId: createRoomDto.userId, visibility: createRoomDto.visibility, password: ''});
+			await this.chatService.addUserToRoom(createRoomDto.userId, roomId);
+			await this.chatService.addAdminToRoom(createRoomDto.userId, roomId);
+			client.emit('create room');
+		}
 	}
 
 	@SubscribeMessage('create dm room') 
 	async handleCreateDMRoom(@ConnectedSocket () client : Socket, @MessageBody()  createDMRoomDto: CreateDMRoomDto) {		
+
 		const createRoomDto: CreateRoomDto = {name: createDMRoomDto.name, userId: 0, visibility: "private", password: ''}
 		let roomId = await this.chatService.createRoom(createRoomDto);
 		await this.chatService.addUserToRoom(createDMRoomDto.user1Id, roomId);

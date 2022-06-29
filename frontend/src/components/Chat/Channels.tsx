@@ -133,24 +133,16 @@ function Channels(props : {user: User, users: User[], currentRoom: Room, setCurr
 
 	
 	async function handleRoomSubmit(e:any) {
-		function addtoDb(password:string, room_name:string, visibility:string) {
-			const createRoomDto: CreateRoomDto = {name: room_name, userId: props.user.id, visibility: visibility, password: password}
-			if (room_name && visibility)
-				socket.emit('create room', createRoomDto);
-		}
-
+		
 		e.preventDefault();
 		const room_name: string = e.target[0].value;
 		const visibility: string = e.target[1].value;
 		const password: string = e.target[3].value;
-		if (password !== "")
-		{
-			bcrypt.hash(password, 10, function(err, hash) {
-				addtoDb(hash, room_name, visibility);
-			});
-		}
-		else
-			addtoDb(password, room_name, visibility);
+		
+		const createRoomDto: CreateRoomDto = {name: room_name, userId: props.user.id, visibility: visibility, password: password}
+		
+		if (room_name && visibility)
+			socket.emit('create room', createRoomDto);
 
 		e.target[0].value = '';
 		setAddRoomClicked(0);
