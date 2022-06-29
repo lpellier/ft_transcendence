@@ -151,4 +151,51 @@ export class UsersService {
     });
     return secret;
   }
+
+  async findFriendsIds(userId: number) {
+    const { friendIds } = await this.prisma.user.findUnique({
+      where: { id: userId },
+      select: { friendIds: true },
+    });
+    console.log('friendIds = ', friendIds);
+    return friendIds;
+  }
+
+  async findFriends(ids: number[]) {
+    const friends = await this.prisma.user.findMany({
+      where: {
+        id: {
+    in: ids,
+        },
+      },
+    });
+    return friends;
+  }
+  
+  async addFriend(userId: number, friendId: number) {
+    const friendIds: number[] = await this.findFriendsIds(userId);
+
+    await this.prisma.user.update({
+      where: { id: userId },
+      data: {
+        friendIds: {
+          set: [...friendIds, friendId],
+        },
+      },
+    });
+  }
+
+  async removeFriend(userId: number, friendId: number) {
+    const friendIds: number[] = await this.findFriendsIds(userId);
+
+    await this.prisma.user.update({
+      where: { id: userId },
+      data: {
+        friendIds: {
+          set: friendIds.filter((id) => id !== friendId),
+        },
+      },
+    });
+  }
+
 }
