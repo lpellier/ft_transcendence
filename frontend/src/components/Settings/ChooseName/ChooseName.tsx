@@ -1,9 +1,14 @@
 import { useState, useEffect } from "react";
+import Modal from '@mui/material/Modal';
+import Box from '@mui/material/Box'
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import { NameButtonStyle } from '../../../styles/tsxStyles/Settings/Name'
 import axios from 'axios';
+import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline'
+import {ModalChooseName} from '../../../styles/tsxStyles/Settings/Name'
+import {ButtonModalStyle, IconStyle} from '../../../styles/tsxStyles/AppBar/PongMenu'
 import {User} from 'interfaces'
 
 function NameButton() {
@@ -24,6 +29,7 @@ function NameInput(props: {username: string, setter: any, setOpen: any}) {
 		e.preventDefault();
 		props.setter(e.target[0].value);
 		e.target[0].value = "";
+		window.location.reload()
 	}
 
 	useEffect(() => {
@@ -46,6 +52,7 @@ function NameInput(props: {username: string, setter: any, setOpen: any}) {
 		.catch(err => {
 			console.log("Put request failed : ", err)
 		});
+
 	}, [props.username])
 
 	return (
@@ -63,16 +70,42 @@ function NameInput(props: {username: string, setter: any, setOpen: any}) {
 	);
 }
 
-export default function ChooseName(props: {user: User, setOpen: any}) {
+export default function ChooseName(props: {user: User}) {
     const [new_username, setNewUsername] = useState(props.user.username);
+	const [open, setOpen] = useState(false);
+
+	const handleOpen = () => {
+		setOpen(true);
+	};
+	
+	const handleClose = () => {
+		setOpen(false);
+	};
 
 	return (
-			<Stack spacing={2} style={{justifyContent: 'center'}}>
-                <NameButton />
-				<NameInput 
-					username={new_username} 
-					setter={setNewUsername} 
-					setOpen={props.setOpen}/>
-            </Stack>
+		<Stack direction="row" spacing={2} style={{justifyContent: 'center'}}>
+      		<Button
+            	onClick={handleOpen}
+            	variant="contained"
+            	color="secondary"
+            	style={ButtonModalStyle}>
+          		<DriveFileRenameOutlineIcon sx={IconStyle}/>
+          		Choose Name
+      		</Button>
+			<Modal
+			  open={open}
+			  onClose={handleClose}
+			> 
+				<Stack spacing={2} style={{justifyContent: 'center'}}>
+					<Box sx={ModalChooseName}>
+            		    <NameButton />
+						<NameInput 
+							username={new_username} 
+							setter={setNewUsername} 
+							setOpen={setOpen}/>
+          			</Box>
+            	</Stack>
+        	</Modal>
+        </Stack>
     );
 }

@@ -3,11 +3,9 @@ import Modal from '@mui/material/Modal';
 import Stack from '@mui/material/Stack'
 import Box from '@mui/material/Box'
 import FaceIcon from '@mui/icons-material/Face'
-import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline'
 import AvatarList from './ChooseAvatar/ChooseAvatar'
 import ChooseName from './ChooseName/ChooseName'
 import ChooseAuth from './ChooseAuth/ChooseAuth'
-import {ModalChooseName} from '../../styles/tsxStyles/Settings/Name'
 import {ModalChooseAvatar} from '../../styles/tsxStyles/Settings/Avatar'
 import Button from '@mui/material/Button';
 import {ButtonModalStyle, IconStyle} from '../../styles/tsxStyles/AppBar/PongMenu'
@@ -35,19 +33,7 @@ function ChooseAvatarModal(props: {user: User, setOpen: any, open: boolean}) {
 	)
 }
 
-function ChooseNameModal(props: {user: User, setOpen: any, open: boolean}) {
-	return (
-		<ChooseModal
-			user={props.user} 
-			icon={DriveFileRenameOutlineIcon}
-			label={"Choose Name"}
-			ModalBoxStyle={ModalChooseName}
-			modalComp={<ChooseName user={props.user} setOpen={props.setOpen}/>}
-			setOpen={props.setOpen}
-			open={props.open}
-		/>
-	)
-}
+
 
 function ChooseModal(props: {user: User, icon: any, 
 	label: string, ModalBoxStyle: any, modalComp: any, open: boolean, setOpen: any}) 
@@ -92,8 +78,8 @@ export default function Settings(props: {user: User | undefined}) {
 			{props.user?
             	<Stack spacing={5}>
             		<ChooseAvatarModal user={props.user} open={isOpenAvatar} setOpen={setOpenAvatar}/>
-            	    <ChooseNameModal user={props.user} open={isOpenName} setOpen={setOpenName}/>
-            	    <ChooseAuth user={props.user}/>
+            	    <ChooseName user={props.user} />
+            	    <ChooseAuth user={props.user} />
 		    	</Stack>
 					:
 				<div/>
