@@ -11,55 +11,53 @@ datasource db {
 }
 
 model User {
-  id          	Int @id
-  username    	String @unique
-  tfa           Boolean @default(false)
-  otpSecret     String  @default("")
-  stats			    Stats?
-  friendIds     Int[]
-  blockedIds    Int[]
-  rooms         Room[] @relation("roomUsers")
-  adminRooms    Room[] @relation("roomAdmins")
-  messages      Message[]  
-  winHistory	  Match[] @relation("win")
-  lossHistory	  Match[] @relation("loss")
+  id           Int       @id
+  username     String    @unique
+  tfa          Boolean   @default(false)
+  otpSecret    String    @default("")
+  stats        Stats?
+  matchHistory Match[]
+  friendIds    Int[]
+  rooms        Room[]    @relation("roomUsers")
+  adminRooms   Room[]    @relation("roomAdmins")
+  messages     Message[]
+  blockedIds   Int[]
+
 }
 
 model Stats {
-  id     Int  @id @default(autoincrement())
-  victories   Int  @default(0)
-  losses Int  @default(0)
-  level  Int  @default(1)
-  userId Int  @unique
-  User   User @relation(fields: [userId], references: [id])
+  id        Int  @id @default(autoincrement())
+  victories Int  @default(0)
+  losses    Int  @default(0)
+  level     Int  @default(1)
+  userId    Int  @unique
+  User      User @relation(fields: [userId], references: [id])
 }
 
 model Match {
-  id		    Int			  @id @default(autoincrement())
-  date	  	DateTime  @default(now())
-  ladder	  Int
-  winnerId	Int
-  loserId	  Int
-  Winner  	User		  @relation(name: "win", fields: [winnerId], references: [id])
-  Loser		  User		  @relation(name: "loss", fields: [loserId], references: [id])
+  id       Int      @id @default(autoincrement())
+  date     DateTime @default(now())
+  players  User[]
+  ladder   Int
+  winnerId Int
 }
 
 model Room {
-  id         Int      @id @default(autoincrement())
+  id         Int       @id @default(autoincrement())
   name       String
   messages   Message[]
   ownerId    Int
-  users      User[] @relation("roomUsers")
-  admins     User[] @relation("roomAdmins")
+  users      User[]    @relation("roomUsers")
+  admins     User[]    @relation("roomAdmins")
   visibility String
   password   String
 }
 
 model Message {
-  id        Int     @id @default(autoincrement())
-  content   String
-  userId    Int
-  roomId    Int
-  Room      Room    @relation(fields: [roomId], references: [id])
-  User      User    @relation(fields: [userId], references: [id])
+  id      Int    @id @default(autoincrement())
+  content String
+  userId  Int
+  roomId  Int
+  Room    Room   @relation(fields: [roomId], references: [id])
+  User    User   @relation(fields: [userId], references: [id])
 }
