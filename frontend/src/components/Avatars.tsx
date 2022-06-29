@@ -46,22 +46,26 @@ function PlayerAvatar(props: {image: string , onClick: any} ) {
 function CreateAvatar(props: {img: string, style: any}) {
     
     const handleClick = () => {
+		console.log("avatar upload : ", props.img)
 
-        axios.put('http://127.0.0.1:3001/users/me',
-        {
-            data: {
-                avatar: props.img,
-            },
-        },
-        {
-            withCredentials: true,
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-        .catch(function (err) {
-            console.log("Put request failed : ", err)
-        });
+        // axios.put('http://127.0.0.1:3001/users/upload-avatar',
+        // {
+        //     data: {
+        //         avatar: props.img,
+        //     },
+        // },
+        // {
+        //     withCredentials: true,
+        //     headers: {
+        //         'Content-Type': 'application/json'
+        //     }
+        // })
+		// .then(res => {
+		// 	console.log("Put request success : ", res)
+		// })
+        // .catch(function (err) {
+        //     console.log("Put request failed : ", err)
+        // });
     }
     
     return (
