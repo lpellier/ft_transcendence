@@ -50,7 +50,7 @@
 	list-style-type: none;
 	padding-right: 0%;
 	overflow-y: scroll;
-	height: 75%;
+	height:63vh;
 	-ms-overflow-style: none;
     scrollbar-width: none;
 }
