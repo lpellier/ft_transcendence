@@ -60,20 +60,21 @@ export class UsersService {
     return this.prisma.user.findMany();
   }
 
-  async getUserWithStats(id: number): Promise<any> {
+  async getUserWithStatsAndMatchHistory(id: number): Promise<any> {
     const user = await this.prisma.user.findUnique({
       where: {
         id: id,
       },
       include: {
         stats: true,
+        matchHistory: true,
       },
     });
     return user;
   }
 
   async getProfileWithSettings(id: number): Promise<ProfileWithSettings> {
-    const user = await this.getUserWithStats(id);
+    const user = await this.getUserWithStatsAndMatchHistory(id);
     const profile: ProfileWithSettings = {
       id: user.id,
       username: user.username,
@@ -81,12 +82,13 @@ export class UsersService {
       victories: user.stats.victories,
       losses: user.stats.losses,
       level: user.stats.level,
+      matchHistory: user.matchHistory,
     };
     return profile;
   }
 
   async getProfile(id: number): Promise<Profile> {
-    const user = await this.getUserWithStats(id);
+    const user = await this.getUserWithStatsAndMatchHistory(id);
     if (!user) {
       throw new NotFoundException();
     }
@@ -96,6 +98,7 @@ export class UsersService {
       victories: user.stats.victories,
       losses: user.stats.losses,
       level: user.stats.level,
+      matchHistory: user.matchHistory,
     };
     return profile;
   }
