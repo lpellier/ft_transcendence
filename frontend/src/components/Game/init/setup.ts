@@ -21,12 +21,12 @@
 	
 	// ? adjust max bounce angle
 	// ? implement better ai
-	
+
+	// ? add bumper shaking
 	// ? reset bumper animation if hit again
 	// ? cute animation showing the roll of pong value in casino
 	
 	// ? comment EVERYTHING
-
 
 let spritesheet : any;
 let spritedata : any;

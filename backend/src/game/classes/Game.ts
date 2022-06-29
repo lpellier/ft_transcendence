@@ -173,7 +173,7 @@ export class Game {
 		
 		if (intersection_point[0][0] != -1) {
 			server.to(this.room_id).emit("player-hit");
-			let max_angle_percentage : number = Math.abs(angle) / (Math.PI * 5 / 12); // ? number that lets me add speed to acute angled shots
+			let max_angle_percentage : number = Math.abs(angle) / (Math.PI * 3 / 12); // ? number that lets me add speed to acute angled shots
 			// ? for bot / top collisions
 			if (intersection_point[0][2] === "top" || intersection_point[0][2] === "bot") {
 				if (intersection_point[0][2] === "top")

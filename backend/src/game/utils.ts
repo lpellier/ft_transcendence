@@ -35,7 +35,7 @@ export function relativeIntersection(intersection_point : [number, number, strin
 	let middle : [number, number] = [p1[0] + (p2[0] - p1[0]) / 2 - intersection_point[0], p1[1] + (p2[1] - p1[1]) / 2 - intersection_point[1]];
 
 	if (intersection_point[2] === "side")
-		return middle[1] / ((p2[1] - p1[1]) / 2) * ((5 * Math.PI) / 12);
+		return middle[1] / ((p2[1] - p1[1]) / 2) * ((3 * Math.PI) / 12);
 	else
-		return middle[0] / ((p2[0] - p1[0]) / 2) * ((5 * Math.PI) / 12);
+		return middle[0] / ((p2[0] - p1[0]) / 2) * ((3 * Math.PI) / 12);
 }

@@ -23,9 +23,9 @@ function relativeIntersection(intersection_point : [number, number, string], p1 
 	let middle : [number, number] = [p1[0] + (p2[0] - p1[0]) / 2 - intersection_point[0], p1[1] + (p2[1] - p1[1]) / 2 - intersection_point[1]];
 
 	if (intersection_point[2] === "side")
-		return middle[1] / ((p2[1] - p1[1]) / 2) * ((5 * Math.PI) / 12);
+		return middle[1] / ((p2[1] - p1[1]) / 2) * ((3 * Math.PI) / 12);
 	else
-		return middle[0] / ((p2[0] - p1[0]) / 2) * ((5 * Math.PI) / 12);
+		return middle[0] / ((p2[0] - p1[0]) / 2) * ((3 * Math.PI) / 12);
 }
 
 // ? MAP BOUNDS :
@@ -86,7 +86,7 @@ function checkCollisions() {
 	
 	if (intersection_point[0][0] != -1) {
 		consts.playRandomPaddleSound();
-		let max_angle_percentage : number = Math.abs(angle) / (Math.PI * 5 / 12); // ? number that lets me add speed to acute angled shots
+		let max_angle_percentage : number = Math.abs(angle) / (Math.PI * 3 / 12); // ? number that lets me add speed to acute angled shots
 		// ? for bot / top collisions
 		if (intersection_point[0][2] === "top" || intersection_point[0][2] === "bot") {
 			if (intersection_point[0][2] === "top")

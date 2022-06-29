@@ -101,6 +101,7 @@ class Consts {
 		this.PADDLE_HIT_1 = new Audio("/assets/sfx/paddle_hit_1.mp3");
 		this.PADDLE_HIT_2 = new Audio("/assets/sfx/paddle_hit_2.mp3");
 
+
 		this.BUMPER_HIT_1 = new Audio("/assets/sfx/bumper_hit_1.mp3");
 		this.BUMPER_HIT_2 = new Audio("/assets/sfx/bumper_hit_2.mp3");
 
@@ -130,7 +131,20 @@ class Consts {
 		this.MENU_MUSIC.loop = true;
 		this.MENU_MUSIC.volume = this.max_volume;
 
-		this.music_playing = "none";
+		this.music_playing = "none";		
+		this.PADDLE_HIT_1.autoplay = false;
+		this.PADDLE_HIT_2.autoplay = false;
+		this.BUMPER_HIT_1.autoplay = false;
+		this.BUMPER_HIT_2.autoplay = false;
+		this.WALL_HIT_1.autoplay = false;
+		this.WALL_HIT_2.autoplay = false;
+		this.BIP.autoplay = false;
+		this.BIP_FINAL.autoplay = false;
+		this.SCORE.autoplay = false;
+		this.MENU_MUSIC.autoplay = false;
+		this.ORIGINAL_MUSIC.autoplay = false;
+		this.CITY_MUSIC.autoplay = false;
+		this.CASINO_MUSIC.autoplay = false;
 	}
 
 	playBip(bip : any) {
