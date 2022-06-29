@@ -9,16 +9,15 @@
 	// ? take into account score when recording on database
 	// ? add player xp and level
 	// ? handle edge cases like players leaving in middle of game for stats (count as defeat)
-
+	
+	// ? implement better ai
+	
 	// ? output final score on game over screen
 	// ? output both player names at start of match and winner name at the end
 
-	// ? implement better ai
-
-	// ? add bumper shaking
 	// ? cute animation showing the roll of pong value in casino
-
 	// ? should make the sound button highlight like others when hovering
+
 	// ? comment EVERYTHING
 
 let spritesheet : any;
@@ -41,8 +40,6 @@ let socket : any = null;
 
 let user_name : string;
 let user_id : string;
-
-let frame_count_shake : number;
 
 function preload() {
 	consts = new Consts();
@@ -93,7 +90,7 @@ function setup() {
 	
 	resizeEverything();
 	game.setState("in-menu");
-	frame_count_shake = 0;
+	game.frame_count_shake = 0;
 }
 
 function hideIcons() {
@@ -106,8 +103,8 @@ function hideIcons() {
 function draw() {
 	consts.playAppropriateMusic();
 	push();
-	if ((game.score[0] != 0 || game.score[1] != 0) && (game.state === "in-game" || game.state === "relaunch-countdown") && frame_count_shake < 30) {
-		frame_count_shake++;
+	if ((game.score[0] != 0 || game.score[1] != 0) && (game.state === "in-game" || game.state === "relaunch-countdown") && game.frame_count_shake < 30) {
+		game.frame_count_shake++;
 		translate(Math.floor(random(-5, 6)), Math.floor(random(-5, 6)))
 	}
 	clear(0, 0, 0, 0);

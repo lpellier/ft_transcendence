@@ -29,8 +29,14 @@ class Buttons {
 	
 	createButtons() {
 		this.create_game = createCustomButton("Create game", createGameMenu, highlightButton, resetButton, consts.std_width, consts.std_height);
+		this.create_game.style("border", (consts.WIDTH / 400).toString() + "px solid white");
+		
 		this.join = createCustomButton("Join game", readRoomID, highlightButton, resetButton, consts.std_width, consts.std_height);
+		this.join.style("border", (consts.WIDTH / 400).toString() + "px solid white");
+
 		this.matchmaking = createCustomButton("Match making", matchmaking, highlightButton, resetButton, consts.std_width, consts.std_height);
+		this.matchmaking.style("border", (consts.WIDTH / 400).toString() + "px solid white");
+
 		this.return = createCustomButton("", goToMainMenu, highlightButton, resetButton, consts.medium_square_diameter, consts.medium_square_diameter);
 		this.return.style("border", "none");
 		this.return.style("background-color", "rgba(0, 0, 0, 0)");
@@ -98,6 +104,7 @@ class Buttons {
 
 		this.spectate = createCustomButton("", clickSpectate, highlightSpectateButton, resetSpectateButton, consts.WIDTH * 0.1, consts.HEIGHT * 0.1);
 		this.spectate.style("background-color", "rgba(0, 0, 0, 0)");
+		this.spectate.style("border", (consts.WIDTH / 400).toString() + "px solid white");
 
 		this.hide();
 		this.addParent();
@@ -110,10 +117,16 @@ class Buttons {
 	resize() {
 		this.create_game.size(consts.std_width, consts.std_height);
 		this.create_game.style("font-size", consts.std_font_size.toString() + "px");
+		this.create_game.style("border", (consts.WIDTH / 400).toString() + "px solid white");
+
 		this.join.size(consts.std_width, consts.std_height);
 		this.join.style("font-size", consts.std_font_size.toString() + "px");
+		this.join.style("border", (consts.WIDTH / 400).toString() + "px solid white");
+
 		this.matchmaking.size(consts.std_width, consts.std_height);
 		this.matchmaking.style("font-size", consts.std_font_size.toString() + "px");
+		this.matchmaking.style("border", (consts.WIDTH / 400).toString() + "px solid white");
+
 		this.opponent_left_ok.size(consts.std_width, consts.std_height);
 		this.opponent_left_ok.style("font-size", consts.std_font_size.toString() + "px");
 	

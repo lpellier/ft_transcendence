@@ -130,7 +130,7 @@ function listenMoveEvents() {
 	) => {
 			if (game.state === "in-game" || game.state === "relaunch-countdown" || game.state === "countdown") {
 				if (game.score[0] != score[0] || game.score[1] != score[1]) {
-					frame_count_shake = 0;
+					game.frame_count_shake = 0;
 					consts.playScore();
 				}
 				game.score[0] = score[0];
