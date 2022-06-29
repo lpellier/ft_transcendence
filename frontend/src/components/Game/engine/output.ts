@@ -36,5 +36,5 @@ function drawPlayerReadiness() {
 }
 
 function outputCountdown() {
-	outputAnnouncement("" + game.timer, consts.std_font_size, consts.WIDTH / 2 + 5, consts.HEIGHT / 2 + 20,"white");
+	outputAnnouncement("" + game.timer, consts.std_font_size, consts.WIDTH * 0.505, consts.HEIGHT * 0.535,"white");
 }

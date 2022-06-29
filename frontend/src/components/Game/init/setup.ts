@@ -4,11 +4,14 @@
 
 // TODO ISSUES
 	// ? countdown timer badly centered
-	// ? when opening the site on a page for the first time, game doesn't load until refresh
+	// ? when opening the site on a page for the first time, game doesn't load until refresh (but only sometimes)
 	// ? arrow to designate player that gets service is not responsive
 	// ? ball speed not adjusted right away when resizing screen
+	// ? -1 point not working properly, how is this so hard ?
 
 // TODO IMPROVEMENTS
+	// ? for collisions, i wanted to avoid it but i need to check mulitple points of the ball when calculating
+		// ? each middle of side and edges
 	// ? need to test casino in multiplayer
 	// ? take into account score when recording on database
 	// ? add player xp and level
@@ -18,14 +21,13 @@
 
 	// ? output final score on game over screen
 	// ? output both player names at start of match and winner name at the end
-	
-	// ? adjust max bounce angle
+
 	// ? implement better ai
 
 	// ? add bumper shaking
 	// ? reset bumper animation if hit again
 	// ? cute animation showing the roll of pong value in casino
-	
+
 	// ? comment EVERYTHING
 
 let spritesheet : any;
