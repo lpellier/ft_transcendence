@@ -1,12 +1,10 @@
-import {useState, cloneElement} from 'react';
-import Modal from '@mui/material/Modal';
 import Stack from '@mui/material/Stack'
 import Box from '@mui/material/Box'
-import FaceIcon from '@mui/icons-material/Face'
 import AvatarList from './ChooseAvatar/ChooseAvatar'
 import ChooseName from './ChooseName/ChooseName'
 import ChooseAuth from './ChooseAuth/ChooseAuth'
 import {User} from 'interfaces'
+import { useEffect } from 'react'
 
 
 const SettingStyle = {

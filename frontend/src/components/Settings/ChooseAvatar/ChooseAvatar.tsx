@@ -55,6 +55,8 @@ function UploadButton(props: {setOpen: any}) {
 	};
 
 	function handleSubmit() {
+		console.log("data input : ", selectedFile, " is :", typeof(selectedFile))
+
 		const formData = new FormData();
 		formData.append('avatar', selectedFile)
 
@@ -148,8 +150,8 @@ function ChooseAvatarButton(props: {user: User, setOpenOne: any}) {
         	Custom avatar
       </Button>
       <Modal
-        open={open}
-        onClose={handleClose}
+		open={open}
+		onClose={handleClose}
       >
         <Box sx={CustomAvatarStyle}>
         	<CustomAvatar setOpen={setOpen}/>
@@ -191,11 +193,11 @@ export default function AvatarList(props: {user: User}){
 		  <Modal
           open={open}
           onClose={handleClose}
-        > 
+        >
           <Box sx={ModalChooseAvatar}>
             <Container>
               <Stack spacing={2} style={{justifyContent: 'center'}}>
-                    <DotsMobileStepper />
+                    {/* <DotsMobileStepper /> */}
                     <ChooseAvatarButton user={props.user} setOpenOne={setOpen}/>
               </Stack>
             </Container>
