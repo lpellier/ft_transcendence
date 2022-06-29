@@ -98,13 +98,13 @@ export class Game {
 		if (!this.invert) {
 			if (this.pong.value === -1 && this.score[1] > 0)
 				this.score[1]--;
-			else
+			else if (this.pong.value != -1)
 				this.score[0] += this.pong.value;
 		}
 		else {
 			if (this.pong.value === -1 && this.score[0] > 0)
 				this.score[0]--;
-			else
+			else if (this.pong.value != -1)
 				this.score[1] += this.pong.value;
 		}
 	}
