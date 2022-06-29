@@ -51,7 +51,7 @@
 				if (this.pos.x > consts.WIDTH * 0.2 && this.pos.x < consts.WIDTH * 0.6)
 					this.vel.lerp(new Vector([this.slow_speed, 0]), 1);
 				else if (this.pos.x  > consts.WIDTH * 0.6)
-					this.vel.lerp(new Vector([this.initial_speed * 2, 0]), 1);
+					this.vel.lerp(new Vector([this.initial_speed * 4, 0]), 2);
 				if (this.pos.x > consts.WIDTH + this.text.length * consts.std_font_size)
 					this.moving = false;
 			}
@@ -59,7 +59,7 @@
 				if (this.pos.x > consts.WIDTH * 0.4 && this.pos.x < consts.WIDTH * 0.8)
 					this.vel.lerp(new Vector([this.slow_speed, 0]), 1);
 				else if (this.pos.x  < consts.WIDTH * 0.4)
-					this.vel.lerp(new Vector([this.initial_speed * 2, 0]), 1);
+					this.vel.lerp(new Vector([this.initial_speed * 4, 0]), 2);
 				if (this.pos.x + this.text.length * consts.std_font_size < 0)
 					this.moving = false;
 			}
