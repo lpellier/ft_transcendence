@@ -69,6 +69,7 @@ function checkCollisions() {
 	if (game.map.name === "city") {
 		for (let bumper of bumpers) {
 			if (bumper.checkCollision(game.pong)) {
+				bumper.resetAnimation();
 				consts.playRandomBumperSound();
 				return ;
 			}

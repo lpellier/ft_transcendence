@@ -12,13 +12,13 @@
 
 	// ? output final score on game over screen
 	// ? output both player names at start of match and winner name at the end
-// 
+
 	// ? implement better ai
 
 	// ? add bumper shaking
-	// ? reset bumper animation if hit again
 	// ? cute animation showing the roll of pong value in casino
 
+	// ? should make the sound button highlight like others when hovering
 	// ? comment EVERYTHING
 
 let spritesheet : any;
@@ -45,7 +45,6 @@ let user_id : string;
 let frame_count_shake : number;
 
 function preload() {
-	// soundFormats("mp3");
 	consts = new Consts();
 	keys = new Keys();
 
@@ -201,12 +200,5 @@ function draw() {
 		drawSound();
 		buttons.sound.show();
 	}
-	// if (game.state === "in-menu") { // ? I felt like color of sound icon was sticking out so i tried to dampen it but now i don't know
-		// push();
-		// fill("rgba(0, 0, 0, 0.10)");
-		// noStroke();
-		// rect(consts.WIDTH * 0.8, consts.HEIGHT * 0.02, consts.small_square_diameter * 3, consts.small_square_diameter * 1.65);
-		// pop();
-	// }
 	pop();
 }

@@ -54,6 +54,10 @@ class Bumper {
 		}
 	}
 
+	resetAnimation() {
+		this.index = 0;
+	}
+
 	render(ratio : number) {
 		this.show(ratio);
 		if (this.hit)
