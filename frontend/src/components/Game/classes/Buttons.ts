@@ -51,8 +51,8 @@ class Buttons {
 		this.anyone_can_join = createCustomButton("Anyone can join", clickAnyone, highlightButton, resetButton, consts.medium_width, consts.medium_height);
 		this.anyone_can_join.style("background-color", "rgba(0, 0, 0, 0)");
 		this.anyone_can_join.style("font-size", consts.medium_font_size.toString() + "px");
-		this.anyone_can_join.style("outline", "3px solid");
-		this.anyone_can_join.style("border", "none");
+		this.anyone_can_join.style("border", "3px solid");
+		this.anyone_can_join.style("outline", "none");
 		this.invitation_only = createCustomButton("Invitation only", clickInvitation, highlightButton, resetButton, consts.medium_width, consts.medium_height);
 		this.invitation_only.style("background-color", "rgba(0, 0, 0, 0)");
 		this.invitation_only.style("border", "none");
@@ -81,8 +81,8 @@ class Buttons {
 
 		this.map_original = createCustomButton("Original", clickMapOriginal, highlightButton, resetButton, consts.WIDTH * 0.2 + consts.WIDTH / 48, consts.HEIGHT * 0.2 + consts.WIDTH / 48);
 		this.map_original.style("background", "none");
-		this.map_original.style("border", "none");
-		this.map_original.style("outline", "3px solid");
+		this.map_original.style("outline", "none");
+		this.map_original.style("border", "3px solid");
 		
 		this.map_city = createCustomButton("City", clickMapCity, highlightButton, resetButton, consts.WIDTH * 0.2 + consts.WIDTH / 48, consts.HEIGHT * 0.2 + consts.WIDTH / 48);
 		this.map_city.style("background", "none");
@@ -255,21 +255,21 @@ class Buttons {
 	}
 
 	clickAnyone() {
-		this.anyone_can_join.style("outline", "3px solid");
-		this.local.style("outline", "none");
-		this.invitation_only.style("outline", "none");
+		this.anyone_can_join.style("border", "3px solid");
+		this.local.style("border", "none");
+		this.invitation_only.style("border", "none");
 		
 		this.ai.hide();
-		this.ai.style("outline", "none");
+		this.ai.style("border", "none");
 		game.ai = false;
 
 		return "public";
 	}
 
 	clickLocal() {
-		this.anyone_can_join.style("outline", "none");
-		this.local.style("outline", "3px solid");
-		this.invitation_only.style("outline", "none");
+		this.anyone_can_join.style("border", "none");
+		this.local.style("border", "3px solid");
+		this.invitation_only.style("border", "none");
 
 		this.ai.show();
 		
@@ -277,12 +277,12 @@ class Buttons {
 	}
 
 	clickInvitation() {
-		this.anyone_can_join.style("outline", "none");
-		this.local.style("outline", "none");
-		this.invitation_only.style("outline", "3px solid");
+		this.anyone_can_join.style("border", "none");
+		this.local.style("border", "none");
+		this.invitation_only.style("border", "3px solid");
 
 		this.ai.hide();
-		this.ai.style("outline", "none");
+		this.ai.style("border", "none");
 		game.ai = false;
 
 		return "private";

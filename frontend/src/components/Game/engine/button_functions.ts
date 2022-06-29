@@ -124,11 +124,11 @@ function clickAi() {
 	if (mouseButton === LEFT) {
 		if (game.ai) {
 			// @ts-ignore : next-line
-			this.style("outline", "none");
+			this.style("border", "none");
 		}
 		else {
 			// @ts-ignore : next-line
-			this.style("outline", "3px solid");
+			this.style("border", "3px solid");
 		}
 		game.ai = !game.ai;
 	}
@@ -137,27 +137,27 @@ function clickAi() {
 function clickMapOriginal() {
 	if (mouseButton === LEFT) {
 		// @ts-ignore : next-line
-		this.style("outline", "3px solid");
-		buttons.map_city.style("outline", "none");
-			buttons.map_casino.style("outline", "none");
+		this.style("border", "3px solid");
+		buttons.map_city.style("border", "none");
+			buttons.map_casino.style("border", "none");
 		game.map = consts.original_map;
 	}
 }
 function clickMapCity() {
 	if (mouseButton === LEFT) {
 		// @ts-ignore : next-line
-		this.style("outline", "3px solid");
-		buttons.map_original.style("outline", "none");
-		buttons.map_casino.style("outline", "none");
+		this.style("border", "3px solid");
+		buttons.map_original.style("border", "none");
+		buttons.map_casino.style("border", "none");
 		game.map = consts.city_map;
 	}
 }
 function clickMapCasino() {
 	if (mouseButton === LEFT) {
 		// @ts-ignore : next-line
-		this.style("outline", "3px solid");
-		buttons.map_city.style("outline", "none");
-		buttons.map_original.style("outline", "none");
+		this.style("border", "3px solid");
+		buttons.map_city.style("border", "none");
+		buttons.map_original.style("border", "none");
 		game.map = consts.casino_map;
 	}
 }
