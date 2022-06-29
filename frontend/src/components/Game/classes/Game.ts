@@ -60,6 +60,10 @@ class Game {
 				this.score[0] += this.pong.value;
 		}
 		setTimeout(() => {
+			if (this.over()) {
+				this.setState("game-over");
+				return ;
+			}
 			this.setState("relaunch-countdown");
 			this.timer = 2;
 			for (let i = 0; i < 3; i++) {
@@ -77,8 +81,6 @@ class Game {
 				this.pong.relaunchPong("right");
 			else
 				this.pong.relaunchPong("left");
-			if (this.over())
-				this.setState("game-over");
 			this.frames_since_point = 0;
 		}, 500);
 	}

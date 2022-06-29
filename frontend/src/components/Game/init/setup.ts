@@ -3,7 +3,6 @@
 // ? Map indexes : 1 (normal map), 2 (city map), 3 (casino map)
 
 // TODO ISSUES
-	// ? countdown timer badly centered
 	// ? when opening the site on a page for the first time, game doesn't load until refresh (but only sometimes)
 	// ? arrow to designate player that gets service is not responsive
 	// ? -1 point not working properly, how is this so hard ?
@@ -13,8 +12,6 @@
 	// ? take into account score when recording on database
 	// ? add player xp and level
 	// ? handle edge cases like players leaving in middle of game for stats (count as defeat)
-
-	// ? coutdown bip going at it at end game
 
 	// ? output final score on game over screen
 	// ? output both player names at start of match and winner name at the end
