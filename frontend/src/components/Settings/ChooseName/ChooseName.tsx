@@ -20,32 +20,35 @@ function NameButton() {
 	);
 }
 
-function NameInput(props: {user: User}) {
-	let [new_username, setNewUsername] = useState(props.user.username);
+function NameInput(props: {username: string, setter: any}) {
 
 	function handleSubmit(e: any)
 	{
-		setNewUsername(e.target[0].value);
+		e.preventDefault();
+		props.setter(e.target[0].value);
 		e.target[0].value = "";
 	}
 
 	useEffect(() => {
-		axios.put('http://127.0.0.1:3001/users/me',
+		console.log("sending : ", props.username, " as ", typeof(props.username))
+
+		axios.patch(
+			'http://127.0.0.1:3001/users/me',
+			{username : props.username},
 			{
-				data: {
-					username: new_username,
+				withCredentials: true,
+				headers: {
+					'Content-Type': 'application/json'
 				}
-			},
-			{
-			withCredentials: true,
-			headers: {
-				'Content-Type': 'application/json'
 			}
+		)
+		.then(res => {
+			console.log("Changing name success : ", props.username)
 		})
-		.catch(function (err) {
+		.catch(err => {
 			console.log("Put request failed : ", err)
 		});
-	}, [new_username])
+	}, [props.username])
 
 	return (
 		<Stack direction="row">
@@ -63,11 +66,12 @@ function NameInput(props: {user: User}) {
 }
 
 export default function ChooseName(props: {user: User}) {
+    const [new_username, setNewUsername] = useState(props.user.username);
 
-        return (
-				<Stack spacing={2} style={{justifyContent: 'center'}}>
-                    <NameButton />
-					<NameInput user={props.user}/>
-                </Stack>
-        );
+	return (
+			<Stack spacing={2} style={{justifyContent: 'center'}}>
+                <NameButton />
+				<NameInput username={new_username} setter={setNewUsername}/>
+            </Stack>
+    );
 }
