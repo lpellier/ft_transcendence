@@ -3,11 +3,10 @@
 // ? Map indexes : 1 (normal map), 2 (city map), 3 (casino map)
 
 // TODO ISSUES
+	// ? point value not shown in multiplayer
 	// ? when opening the site on a page for the first time, game doesn't load until refresh (but only sometimes)
-	// ? -1 point not working properly, how is this so hard ?
 
 // TODO IMPROVEMENTS
-	// ? need to test casino in multiplayer
 	// ? take into account score when recording on database
 	// ? add player xp and level
 	// ? handle edge cases like players leaving in middle of game for stats (count as defeat)

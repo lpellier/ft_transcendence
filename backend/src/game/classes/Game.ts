@@ -81,7 +81,17 @@ export class Game {
 	setNewValue() {
 		if (this.map.name != "casino")
 			return ;
-		this.pong.value = Math.floor(Math.random() * 4) + 1;
+		let rand : number = Math.floor(Math.random() * 11);
+		if (rand === 0)
+			this.pong.value = -1;
+		else if (rand <= 4)
+			this.pong.value = 1;
+		else if (rand <= 7)
+			this.pong.value = 2;
+		else if (rand <= 9)
+			this.pong.value = 3;
+		else if (rand === 10)
+			this.pong.value = 4;
 	}
 
 	increment_score() {
