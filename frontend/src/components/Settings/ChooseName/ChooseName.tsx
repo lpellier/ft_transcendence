@@ -2,11 +2,8 @@ import { useState, useEffect } from "react";
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
-
 import { NameButtonStyle } from '../../../styles/tsxStyles/Settings/Name'
-
 import axios from 'axios';
-
 import {User} from 'interfaces'
 
 function NameButton() {
@@ -20,7 +17,7 @@ function NameButton() {
 	);
 }
 
-function NameInput(props: {username: string, setter: any}) {
+function NameInput(props: {username: string, setter: any, setOpen: any}) {
 
 	function handleSubmit(e: any)
 	{
@@ -44,6 +41,7 @@ function NameInput(props: {username: string, setter: any}) {
 		)
 		.then(res => {
 			console.log("Changing name success : ", props.username)
+			props.setOpen(false)
 		})
 		.catch(err => {
 			console.log("Put request failed : ", err)
@@ -52,26 +50,29 @@ function NameInput(props: {username: string, setter: any}) {
 
 	return (
 		<Stack direction="row">
-		<form id='ChangeNameForm' onSubmit={handleSubmit} style={{width: '100%'}}>
-			<TextField
-				type="text"
-				label="Your name" 
-				variant="standard"
-				style={{width: '50%', justifyContent: 'center'}}
-				id='name'
-			/>
-		</form>
+			<form id='ChangeNameForm' onSubmit={handleSubmit} style={{width: '100%'}}>
+				<TextField
+					type="text"
+					label="Your name" 
+					variant="standard"
+					style={{width: '50%', justifyContent: 'center'}}
+					id='name'
+				/>
+			</form>
 		</Stack>
 	);
 }
 
-export default function ChooseName(props: {user: User}) {
+export default function ChooseName(props: {user: User, setOpen: any}) {
     const [new_username, setNewUsername] = useState(props.user.username);
 
 	return (
 			<Stack spacing={2} style={{justifyContent: 'center'}}>
                 <NameButton />
-				<NameInput username={new_username} setter={setNewUsername}/>
+				<NameInput 
+					username={new_username} 
+					setter={setNewUsername} 
+					setOpen={props.setOpen}/>
             </Stack>
     );
 }
