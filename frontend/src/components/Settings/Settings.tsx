@@ -1,16 +1,13 @@
-
 import {useState, cloneElement} from 'react';
 import Modal from '@mui/material/Modal';
 import Stack from '@mui/material/Stack'
 import Box from '@mui/material/Box'
 import FaceIcon from '@mui/icons-material/Face'
-import VpnKeyIcon from '@mui/icons-material/VpnKey'
 import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline'
 import AvatarList from './ChooseAvatar/ChooseAvatar'
 import ChooseName from './ChooseName/ChooseName'
 import ChooseAuth from './ChooseAuth/ChooseAuth'
 import {ModalChooseName} from '../../styles/tsxStyles/Settings/Name'
-import {ModalChooseAuth} from '../../styles/tsxStyles/Settings/Auth'
 import {ModalChooseAvatar} from '../../styles/tsxStyles/Settings/Avatar'
 import Button from '@mui/material/Button';
 import {ButtonModalStyle, IconStyle} from '../../styles/tsxStyles/AppBar/PongMenu'
@@ -52,20 +49,6 @@ function ChooseNameModal(props: {user: User, setOpen: any, open: boolean}) {
 	)
 }
 
-function ChooseAuthModal(props: {user: User, setOpen: any, open: boolean}) {
-	return (
-		<ChooseModal
-			user={props.user} 
-			icon={VpnKeyIcon}
-			label={"Choose Authentication"}
-			ModalBoxStyle={ModalChooseAuth}
-			modalComp={<ChooseAuth user={props.user}/>}
-			setOpen={props.setOpen}
-			open={props.open}
-		/>
-	)
-}
-
 function ChooseModal(props: {user: User, icon: any, 
 	label: string, ModalBoxStyle: any, modalComp: any, open: boolean, setOpen: any}) 
 {
@@ -101,7 +84,6 @@ function ChooseModal(props: {user: User, icon: any,
 }
 
 export default function Settings(props: {user: User | undefined}) {
-	const [isOpenTFA, setOpenTFA] = useState(false);
 	const [isOpenAvatar, setOpenAvatar] = useState(false);
 	const [isOpenName, setOpenName] = useState(false);
 
@@ -111,7 +93,7 @@ export default function Settings(props: {user: User | undefined}) {
             	<Stack spacing={5}>
             		<ChooseAvatarModal user={props.user} open={isOpenAvatar} setOpen={setOpenAvatar}/>
             	    <ChooseNameModal user={props.user} open={isOpenName} setOpen={setOpenName}/>
-            	    <ChooseAuthModal user={props.user} open={isOpenTFA} setOpen={setOpenTFA}/>
+            	    <ChooseAuth user={props.user}/>
 		    	</Stack>
 					:
 				<div/>

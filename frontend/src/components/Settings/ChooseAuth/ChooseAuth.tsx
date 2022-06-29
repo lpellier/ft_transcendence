@@ -1,5 +1,6 @@
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography'
+import Modal from '@mui/material/Modal';
 import { ButtonStackStyle, Title } from '../../../styles/tsxStyles/Settings/Auth'
 import { User } from 'interfaces'
 import {useState, useEffect} from 'react'
@@ -7,6 +8,10 @@ import Button from '@mui/material/Button'
 import Box from '@mui/material/Box'
 import QRCode from 'react-qr-code'
 import axios from 'axios'
+import VpnKeyIcon from '@mui/icons-material/VpnKey'
+import {ButtonModalStyle, IconStyle} from '../../../styles/tsxStyles/AppBar/PongMenu'
+import {ModalChooseAuth} from '../../../styles/tsxStyles/Settings/Auth'
+
 
 function GenerateQRCode(props: {url: string}) {
 	
@@ -90,14 +95,41 @@ function TFAButton(props: {user: User}) {
 }
 
 export default function ChooseAuth(props: {user: User}) {
-        return (
-                <Stack spacing={5}>
-                    <Typography sx={Title}>
-                        Change Authentication
-                    </Typography>
-                    <Stack spacing={4} sx={ButtonStackStyle}>
-                        <TFAButton user = {props.user}/>
-                    </Stack>
-                </Stack>
-        );
+	const [open, setOpen] = useState<boolean>(false)
+
+	const handleOpen = () => {
+		setOpen(true);
+	};
+	
+	const handleClose = () => {
+		setOpen(false);
+	};
+
+    return (
+		<Stack direction="row" spacing={2} style={{justifyContent: 'center'}}>
+			<Button
+				  onClick={handleOpen}
+				  variant="contained"
+				  color="secondary"
+				  style={ButtonModalStyle}
+				>
+				<VpnKeyIcon sx={IconStyle}/>
+				Choose Authentication
+			</Button>
+			<Modal
+          		open={open}
+          		onClose={handleClose}> 
+				<Box sx={ModalChooseAuth}>
+            		<Stack spacing={5}>
+            		    <Typography sx={Title}>
+            		        Change Authentication
+            		    </Typography>
+            		    <Stack spacing={4} sx={ButtonStackStyle}>
+            		        <TFAButton user = {props.user}/>
+            		    </Stack>
+            		</Stack>
+				</Box>
+			</Modal>
+		</Stack>
+    );
 }
