@@ -94,8 +94,8 @@ export default function AllRoutes()  {
 		<BrowserRouter>
 	        <Routes>
 	            <Route path="/login" element={<LogIn user={user} auth={isAuth}/>} />
+				<Route path="tfauth" element={<TFAuth setAuth={setAuth}/>} />
 	            <Route path="/" element={ <ProtectedRoute auth={isAuth}><App user={user} users={users}/></ProtectedRoute>}>
-					<Route path="tfauth" element={<TFAuth setAuth={setAuth}/>} />
 					<Route path="profile" element={ < Profile user={user}/>}/>
 					<Route path="chat" element={<Chat user={user} users={users}/>}/>
 					<Route path="game" element={<Game user={user}/>}/>

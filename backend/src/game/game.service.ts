@@ -11,9 +11,14 @@ export class GameService {
     async createMatch(m_data: CreateMatchDto) {
         const match = await this.prisma.match.create({
             data: {
+                players: {
+                    connect: [
+                        { id: m_data.winnerId },
+                        { id: m_data.loserId }
+                    ]
+                },
                 ladder: m_data.ladder,
                 winnerId: m_data.winnerId,
-                loserId: m_data.loserId
             }
         });
         return match.id;

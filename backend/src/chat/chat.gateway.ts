@@ -1,5 +1,5 @@
 import { ConfigService } from "@nestjs/config";
-import { MessageBody, ConnectedSocket, SubscribeMessage, WebSocketGateway, WebSocketServer } from "@nestjs/websockets";
+import { MessageBody, ConnectedSocket, SubscribeMessage, WebSocketGateway, WebSocketServer, OnGatewayConnection, OnGatewayDisconnect } from "@nestjs/websockets";
 import { Socket } from "socket.io";
 import { ChatService } from './chat.service';
 import { UserRoomDto } from "./dto/user-room.dto";
@@ -10,7 +10,6 @@ import { UpdatePasswordDto } from "./dto/update-password.dto"
 	
 import * as bcrypt from 'bcrypt';
 
-
 let socketUser = new Map<string, number>();
 
 @WebSocketGateway({
@@ -19,7 +18,8 @@ let socketUser = new Map<string, number>();
 	  credentials: true
 	}
 })
-export class ChatGateway {
+export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect
+{
 	constructor(private readonly chatService: ChatService) {}
 
 	@WebSocketServer()
@@ -175,5 +175,29 @@ export class ChatGateway {
 		console.log('client disconnected');
 		this.server.emit('disconnection', socketUser.get(client.id))
 	}
+
+	handleConnection(@ConnectedSocket() client:Socket) {
+		console.log('client connected');
+	  }
+
+	  @SubscribeMessage('add blocked')
+	  add(@ConnectedSocket() client:Socket, @MessageBody() blockedUserDto: BlockedUserDto) {
+		this.chatService.add(blockedUserDto.userId, blockedUserDto.blockedId);
+		client.emit('add blocked');
+		console.log('add blocked called -> ', blockedUserDto);
+	  }
+	
+	  @SubscribeMessage('removeBlocked')
+	  remove(@MessageBody() blockedUserDto: BlockedUserDto) {
+		return this.chatService.remove(blockedUserDto.userId, blockedUserDto.blockedId);
+	  }
+	
+	  @SubscribeMessage('get blocked')
+	  async findAll(@ConnectedSocket() client:Socket , @MessageBody() userId: number) {
+		const blockedIds: number[] = await this.chatService.findAllIds(userId);
+		const blocked = await this.chatService.findAll(blockedIds);
+		client.emit('get blocked', blocked);
+		console.log('get blocked called', blocked)
+	  }
 
 }

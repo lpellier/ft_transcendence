@@ -1,12 +1,9 @@
+import {useEffect, useState} from 'react'
 import {Link} from 'react-router-dom'
-
 import {User} from 'interfaces';
 import {PlayerAvatar} from	'../Avatars';
-
 import FriendBar from 'components/FriendBar/FriendBar';
 import { ToastContainer } from 'react-toastify';
-
-
 import AppBar from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
@@ -17,12 +14,9 @@ import GamesIcon from '@mui/icons-material/Games'
 import SettingsIcon from '@mui/icons-material/Settings';
 import Tooltip from '@mui/material/Tooltip'
 import WebhookIcon from '@mui/icons-material/Webhook'
-
 import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
 import axios from 'axios';
-
 import { BarStyle } from '../../styles/tsxStyles/AppBar/AppBar'
-
 
 function LogOutLink() {
   
@@ -38,9 +32,8 @@ function LogOutLink() {
 	  .catch(function (err) {
 		console.log("Get request failed : ", err)
 	  });
-  
 	}
-  
+
 	return (
 	  <nav>
 		<Link to="/login" style={{ textDecoration: 'none' }}>
@@ -69,7 +62,7 @@ function AppBarButton(props: {icon: any, link: string, tooltip: any}) {
 			</Tooltip>
 		  </Link>
 		</nav>
-	  );
+	);
 }
 
 function PlayerName(props: {name: string}) {
@@ -101,6 +94,11 @@ function ProjectName() {
 }
 
 export default function SearchAppBar(props: {user: User, users: User[]}) {
+	const [hasChanged, setHasChanged] = useState<boolean>(false)
+
+	useEffect(() => {
+		setHasChanged(false)
+	}, [hasChanged])
 
   return (
       <AppBar position="static">
