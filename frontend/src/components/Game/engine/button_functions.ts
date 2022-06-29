@@ -181,8 +181,8 @@ function startLocal() {
 			}, i * 1000);
 		}
 		game.setState("countdown");
-		game.players.push(new Player(1, "first"));
-		game.players.push(new Player(2, "second"));		
+		game.players.push(new Player(1, "first", "P1"));
+		game.players.push(new Player(2, "second", "P2"));		
 		game.pong = new Pong();
 		game.room_id = "Local";
 	}

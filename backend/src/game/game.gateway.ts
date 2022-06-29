@@ -155,14 +155,14 @@ export class GameGateway {
 				if (data[1] === true) {
 					client.join(game.room_id);
 					game.addSpectator(client.id);
-					this.server.to(client.id).emit("spectate", game.room_id, game.score_limit, game.map.name, game.state, game.players[0].id, (game.players.length > 1 ? game.players[1].id : "null")); // need to handle case where only one user is connected
+					this.server.to(client.id).emit("spectate", game.room_id, game.score_limit, game.map.name, game.state, game.players[0].id, (game.players.length > 1 ? game.players[1].id : "null"), game.players[0].real_name, (game.players.length > 1 ? game.players[1].real_name : "null")); // need to handle case where only one user is connected
 				}
 				else if (game.players.length < 2) {
 					client.join(game.room_id);
 					game.addPlayer(client.id, this.users[this.clients.indexOf(client.id)]);
 					this.server.to(game.room_id).emit("waiting-player", game.room_id, game.score_limit, game.map.name);
 					game.state = "waiting-readiness";
-					this.server.to(game.room_id).emit("waiting-readiness", game.players[0].id, game.players[1].id);						
+					this.server.to(game.room_id).emit("waiting-readiness", game.players[0].id, game.players[1].id, game.players[0].real_name, game.players[1].real_name);						
 				}
 				else
 					this.server.to(client.id).emit("matchmaking-error", "game_full");

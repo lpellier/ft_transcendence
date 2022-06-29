@@ -8,7 +8,9 @@ class Player {
 	id : string = "0";
 	ready : boolean = false;
 
-	constructor(index : number, id : any) {
+	username : string;
+
+	constructor(index : number, id : any, username : string) {
 		if (index == 1)
 			this.pos = [consts.WIDTH / 12, consts.HEIGHT / 2 - consts.PLAYER_HEIGHT / 2];
 		else
@@ -21,6 +23,8 @@ class Player {
 		this.index = index;
 		this.id = id;
 		this.ready = false;
+		console.log(username)
+		this.username = username;
 	}
 	
 	render() {

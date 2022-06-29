@@ -12,7 +12,6 @@
 	
 	// ? implement better ai
 	
-	// ? output final score on game over screen
 	// ? output both player names at start of match and winner name at the end
 
 	// ? cute animation showing the roll of pong value in casino
@@ -152,6 +151,7 @@ function draw() {
 			drawSpectate();
 		drawPlayerReadiness();
 		outputAnnouncement("PLEASE PRESS SPACE TO START THE GAME", consts.medium_font_size, consts.WIDTH / 2, consts.HEIGHT / 2, "white");
+		outputPlayerNames();
 	}
 	else if (game.state === "countdown") {
 		if (game.spectator)
@@ -192,6 +192,7 @@ function draw() {
 		buttons.return.show();
 		image(consts.RETURN_ICON, consts.WIDTH * 0.90, consts.HEIGHT * 0.01, consts.medium_square_diameter, consts.medium_square_diameter);
 		outputAnnouncement((game.score[0] > game.score[1] ? "Player 1 " : "Player 2 ") + "won the game!", consts.std_font_size, width / 2, height / 2, "white")
+		outputScore(consts.WIDTH, consts.HEIGHT);
 	}
 	if (game.state === "in-menu" || game.state === "waiting-player" || game.state === "waiting-readiness") {
 		drawSound();

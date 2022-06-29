@@ -38,3 +38,31 @@ function drawPlayerReadiness() {
 function outputCountdown() {
 	outputAnnouncement("" + game.timer, consts.std_font_size, consts.WIDTH * 0.505, consts.HEIGHT * 0.535,"white");
 }
+
+function outputScore(map_width : number, map_height : number) {
+	push();
+	textSize(consts.std_font_size);
+	push();
+	fill((game.score[0] > game.score[1] ? "white" : "grey")); // highlight better score
+	if (game.score[0].toString().length > 1)
+		text(game.score[0], map_width / 2 - map_width / 10, map_height / 9); // score
+	else
+		text(game.score[0], map_width / 2 - map_width / 16, map_height / 9); // score
+	pop();
+	push();
+	fill((game.score[1] > game.score[0] ? "white" : "grey"));
+	text(game.score[1], map_width / 2 + map_width / 30, map_height / 9); // score
+	pop();
+	pop();
+}
+
+function outputPlayerNames() {
+	push();
+	textSize(consts.std_font_size);
+	fill("white");
+	textAlign(CENTER)
+	text(game.players[0].username, consts.WIDTH * 0.1, consts.HEIGHT * 0.95);
+	text(game.players[1].username, consts.WIDTH * 0.8, consts.HEIGHT * 0.95);
+	console.log(game.players[0].username)
+	pop();
+}

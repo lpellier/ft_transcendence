@@ -14,7 +14,7 @@ function listenStartEvents() {
 			game.map = consts.casino_map;
 		game.setState("waiting-player");
 	});
-	socket.on("spectate", (r_id : string, score_limit : number, map : string, game_state : string, id_p1 : string, id_p2 : string) => {
+	socket.on("spectate", (r_id : string, score_limit : number, map : string, game_state : string, id_p1 : string, id_p2 : string, name_p1 : string, name_p2 : string) => {
 		game.room_id = r_id;
 		game.score_limit = score_limit;
 		errors.set_false();
@@ -27,8 +27,8 @@ function listenStartEvents() {
 		buttons.hide();
 		inputs.hide();
 
-		game.players.push(new Player(1, id_p1));
-		game.players.push(new Player(2, id_p2));
+		game.players.push(new Player(1, id_p1, name_p1));
+		game.players.push(new Player(2, id_p2, name_p2));
 		game.pong = new Pong;
 	});
 
@@ -40,20 +40,23 @@ function listenStartEvents() {
 			errors.game_not_found = true;	
 	});
 
-	socket.on("waiting-readiness", (id_p1 : string, id_p2 : string) => {
-		if (game.players.length == 2 && game.players[1].id === "null") {
-			game.players[1].id = id_p2;
+	socket.on("waiting-readiness", (id_p1 : string, id_p2 : string, name_p1 : string, name_p2 : string) => {
+		if (game.players.length == 2) {
+			if (game.players[1].id == "null")
+				game.players[1].id = id_p2;
+			if (game.players[1].username == "null")
+				game.players[1].username = id_p2;
 			game.setState("waiting-readiness");
 		}
 		if (game.players.length === 0) {
 			game.setState("waiting-readiness");
 			if (socket.id === id_p1) {
-				game.players.push(new Player(1, id_p1));
-				game.players.push(new Player(2, id_p2));
+				game.players.push(new Player(1, id_p1, name_p1));
+				game.players.push(new Player(2, id_p2, name_p2));
 			}
 			else if (socket.id === id_p2) {
-				game.players.push(new Player(2, id_p2));
-				game.players.push(new Player(1, id_p1));
+				game.players.push(new Player(2, id_p2, name_p2));
+				game.players.push(new Player(1, id_p1, name_p1));
 			}
 			game.pong = new Pong;
 		}
