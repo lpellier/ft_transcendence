@@ -44,7 +44,7 @@ import { GameService } from "./game.service"
 	for (const game of games) {
 		if (game.players.length === 2 && game.state === "waiting-player") {
 			game.state = "waiting-readiness";
-			server.to(game.room_id).emit("waiting-readiness", game.players[0].id, game.players[1].id);
+			server.to(game.room_id).emit("waiting-readiness", game.players[0].id, game.players[1].id, game.players[0].real_name, game.players[1].real_name);
 		}
 	}
 }

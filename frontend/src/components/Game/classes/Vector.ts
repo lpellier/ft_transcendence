@@ -40,4 +40,15 @@ class Vector {
 		ret += this.y * other.y;
 		return ret;
 	}
+
+	lerp(other : Vector, amount : number) {
+		if (this.x > other.x)
+			this.x -= amount;
+		else if (this.x < other.x)
+			this.x += amount;
+		if (this.y > other.y)
+			this.y -= amount;
+		else if (this.y < other.y)
+			this.y += amount;
+	}
 }

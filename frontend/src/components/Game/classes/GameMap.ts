@@ -49,9 +49,12 @@ class GameMap {
 		pop();
 		fill(this.object_color);
 		if (ratio === 1) {
+			push();
+			fill("rgba(255, 255, 255, 0.6)");
 			textSize(consts.small_font_size / 2);
 			text("Room #" + game.room_id, consts.WIDTH * 0.02, consts.HEIGHT * 0.03 + consts.small_font_size / 2); // room id
 			outputScore(map_width, map_height);
+			pop();
 		}
 		
 		push();

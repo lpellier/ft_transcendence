@@ -58,11 +58,10 @@ function outputScore(map_width : number, map_height : number) {
 
 function outputPlayerNames() {
 	push();
-	textSize(consts.std_font_size);
-	fill("white");
+	textSize(consts.small_font_size / 2);
+	fill("rgba(255, 255, 255, 0.6)");
 	textAlign(CENTER)
 	text(game.players[0].username, consts.WIDTH * 0.1, consts.HEIGHT * 0.95);
-	text(game.players[1].username, consts.WIDTH * 0.8, consts.HEIGHT * 0.95);
-	console.log(game.players[0].username)
+	text(game.players[1].username, consts.WIDTH * 0.9, consts.HEIGHT * 0.95);
 	pop();
 }

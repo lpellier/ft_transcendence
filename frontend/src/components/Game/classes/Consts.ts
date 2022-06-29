@@ -113,7 +113,7 @@ class Consts {
 
 		this.SCORE = new Audio("/assets/sfx/score.mp3");
 
-		this.max_volume = 0.25;
+		this.max_volume = 0;
 
 		this.CASINO_MUSIC = new Audio("/assets/music/casino.mp3");
 		this.CASINO_MUSIC.loop = true;

@@ -9,6 +9,9 @@ class Player {
 	ready : boolean = false;
 
 	username : string;
+	moving_name : MovingText;
+
+	timestep : number;
 
 	constructor(index : number, id : any, username : string) {
 		if (index == 1)
@@ -23,8 +26,19 @@ class Player {
 		this.index = index;
 		this.id = id;
 		this.ready = false;
-		console.log(username)
 		this.username = username;
+
+
+		if (index === 1) {
+			this.moving_name = new MovingText((-consts.WIDTH * 2) + username.length * consts.std_font_size, consts.HEIGHT * 0.35, true, username);
+		}
+		else {
+			this.moving_name = new MovingText((consts.WIDTH * 2) - username.length * consts.std_font_size, consts.HEIGHT * 0.65, false, username);
+		}
+	}
+
+	moveName() {
+		this.moving_name.moving = true;
 	}
 	
 	render() {
