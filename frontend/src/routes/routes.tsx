@@ -93,7 +93,7 @@ export default function AllRoutes()  {
 	return (
 		<BrowserRouter>
 	        <Routes>
-	            <Route path="/login" element={<LogIn />} />
+	            <Route path="/login" element={<LogIn user={user} auth={isAuth}/>} />
 	            <Route path="/" element={ <ProtectedRoute auth={isAuth}><App user={user} users={users}/></ProtectedRoute>}>
 					<Route path="tfauth" element={<TFAuth setAuth={setAuth}/>} />
 					<Route path="profile" element={ < Profile user={user}/>}/>
