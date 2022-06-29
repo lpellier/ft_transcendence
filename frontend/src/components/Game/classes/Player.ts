@@ -33,7 +33,7 @@ class Player {
 			this.moving_name = new MovingText((-consts.WIDTH * 2) + username.length * consts.std_font_size, consts.HEIGHT * 0.35, true, username);
 		}
 		else {
-			this.moving_name = new MovingText((consts.WIDTH * 2) - username.length * consts.std_font_size, consts.HEIGHT * 0.65, false, username);
+			this.moving_name = new MovingText((consts.WIDTH * 2) - username.length * consts.std_font_size, consts.HEIGHT * 0.65 + consts.std_font_size, false, username);
 		}
 	}
 

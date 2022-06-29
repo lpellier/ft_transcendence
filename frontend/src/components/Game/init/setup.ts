@@ -51,16 +51,16 @@
 				if (this.pos.x > consts.WIDTH * 0.2 && this.pos.x < consts.WIDTH * 0.6)
 					this.vel.lerp(new Vector([this.slow_speed, 0]), 1);
 				else if (this.pos.x  > consts.WIDTH * 0.6)
-					this.vel.lerp(new Vector([this.initial_speed, 0]), 1);
-				if (this.pos.x > consts.WIDTH)
+					this.vel.lerp(new Vector([this.initial_speed * 2, 0]), 1);
+				if (this.pos.x > consts.WIDTH + this.text.length * consts.std_font_size)
 					this.moving = false;
 			}
 			else {
 				if (this.pos.x > consts.WIDTH * 0.4 && this.pos.x < consts.WIDTH * 0.8)
 					this.vel.lerp(new Vector([this.slow_speed, 0]), 1);
 				else if (this.pos.x  < consts.WIDTH * 0.4)
-					this.vel.lerp(new Vector([this.initial_speed, 0]), 1);
-				if (this.pos.x < 0)
+					this.vel.lerp(new Vector([this.initial_speed * 2, 0]), 1);
+				if (this.pos.x + this.text.length * consts.std_font_size < 0)
 					this.moving = false;
 			}
 			this.pos.x += this.vel.x;
@@ -158,6 +158,20 @@ function hideIcons() {
 }
 
 function draw() {
+	if (keyIsDown(32)) {
+		for (let player of game.players) {
+			player.moveName();
+			if (player.moving_name.left) {
+				player.moving_name.pos = new Vector([(-consts.WIDTH * 2) + player.moving_name.text.length * consts.std_font_size, consts.HEIGHT * 0.35]);
+				player.moving_name.vel = new Vector([player.moving_name.initial_speed, 0]);
+			}
+			else {
+				player.moving_name.pos = new Vector([(consts.WIDTH * 2) - player.moving_name.text.length * consts.std_font_size, consts.HEIGHT * 0.65 + consts.std_font_size]);
+				player.moving_name.vel = new Vector([player.moving_name.initial_speed, 0]);	
+			}
+		}
+	}
+
 	consts.playAppropriateMusic();
 	push();
 	if ((game.score[0] != 0 || game.score[1] != 0) && (game.state === "in-game" || game.state === "relaunch-countdown") && game.frame_count_shake < 30) {
