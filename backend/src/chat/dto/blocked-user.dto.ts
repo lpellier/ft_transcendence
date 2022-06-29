@@ -1,9 +1,9 @@
 import { IsNumber } from "class-validator";
 
-export class UpdatePasswordDto {
+export class BlockedUserDto {
     @IsNumber()
-    roomId: number;
+    userId: number;
 
     @IsNumber()
-    password: string;
+    blockedId: number;
 }
