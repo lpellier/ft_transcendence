@@ -13,23 +13,31 @@ import {ButtonModalStyle, IconStyle} from '../../../styles/tsxStyles/AppBar/Pong
 import {ModalChooseAuth} from '../../../styles/tsxStyles/Settings/Auth'
 
 
-function GenerateQRCode(props: {url: string}) {
+function GenerateQRCode(props: {url: string, setOpen: any}) {
 	
+	function handleClick() {
+		props.setOpen(false)
+		window.location.reload()
+	}
+
 	return (
 		<Box sx={{'& > :not(style)': {m: 1,},}}>
 			<Stack spacing={1}>
 				< QRCode value={props.url} />
+				< Button
+					onClick={handleClick}
+					variant="contained"
+					color="secondary">
+					OK I flashed !
+				</Button>
 			</Stack>
 		</Box>
 	)
 }
 
-function TFAButton(props: {user: User}) {
+function TFAButton(props: {user: User, setOpen: any}) {
 	const [input, showedInput] = useState(false);
 	const [url, setUrl] = useState("");
-
-	const [secret, setSecret] = useState<string>("");
-
 
 	function patchTfaTrue() {
 
@@ -68,6 +76,8 @@ function TFAButton(props: {user: User}) {
 
 	function deactivateTfa() {
 		patchTfaFalse()
+		props.setOpen(false)
+		window.location.reload()
 	}
 
 	if (props.user.tfa == false) {
@@ -79,19 +89,19 @@ function TFAButton(props: {user: User}) {
 					color="secondary">
 					Activate Two Factor Authentication
 				</Button>
-				{input && < GenerateQRCode url={url} /> }
+				{input && < GenerateQRCode url={url} setOpen={props.setOpen} />}
 			</Stack>
     	);}
-		return (
-			<Stack>
-    			< Button
-					onClick={deactivateTfa}
-					variant="contained"
-					color="secondary">
-					Deactivate Two Factor Authentication
-				</Button>
-			</Stack>
-		)
+	return (
+		<Stack>
+    		< Button
+				onClick={deactivateTfa}
+				variant="contained"
+				color="secondary">
+				Deactivate Two Factor Authentication
+			</Button>
+		</Stack>
+	)
 }
 
 export default function ChooseAuth(props: {user: User}) {
@@ -125,7 +135,7 @@ export default function ChooseAuth(props: {user: User}) {
             		        Change Authentication
             		    </Typography>
             		    <Stack spacing={4} sx={ButtonStackStyle}>
-            		        <TFAButton user = {props.user}/>
+            		        <TFAButton user={props.user} setOpen={setOpen}/>
             		    </Stack>
             		</Stack>
 				</Box>
