@@ -4,7 +4,6 @@
 
 // TODO ISSUES
 	// ? when opening the site on a page for the first time, game doesn't load until refresh (but only sometimes)
-	// ? arrow to designate player that gets service is not responsive
 	// ? -1 point not working properly, how is this so hard ?
 
 // TODO IMPROVEMENTS
