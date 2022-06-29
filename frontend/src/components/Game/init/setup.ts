@@ -3,7 +3,6 @@
 // ? Map indexes : 1 (normal map), 2 (city map), 3 (casino map)
 
 // TODO ISSUES
-	// ? point value not shown in multiplayer
 	// ? when opening the site on a page for the first time, game doesn't load until refresh (but only sometimes)
 
 // TODO IMPROVEMENTS
@@ -190,7 +189,7 @@ function draw() {
 				for (let bumper of bumpers)
 					bumper.render();
 		}
-		if (game.frames_since_point > 10 && game.frames_since_point < 180 && game.map.name === "casino")
+		if (game.frames_since_point < 180 && game.map.name === "casino")
 			outputAnnouncement(game.pong.value + (game.pong.value === 1 || game.pong.value === -1 ? " point" : " points"), consts.std_font_size, consts.WIDTH * 0.5, consts.HEIGHT * 0.95, game.pong.color);
 	}
 	else if (game.state === "game-over") {
