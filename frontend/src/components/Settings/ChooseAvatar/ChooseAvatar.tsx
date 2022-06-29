@@ -2,11 +2,11 @@ import Stack from '@mui/material/Stack';
 import Container from '@mui/material/Container';
 import DotsMobileStepper from './Stepper'
 import {User} from 'interfaces'
-import * as React from 'react';
-import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
+import FaceIcon from '@mui/icons-material/Face'
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import Modal from '@mui/material/Modal';
+import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn';
 import { CustomAvatarStyle } from '../../../styles/tsxStyles/Settings/Avatar';
 import { ThemeProvider } from '@mui/material/styles';
 import { redTheme, greenTheme } from '../../Themes'
@@ -14,6 +14,9 @@ import { styled } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import {useState} from 'react'
+import {ModalChooseAvatar} from '../../../styles/tsxStyles/Settings/Avatar'
+import Button from '@mui/material/Button';
+import {ButtonModalStyle, IconStyle} from '../../../styles/tsxStyles/AppBar/PongMenu'
 import axios from 'axios'
 
 const Input = styled('input')({
@@ -119,8 +122,8 @@ function CustomAvatar(props: {setOpen: any}) {
   );
 }
 
-function ChooseAvatarButton(props: {user: User}) {
-  const [open, setOpen] = React.useState(false);
+function ChooseAvatarButton(props: {user: User, setOpenOne: any}) {
+  const [open, setOpen] = useState(false);
 
   const handleOpen = () => {
     setOpen(true);
@@ -128,6 +131,11 @@ function ChooseAvatarButton(props: {user: User}) {
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const closeOne = () => {
+    props.setOpenOne(false);
+	window.location.reload()
   };
 
   return (
@@ -147,17 +155,52 @@ function ChooseAvatarButton(props: {user: User}) {
         	<CustomAvatar setOpen={setOpen}/>
         </Box>
       </Modal>
+	  <Button
+          onClick={closeOne}
+          variant="contained"
+          startIcon={<KeyboardReturnIcon />}
+          color="secondary">
+        	I'm done !
+      </Button>
     </Stack>
   );
 }
 
 export default function AvatarList(props: {user: User}){
-        return (
-                <Container>
-                  <Stack spacing={2} style={{justifyContent: 'center'}}>
-                        <DotsMobileStepper />
-                        <ChooseAvatarButton user={props.user}/>
-                  </Stack>
-                </Container>
-        );
+	const [open, setOpen] = useState<boolean>(false)
+
+	const handleOpen = () => {
+		setOpen(true);
+	};
+	
+	const handleClose = () => {
+		setOpen(false);
+	};
+
+    return (
+		<Stack direction="row" spacing={2} style={{justifyContent: 'center'}}>
+      	<Button
+      	      onClick={handleOpen}
+      	      variant="contained"
+      	      color="secondary"
+      	      style={ButtonModalStyle}
+      	    >
+      	    <FaceIcon sx={IconStyle}/>
+      	    Choose avatar
+      	</Button>
+		  <Modal
+          open={open}
+          onClose={handleClose}
+        > 
+          <Box sx={ModalChooseAvatar}>
+            <Container>
+              <Stack spacing={2} style={{justifyContent: 'center'}}>
+                    <DotsMobileStepper />
+                    <ChooseAvatarButton user={props.user} setOpenOne={setOpen}/>
+              </Stack>
+            </Container>
+			</Box>
+        </Modal>
+        </Stack>
+    );
 }
