@@ -10,7 +10,7 @@
 	// ? add player xp and level
 	// ? handle edge cases like players leaving in middle of game for stats (count as defeat)
 	
-	// ? implement better ai
+		// ? implement better ai
 
 	// ? cute animation showing the roll of pong value in casino
 	// ? should make the sound button highlight like others when hovering

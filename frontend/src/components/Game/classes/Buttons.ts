@@ -42,7 +42,7 @@ class Buttons {
 		this.return.style("background-color", "rgba(0, 0, 0, 0)");
 		this.return.position(consts.WIDTH * 0.90, consts.HEIGHT * 0.01);
 		
-		this.sound = createCustomButton("", clickSound, highlightButton, resetButton, consts.medium_square_diameter, consts.medium_square_diameter);
+		this.sound = createCustomButton("", clickSound, highlightSoundButton, resetSoundButton, consts.medium_square_diameter, consts.medium_square_diameter);
 		this.sound.style("border", "none");
 		this.sound.style("background-color", "rgba(0, 0, 0, 0)");
 		this.sound.size(consts.small_square_diameter * 1.65, consts.small_square_diameter * 1.65);

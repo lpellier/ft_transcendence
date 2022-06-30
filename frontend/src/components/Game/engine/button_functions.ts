@@ -74,6 +74,13 @@ function resetButton() {
 	this.style("color", "white");
 }
 
+function highlightSoundButton() {
+	tint_sound = true;
+}
+function resetSoundButton() {
+	tint_sound = false;
+}
+
 function plusScoreLimit() {
 	if (mouseButton === LEFT && game.score_limit < 15) {
 		game.score_limit++;
