@@ -13,7 +13,8 @@ import {User} from 'interfaces'
 
 function NameButton() {
 	return (
-		<Button disabled 
+		<Button
+			style={{ backgroundColor: 'rgb(150, 100, 200)' }}
 			sx={NameButtonStyle}
 			variant="contained"
 			color="secondary">
@@ -83,7 +84,7 @@ export default function ChooseName(props: {user: User}) {
 	};
 
 	return (
-		<Stack direction="row" spacing={2} style={{justifyContent: 'center'}}>
+		<div>
       		<Button
             	onClick={handleOpen}
             	variant="contained"
@@ -96,16 +97,17 @@ export default function ChooseName(props: {user: User}) {
 			  open={open}
 			  onClose={handleClose}
 			> 
-				<Stack spacing={2} style={{justifyContent: 'center'}}>
-					<Box sx={ModalChooseName}>
-            		    <NameButton />
+				<Box sx={ModalChooseName}>
+					<Stack spacing={3}>
+            	    	<NameButton />
 						<NameInput 
 							username={new_username} 
 							setter={setNewUsername} 
 							setOpen={setOpen}/>
-          			</Box>
-            	</Stack>
+
+					</Stack>
+          		</Box>
         	</Modal>
-        </Stack>
+        </div>
     );
 }

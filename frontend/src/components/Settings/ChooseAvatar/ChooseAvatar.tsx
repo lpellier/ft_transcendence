@@ -8,40 +8,40 @@ import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import Modal from '@mui/material/Modal';
 import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn';
 import { CustomAvatarStyle } from '../../../styles/tsxStyles/Settings/Avatar';
-import { ThemeProvider } from '@mui/material/styles';
+import {ModalChooseAvatar} from '../../../styles/tsxStyles/Settings/Avatar'
+import {ButtonModalStyle, IconStyle} from '../../../styles/tsxStyles/AppBar/PongMenu'
 import { redTheme, greenTheme } from '../../Themes'
+import { ThemeProvider } from '@mui/material/styles';
 import { styled } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import {useState} from 'react'
-import {ModalChooseAvatar} from '../../../styles/tsxStyles/Settings/Avatar'
 import Button from '@mui/material/Button';
-import {ButtonModalStyle, IconStyle} from '../../../styles/tsxStyles/AppBar/PongMenu'
 import axios from 'axios'
 
 const Input = styled('input')({
 	display: 'none',
   });
 
-function CustomButton(props: {content:string, theme: any, onClick: any}) {
-	return(
-		<ThemeProvider theme={props.theme}>
-			<Button variant="contained" color="primary" onClick={props.onClick}>
-	 	 		{props.content}
-      		</Button>
-		</ThemeProvider>
+function NoButton(props: {onClick: any}) {
+	return (
+		<Button 
+			variant="contained" 
+			style={{backgroundColor: 'rgb(200, 50, 50)',  border: '2px solid black', borderRadius: '20px'}}
+			onClick={props.onClick}>
+			Change my mind !
+		</Button>
 	);
 }
 
-function NoButton(props: {onClick: any}) {
-	return (
-		<CustomButton theme={redTheme} content={"Change my mind !"} onClick={props.onClick}/>
-		);
-}
-	
 function YesButton(props: {onClick: any}) {
 	return (
-		<CustomButton theme={greenTheme} content={"Let's go !"} onClick={props.onClick}/>
+		<Button 
+			variant="contained" 
+			onClick={props.onClick}
+			style={{backgroundColor: 'rgb(50, 200, 50)', border: '2px solid black', borderRadius: '20px'}}>
+			Let's go !
+		</Button>
 	);
 }
 
@@ -88,7 +88,7 @@ function UploadButton(props: {setOpen: any}) {
 	return (
 		<div>
 			<label htmlFor="icon-button-file">
-				<Button
+				<Button 
     	    		variant="contained"
     	    		color="secondary"
 					>
@@ -183,28 +183,28 @@ export default function AvatarList(props: {user: User}){
 
     return (
 		<Stack direction="row" spacing={2} style={{justifyContent: 'center'}}>
-      	<Button
-      	      onClick={handleOpen}
-      	      variant="contained"
-      	      color="secondary"
-      	      style={ButtonModalStyle}
-      	    >
-      	    <FaceIcon sx={IconStyle}/>
-      	    Choose avatar
-      	</Button>
-		  <Modal
-          open={open}
-          onClose={handleClose}
-        >
-          <Box sx={ModalChooseAvatar}>
-            <Container>
-              <Stack spacing={2} style={{justifyContent: 'center'}}>
-                    {/* <DotsMobileStepper /> */}
-                    <ChooseAvatarButton user={props.user} setOpenOne={setOpen}/>
-              </Stack>
-            </Container>
-			</Box>
-        </Modal>
+      		<Button
+      		      onClick={handleOpen}
+      		      variant="contained"
+      		      color="secondary"
+      		      style={ButtonModalStyle}
+      		    >
+      		    <FaceIcon sx={IconStyle}/>
+      		    Choose avatar
+      		</Button>
+			  <Modal
+        	  open={open}
+        	  onClose={handleClose}
+        	>
+        	  <Box sx={ModalChooseAvatar}>
+        	    <Container>
+        	      <Stack spacing={2} style={{justifyContent: 'center'}}>
+        	            {/* <DotsMobileStepper /> */}
+        	            <ChooseAvatarButton user={props.user} setOpenOne={setOpen}/>
+        	      </Stack>
+        	    </Container>
+				</Box>
+        	</Modal>
         </Stack>
     );
 }

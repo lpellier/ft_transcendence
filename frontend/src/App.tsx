@@ -30,7 +30,6 @@ export function toastIt(message: string) {
         });
 }
 
-
 export default function App(props: {user: User | undefined, users: User[]}) {
 
     return (
@@ -40,7 +39,7 @@ export default function App(props: {user: User | undefined, users: User[]}) {
                     <SearchAppBar user={props.user} users={props.users} />
                     <Outlet />
                 </div>
-            :
+            		:
                 <div/>
             }
             <ToastContainer

@@ -39,8 +39,8 @@ function StatsBox(props: {user: User}){
 					<h3> Total games : {totGames} </h3>
 				</Box>
 		</Stack>
-		);
-	}
+	);
+}
 	
 function TrophyBox(){
 
@@ -81,7 +81,7 @@ function MatchhistoryBox(){
 				<Box sx={StatBox}>
 				</Box>
 			</Stack>
-		);
+	);
 }
 
 export default function StatsBoards(props: {user: User}) {

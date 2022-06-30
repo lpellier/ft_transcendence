@@ -23,7 +23,9 @@ function GenerateQRCode(props: {url: string, setOpen: any}) {
 	return (
 		<Box sx={{'& > :not(style)': {m: 1,},}}>
 			<Stack spacing={1}>
-				< QRCode value={props.url} />
+				<Box sx={{display: 'flex', justifyContent: 'center'}}>
+					< QRCode value={props.url} />
+				</Box>
 				< Button
 					onClick={handleClick}
 					variant="contained"
@@ -116,7 +118,7 @@ export default function ChooseAuth(props: {user: User}) {
 	};
 
     return (
-		<Stack direction="row" spacing={2} style={{justifyContent: 'center'}}>
+		<Stack direction="row" style={{justifyContent: 'center'}}>
 			<Button
 				  onClick={handleOpen}
 				  variant="contained"
