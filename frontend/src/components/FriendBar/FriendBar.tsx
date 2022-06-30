@@ -81,7 +81,7 @@ export default function FriendBar(props: {user: User, users: User[]}) {
         return () => {
             socket.off('add friend', handler);
         }
-    })
+    },[])
 
     function closeFriendBar() {
         setOpen(false);
@@ -97,7 +97,7 @@ export default function FriendBar(props: {user: User, users: User[]}) {
         return () => {
             socket.off('get friends', handler);
         }
-    })
+    },[])
 
 
     function addFriendSubmit(e: any) {
@@ -124,6 +124,10 @@ export default function FriendBar(props: {user: User, users: User[]}) {
             toastThatError("username doesn't exist")
             console.log("user doesn't exist")
         }
+    }
+
+    function removeFriend(user: User) {
+        socket.emit('remove friend', {userId: props.user.id, friendId: user.id});
     }
 
     return (
@@ -158,6 +162,7 @@ export default function FriendBar(props: {user: User, users: User[]}) {
                         <div key={item.id}>
                             <ListItem >
                                 <ListItemText primary={item.username} secondary={statusMap.get(item.id)? statusMap.get(item.id) : 'offline'}/>
+                                <Button variant="contained" color="error" onClick={() => removeFriend(item)}>remove</Button>
                             </ListItem>
                         </div>
                     ))

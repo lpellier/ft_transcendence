@@ -39,7 +39,7 @@ function LogOutLink() {
   
 	return (
 	  <nav>
-		<Link to="/" style={{ textDecoration: 'none' }}>
+		<Link to="/login" style={{ textDecoration: 'none' }}>
 		  <Button
 			  onClick={logout}
 			  variant="contained"
@@ -52,18 +52,18 @@ function LogOutLink() {
 	);
 }
 
-export function AppBarButton(props: {onClick: any, icon: any, tooltip: any}) {
+function AppBarButton(props: {icon: any, link: string, tooltip: any}) {
 	return (
 		<nav>
+		  <Link to={props.link} style={{ textDecoration: 'none' }}>
 		  <Tooltip title={props.tooltip} placement="bottom">
 			<Button
 				variant="contained"
-				color="secondary"
-				onClick={props.onClick}
-			>
+				color="secondary">
 				{props.icon}
 			</Button>
 			</Tooltip>
+		  </Link>
 		</nav>
 	  );
 }
@@ -96,7 +96,7 @@ function ProjectName() {
 	);
 }
 
-export default function SearchAppBar(props: {user: User, users: User[], component: string, setComponent: React.Dispatch<React.SetStateAction<string>>}) {
+export default function SearchAppBar(props: {user: User, users: User[]}) {
 
   return (
       <AppBar position="static">
@@ -112,16 +112,18 @@ export default function SearchAppBar(props: {user: User, users: User[], componen
                 pauseOnHover
 		/>
         <Toolbar style={ BarStyle }>
-			<Button onClick={() => props.setComponent("Profile")}>
-				<PlayerAvatar image={'http://127.0.0.1:3001/avatars/' + props.user.id + '.png'} onClick={() => props.setComponent("Profile")}/>
-			</Button>
+		<nav>
+			<Link to="profile" style={{ textDecoration: 'none' }}>
+				<PlayerAvatar image={'http://127.0.0.1:3001/avatars/' + props.user.id + '.png'}/>
+			</Link>
+			</nav>
 			<PlayerName name={props.user.username}/>
 			<ProjectName />
 			<Stack direction="row" spacing={2}>
 				<FriendBar user={props.user} users={props.users}/>
-				<AppBarButton onClick={() => props.setComponent("Game")} tooltip={"New Game"} icon={<GamesIcon />}/>
-				<AppBarButton onClick={() => props.setComponent("Chat")} tooltip={"Forum"} icon={<ForumIcon />}/>
-				<AppBarButton onClick={() => props.setComponent("Settings")} tooltip={"Settings"} icon={<SettingsIcon />}/>
+				<AppBarButton link="../game" tooltip={"Game"} icon={<GamesIcon />}/>
+				<AppBarButton link="../chat" tooltip={"Forum"} icon={<ForumIcon />}/>
+				<AppBarButton link="../settings" tooltip={"Settings"} icon={<SettingsIcon />}/>
 				<LogOutLink />
 			</Stack>
         </Toolbar>

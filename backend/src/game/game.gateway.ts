@@ -188,7 +188,7 @@ export class GameGateway {
 					game.update_interval = setInterval(() => {
 						if (calculate_state === "none")
 							calculate_state = game.pong.calculateNewPos(game, this.server);
-						if (calculate_state === "over") {
+						if (game.over()) {
 							test.to(game.room_id).emit("game-over");
 							clearInterval(game.update_interval);
 							var w_id : number, l_id : number;
@@ -207,15 +207,23 @@ export class GameGateway {
 							return ;
 						}
 						else if (calculate_state === "relaunch") {
+							game.pong.velocity = [0, 0];
+							game.pong.pos = [consts.MAP_WIDTH / 2 - consts.PONG_DIAMETER / 2, consts.MAP_HEIGHT / 2 - consts.PONG_DIAMETER / 2];
 							calculate_state = "null";
-							test.to(game.room_id).emit("relaunch");
-							for (var j = 1; j < 3; j++) {
-								setTimeout((index : number) => {
-									test.to(game.room_id).emit("countdown-server");
-									if (index === 2) {
-										calculate_state = "none";
+							game.increment_score();
+							if (!game.over()) {
+								setTimeout(() => {
+									game.scorePoint();
+									test.to(game.room_id).emit("relaunch");
+									for (var j = 1; j < 3; j++) {
+										setTimeout((index : number) => {
+											test.to(game.room_id).emit("countdown-server");
+											if (index === 2) {
+												calculate_state = "none";
+											}
+										}, j * 1000, j);
 									}
-								}, j * 1000, j);
+								}, 500);
 							}
 						}
 						test.to(game.room_id).emit("updated_pos",

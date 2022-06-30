@@ -21,6 +21,8 @@ class Buttons {
 
 	spectate : any;
 
+	sound : any;
+
 	constructor() {
 		this.reset();
 	}
@@ -34,6 +36,12 @@ class Buttons {
 		this.return.style("background-color", "rgba(0, 0, 0, 0)");
 		this.return.position(consts.WIDTH * 0.90, consts.HEIGHT * 0.01);
 		
+		this.sound = createCustomButton("", clickSound, highlightButton, resetButton, consts.medium_square_diameter, consts.medium_square_diameter);
+		this.sound.style("border", "none");
+		this.sound.style("background-color", "rgba(0, 0, 0, 0)");
+		this.sound.size(consts.small_square_diameter * 1.65, consts.small_square_diameter * 1.65);
+		this.sound.position(consts.WIDTH * 0.80, consts.HEIGHT * 0.02);
+
 		this.anyone_can_join = createCustomButton("Anyone can join", clickAnyone, highlightButton, resetButton, consts.medium_width, consts.medium_height);
 		this.anyone_can_join.style("background-color", "rgba(0, 0, 0, 0)");
 		this.anyone_can_join.style("font-size", consts.medium_font_size.toString() + "px");
@@ -127,8 +135,10 @@ class Buttons {
 	
 		this.return.size(consts.medium_square_diameter, consts.medium_square_diameter);
 		this.return.style("font-size", consts.medium_font_size.toString() + "px");
-
 		this.return.position(consts.WIDTH * 0.90, consts.HEIGHT * 0.01);
+		
+		this.sound.size(consts.small_square_diameter * 1.65, consts.small_square_diameter * 1.65);
+		this.sound.position(consts.WIDTH * 0.80, consts.HEIGHT * 0.02);
 	
 		this.map_original.size(consts.WIDTH * 0.2 + consts.DIAGONAL * 0.025, consts.HEIGHT * 0.2 + consts.DIAGONAL * 0.025);
 		this.map_original.style("font-size", consts.medium_font_size.toString() + "px");
@@ -157,6 +167,10 @@ class Buttons {
 		if (this.return)
 			this.return.remove();
 		this.return = null;
+
+		if (this.sound)
+			this.sound.remove();
+		this.sound = null;
 
 		if (this.anyone_can_join)
 			this.anyone_can_join.remove();
@@ -207,6 +221,7 @@ class Buttons {
 		this.join.hide();
 		this.return.hide();
 		this.matchmaking.hide();
+		this.sound.hide();
 	
 		this.anyone_can_join.hide();
 		this.invitation_only.hide();
@@ -265,6 +280,7 @@ class Buttons {
 		this.join.parent(document.getElementById("button-join"));
 		this.matchmaking.parent(document.getElementById("button-matchmaking"));
 		this.return.parent(document.getElementById("button-return"));
+		this.sound.parent(document.getElementById("button-sound"));
 		this.anyone_can_join.parent(document.getElementById("button-anyone"));
 		this.local.parent(document.getElementById("button-local"));
 		this.invitation_only.parent(document.getElementById("button-invitation"));

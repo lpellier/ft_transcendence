@@ -4,6 +4,7 @@ import { Player } from "./Player";
 import { Pong } from "./Pong";
 import { GameMap } from "./GameMap";
 import * as utils from "./../utils";
+import { Socket } from "dgram";
 
 const top_bound : number = 10;
 const bot_bound : number = consts.MAP_HEIGHT - 10;
@@ -23,6 +24,8 @@ export class Game {
 	publicity : string;
 	update_interval : any;
 
+	invert : boolean;
+
 	constructor(room_id: any) {
 		this.room_id = room_id;
 		this.state = 'waiting-player';
@@ -34,6 +37,7 @@ export class Game {
 		this.map = consts.original_map;
 		this.frames_since_point = 0;
 		this.publicity = "public";
+		this.invert = false;
 	}
 
 	spaceAvailable() {
@@ -80,6 +84,37 @@ export class Game {
 		this.pong.value = Math.floor(Math.random() * 4) + 1;
 	}
 
+	increment_score() {
+		if (!this.invert) {
+			if (this.pong.value === -1 && this.score[1] > 0)
+				this.score[1]--;
+			else
+				this.score[0] += this.pong.value;
+		}
+		else {
+			if (this.pong.value === -1 && this.score[0] > 0)
+				this.score[0]--;
+			else
+				this.score[1] += this.pong.value;
+		}
+	}
+
+	over() : boolean {
+		if (this.score[0] >= this.score_limit || this.score[1] >= this.score_limit)
+			return true;
+		return false;
+	}
+
+	scorePoint() : string {
+		if (!this.invert)
+			this.pong.relaunchPong("right");
+		else
+			this.pong.relaunchPong("left");
+		this.setNewValue();
+		this.frames_since_point = 0;
+		return "relaunch";
+	}
+
 	checkCollisions(server : Server) : string {
 		// Implement acceleration here
 		if (this.frames_since_point === 0)
@@ -100,40 +135,32 @@ export class Game {
 
 		if (this.map.name === "city") {
 			if (this.map.bumpers[0].checkCollision(this.pong)) {
-				server.to(this.room_id).emit("bump", 0);
+				server.to(this.room_id).emit("bumper-hit", 0);
 				return "none";
 			}
 			else if (this.map.bumpers[1].checkCollision(this.pong))  {
-				server.to(this.room_id).emit("bump", 1);
+				server.to(this.room_id).emit("bumper-hit", 1);
 				return "none";
 			}
 		}
 
 		// ? collision with bounds
-		if (this.pong.pos[1] < consts.TOP_BOUND || this.pong.pos[1] + this.pong.diameter > consts.BOT_BOUND)
+		if (this.pong.pos[1] < consts.TOP_BOUND || this.pong.pos[1] + this.pong.diameter > consts.BOT_BOUND) {
+			if (this.pong.pos[1] < consts.TOP_BOUND) {
+				this.pong.pos[1] = consts.TOP_BOUND + consts.MAP_HEIGHT * 0.005;
+			}
+			else if (this.pong.pos[1] + this.pong.diameter > consts.BOT_BOUND) {
+				this.pong.pos[1] = consts.BOT_BOUND - this.pong.diameter - consts.MAP_HEIGHT * 0.005;
+			}
 			this.pong.velocity[1] *= -1;
-		if (this.pong.pos[1] < consts.TOP_BOUND) {
-			this.pong.pos[1] = consts.TOP_BOUND + consts.MAP_HEIGHT * 0.005;
-		}
-		else if (this.pong.pos[1] + this.pong.diameter > consts.BOT_BOUND) {
-			this.pong.pos[1] = consts.BOT_BOUND - this.pong.diameter - consts.MAP_HEIGHT * 0.005;
+			server.to(this.room_id).emit("wall-hit");
 		}
 		if (this.pong.velocity[0] > 0 && this.pong.pos[0] + this.pong.diameter > right_bound) {
-			this.score[0] += this.pong.value;
-			if (this.score[0] >= this.score_limit)
-				return "over";
-			this.setNewValue();
-			this.pong.relaunchPong("right");
-			this.frames_since_point = 0;
+			this.invert = false;
 			return "relaunch";
 		}
 		else if (this.pong.velocity[0] < 0 && this.pong.pos[0] < left_bound) {
-			this.score[1] += this.pong.value;
-			if (this.score[1] >= this.score_limit)
-				return "over";
-			this.setNewValue();
-			this.pong.relaunchPong("left");
-			this.frames_since_point = 0;
+			this.invert = true;
 			return "relaunch";
 		}
 		
@@ -145,6 +172,7 @@ export class Game {
 		angle = this.collisionPaddle(player, intersection_point);
 		
 		if (intersection_point[0][0] != -1) {
+			server.to(this.room_id).emit("player-hit");
 			let max_angle_percentage : number = Math.abs(angle) / (Math.PI * 5 / 12); // ? number that lets me add speed to acute angled shots
 			// ? for bot / top collisions
 			if (intersection_point[0][2] === "top" || intersection_point[0][2] === "bot") {

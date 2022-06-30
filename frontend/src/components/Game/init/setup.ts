@@ -2,14 +2,31 @@
 // ? Coding consistency : snake_case for variables | camelCase for functions | PascalCase for classes
 // ? Map indexes : 1 (normal map), 2 (city map), 3 (casino map)
 
-// ? output both player names at start of match and winner name at the end
+// TODO ISSUES
+	// ? countdown timer badly centered
+	// ? when opening the site on a page for the first time, game doesn't load until refresh
+	// ? arrow to designate player that gets service is not responsive
+	// ? ball speed not adjusted right away when resizing screen
 
-// ? add off/on button for sfx and music
+// TODO IMPROVEMENTS
+	// ? need to test casino in multiplayer
+	// ? take into account score when recording on database
+	// ? add player xp and level
+	// ? handle edge cases like players leaving in middle of game for stats (count as defeat)
 
-// sometimes weird thing keeps my paddle moving
+	// ? coutdown bip going at it at end game
 
-// TODO cute animation showing the roll of pong value in casino
-// TODO comment EVERYTHING
+	// ? output final score on game over screen
+	// ? output both player names at start of match and winner name at the end
+	
+	// ? adjust max bounce angle
+	// ? implement better ai
+	
+	// ? reset bumper animation if hit again
+	// ? cute animation showing the roll of pong value in casino
+	
+	// ? comment EVERYTHING
+
 
 let spritesheet : any;
 let spritedata : any;
@@ -31,6 +48,8 @@ let socket : any = null;
 
 let user_name : string;
 let user_id : string;
+
+let frame_count_shake : number;
 
 function preload() {
 	// soundFormats("mp3");
@@ -82,6 +101,7 @@ function setup() {
 	
 	resizeEverything();
 	game.setState("in-menu");
+	frame_count_shake = 0;
 }
 
 function hideIcons() {
@@ -93,6 +113,11 @@ function hideIcons() {
 
 function draw() {
 	consts.playAppropriateMusic();
+	push();
+	if ((game.score[0] != 0 || game.score[1] != 0) && (game.state === "in-game" || game.state === "relaunch-countdown") && frame_count_shake < 30) {
+		frame_count_shake++;
+		translate(Math.floor(random(-5, 6)), Math.floor(random(-5, 6)))
+	}
 	clear(0, 0, 0, 0);
 	hideIcons();
 	background(0);
@@ -178,5 +203,17 @@ function draw() {
 		buttons.return.show();
 		image(consts.RETURN_ICON, consts.WIDTH * 0.90, consts.HEIGHT * 0.01, consts.medium_square_diameter, consts.medium_square_diameter);
 		outputAnnouncement((game.score[0] > game.score[1] ? "Player 1 " : "Player 2 ") + "won the game!", consts.std_font_size, width / 2, height / 2, "white")
-	}	
+	}
+	if (game.state === "in-menu" || game.state === "waiting-player" || game.state === "waiting-readiness") {
+		drawSound();
+		buttons.sound.show();
+	}
+	// if (game.state === "in-menu") { // ? I felt like color of sound icon was sticking out so i tried to dampen it but now i don't know
+		// push();
+		// fill("rgba(0, 0, 0, 0.10)");
+		// noStroke();
+		// rect(consts.WIDTH * 0.8, consts.HEIGHT * 0.02, consts.small_square_diameter * 3, consts.small_square_diameter * 1.65);
+		// pop();
+	// }
+	pop();
 }

@@ -3,6 +3,13 @@ function goToMainMenu() {
 		inMainMenu();
 }
 
+function clickSound() {
+	consts.max_volume += 0.25;
+	if (consts.max_volume > 1)
+		consts.max_volume = 0;
+	consts.musicPlaying().volume = consts.max_volume;
+}
+
 function createGameMenu() {
 	if (mouseButton === LEFT) {
 		buttons.hide();
@@ -164,6 +171,10 @@ function startLocal() {
 		for (let i = 0; i < 5; i++) {
 			setTimeout(() => {
 				game.timer--;
+				if (game.timer === 0)
+					consts.playBip(consts.BIP_FINAL);
+				else if (game.timer >= 0)
+					consts.playBip(consts.BIP);
 				if (game.timer === -1 && game.state === "countdown") {
 					game.setState("in-game");
 				}

@@ -2,11 +2,11 @@
 	display: flex;
 	flex-direction: row;
 	position: absolute;
-	gap: 3vw;
+	gap: 10%;
 	align-content: center;
 	align-items: center;
 	justify-content: center;
-	left: 9%;
+	left: 12.5%;
 	bottom: 20%;
 }
 
@@ -38,6 +38,10 @@
 }
 
 #button-return {
+	position: absolute;
+}
+
+#button-sound {
 	position: absolute;
 }
 

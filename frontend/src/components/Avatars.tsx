@@ -32,10 +32,10 @@ import Sloth from       "../images/Avatar/Sloth.png"
 const BigAvatar = {border: 2, width: 150, height: 150}
 const SmallAvatar = {border: 2, width: 50, height: 50}
 
-function PlayerAvatar(props: {image: string , onClick: any} ) {
+function PlayerAvatar(props: {image: string } ) {
     
     return(
-        <IconButton onClick={props.onClick}>
+        <IconButton >
             <Tooltip title="Home" placement="bottom">
                 <Avatar src={props.image}  sx={SmallAvatar}/>
             </Tooltip>
@@ -46,22 +46,26 @@ function PlayerAvatar(props: {image: string , onClick: any} ) {
 function CreateAvatar(props: {img: string, style: any}) {
     
     const handleClick = () => {
+		console.log("avatar upload : ", props.img)
 
-        axios.put('http://127.0.0.1:3001/users/me',
-        {
-            data: {
-                avatar: props.img,
-            },
-        },
-        {
-            withCredentials: true,
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-        .catch(function (err) {
-            console.log("Put request failed : ", err)
-        });
+        // axios.put('http://127.0.0.1:3001/users/upload-avatar',
+        // {
+        //     data: {
+        //         avatar: props.img,
+        //     },
+        // },
+        // {
+        //     withCredentials: true,
+        //     headers: {
+        //         'Content-Type': 'application/json'
+        //     }
+        // })
+		// .then(res => {
+		// 	console.log("Put request success : ", res)
+		// })
+        // .catch(function (err) {
+        //     console.log("Put request failed : ", err)
+        // });
     }
     
     return (
