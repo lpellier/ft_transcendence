@@ -1,12 +1,9 @@
-const AllHomeStyle = {
-    whiteSpace: 'nowrap',
-}
-
 const StatsPartStyle = {
     width: '100%',
 }
 
 const PlayerBarStyle = {	
+	width: '100%',
     textAlign: 'center',
     alignComponent: 'center',
     padding: '1%',
@@ -19,7 +16,6 @@ const PlayerBarStyle = {
 }
 					
 const SkillBarStyle = {
-    width: '100%',
     paddingTop: '1%'
 }
 
@@ -33,10 +29,12 @@ const StatTitle = {
 }
 
 const StatBox = {
+	width: '45vw',
+
     backgroundColor: 'rgb(211, 172, 223)',
 	color: 'white',
 	border: '3px solid black',
-    height: '20vh',
+    height: '30vh',
     overflowY: 'scroll',
     overflow: 'auto',
 }
@@ -51,7 +49,7 @@ const TitleStyle = {
 	marginRight: '10px',
 }
 
-export {AllHomeStyle, StatsPartStyle,
+export {StatsPartStyle,
         PlayerBarStyle, SkillBarStyle,
         StatTitle, StatBox, SkillBarContourStyle,
         TitleStyle}

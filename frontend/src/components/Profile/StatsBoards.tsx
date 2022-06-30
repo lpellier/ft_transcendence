@@ -3,12 +3,10 @@ import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import {User} from 'interfaces';
-
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import TimelineIcon from '@mui/icons-material/Timeline';
 import MilitaryTechIcon from '@mui/icons-material/MilitaryTech';
 import UpdateIcon from '@mui/icons-material/Update';
-
 import { phoneSize } from 'index';
 import {StatTitle, StatBox} from "../../styles/tsxStyles/Home"
 
@@ -24,18 +22,22 @@ function BoardComponent(props: {icon: any, title: string}) {
 }
 
 function StatsBox(props: {user: User}){
-	const totGames = props.user.victories + props.user.losses;
+	const [totGames, setTotGame] = useState<number>(props.user.victories + props.user.losses)
+
+	useEffect(() => {
+		setTotGame(props.user.victories + props.user.losses)
+	}, [props.user])
 
 	return (
 		<Stack spacing={1}>
-		<BoardComponent
-			icon={<TimelineIcon />} 
-			title="Stats" />
-			<Box sx={StatBox}>
-				<h3> Victories : {props.user.victories} </h3>
-				<h3> Games lost : {props.user.losses} </h3>
-				<h3> Total games : {totGames} </h3>
-			</Box>
+			<BoardComponent
+				icon={<TimelineIcon />} 
+				title="Stats" />
+				<Box sx={StatBox}>
+					<h3> Victories : {props.user.victories} </h3>
+					<h3> Games lost : {props.user.losses} </h3>
+					<h3> Total games : {totGames} </h3>
+				</Box>
 		</Stack>
 		);
 	}
@@ -107,12 +109,12 @@ export default function StatsBoards(props: {user: User}) {
 	return (
 		<Stack direction="row" spacing={1}>
 			<Stack spacing={1}>
-					<StatsBox user={props.user}/>
-					<TrophyBox />
+				<StatsBox user={props.user}/>
+				<TrophyBox />
 			</Stack>
 			<Stack spacing={1}>
-					<LeaderboardBox />
-					<MatchhistoryBox />
+				<LeaderboardBox />
+				<MatchhistoryBox />
 			</Stack>
 		</Stack>
 	);
