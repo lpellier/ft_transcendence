@@ -34,7 +34,7 @@ class MovingText {
         }
         else {
             if (this.pos.x > consts.WIDTH * 0.4 && this.pos.x < consts.WIDTH * 0.8)
-                this.vel.lerp(new Vector([this.slow_speed, 0]), 1.5);
+                this.vel.lerp(new Vector([this.slow_speed, 0]), 1.25);
             else if (this.pos.x  < consts.WIDTH * 0.4)
                 this.vel.lerp(new Vector([this.initial_speed * 4, 0]), 2);
             if (this.pos.x + this.text.length * consts.std_font_size < 0)
