@@ -1,6 +1,7 @@
 import '../../styles/Chat/Channels.css';
 import Stack from '@mui/material/Stack';
 import SettingsIcon from '@mui/icons-material/Settings';
+import IconButton from '@mui/material/IconButton';
 import Box from '@mui/material/Box';
 import Popper from '@mui/material/Popper';
 
@@ -280,14 +281,14 @@ function SimplePopper(props : {user: User, users: User[], room: Room, roomAdmins
 	
 	return (
 		<div>
-		<button aria-describedby={id} type="button" onClick={handleClick}>
-			<SettingsIcon/>
-		</button>
-		<Popper id={id} open={open} anchorEl={anchorEl}>
-			<Box sx={{ border: 1, p: 1, bgcolor: 'background.paper' }}>
-				<RoomUserMod currentUser={props.user} users={props.users} room={props.room} roomAdmins={props.roomAdmins}/>
-			</Box>
-		</Popper>
+			<IconButton onClick={handleClick} color="error">
+				<SettingsIcon/>
+			</IconButton>
+			<Popper id={id} open={open} anchorEl={anchorEl}>
+				<Box sx={{ border: 1, p: 1, bgcolor: 'background.paper' }}>
+					<RoomUserMod currentUser={props.user} users={props.users} room={props.room} roomAdmins={props.roomAdmins}/>
+				</Box>
+			</Popper>
 		</div>
 	);
 }

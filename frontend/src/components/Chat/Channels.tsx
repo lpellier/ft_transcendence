@@ -14,7 +14,6 @@ import ToggleButton from '@mui/material/ToggleButton';
 import Dialog from '@mui/material/Dialog';
 import bcrypt from 'bcryptjs';
 import { ThemeProvider } from '@mui/styles';
-import { orangeTheme, redTheme, greenTheme } from '../Themes';
 import { toastThatError } from 'App';
 import {useState, useEffect} from 'react'
 import {Room, User} from 'interfaces'
@@ -23,7 +22,6 @@ import RoomUserPopper from './RoomUserMod'
 import FormControl from '@mui/material/FormControl'
 import Button from '@mui/material/Button'
 import DirectMessaging from './DirectMessaging';
-import { ButtonGroup } from '@mui/material';
 
 interface CreateRoomDto {
 	name: string;
@@ -272,9 +270,7 @@ function Channels(props : {user: User, users: User[], currentRoom: Room, setCurr
 									}
 									<Button variant="contained" color="success" type="submit">Create</Button>
 								</Stack>
-								<ThemeProvider theme={redTheme}>
 									<Button variant="contained" color="error" onClick={() => setAddRoomClicked(0)}>Cancel</Button>
-								</ThemeProvider>
 							</Stack>
 						:
 						<Button onClick={() => setAddRoomClicked(1)} variant='contained' color="warning" sx={{ width: '100%' }}>Create Room</Button>

@@ -8,15 +8,29 @@ import {User, Room} from 'interfaces';
 import {socket} from 'index';
 
 const ChatBoxComponentStyle = {	
-    width: '80%',
-    minWidth: '320px',
-    height: '70%',
+    width: '87vw',
+    minWidth: '510px',
+    height: '78vh',
+	
+
+	justifyContent: 'center',
+	display: 'flex',
 
 	border: '3px solid black',
     backgroundColor: 'rgb(120, 110, 220, 0.95)',
     backgroundPosition: 'bottom left',
 	backgroundRepeat: 'no-repeat',
     filter: 'drop-shadow(20px 20px 1px black)',
+}
+
+const OverallChatStyle = {
+	minheight: '812px',
+
+	width: '100%',
+	height: '100%',
+	justifyContent: 'center', 
+	display: 'flex', 
+	paddingTop: '5vh',
 }
 
 function Chat(props: {user: User | undefined, users: User[]}) {
@@ -75,19 +89,20 @@ function Chat(props: {user: User | undefined, users: User[]}) {
 	}, [props.user])
 
 	return (
-
-		<Box sx={ChatBoxComponentStyle} style={{ alignItems: 'center' }}>
-			{status}
-				{props.user?
-				<Stack direction='row' spacing='2' className='chmsg'>
-					<Box>
+		<Box sx={OverallChatStyle}>
+		<Box sx={ChatBoxComponentStyle}>
+			{props.user?
+				<Stack direction='row' className='chmsg'>
+					<Stack>
+						{status}
 						<Channels user={props.user} users={props.users} currentRoom={currentRoom} setCurrentRoom = {setCurrentRoom} setCanWrite = {setCanWrite} roomAdmins={roomAdmins} />
-					</Box>
+					</Stack>
 					<Messages user={props.user} users={props.users} currentRoom={currentRoom} canWrite = {canWrite} />
 				</Stack>
 				:
 				<div/>
-				}
+			}
+		</Box>
 		</Box>
 	);
 }
