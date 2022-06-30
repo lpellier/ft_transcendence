@@ -99,8 +99,9 @@
 
 .user {
 	margin-top: 0%;
-	padding-right: 1%;
+	padding-right: 2%;
 	padding-top: 1%;
+	
 }
 
 .newuser {
@@ -109,7 +110,7 @@
 }
 
 .avatar {
-	width: 15%;
+	width: 3vw;
 	border-radius: 30px;
 	padding: 1%;
 }

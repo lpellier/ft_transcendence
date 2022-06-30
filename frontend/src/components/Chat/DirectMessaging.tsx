@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from 'react';
 import { User, Room } from 'interfaces';
-
+import TextField from '@mui/material/TextField';
 import '../../styles/Chat/Channels.css';
 import '../../styles/Chat/DirectMessaging.css'
 import List from '@mui/material/List';
@@ -18,7 +18,6 @@ interface CreateDMRoomDto {
     user1Id: number;
     user2Id: number;
 }
-
 
 export default function DirectMessaging(props: {user: User, users: User[], rooms: Room[], currentRoom: Room, setCurrentRoom: React.Dispatch<React.SetStateAction<Room>>}) {
     
@@ -188,12 +187,12 @@ export default function DirectMessaging(props: {user: User, users: User[], rooms
     return (
         <div>
             <form onSubmit={handleOnSubmit} >
-            <input
-                onFocus={handleFocus}
-                onBlur={handleBlur}
-                placeholder='search'
-                onChange={handleOnChange}
-            />
+				<TextField
+					onChange={handleOnChange}
+					label="search"
+					color="warning"
+					variant="standard"
+				/>
             </form>
             {showUserList?
                 <UserList currentUser={props.user} users={props.users} rooms={props.rooms} setCurrentRoom={props.setCurrentRoom} search={search}/>
