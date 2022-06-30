@@ -7,6 +7,7 @@ import { CreateRoomDto } from './dto/create-room.dto';
 import { CreateMessageDto } from "./dto/create-message.dto";
 import { CreateDMRoomDto } from "./dto/create-dm-room.dto"
 import { UpdatePasswordDto } from "./dto/update-password.dto"
+import { BlockedUserDto } from "./dto/blocked-user.dto"
 	
 import * as bcrypt from 'bcrypt';
 
