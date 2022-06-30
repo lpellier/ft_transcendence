@@ -1,8 +1,11 @@
 import {useEffect, useState} from 'react';
 import {socket} from 'index';
-import Box from '@mui/material/Box'
+// import {socket} from './Chat'
 import Stack from '@mui/material/Stack'
+import Container from '@mui/material/Container'
+
 import '../../styles/Chat/Messages.css';
+
 import {User, Message, Room} from 'interfaces'
 
 interface CreateMessageDto {
@@ -46,53 +49,44 @@ function Messages(props : {user: User, users: User[], currentRoom: Room, canWrit
 	console.log('currentRoom = ', props.currentRoom);
 	console.log('messages = ', messages);
     return (
-		<Box sx={{width: '100%', padding: '2%'}} >
-    	    <Stack className='chat' spacing={2} justifyContent='space-between'>
-				<ul className='messages' id='messagebox'>
-					{messages.map(item=> (
-						<div key={item.id}>
-							{item.roomId === props.currentRoom.id ?
-									<div className='flexwrapper' >
-										{item.userId === props.user.id ?
-										<div className='message current flex'>
-											<li className=''>{item.content}</li> 
-											<Stack className='user' direction="row" spacing={2}>
-												<img className='avatar' src={"http://127.0.0.1:3001/avatars/"+item.userId.toString()+".png"} alt="avatar"/>
-												{props.users.find(user => user.id === item.userId)?.username}
-											</Stack>
-										</div>
-										:
-										<div className='message other flex'>
-											<li className=''>{item.content}</li>
-											<Stack className='user' direction="row" spacing={2}>
-												<img className='avatar' src={"http://127.0.0.1:3001/avatars/"+item.userId.toString()+".png"} alt="avatar"/>
-												{props.users.find(user => user.id === item.userId)?.username}
-											</Stack>
-										</div>
-										}
+	<Container >
+        <Stack className='chat' spacing={2} justifyContent='space-between'>
+			<ul className='messages' id='messagebox'>
+				{messages.map(item=> (
+					<div key={item.id}>
+						{item.roomId === props.currentRoom.id ?
+								<div className='flexwrapper' >
+									{item.userId === props.user.id ?
+									<div className='message current flex'>
+										<li className=''>{item.content}</li> 
+										<div className='user'><img className='avatar' src={"http://127.0.0.1:3001/avatars/"+item.userId.toString()+".png"} alt="avatar"/>{props.users.find(user => user.id === item.userId)?.username}</div>
 									</div>
-								:
-								<div/>
-							}
-						</div>
-					))}
-				</ul>
-				{props.canWrite?
-				<form className="message-form" id="form" onSubmit={handleSubmit}>
-					<Stack direction='row' spacing={1} justifyContent='space-between' className="message-form">
-						<input className='input' type="text" />
-						<button className='miauw-button'>Miauw</button>
-					</Stack>
-    	        </form>
-				:
-				<div/>
-				}
-    	    </Stack>
-			<Stack direction="row" spacing={1} className="cat-chat">
-				<img className="cat-chat-logo" src="https://media.istockphoto.com/vectors/minimal-cat-drawing-vector-id671786264?k=20&m=671786264&s=612x612&w=0&h=3PdcGzJGmzoe8T80LCUrTFMTDJf1r8M15kB_JRPa8H0=" alt='logo'/>
-				<div >powered by Cat Chat</div>
-			</Stack>
-		</Box>
+									:
+									<div className='message other flex'>
+										<li className=''>{item.content}</li>
+										<div className='user' ><img className='avatar' src={"http://127.0.0.1:3001/avatars/"+item.userId.toString()+".png"} alt="avatar"/>{props.users.find(user => user.id === item.userId)?.username}</div>
+										
+									</div>
+									}
+								</div>
+							:
+							<div/>
+						}
+					</div>
+				))}
+			</ul>
+			{props.canWrite?
+			<form className="message-form" id="form" onSubmit={handleSubmit}>
+				<Stack direction='row' spacing={1} justifyContent='space-between' className="message-form">
+					<input className='input' type="text" />
+					<button className='miauw-button'>Miauw</button>
+				</Stack>
+            </form>
+			:
+			<div/>
+			}
+        </Stack>
+	</Container>
     )
 }
 

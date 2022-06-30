@@ -49,19 +49,11 @@ class GameMap {
 		pop();
 		fill(this.object_color);
 		if (ratio === 1) {
+			push();
+			fill("rgba(255, 255, 255, 0.6)");
 			textSize(consts.small_font_size / 2);
 			text("Room #" + game.room_id, consts.WIDTH * 0.02, consts.HEIGHT * 0.03 + consts.small_font_size / 2); // room id
-			textSize(consts.std_font_size);
-			push();
-			fill((game.score[0] > game.score[1] ? "white" : "grey")); // highlight better score
-			if (game.score[0].toString().length > 1)
-				text(game.score[0], map_width / 2 - map_width / 10, map_height / 9); // score
-			else
-				text(game.score[0], map_width / 2 - map_width / 16, map_height / 9); // score
-			pop();
-			push();
-			fill((game.score[1] > game.score[0] ? "white" : "grey"));
-			text(game.score[1], map_width / 2 + map_width / 30, map_height / 9); // score
+			outputScore(map_width, map_height);
 			pop();
 		}
 		

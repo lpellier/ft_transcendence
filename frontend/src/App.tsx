@@ -1,17 +1,10 @@
 import Stack from '@mui/material/Stack'
 import SearchAppBar from 'components/AppBar/AppBar'
-
-import {useState, useEffect} from 'react'
 import {User} from 'interfaces';
-import axios from 'axios'
-
 import {toast} from 'react-toastify';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
 import { Outlet } from 'react-router-dom'
-
-import {socket} from 'index';
 
 export function toastThatError(message: string) {
     toast.error(message, {
@@ -39,7 +32,6 @@ export function toastIt(message: string) {
 
 
 export default function App(props: {user: User | undefined, users: User[]}) {
-
 
     return (
 		<Stack spacing={2}>

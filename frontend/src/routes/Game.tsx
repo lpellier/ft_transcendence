@@ -118,6 +118,7 @@ export default function Game( props: {user: User | undefined}) {
 		addScript("/sketch/classes/Player.js");
 		addScript("/sketch/classes/GameMap.js");
 		addScript("/sketch/classes/Pong.js");
+		addScript("/sketch/classes/MovingText.js");
 		addScript("/sketch/engine/collisions.js");
 		addScript("/sketch/engine/draw.js");
 		addScript("/sketch/engine/output.js");

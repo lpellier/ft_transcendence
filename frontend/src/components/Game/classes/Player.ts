@@ -8,7 +8,12 @@ class Player {
 	id : string = "0";
 	ready : boolean = false;
 
-	constructor(index : number, id : any) {
+	username : string;
+	moving_name : MovingText;
+
+	timestep : number;
+
+	constructor(index : number, id : any, username : string) {
 		if (index == 1)
 			this.pos = [consts.WIDTH / 12, consts.HEIGHT / 2 - consts.PLAYER_HEIGHT / 2];
 		else
@@ -21,6 +26,19 @@ class Player {
 		this.index = index;
 		this.id = id;
 		this.ready = false;
+		this.username = username;
+
+
+		if (index === 1) {
+			this.moving_name = new MovingText((-consts.WIDTH * 2) + username.length * consts.std_font_size, consts.HEIGHT * 0.35, true, username);
+		}
+		else {
+			this.moving_name = new MovingText((consts.WIDTH * 2) - username.length * consts.std_font_size, consts.HEIGHT * 0.65 + consts.std_font_size, false, username);
+		}
+	}
+
+	moveName() {
+		this.moving_name.moving = true;
 	}
 	
 	render() {

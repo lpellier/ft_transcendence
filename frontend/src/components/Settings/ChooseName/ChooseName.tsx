@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
+import Modal from '@mui/material/Modal';
+import Box from '@mui/material/Box'
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
-
 import { NameButtonStyle } from '../../../styles/tsxStyles/Settings/Name'
-
 import axios from 'axios';
-
+import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline'
+import {ModalChooseName} from '../../../styles/tsxStyles/Settings/Name'
+import {ButtonModalStyle, IconStyle} from '../../../styles/tsxStyles/AppBar/PongMenu'
 import {User} from 'interfaces'
 
 function NameButton() {
@@ -20,54 +22,90 @@ function NameButton() {
 	);
 }
 
-function NameInput(props: {user: User}) {
-	let [new_username, setNewUsername] = useState(props.user.username);
+function NameInput(props: {username: string, setter: any, setOpen: any}) {
 
 	function handleSubmit(e: any)
 	{
-		setNewUsername(e.target[0].value);
+		e.preventDefault();
+		props.setter(e.target[0].value);
 		e.target[0].value = "";
+		window.location.reload()
 	}
 
 	useEffect(() => {
-		axios.put('http://127.0.0.1:3001/users/me',
+		console.log("sending : ", props.username, " as ", typeof(props.username))
+
+		axios.patch(
+			'http://127.0.0.1:3001/users/me',
+			{username : props.username},
 			{
-				data: {
-					username: new_username,
+				withCredentials: true,
+				headers: {
+					'Content-Type': 'application/json'
 				}
-			},
-			{
-			withCredentials: true,
-			headers: {
-				'Content-Type': 'application/json'
 			}
+		)
+		.then(res => {
+			console.log("Changing name success : ", props.username)
+			props.setOpen(false)
 		})
-		.catch(function (err) {
+		.catch(err => {
 			console.log("Put request failed : ", err)
 		});
-	}, [new_username])
+
+	}, [props.username])
 
 	return (
 		<Stack direction="row">
-		<form id='ChangeNameForm' onSubmit={handleSubmit} style={{width: '100%'}}>
-			<TextField
-				type="text"
-				label="Your name" 
-				variant="standard"
-				style={{width: '50%', justifyContent: 'center'}}
-				id='name'
-			/>
-		</form>
+			<form id='ChangeNameForm' onSubmit={handleSubmit} style={{width: '100%'}}>
+				<TextField
+					type="text"
+					label="Your name" 
+					variant="standard"
+					style={{width: '50%', justifyContent: 'center'}}
+					id='name'
+				/>
+			</form>
 		</Stack>
 	);
 }
 
 export default function ChooseName(props: {user: User}) {
+    const [new_username, setNewUsername] = useState(props.user.username);
+	const [open, setOpen] = useState(false);
 
-        return (
+	const handleOpen = () => {
+		setOpen(true);
+	};
+	
+	const handleClose = () => {
+		setOpen(false);
+	};
+
+	return (
+		<Stack direction="row" spacing={2} style={{justifyContent: 'center'}}>
+      		<Button
+            	onClick={handleOpen}
+            	variant="contained"
+            	color="secondary"
+            	style={ButtonModalStyle}>
+          		<DriveFileRenameOutlineIcon sx={IconStyle}/>
+          		Choose Name
+      		</Button>
+			<Modal
+			  open={open}
+			  onClose={handleClose}
+			> 
 				<Stack spacing={2} style={{justifyContent: 'center'}}>
-                    <NameButton />
-					<NameInput user={props.user}/>
-                </Stack>
-        );
+					<Box sx={ModalChooseName}>
+            		    <NameButton />
+						<NameInput 
+							username={new_username} 
+							setter={setNewUsername} 
+							setOpen={setOpen}/>
+          			</Box>
+            	</Stack>
+        	</Modal>
+        </Stack>
+    );
 }

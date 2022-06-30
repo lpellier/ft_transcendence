@@ -1,5 +1,5 @@
 .chat {
-	height: 98%;
+	height: 65vh;
 }
 
 .message-form {
@@ -50,6 +50,7 @@
 	list-style-type: none;
 	padding-right: 0%;
 	overflow-y: scroll;
+	height:63vh;
 	-ms-overflow-style: none;
     scrollbar-width: none;
 }

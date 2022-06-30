@@ -49,11 +49,6 @@ function movePlayers() {
 			else
 				game.players[1].velocity[1] = 0;
 		}
-		
-		// if (keyIsDown(80)) {
-		// 	inMainMenu();
-		// 	return ;
-		// }
 
 		if (game.state != "relaunch-countdown" && game.local)
 			game.pong.calculateNewPos();

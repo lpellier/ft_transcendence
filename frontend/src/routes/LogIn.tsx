@@ -9,18 +9,6 @@ import {Title, ButtonStyle, LinkStyle, IconStyle} from "../styles/tsxStyles/LogI
 
 const AuthAPI = "http://127.0.0.1:3001/auth"
 
-const style = {
-	position: 'absolute' as 'absolute',
-	top: '50%',
-	left: '50%',
-	transform: 'translate(-50%, -50%)',
-	width: 400,
-	bgcolor: 'background.paper',
-	border: '2px solid #000',
-	boxShadow: 24,
-	p: 4,
-};
-
 function LogInButton()
 {
 	return (
@@ -30,10 +18,11 @@ function LogInButton()
         	    variant="contained"
         	    startIcon={<LoginIcon />}
         	    size="large"
+        	    color="primary"
 			>
         	  Log in
         	</Button>
-		</ThemeProvider>
+        </ThemeProvider>
 	);
 }
 
