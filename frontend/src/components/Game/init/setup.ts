@@ -1,6 +1,5 @@
 // ? P to quit local mode
 // ? Coding consistency : snake_case for variables | camelCase for functions | PascalCase for classes
-// ? Map indexes : 1 (normal map), 2 (city map), 3 (casino map)
 
 // TODO ISSUES
 	// ? when opening the site on a page for the first time, game doesn't load until refresh (but only sometimes)
@@ -13,8 +12,6 @@
 	// ? implement better ai
 
 	// ? cute animation showing the roll of pong value in casino
-
-	// ? comment EVERYTHING
 
 let spritesheet : any;
 let spritedata : any;
