@@ -14,6 +14,8 @@ class Bumper {
 	collision : Vector;
 	bounce_vec : Vector;
 
+	frame_count_shake : number;
+
 	constructor(animation : any, x : number, y : number, diameter : number, index : number) {
 		this.pos = new Vector([x, y]);
 		this.center = new Vector([x + diameter / 2, y + diameter / 2])
@@ -25,6 +27,7 @@ class Bumper {
 		this.hit = false;
 		this.diameter = diameter;
 		this.index_bumper = index;
+		this.frame_count_shake = 0;
 	}
 
 	resize() {
@@ -42,16 +45,26 @@ class Bumper {
 	}
   
 	show(ratio : number) {
-	  let index = this.index % this.len;
-	  image(this.animation[index], this.pos.x * ratio, this.pos.y * ratio, this.diameter * ratio, this.diameter * ratio);
+		let index = this.index % this.len;
+		push();
+		if (this.hit && this.frame_count_shake < 30)
+			translate(Math.floor(random(-5, 6)), Math.floor(random(-5, 6)))
+		image(this.animation[index], this.pos.x * ratio, this.pos.y * ratio, this.diameter * ratio, this.diameter * ratio);
+		pop();
 	}
   
 	animate() {
 		this.index += 1;
+		this.frame_count_shake++;
 		if (this.index >= this.len) {
 			this.index = 0;
 			this.hit = false;
 		}
+	}
+
+	resetAnimation() {
+		this.index = 0;
+		this.frame_count_shake = 0;
 	}
 
 	render(ratio : number) {

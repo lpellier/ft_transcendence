@@ -16,12 +16,12 @@ function drawSound() {
 }
 
 function drawBallIntent() {
-	let arrow_width = 10 + arrow_anim2;
+	let arrow_width = consts.DIAGONAL * 0.01 + arrow_anim2;
 	if (grow2)
-		arrow_anim2 += 0.1;
+		arrow_anim2 += consts.DIAGONAL * 0.0005;
 	else
-		arrow_anim2 -= 0.1;
-	if (arrow_anim2 >= 5)
+		arrow_anim2 -= consts.DIAGONAL * 0.0005;
+	if (arrow_anim2 >= consts.DIAGONAL * 0.005)
 		grow2 = false;
 	else if (arrow_anim2 <= 0)
 		grow2 = true;
@@ -29,20 +29,20 @@ function drawBallIntent() {
 	fill("white");
 	noStroke();
 	if (game.pong.velocity[0] < 0)
-		triangle(consts.WIDTH / 2.5, consts.HEIGHT / 2 + arrow_width / 2, consts.WIDTH / 2.5 + arrow_width, consts.HEIGHT / 2 + arrow_width + arrow_width / 2, consts.WIDTH / 2.5 + arrow_width, consts.HEIGHT / 2 - arrow_width + arrow_width / 2);
+		triangle(consts.WIDTH / 2.5, consts.HEIGHT * 0.49 + arrow_width / 2, consts.WIDTH / 2.5 + arrow_width, consts.HEIGHT * 0.49 + arrow_width + arrow_width / 2, consts.WIDTH / 2.5 + arrow_width, consts.HEIGHT * 0.49 - arrow_width + arrow_width / 2);
 	else if (game.pong.velocity[0] > 0)
-		triangle(consts.WIDTH * 1.5 / 2.5, consts.HEIGHT / 2 + arrow_width / 2, consts.WIDTH * 1.5 / 2.5 - arrow_width, consts.HEIGHT / 2 + arrow_width + arrow_width / 2, consts.WIDTH * 1.5 / 2.5 - arrow_width, consts.HEIGHT / 2 - arrow_width + arrow_width / 2);
+		triangle(consts.WIDTH * 1.5 / 2.5, consts.HEIGHT * 0.49 + arrow_width / 2, consts.WIDTH * 1.5 / 2.5 - arrow_width, consts.HEIGHT * 0.49 + arrow_width + arrow_width / 2, consts.WIDTH * 1.5 / 2.5 - arrow_width, consts.HEIGHT * 0.49 - arrow_width + arrow_width / 2);
 	pop();
 }
 
 function drawHelp() {
 	let index = game.players[0].index;
-	let arrow_width = 25 + arrow_anim;
+	let arrow_width = consts.DIAGONAL * 0.025 + arrow_anim;
 	if (grow)
-		arrow_anim += 0.5;
+		arrow_anim += consts.DIAGONAL * 0.0005;
 	else
-		arrow_anim -= 0.5;
-	if (arrow_anim >= 10)
+		arrow_anim -= consts.DIAGONAL * 0.0005;
+	if (arrow_anim >=  consts.DIAGONAL * 0.010)
 		grow = false;
 	else if (arrow_anim <= 0)
 		grow = true;

@@ -23,10 +23,13 @@ class Pong {
 	}
 
 	resize() {
-		let proportionnal_x : number = this.pos[0] / consts.OLD_WIDTH;
-		let proportionnal_y : number = this.pos[1] / consts.OLD_HEIGHT;
+		let proportionnal_pos_x : number = this.pos[0] / consts.OLD_WIDTH;
+		let proportionnal_pos_y : number = this.pos[1] / consts.OLD_HEIGHT;
+		let proportionnal_vel_x : number = this.velocity[0] / consts.OLD_WIDTH;
+		let proportionnal_vel_y : number = this.velocity[1] / consts.OLD_HEIGHT;
 		this.diameter = consts.PONG_DIAMETER;
-		this.pos = [consts.WIDTH * proportionnal_x, consts.HEIGHT * proportionnal_y];
+		this.pos = [consts.WIDTH * proportionnal_pos_x, consts.HEIGHT * proportionnal_pos_y];
+		this.velocity = [consts.WIDTH * proportionnal_vel_x, consts.HEIGHT * proportionnal_vel_y];
 	}
 
 	relaunchPong(loser_side : string) {

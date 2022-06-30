@@ -23,9 +23,9 @@ function relativeIntersection(intersection_point : [number, number, string], p1 
 	let middle : [number, number] = [p1[0] + (p2[0] - p1[0]) / 2 - intersection_point[0], p1[1] + (p2[1] - p1[1]) / 2 - intersection_point[1]];
 
 	if (intersection_point[2] === "side")
-		return middle[1] / ((p2[1] - p1[1]) / 2) * ((5 * Math.PI) / 12);
+		return middle[1] / ((p2[1] - p1[1]) / 2) * ((3 * Math.PI) / 12);
 	else
-		return middle[0] / ((p2[0] - p1[0]) / 2) * ((5 * Math.PI) / 12);
+		return middle[0] / ((p2[0] - p1[0]) / 2) * ((3 * Math.PI) / 12);
 }
 
 // ? MAP BOUNDS :
@@ -69,6 +69,7 @@ function checkCollisions() {
 	if (game.map.name === "city") {
 		for (let bumper of bumpers) {
 			if (bumper.checkCollision(game.pong)) {
+				bumper.resetAnimation();
 				consts.playRandomBumperSound();
 				return ;
 			}
@@ -76,54 +77,58 @@ function checkCollisions() {
 	}
 
 	let player = (game.pong.pos[0] < consts.WIDTH / 2 ? game.players[0] : game.players[1]);
-
+	let ball_points : [[number, number], [number, number], [number, number], [number, number], [number, number], [number, number], [number, number], [number, number]] = 
+		[game.pong.leftUp(), game.pong.up(), game.pong.rightUp(), game.pong.right(), game.pong.rightDown(), game.pong.down(), game.pong.leftDown(), game.pong.left()];
 	// debugCollisions(player);
 
 	// ? collision with paddles
-	let angle : number = 0;
-	let intersection_point : [number, number, string][] = [[-1, -1, "side"]]; // array of one element so that the variable is referenced in functions
-	angle = collisionPaddle(player, intersection_point);
-	
-	if (intersection_point[0][0] != -1) {
-		consts.playRandomPaddleSound();
-		let max_angle_percentage : number = Math.abs(angle) / (Math.PI * 5 / 12); // ? number that lets me add speed to acute angled shots
-		// ? for bot / top collisions
-		if (intersection_point[0][2] === "top" || intersection_point[0][2] === "bot") {
-			if (intersection_point[0][2] === "top")
-				game.pong.velocity[1] = (1 + consts.PONG_ACCELERATION_ACUTE_ANGLE * max_angle_percentage) * game.pong.speed * -Math.cos(angle);
-			else if (intersection_point[0][2] === "bot")
-				game.pong.velocity[1] = (1 + consts.PONG_ACCELERATION_ACUTE_ANGLE * max_angle_percentage) * game.pong.speed * Math.cos(angle);
-			game.pong.velocity[0] = (1 + consts.PONG_ACCELERATION_ACUTE_ANGLE * max_angle_percentage) * game.pong.speed * -Math.sin(angle);
-		}
-		// ? invert velocity indexes for left / right collisions
-		else if (intersection_point[0][2] === "side") {
-			if (game.pong.pos[0] < consts.WIDTH / 2)
-				game.pong.velocity[0] = (1 + consts.PONG_ACCELERATION_ACUTE_ANGLE * max_angle_percentage) * game.pong.speed * Math.cos(angle);
-			else
-				game.pong.velocity[0] = (1 + consts.PONG_ACCELERATION_ACUTE_ANGLE * max_angle_percentage) * game.pong.speed * -Math.cos(angle);
-			game.pong.velocity[1] = (1 + consts.PONG_ACCELERATION_ACUTE_ANGLE * max_angle_percentage) * game.pong.speed * -Math.sin(angle);	
+	for (let i = 0; i < 8; i++) {
+		let angle : number = 0;
+		let intersection_point : [number, number, string][] = [[-1, -1, "side"]]; // array of one element so that the variable is referenced in functions
+		angle = collisionPaddle(player, intersection_point, ball_points[i]);
+		
+		if (intersection_point[0][0] != -1) {
+			consts.playRandomPaddleSound();
+			let max_angle_percentage : number = Math.abs(angle) / (Math.PI * 3 / 12); // ? number that lets me add speed to acute angled shots
+			// ? for bot / top collisions
+			if (intersection_point[0][2] === "top" || intersection_point[0][2] === "bot") {
+				if (intersection_point[0][2] === "top")
+					game.pong.velocity[1] = (1 + consts.PONG_ACCELERATION_ACUTE_ANGLE * max_angle_percentage) * game.pong.speed * -Math.cos(angle);
+				else if (intersection_point[0][2] === "bot")
+					game.pong.velocity[1] = (1 + consts.PONG_ACCELERATION_ACUTE_ANGLE * max_angle_percentage) * game.pong.speed * Math.cos(angle);
+				game.pong.velocity[0] = (1 + consts.PONG_ACCELERATION_ACUTE_ANGLE * max_angle_percentage) * game.pong.speed * -Math.sin(angle);
+			}
+			// ? invert velocity indexes for left / right collisions
+			else if (intersection_point[0][2] === "side") {
+				if (game.pong.pos[0] < consts.WIDTH / 2)
+					game.pong.velocity[0] = (1 + consts.PONG_ACCELERATION_ACUTE_ANGLE * max_angle_percentage) * game.pong.speed * Math.cos(angle);
+				else
+					game.pong.velocity[0] = (1 + consts.PONG_ACCELERATION_ACUTE_ANGLE * max_angle_percentage) * game.pong.speed * -Math.cos(angle);
+				game.pong.velocity[1] = (1 + consts.PONG_ACCELERATION_ACUTE_ANGLE * max_angle_percentage) * game.pong.speed * -Math.sin(angle);	
+			}
+			return ;
 		}
 	}
 }
 
-function collisionPaddle(player : Player, intersection_point : [number, number, string][]) : number {
+function collisionPaddle(player : Player, intersection_point : [number, number, string][], ball_point : [number, number]) : number {
 	let paddle_side_hit :	[[number, number], [number, number]] = player.index === 1 ? 
 							[player.rightUp(), player.rightDown()] : [player.leftUp(), player.leftDown()];
 	let paddle_bot_hit : [[number, number], [number, number]] = [player.leftDown(), player.rightDown()];
 	let paddle_top_hit : [[number, number], [number, number]] = [player.leftUp(), player.rightUp()];
 
-	intersection_point[0] = getLineIntersection(game.pong.center(), game.pong.centerNextFrame(), paddle_side_hit[0], paddle_side_hit[1]);
+	intersection_point[0] = getLineIntersection(ball_point, game.pong.ballMoves(ball_point), paddle_side_hit[0], paddle_side_hit[1]);
 	intersection_point[0][2] = "side";
 	if (intersection_point[0][0] != -1)
 		return relativeIntersection(intersection_point[0], paddle_side_hit[0], paddle_side_hit[1]);
 
 	// ? Multiplying velocity vector by 3 for better precision in bot/top intersection
-	intersection_point[0] = getLineIntersection(game.pong.center(), [game.pong.cX() + game.pong.velocity[0] * 3, game.pong.cY() + game.pong.velocity[1] * 3], paddle_bot_hit[0], paddle_bot_hit[1]);
+	intersection_point[0] = getLineIntersection(ball_point, game.pong.ballMoves(ball_point), paddle_bot_hit[0], paddle_bot_hit[1]);
 	intersection_point[0][2] = "bot";
 	if (intersection_point[0][0] != -1)
 		return relativeIntersection(intersection_point[0], paddle_bot_hit[0], paddle_bot_hit[1]);
 
-	intersection_point[0] = getLineIntersection(game.pong.center(), [game.pong.cX() + game.pong.velocity[0] * 3, game.pong.cY() + game.pong.velocity[1] * 3], paddle_top_hit[0], paddle_top_hit[1]);
+	intersection_point[0] = getLineIntersection(ball_point, game.pong.ballMoves(ball_point), paddle_top_hit[0], paddle_top_hit[1]);
 	intersection_point[0][2] = "top";
 	if (intersection_point[0][0] != -1)
 		return relativeIntersection(intersection_point[0], paddle_top_hit[0], paddle_top_hit[1]);

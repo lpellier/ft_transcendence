@@ -4,9 +4,15 @@ function goToMainMenu() {
 }
 
 function clickSound() {
-	consts.max_volume += 0.25;
+	if (mouseButton === LEFT)
+		consts.max_volume += 0.25;
+	else if (mouseButton === RIGHT)
+		consts.max_volume -= 0.25;
+	
 	if (consts.max_volume > 1)
 		consts.max_volume = 0;
+	else if (consts.max_volume < 0)
+		consts.max_volume = 1;
 	consts.musicPlaying().volume = consts.max_volume;
 }
 
@@ -124,11 +130,11 @@ function clickAi() {
 	if (mouseButton === LEFT) {
 		if (game.ai) {
 			// @ts-ignore : next-line
-			this.style("outline", "none");
+			this.style("border", "none");
 		}
 		else {
 			// @ts-ignore : next-line
-			this.style("outline", "3px solid");
+			this.style("border", "3px solid");
 		}
 		game.ai = !game.ai;
 	}
@@ -137,27 +143,27 @@ function clickAi() {
 function clickMapOriginal() {
 	if (mouseButton === LEFT) {
 		// @ts-ignore : next-line
-		this.style("outline", "3px solid");
-		buttons.map_city.style("outline", "none");
-			buttons.map_casino.style("outline", "none");
+		this.style("border", "3px solid");
+		buttons.map_city.style("border", "none");
+			buttons.map_casino.style("border", "none");
 		game.map = consts.original_map;
 	}
 }
 function clickMapCity() {
 	if (mouseButton === LEFT) {
 		// @ts-ignore : next-line
-		this.style("outline", "3px solid");
-		buttons.map_original.style("outline", "none");
-		buttons.map_casino.style("outline", "none");
+		this.style("border", "3px solid");
+		buttons.map_original.style("border", "none");
+		buttons.map_casino.style("border", "none");
 		game.map = consts.city_map;
 	}
 }
 function clickMapCasino() {
 	if (mouseButton === LEFT) {
 		// @ts-ignore : next-line
-		this.style("outline", "3px solid");
-		buttons.map_city.style("outline", "none");
-		buttons.map_original.style("outline", "none");
+		this.style("border", "3px solid");
+		buttons.map_city.style("border", "none");
+		buttons.map_original.style("border", "none");
 		game.map = consts.casino_map;
 	}
 }
@@ -181,8 +187,8 @@ function startLocal() {
 			}, i * 1000);
 		}
 		game.setState("countdown");
-		game.players.push(new Player(1, "first"));
-		game.players.push(new Player(2, "second"));		
+		game.players.push(new Player(1, "first", user_name));
+		game.players.push(new Player(2, "second", "P2"));		
 		game.pong = new Pong();
 		game.room_id = "Local";
 	}

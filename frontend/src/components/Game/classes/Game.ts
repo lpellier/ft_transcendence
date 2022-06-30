@@ -15,6 +15,8 @@ class Game {
 	spectator : boolean;
 	hover_spectator : boolean;
 
+	frame_count_shake : number;
+
 	constructor() {
 		this.reset();
 	}
@@ -34,6 +36,7 @@ class Game {
 		this.map = consts.original_map;
 		this.spectator = false;
 		this.hover_spectator = false;
+		this.frame_count_shake = 0;
 	}
 
 	over() : boolean {
@@ -43,23 +46,27 @@ class Game {
 	}
 
 	scorePoint(invert : boolean) {
-		frame_count_shake = 0;
+		this.frame_count_shake = 0;
 		consts.playScore();
 		this.pong.velocity = [0, 0];
 		this.pong.pos = [consts.WIDTH / 2 - consts.PONG_DIAMETER / 2, consts.HEIGHT / 2 - consts.PONG_DIAMETER / 2];
 		if (!invert) {
 			if (this.pong.value === -1 && this.score[0] > 0)
 				this.score[0]--;
-			else
+			else if (this.pong.value != -1)
 				this.score[1] += this.pong.value;
 		}
 		else {
 			if (this.pong.value === -1 && this.score[1] > 0)
 				this.score[1]--;
-			else
+			else if (this.pong.value != -1)
 				this.score[0] += this.pong.value;
 		}
 		setTimeout(() => {
+			if (this.over()) {
+				this.setState("game-over");
+				return ;
+			}
 			this.setState("relaunch-countdown");
 			this.timer = 2;
 			for (let i = 0; i < 3; i++) {
@@ -77,8 +84,6 @@ class Game {
 				this.pong.relaunchPong("right");
 			else
 				this.pong.relaunchPong("left");
-			if (this.over())
-				this.setState("game-over");
 			this.frames_since_point = 0;
 		}, 500);
 	}

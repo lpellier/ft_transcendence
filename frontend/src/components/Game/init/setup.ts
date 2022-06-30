@@ -3,30 +3,79 @@
 // ? Map indexes : 1 (normal map), 2 (city map), 3 (casino map)
 
 // TODO ISSUES
-	// ? countdown timer badly centered
-	// ? when opening the site on a page for the first time, game doesn't load until refresh
-	// ? arrow to designate player that gets service is not responsive
-	// ? ball speed not adjusted right away when resizing screen
+	// ? when opening the site on a page for the first time, game doesn't load until refresh (but only sometimes)
+	// ? play local / vs ai not quite aligned when on a large screen
+
 
 // TODO IMPROVEMENTS
-	// ? need to test casino in multiplayer
 	// ? take into account score when recording on database
 	// ? add player xp and level
 	// ? handle edge cases like players leaving in middle of game for stats (count as defeat)
-
-	// ? coutdown bip going at it at end game
-
-	// ? output final score on game over screen
-	// ? output both player names at start of match and winner name at the end
 	
-	// ? adjust max bounce angle
 	// ? implement better ai
 	
-	// ? reset bumper animation if hit again
+	// ? output both player names at start of match and winner name at the end
+
 	// ? cute animation showing the roll of pong value in casino
-	
+	// ? should make the sound button highlight like others when hovering
+
 	// ? comment EVERYTHING
 
+	class MovingText {
+		pos : Vector;
+		vel : Vector;
+
+		moving : boolean;
+
+		left : boolean;
+
+		text : string;
+		initial_speed : number;
+		slow_speed : number;
+		
+		constructor(x : number, y : number, left : boolean, text : string) {
+			this.initial_speed = left ? consts.DIAGONAL * 0.015 : -consts.DIAGONAL * 0.015;
+			this.slow_speed = left ? consts.DIAGONAL * 0.001 : -consts.DIAGONAL * 0.001;
+
+			this.left = left;
+
+			this.pos = new Vector([x, y]);
+			this.vel = new Vector([this.initial_speed, 0]);
+			
+			this.text = text;
+			this.moving = false;
+		}
+	
+		calculatePos() {
+			if (this.left) {
+				if (this.pos.x > consts.WIDTH * 0.2 && this.pos.x < consts.WIDTH * 0.6)
+					this.vel.lerp(new Vector([this.slow_speed, 0]), 1);
+				else if (this.pos.x  > consts.WIDTH * 0.6)
+					this.vel.lerp(new Vector([this.initial_speed * 4, 0]), 2);
+				if (this.pos.x > consts.WIDTH + this.text.length * consts.std_font_size)
+					this.moving = false;
+			}
+			else {
+				if (this.pos.x > consts.WIDTH * 0.4 && this.pos.x < consts.WIDTH * 0.8)
+					this.vel.lerp(new Vector([this.slow_speed, 0]), 1);
+				else if (this.pos.x  < consts.WIDTH * 0.4)
+					this.vel.lerp(new Vector([this.initial_speed * 4, 0]), 2);
+				if (this.pos.x + this.text.length * consts.std_font_size < 0)
+					this.moving = false;
+			}
+			this.pos.x += this.vel.x;
+			this.pos.y += this.vel.y;
+		}
+	
+		render() {
+			push();
+			fill("white");
+			textAlign(CENTER);
+			textSize(consts.std_font_size);
+			text(this.text, this.pos.x, this.pos.y);
+			pop();
+		}
+	}
 
 let spritesheet : any;
 let spritedata : any;
@@ -49,10 +98,7 @@ let socket : any = null;
 let user_name : string;
 let user_id : string;
 
-let frame_count_shake : number;
-
 function preload() {
-	// soundFormats("mp3");
 	consts = new Consts();
 	keys = new Keys();
 
@@ -101,7 +147,7 @@ function setup() {
 	
 	resizeEverything();
 	game.setState("in-menu");
-	frame_count_shake = 0;
+	game.frame_count_shake = 0;
 }
 
 function hideIcons() {
@@ -112,10 +158,24 @@ function hideIcons() {
 }
 
 function draw() {
+	if (keyIsDown(32)) {
+		for (let player of game.players) {
+			player.moveName();
+			if (player.moving_name.left) {
+				player.moving_name.pos = new Vector([(-consts.WIDTH * 2) + player.moving_name.text.length * consts.std_font_size, consts.HEIGHT * 0.35]);
+				player.moving_name.vel = new Vector([player.moving_name.initial_speed, 0]);
+			}
+			else {
+				player.moving_name.pos = new Vector([(consts.WIDTH * 2) - player.moving_name.text.length * consts.std_font_size, consts.HEIGHT * 0.65 + consts.std_font_size]);
+				player.moving_name.vel = new Vector([player.moving_name.initial_speed, 0]);	
+			}
+		}
+	}
+
 	consts.playAppropriateMusic();
 	push();
-	if ((game.score[0] != 0 || game.score[1] != 0) && (game.state === "in-game" || game.state === "relaunch-countdown") && frame_count_shake < 30) {
-		frame_count_shake++;
+	if ((game.score[0] != 0 || game.score[1] != 0) && (game.state === "in-game" || game.state === "relaunch-countdown") && game.frame_count_shake < 30) {
+		game.frame_count_shake++;
 		translate(Math.floor(random(-5, 6)), Math.floor(random(-5, 6)))
 	}
 	clear(0, 0, 0, 0);
@@ -173,8 +233,11 @@ function draw() {
 			drawHelp();
 		if (!game.spectator)
 			drawInput();
-		for (let i : number = 0; i < game.players.length; i++)
+		for (let i : number = 0; i < game.players.length; i++) {
 			game.players[i].render();
+			game.players[i].moveName();
+		}
+		
 	}
 	else if (game.state === "relaunch-countdown") {
 		outputCountdown();
@@ -183,6 +246,7 @@ function draw() {
 			player.render();
 		game.pong.render();
 		drawBallIntent();
+		outputPlayerNames();
 	}
 	else if (game.state === "in-game") {
 		if (game.spectator)
@@ -196,24 +260,25 @@ function draw() {
 				for (let bumper of bumpers)
 					bumper.render();
 		}
-		if (game.frames_since_point > 10 && game.frames_since_point < 180 && game.map.name === "casino")
+		if (game.frames_since_point < 180 && game.map.name === "casino")
 			outputAnnouncement(game.pong.value + (game.pong.value === 1 || game.pong.value === -1 ? " point" : " points"), consts.std_font_size, consts.WIDTH * 0.5, consts.HEIGHT * 0.95, game.pong.color);
+		outputPlayerNames();
 	}
 	else if (game.state === "game-over") {
 		buttons.return.show();
 		image(consts.RETURN_ICON, consts.WIDTH * 0.90, consts.HEIGHT * 0.01, consts.medium_square_diameter, consts.medium_square_diameter);
-		outputAnnouncement((game.score[0] > game.score[1] ? "Player 1 " : "Player 2 ") + "won the game!", consts.std_font_size, width / 2, height / 2, "white")
+		outputAnnouncement((game.score[0] > game.score[1] ? game.players[0].username : game.players[1].username) + " won the game!", consts.std_font_size, width / 2, height / 2, "white")
+		outputScore(consts.WIDTH, consts.HEIGHT);
 	}
 	if (game.state === "in-menu" || game.state === "waiting-player" || game.state === "waiting-readiness") {
 		drawSound();
 		buttons.sound.show();
 	}
-	// if (game.state === "in-menu") { // ? I felt like color of sound icon was sticking out so i tried to dampen it but now i don't know
-		// push();
-		// fill("rgba(0, 0, 0, 0.10)");
-		// noStroke();
-		// rect(consts.WIDTH * 0.8, consts.HEIGHT * 0.02, consts.small_square_diameter * 3, consts.small_square_diameter * 1.65);
-		// pop();
-	// }
 	pop();
+	for (let player of game.players) {
+		if (player.moving_name.moving) {
+			player.moving_name.render();
+			player.moving_name.calculatePos();
+		}
+	}
 }
