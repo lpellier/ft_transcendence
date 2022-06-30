@@ -11,7 +11,7 @@ class MovingText {
     slow_speed : number;
     
     constructor(x : number, y : number, left : boolean, text : string) {
-        this.initial_speed = left ? consts.DIAGONAL * 0.015 : -consts.DIAGONAL * 0.015;
+        this.initial_speed = left ? consts.DIAGONAL * 0.030 : -consts.DIAGONAL * 0.030;
         this.slow_speed = left ? consts.DIAGONAL * 0.001 : -consts.DIAGONAL * 0.001;
 
         this.left = left;
@@ -26,7 +26,7 @@ class MovingText {
     calculatePos() {
         if (this.left) {
             if (this.pos.x > consts.WIDTH * 0.2 && this.pos.x < consts.WIDTH * 0.6)
-                this.vel.lerp(new Vector([this.slow_speed, 0]), 1);
+                this.vel.lerp(new Vector([this.slow_speed, 0]), 1.25);
             else if (this.pos.x  > consts.WIDTH * 0.6)
                 this.vel.lerp(new Vector([this.initial_speed * 4, 0]), 2);
             if (this.pos.x > consts.WIDTH + this.text.length * consts.std_font_size)
@@ -34,7 +34,7 @@ class MovingText {
         }
         else {
             if (this.pos.x > consts.WIDTH * 0.4 && this.pos.x < consts.WIDTH * 0.8)
-                this.vel.lerp(new Vector([this.slow_speed, 0]), 1);
+                this.vel.lerp(new Vector([this.slow_speed, 0]), 1.5);
             else if (this.pos.x  < consts.WIDTH * 0.4)
                 this.vel.lerp(new Vector([this.initial_speed * 4, 0]), 2);
             if (this.pos.x + this.text.length * consts.std_font_size < 0)

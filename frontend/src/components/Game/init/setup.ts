@@ -11,10 +11,6 @@
 	// ? handle edge cases like players leaving in middle of game for stats (count as defeat)
 	
 	// ? implement better ai
-	
-	// ? border buttons need to be responsive
-
-	// ? fix player name animation
 
 	// ? cute animation showing the roll of pong value in casino
 	// ? should make the sound button highlight like others when hovering
