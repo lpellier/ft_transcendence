@@ -90,19 +90,19 @@ function Chat(props: {user: User | undefined, users: User[]}) {
 
 	return (
 		<Box sx={OverallChatStyle}>
-		<Box sx={ChatBoxComponentStyle}>
-			{props.user?
-				<Stack direction='row' className='chmsg'>
-					<Stack>
-						{status}
-						<Channels user={props.user} users={props.users} currentRoom={currentRoom} setCurrentRoom = {setCurrentRoom} setCanWrite = {setCanWrite} roomAdmins={roomAdmins} />
+			<Box sx={ChatBoxComponentStyle}>
+				{props.user?
+					<Stack direction='row' className='chmsg'>
+						<Stack>
+							{status}
+							<Channels user={props.user} users={props.users} currentRoom={currentRoom} setCurrentRoom = {setCurrentRoom} setCanWrite = {setCanWrite} roomAdmins={roomAdmins} />
+						</Stack>
+						<Messages user={props.user} users={props.users} currentRoom={currentRoom} canWrite = {canWrite} />
 					</Stack>
-					<Messages user={props.user} users={props.users} currentRoom={currentRoom} canWrite = {canWrite} />
-				</Stack>
-				:
-				<div/>
-			}
-		</Box>
+					:
+					<div/>
+				}
+			</Box>
 		</Box>
 	);
 }

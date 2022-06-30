@@ -4,11 +4,9 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import IconButton from '@mui/material/IconButton';
 import Box from '@mui/material/Box';
 import Popper from '@mui/material/Popper';
-
 import {useState, useEffect } from 'react'
 import {Room, User} from 'interfaces'
 import {socket} from 'index'
-
 import { toastIt, toastThatError } from 'App';
 import bcrypt from 'bcryptjs';
 
@@ -86,7 +84,6 @@ function RoomUserMod(props : {currentUser: User, users: User[], room: Room, room
 		setKickUserClicked(1);
     }
 
-
 	function handleAddAdminClick(room: Room) {
 		socket.emit('get users', room.id);
 		setAddAdminClicked(1);
@@ -156,7 +153,7 @@ function RoomUserMod(props : {currentUser: User, users: User[], room: Room, room
 							<div/>
 							:
 							<button className="add-user-list-content" key={item.id}>
-								{item.username}		
+								{item.username}
 							</button>
 						}
 					</div>
@@ -190,7 +187,7 @@ function RoomUserMod(props : {currentUser: User, users: User[], room: Room, room
 
 	function PasswordMod(props: {setPasswordClicked: React.Dispatch<React.SetStateAction<boolean>>}) {
 		return (
-			<button onClick={() => props.setPasswordClicked(true)}>Change Password</button>
+			<button className='add-user' onClick={() => props.setPasswordClicked(true)}>Change Password</button>
 		)
 	}
 
@@ -210,7 +207,7 @@ function RoomUserMod(props : {currentUser: User, users: User[], room: Room, room
 	}
 
 	return (
-		<Stack>
+		<Stack spacing={0.6} >
 			<UserModButton 
 				clickAction={handleAddUserClick} 
 				room={props.room} title="add user"
@@ -285,7 +282,7 @@ function SimplePopper(props : {user: User, users: User[], room: Room, roomAdmins
 				<SettingsIcon/>
 			</IconButton>
 			<Popper id={id} open={open} anchorEl={anchorEl}>
-				<Box sx={{ border: 1, p: 1, bgcolor: 'background.paper' }}>
+				<Box sx={{ border: 1, p: 1, bgcolor: 'rgb(140, 150, 220)' }}>
 					<RoomUserMod currentUser={props.user} users={props.users} room={props.room} roomAdmins={props.roomAdmins}/>
 				</Box>
 			</Popper>
@@ -295,14 +292,13 @@ function SimplePopper(props : {user: User, users: User[], room: Room, roomAdmins
 
 export default function RoomUserPopper(props : {currentUser: User, users: User[], room: Room, roomAdmins:User[]}) {
 
-
 	  return (
-		<div>
+		<Box sx={{display: 'flex', alignItems: 'center'}}>
 			{props.roomAdmins.find(user => user.id === props.currentUser?.id)?
 				<SimplePopper user={props.currentUser} users={props.users} room={props.room} roomAdmins={props.roomAdmins}/>
 			:
 				<div/>
 			}
-		</div>
+		</Box>
 	  )
 }
