@@ -31,8 +31,10 @@ class Inputs {
 	resize() {
 		this.join.size(consts.WIDTH / 1.75, consts.HEIGHT / 8);
 		this.join.style("font-size", (consts.std_font_size).toString() + "px");
+		this.join.style("border", (consts.DIAGONAL / 250).toString() + "px solid white");
 		this.score_limit.size(consts.WIDTH / 12, consts.HEIGHT / 10);
 		this.score_limit.style("font-size", (consts.std_font_size).toString() + "px");
+		this.score_limit.style("border", (consts.DIAGONAL / 250).toString() + "px solid white");
 	}
 
 	hide() {

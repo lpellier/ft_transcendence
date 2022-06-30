@@ -4,8 +4,6 @@
 
 // TODO ISSUES
 	// ? when opening the site on a page for the first time, game doesn't load until refresh (but only sometimes)
-	// ? play local / vs ai not quite aligned when on a large screen
-
 
 // TODO IMPROVEMENTS
 	// ? take into account score when recording on database
@@ -14,7 +12,9 @@
 	
 	// ? implement better ai
 	
-	// ? output both player names at start of match and winner name at the end
+	// ? border buttons need to be responsive
+
+	// ? fix player name animation
 
 	// ? cute animation showing the roll of pong value in casino
 	// ? should make the sound button highlight like others when hovering
