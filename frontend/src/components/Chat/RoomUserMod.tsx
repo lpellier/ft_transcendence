@@ -1,4 +1,6 @@
 import '../../styles/Chat/Channels.css';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import SettingsIcon from '@mui/icons-material/Settings';
 import IconButton from '@mui/material/IconButton';
@@ -170,9 +172,16 @@ function RoomUserMod(props : {currentUser: User, users: User[], room: Room, room
 						<Stack >
 							<Stack direction="row" >
 								<form onSubmit={props.handleSubmit}>
-									<input type="text" placeholder="username" className="form"/>
+									<TextField 
+										type="text"
+										label="username" 
+										variant="standard"
+										size="small"
+										color="warning"
+										style={{width: '80%'}}
+									/>
 								</form>
-								<button title="cancel" onClick={() => props.setClicked(0)}>❌</button>
+								<Button title="cancel" onClick={() => props.setClicked(0)}>❌</Button>
 							</Stack>
 							<UserList users={props.users} condition={props.condition}/>
 						</Stack>
@@ -251,9 +260,16 @@ function RoomUserMod(props : {currentUser: User, users: User[], room: Room, room
 					{passwordClicked?
 							<Stack direction="row" >
 							<form onSubmit={handleNewPasswordSubmit}>
-								<input type="text" placeholder="new password" className="form"/>
+							<TextField 
+									type="text"
+									label="new password"
+									variant="standard"
+									size="small"
+									color="warning"
+									style={{width: '80%'}}
+								/>
 							</form>
-							<button title="cancel" onClick={() => setPasswordClicked(false)}>❌</button>
+							<Button title="cancel" onClick={() => setPasswordClicked(false)}>❌</Button>
 						</Stack>
 					:
 						<div/>
