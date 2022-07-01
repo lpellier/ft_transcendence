@@ -1,6 +1,6 @@
 import Stack from '@mui/material/Stack'
+import Box from '@mui/material/Box'
 import StatsBoards from './StatsBoards'
-import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography'
 import {StatsPartStyle} from '../../styles/tsxStyles/Home'
 import {User} from 'interfaces'

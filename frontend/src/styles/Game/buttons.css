@@ -32,9 +32,9 @@
 	align-content: center;
 	align-items: center;
 	justify-content: center;
-	gap: 1vw;
+	gap: 2%;
 	top: 25%;
-	left: 6%;
+	left: 7%;
 }
 
 #button-return {
@@ -64,7 +64,7 @@
 	position: absolute;
 	padding: 0;
 	top: 40%;
-	right: 6%;
+	right: 5.5%;
 }
 
 #buttons-plus-minus {

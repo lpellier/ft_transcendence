@@ -11,6 +11,18 @@ export class AuthController {
 	constructor(
 		private authService: AuthService) { }
 
+	@Get('mock')
+	@Redirect()
+	async mockLogin(@Req() req, @Res({passthrough: true}) res: Response) {
+		const user = await this.authService.getMock();
+		const isAuthenticated = !user.tfa;
+		const authentication = await this.authService.login(user.id, isAuthenticated);
+		res.cookie(authentication.type, authentication.token, { sameSite: 'strict' , httpOnly: true });
+		if (isAuthenticated === true) {
+			console.log("user is authenticated")
+			return ({ url: 'http://127.0.0.1:3000/profile' })}
+	}
+
 	@UseGuards(OAuth2AuthGuard)
 	@Get()
 	@Redirect()

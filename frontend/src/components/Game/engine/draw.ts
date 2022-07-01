@@ -4,8 +4,14 @@ let arrow_anim2 : number = 0;
 let grow : boolean = true;
 let grow2 : boolean = true;
 
+let tint_sound : boolean = false;
+
 function drawSound() {
+	push();
+	if (tint_sound)
+		tint(200, 200, 200);
 	image(consts.SOUND_ICON, consts.WIDTH * 0.8, consts.HEIGHT * 0.02, consts.small_square_diameter * 1.65, consts.small_square_diameter * 1.65);
+	pop();
 	let rect_size = consts.small_square_diameter * 1.65 / 6;
 	push();
 	fill("white");
