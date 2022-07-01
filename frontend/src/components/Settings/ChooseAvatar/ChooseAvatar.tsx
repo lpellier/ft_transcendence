@@ -77,6 +77,8 @@ function UploadButton(props: {setOpen: any}) {
 		.catch(err => {
 			console.log("Put avatar request failed : ", err)
 		})
+
+		props.setOpen(false)
 	};
 
 	function closeModal() {
@@ -86,6 +88,12 @@ function UploadButton(props: {setOpen: any}) {
 	return (
 		<div>
 			<label htmlFor="icon-button-file">
+				<Button
+    	    		variant="contained"
+    	    		color="secondary"
+					>
+    				Choose file :
+    			</Button>
 				<Input type="file" id="icon-button-file" name="file" onChange={changeHandler} />
 				<IconButton color="primary" aria-label="upload picture" component="span">
 					<PhotoCamera />
@@ -112,12 +120,6 @@ function CustomAvatar(props: {setOpen: any}) {
   return (
     <Stack spacing={2} style={{marginTop: '5%'}}>
     	<Stack direction="row" spacing={2} style={{marginTop: '5%'}}>
-   			<Button
-    	    	variant="contained"
-    	    	color="secondary"
-				>
-    			Choose file :
-    		</Button>
     		<UploadButton setOpen={props.setOpen}/>
 		</Stack>
     </Stack>

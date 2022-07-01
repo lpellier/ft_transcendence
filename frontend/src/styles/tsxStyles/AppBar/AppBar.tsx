@@ -2,8 +2,12 @@ import { styled, alpha } from '@mui/material/styles'
 import InputBase from '@mui/material/InputBase'
 
 const BarStyle = {
-    backgroundColor: 'rgb(40, 80, 255)',
-    display: 'flex',
+	backgroundColor: 'rgb(40, 80, 255)',
+	border: '2px solid black',
+}
+
+const ProjectNameStyle = {
+	
 }
 
 const SearchStyle = styled('div')(({ theme }) => ({
@@ -47,4 +51,5 @@ const SearchStyle = styled('div')(({ theme }) => ({
   }));
 
 
-export { BarStyle, SearchStyle, SearchIconWrapper, StyledInputBase }
+export { BarStyle, SearchStyle, SearchIconWrapper, StyledInputBase, 
+	ProjectNameStyle }

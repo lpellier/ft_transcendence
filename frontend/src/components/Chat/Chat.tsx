@@ -3,27 +3,34 @@ import Stack from '@mui/material/Stack'
 import Messages from './Messages';
 import Channels from './Channels';
 import Box from '@mui/material/Box';
-
-
 import '../../styles/Chat/Chat.css';
-
 import {User, Room} from 'interfaces';
 import {socket} from 'index';
 
+const ChatBoxComponentStyle = {	
+    width: '87vw',
+    minWidth: '510px',
+    height: '78vh',
+	
 
-
-const ChatBoxStyle = {	
-    width: '80vw',
-    minWidth: '320px',
-    height: '70vh',
+	justifyContent: 'center',
+	display: 'flex',
 
 	border: '3px solid black',
     backgroundColor: 'rgb(120, 110, 220, 0.95)',
-	// backgroundImage: 'url("https://cdn.pixabay.com/photo/2017/09/13/22/18/stretching-2747269_960_720.png")',
-	backgroundSize: '20%',
     backgroundPosition: 'bottom left',
 	backgroundRepeat: 'no-repeat',
     filter: 'drop-shadow(20px 20px 1px black)',
+}
+
+const OverallChatStyle = {
+	minheight: '812px',
+
+	width: '100%',
+	height: '100%',
+	justifyContent: 'center', 
+	display: 'flex', 
+	paddingTop: '5vh',
 }
 
 function Chat(props: {user: User | undefined, users: User[]}) {
@@ -62,7 +69,7 @@ function Chat(props: {user: User | undefined, users: User[]}) {
 			socket.off('admin removed from room', handler);
 		}
 	})
-		
+
 	useEffect(() => {
 	const init = () => {
 		setStatus('connected');
@@ -71,7 +78,6 @@ function Chat(props: {user: User | undefined, users: User[]}) {
 			socket.emit('get rooms', props.user.id);
 			socket.emit('get public rooms', props.user.id);
 			socket.emit('get all messages', props.user.id);
-			// socket.emit('new user', {userId: props.user.id, roomId: 1});
 		}
 		if (!socket.connected)
 			setStatus('disconnected');
@@ -81,26 +87,24 @@ function Chat(props: {user: User | undefined, users: User[]}) {
 		else
 			socket.on('connect', init)
 	}, [props.user])
-	
 
 	return (
-
-		<Box sx={ChatBoxStyle} style={{ alignItems: 'center' }}>
-			{status}
+		<Box sx={OverallChatStyle}>
+			<Box sx={ChatBoxComponentStyle}>
 				{props.user?
-				<Stack direction='row' spacing='2' className='chmsg'>
-					<Box>
-						<Channels user={props.user} users={props.users} currentRoom={currentRoom} setCurrentRoom = {setCurrentRoom} setCanWrite = {setCanWrite} roomAdmins={roomAdmins} />
-					</Box>
-					<Messages user={props.user} users={props.users} currentRoom={currentRoom} canWrite = {canWrite} />
-				</Stack>
-				:
-				<div/>
+					<Stack direction='row' className='chmsg'>
+						<Stack>
+							{status}
+							<Channels user={props.user} users={props.users} currentRoom={currentRoom} setCurrentRoom = {setCurrentRoom} setCanWrite = {setCanWrite} roomAdmins={roomAdmins} />
+						</Stack>
+						<Messages user={props.user} users={props.users} currentRoom={currentRoom} canWrite = {canWrite} />
+					</Stack>
+					:
+					<div/>
 				}
+			</Box>
 		</Box>
 	);
 }
 
 export default Chat;
-
-

@@ -1,10 +1,10 @@
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import LoginIcon from '@mui/icons-material/Login';
-import { ThemeProvider } from '@mui/styles';
 import WebhookIcon from '@mui/icons-material/Webhook';
 import {User} from 'interfaces';
 import {orangeTheme} from 'components/Themes'
+import {ThemeProvider} from "@mui/material/styles"
 import {Title, ButtonStyle, LinkStyle, IconStyle} from "../styles/tsxStyles/LogIn"
 
 const AuthAPI = "http://127.0.0.1:3001/auth"
