@@ -3,27 +3,39 @@ import Stack from '@mui/material/Stack';
 import LoginIcon from '@mui/icons-material/Login';
 import WebhookIcon from '@mui/icons-material/Webhook';
 import {User} from 'interfaces';
-import {orangeTheme} from 'components/Themes'
-import {ThemeProvider} from "@mui/material/styles"
 import {Title, ButtonStyle, LinkStyle, IconStyle} from "../styles/tsxStyles/LogIn"
 
 const AuthAPI = "http://127.0.0.1:3001/auth"
+const MockAuthAPI = "http://127.0.0.1:3001/auth/mock"
 
 function LogInButton()
 {
 	return (
-		<ThemeProvider theme={orangeTheme}>
-        	<Button
-				sx={ButtonStyle}
-        	    variant="contained"
-        	    startIcon={<LoginIcon />}
-        	    size="large"
-        	    color="primary"
-			>
-        	  Log in
-        	</Button>
-        </ThemeProvider>
+        <Button
+			sx={ButtonStyle}
+            variant="contained"
+            startIcon={<LoginIcon />}
+            size="large"
+            color="primary"
+		>
+          Log in
+        </Button>
 	);
+}
+
+function MockLogInButton()
+ {
+	return (
+        <Button 
+			sx={ButtonStyle}
+            variant="contained"
+            startIcon={<LoginIcon />}
+            size="large"
+            color="primary"
+			>
+          Mock Login
+        </Button>
+      );
 }
 
 export default function LogIn(props: {user: User | undefined, auth: boolean}) {
@@ -38,6 +50,11 @@ export default function LogIn(props: {user: User | undefined, auth: boolean}) {
 			<nav>
 				<a href={AuthAPI} style={LinkStyle}>
 					<LogInButton />
+				</a>
+			</nav>
+			<nav>
+				<a href={MockAuthAPI} style={LinkStyle}>
+					<MockLogInButton />
 				</a>
 			</nav>
         </Stack>

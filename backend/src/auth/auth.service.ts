@@ -40,4 +40,8 @@ export class AuthService {
 		const validated = authenticator.check(otp.value, otpSecret);
 		return validated;
 	}
+
+	async getMock() {
+		return this.usersService.getMock();
+	}
 }

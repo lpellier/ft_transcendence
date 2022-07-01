@@ -29,8 +29,10 @@ const CustomAvatarStyle = {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: '50%',
-    height: '30%',
+
+    width: '30vw',
+    height: '20vh',
+
     bgcolor: 'rgb(160, 130, 170, 0.95)',
     border: '2px solid #000',
     boxShadow: 24,

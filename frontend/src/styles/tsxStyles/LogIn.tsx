@@ -15,6 +15,7 @@ const IconStyle = {
 }
 
 const ButtonStyle = {
+	backgroundColor: 'rgb(140, 50, 120)',
     textShadow: '1px 1px 2px black',
 }
 

@@ -23,6 +23,15 @@ export class UsersService {
     return user;
   }
 
+  async getMock() {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id: 1
+      }
+    })
+    return user;
+  }
+
   async findOne(id: number): Promise<User> {
     return this.prisma.user.findUnique({
       where: { id: id },

@@ -3,7 +3,6 @@ import AllRoutes from './routes/routes';
 import './styles/body.css';
 import io  from "socket.io-client";
 
-
 const tabletSize = 768;
 const phoneSize = 530;
 
@@ -15,7 +14,6 @@ export const socket = io(SERVER, {
 });
 
 ReactDOM.render(
-
     <AllRoutes />,
     Root
 );

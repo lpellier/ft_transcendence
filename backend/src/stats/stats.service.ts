@@ -5,13 +5,13 @@ import { Stats, PrismaClient } from '@prisma/client';
 export class StatsService {
 	constructor(private readonly prisma: PrismaClient) {}
 
-	  async findLeaders() {
+	async findLeaders() {
 		return this.prisma.stats.findMany({
 			orderBy: {
 				level: 'desc',
 			  }, 
 			take : 3,
 		});
-	  }
-	  
+	}
+	
 }
