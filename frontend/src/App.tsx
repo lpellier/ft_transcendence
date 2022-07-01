@@ -34,7 +34,7 @@ export function toastIt(message: string) {
 export default function App(props: {user: User | undefined, users: User[]}) {
 
     return (
-		<Stack spacing={2}>
+		<Stack >
             {props.user?
                 <div>
                     <SearchAppBar user={props.user} users={props.users} />

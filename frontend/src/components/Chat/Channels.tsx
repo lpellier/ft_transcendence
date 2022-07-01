@@ -13,20 +13,15 @@ import KeyOffIcon from '@mui/icons-material/KeyOff';
 import ToggleButton from '@mui/material/ToggleButton';
 import Dialog from '@mui/material/Dialog';
 import bcrypt from 'bcryptjs';
-
+import { ThemeProvider } from '@mui/styles';
 import { toastThatError } from 'App';
-
 import {useState, useEffect} from 'react'
 import {Room, User} from 'interfaces'
 import {socket} from 'index'
-// import {socket} from './Chat'
 import RoomUserPopper from './RoomUserMod'
 import FormControl from '@mui/material/FormControl'
 import Button from '@mui/material/Button'
-
 import DirectMessaging from './DirectMessaging';
-import { ButtonGroup } from '@mui/material';
-
 
 interface CreateRoomDto {
 	name: string;
@@ -40,8 +35,8 @@ export interface UserRoomDto {
     roomId: number;
 };
 
-
-function PasswordInput(props: {openPassword: boolean, setOpenPassword: React.Dispatch<React.SetStateAction<boolean>>, room: Room, setCurrentRoom: React.Dispatch<React.SetStateAction<Room>>}) {
+function PasswordInput(props: {openPassword: boolean, setOpenPassword: React.Dispatch<React.SetStateAction<boolean>>, 
+	room: Room, setCurrentRoom: React.Dispatch<React.SetStateAction<Room>>}) {
 	
 	const handleClose = () => {
 		props.setOpenPassword(false);
@@ -62,18 +57,17 @@ function PasswordInput(props: {openPassword: boolean, setOpenPassword: React.Dis
 		})
 	}
 
-
 	return(
 		<Dialog open={props.openPassword}  onClose={handleClose}>
 			<Box component="form" onSubmit={handlePasswordSubmit}>
-			<TextField
-				autoFocus
-				margin="dense"
-				id="password"
-				label="password"
-				type="password"
-				fullWidth
-				variant="standard"
+				<TextField
+					autoFocus
+					margin="dense"
+					id="password"
+					label="password"
+					type="password"
+					fullWidth
+					variant="standard"
 				/>
 			</Box>
 		</Dialog>
@@ -131,7 +125,6 @@ function Channels(props : {user: User, users: User[], currentRoom: Room, setCurr
 	let [showPassword, setShowPassword] = useState<number>(0);
 	let [tab, setTab] = useState<string>('channels');
 
-	
 	async function handleRoomSubmit(e:any) {
 		
 		e.preventDefault();
@@ -234,33 +227,35 @@ function Channels(props : {user: User, users: User[], currentRoom: Room, setCurr
 
 	return (
 		<div>
-		<Stack className='channels' >
-			<Stack direction='row'>
-				<ButtonGroup>
-					<Button variant="contained" onClick={() => setTab('channels')}>Channels</Button>
-					<Button variant="contained" onClick={() => setTab('dms')}>DMs</Button>
-				</ButtonGroup>
+		<Stack className='channels' spacing={1} >
+			<Stack spacing={0.5} direction="row">
+				<Button variant="contained" size="small" color="warning" onClick={() => setTab('channels')}>Channels</Button>
+				<Button variant="contained" size="small" color="warning" onClick={() => setTab('dms')}>DMs</Button>
 			</Stack>
 			{tab === 'channels'?
 			<Stack justifyContent='space-between'>
 				<Box>
 					{addRoomClicked ?
-							<Stack>
+							<Stack spacing={1}>
 								<Stack component="form" onSubmit={handleRoomSubmit} spacing={1}>
-									<TextField id="roomName" label="Room name" variant="standard" />
-									<FormControl fullWidth>
-										<InputLabel id="visibility-label">visibility</InputLabel>
-										<NativeSelect
-											defaultValue="private"
-											inputProps={{
-												name: 'visibility',
-												id: 'uncontrolled-native',
-											}}
-											>
-											<option value="private">private</option>
-											<option value="public">public</option>
-										</NativeSelect>
-									</FormControl>
+									<TextField 
+										id="roomName" 
+										label="Room name" 
+										variant="standard"
+									/>
+										<FormControl fullWidth>
+											<InputLabel id="visibility-label">visibility</InputLabel>
+											<NativeSelect
+												defaultValue="private"
+												inputProps={{
+													name: 'visibility',
+													id: 'uncontrolled-native',
+												}}
+												>
+												<option value="private">private</option>
+												<option value="public">public</option>
+											</NativeSelect>
+										</FormControl>
 									<ToggleButton value={showPassword} onChange={handlePasswordSelect}>
 										{showPassword?
 											<KeyOffIcon/>
@@ -273,17 +268,12 @@ function Channels(props : {user: User, users: User[], currentRoom: Room, setCurr
 										:
 										<div/>
 									}
-
-									<Button variant="contained" color="success" type="submit">
-										Create
-									</Button>
+									<Button variant="contained" color="success" type="submit">Create</Button>
 								</Stack>
-								<Button variant="contained" color="error" onClick={() => setAddRoomClicked(0)}>
-									Cancel
-								</Button>
+									<Button variant="contained" color="error" onClick={() => setAddRoomClicked(0)}>Cancel</Button>
 							</Stack>
 						:
-						<Button onClick={() => setAddRoomClicked(1)} variant='contained' sx={{ width: '100%' }}>Create Room</Button>
+						<Button onClick={() => setAddRoomClicked(1)} variant='contained' color="warning" sx={{ width: '100%' }}>Create Room</Button>
 					}
 				</Box>
 				<div>

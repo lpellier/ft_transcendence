@@ -1,13 +1,14 @@
 import '../../styles/Chat/Channels.css';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import SettingsIcon from '@mui/icons-material/Settings';
+import IconButton from '@mui/material/IconButton';
 import Box from '@mui/material/Box';
 import Popper from '@mui/material/Popper';
-
 import {useState, useEffect } from 'react'
 import {Room, User} from 'interfaces'
 import {socket} from 'index'
-
 import { toastIt, toastThatError } from 'App';
 import bcrypt from 'bcryptjs';
 
@@ -85,7 +86,6 @@ function RoomUserMod(props : {currentUser: User, users: User[], room: Room, room
 		setKickUserClicked(1);
     }
 
-
 	function handleAddAdminClick(room: Room) {
 		socket.emit('get users', room.id);
 		setAddAdminClicked(1);
@@ -155,7 +155,7 @@ function RoomUserMod(props : {currentUser: User, users: User[], room: Room, room
 							<div/>
 							:
 							<button className="add-user-list-content" key={item.id}>
-								{item.username}		
+								{item.username}
 							</button>
 						}
 					</div>
@@ -172,9 +172,16 @@ function RoomUserMod(props : {currentUser: User, users: User[], room: Room, room
 						<Stack >
 							<Stack direction="row" >
 								<form onSubmit={props.handleSubmit}>
-									<input type="text" placeholder="username" className="form"/>
+									<TextField 
+										type="text"
+										label="username" 
+										variant="standard"
+										size="small"
+										color="warning"
+										style={{width: '80%'}}
+									/>
 								</form>
-								<button title="cancel" onClick={() => props.setClicked(0)}>❌</button>
+								<Button title="cancel" onClick={() => props.setClicked(0)}>❌</Button>
 							</Stack>
 							<UserList users={props.users} condition={props.condition}/>
 						</Stack>
@@ -189,7 +196,7 @@ function RoomUserMod(props : {currentUser: User, users: User[], room: Room, room
 
 	function PasswordMod(props: {setPasswordClicked: React.Dispatch<React.SetStateAction<boolean>>}) {
 		return (
-			<button onClick={() => props.setPasswordClicked(true)}>Change Password</button>
+			<button className='add-user' onClick={() => props.setPasswordClicked(true)}>Change Password</button>
 		)
 	}
 
@@ -209,7 +216,7 @@ function RoomUserMod(props : {currentUser: User, users: User[], room: Room, room
 	}
 
 	return (
-		<Stack>
+		<Stack spacing={0.6} >
 			<UserModButton 
 				clickAction={handleAddUserClick} 
 				room={props.room} title="add user"
@@ -253,9 +260,16 @@ function RoomUserMod(props : {currentUser: User, users: User[], room: Room, room
 					{passwordClicked?
 							<Stack direction="row" >
 							<form onSubmit={handleNewPasswordSubmit}>
-								<input type="text" placeholder="new password" className="form"/>
+							<TextField 
+									type="text"
+									label="new password"
+									variant="standard"
+									size="small"
+									color="warning"
+									style={{width: '80%'}}
+								/>
 							</form>
-							<button title="cancel" onClick={() => setPasswordClicked(false)}>❌</button>
+							<Button title="cancel" onClick={() => setPasswordClicked(false)}>❌</Button>
 						</Stack>
 					:
 						<div/>
@@ -280,28 +294,27 @@ function SimplePopper(props : {user: User, users: User[], room: Room, roomAdmins
 	
 	return (
 		<div>
-		<button aria-describedby={id} type="button" onClick={handleClick}>
-			<SettingsIcon/>
-		</button>
-		<Popper id={id} open={open} anchorEl={anchorEl}>
-			<Box sx={{ border: 1, p: 1, bgcolor: 'background.paper' }}>
-				<RoomUserMod currentUser={props.user} users={props.users} room={props.room} roomAdmins={props.roomAdmins}/>
-			</Box>
-		</Popper>
+			<IconButton onClick={handleClick} color="error">
+				<SettingsIcon/>
+			</IconButton>
+			<Popper id={id} open={open} anchorEl={anchorEl}>
+				<Box sx={{ border: 1, p: 1, bgcolor: 'rgb(140, 150, 220)' }}>
+					<RoomUserMod currentUser={props.user} users={props.users} room={props.room} roomAdmins={props.roomAdmins}/>
+				</Box>
+			</Popper>
 		</div>
 	);
 }
 
 export default function RoomUserPopper(props : {currentUser: User, users: User[], room: Room, roomAdmins:User[]}) {
 
-
 	  return (
-		<div>
+		<Box sx={{display: 'flex', alignItems: 'center'}}>
 			{props.roomAdmins.find(user => user.id === props.currentUser?.id)?
 				<SimplePopper user={props.currentUser} users={props.users} room={props.room} roomAdmins={props.roomAdmins}/>
 			:
 				<div/>
 			}
-		</div>
+		</Box>
 	  )
 }

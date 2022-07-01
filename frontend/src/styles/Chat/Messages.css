@@ -1,12 +1,9 @@
 .chat {
-	height: 65vh;
+	height: 73vh;
 }
 
 .message-form {
-	width: 100%;
 	text-align: center;
-	padding-left: 0%;
-	padding-top: 0;
 }
 
 .input {
@@ -38,15 +35,18 @@
 
 .miauw-button:hover {
 	background-color: rgb(250, 80, 0);
+	cursor: pointer;
 }
 
 .miauw-button:active {
 	background-color: rgb(260, 70, 0);
 	filter: drop-shadow(4px 4px 2px black);
-
 }
 
 .messages {
+	height: 75%;
+	width: 96%;
+
 	list-style-type: none;
 	padding-right: 0%;
 	overflow-y: scroll;
@@ -78,7 +78,7 @@
 
 .message li{
 	border: solid 2px black;
-	background-color: rgb(200, 200, 170);
+	background-color: rgba(241, 248, 238, 0.9);
 	color: rgb(30, 80, 200);
 
 	width: fit-content;
@@ -94,10 +94,14 @@
 .flex {
 	display: flex;
 	flex-direction: column;
+	padding-right: 3%;
 }
 
 .user {
 	margin-top: 0%;
+	padding-right: 2%;
+	padding-top: 1%;
+	
 }
 
 .newuser {
@@ -106,9 +110,9 @@
 }
 
 .avatar {
-	width: 30px;
-	height: 30px;
+	width: 3vw;
 	border-radius: 30px;
+	padding: 1%;
 }
 
 .cat-chat {

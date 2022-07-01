@@ -9,11 +9,8 @@ import LogIn from './LogIn'
 import TFAuth from './TFAuth'
 import App from '../App'
 import Profile from '../components/Profile/Profile'
-
 import {useState, useEffect} from 'react'
-
 import {User} from 'interfaces';
-
 import {socket} from 'index';
 import Chat from "../components/Chat/Chat";
 import Settings from "../components/Settings/Settings";

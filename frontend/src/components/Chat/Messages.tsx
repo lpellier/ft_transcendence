@@ -1,12 +1,9 @@
 import {useEffect, useState} from 'react';
 import {socket} from 'index';
-
 // import {socket} from './Chat'
-
-
-
 import Stack from '@mui/material/Stack'
-import Container from '@mui/material/Container'
+import Box from '@mui/material/Box'
+import Avatar from '@mui/material/Avatar'
 
 import '../../styles/Chat/Messages.css';
 
@@ -53,7 +50,7 @@ function Messages(props : {user: User, users: User[], currentRoom: Room, canWrit
 	console.log('currentRoom = ', props.currentRoom);
 	console.log('messages = ', messages);
     return (
-	<Container >
+	<Box sx={{width:'100%'}}>
         <Stack className='chat' spacing={2} justifyContent='space-between'>
 			<ul className='messages' id='messagebox'>
 				{messages.map(item=> (
@@ -62,14 +59,23 @@ function Messages(props : {user: User, users: User[], currentRoom: Room, canWrit
 								<div className='flexwrapper' >
 									{item.userId === props.user.id ?
 									<div className='message current flex'>
-										<li className=''>{item.content}</li> 
-										<div className='user'><img className='avatar' src={"http://127.0.0.1:3001/avatars/"+item.userId.toString()+".png"} alt="avatar"/>{props.users.find(user => user.id === item.userId)?.username}</div>
+										<Stack direction="row" className='user' spacing={1}>
+											<li className=''>{item.content}</li>
+											<Avatar src={"http://127.0.0.1:3001/avatars/"+item.userId.toString()+".png"} sx={{width: '3vw', height: '3vh'}}/>
+										</Stack>
+											<div className='user'>
+												{props.users.find(user => user.id === item.userId)?.username}
+											</div>
 									</div>
 									:
 									<div className='message other flex'>
 										<li className=''>{item.content}</li>
-										<div className='user' ><img className='avatar' src={"http://127.0.0.1:3001/avatars/"+item.userId.toString()+".png"} alt="avatar"/>{props.users.find(user => user.id === item.userId)?.username}</div>
-										
+											<div className='user' >
+												<Stack direction="row" className='user'>
+													<Avatar src={"http://127.0.0.1:3001/avatars/"+item.userId.toString()+".png"} sx={{width: '3vw', height: '3vh'}}/>
+													{props.users.find(user => user.id === item.userId)?.username}
+												</Stack>
+											</div>
 									</div>
 									}
 								</div>
@@ -90,7 +96,7 @@ function Messages(props : {user: User, users: User[], currentRoom: Room, canWrit
 			<div/>
 			}
         </Stack>
-	</Container>
+	</Box>
     )
 }
 
