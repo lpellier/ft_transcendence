@@ -1,11 +1,8 @@
 // ? P to quit local mode
 // ? Coding consistency : snake_case for variables | camelCase for functions | PascalCase for classes
-// ? Map indexes : 1 (normal map), 2 (city map), 3 (casino map)
 
 // TODO ISSUES
 	// ? when opening the site on a page for the first time, game doesn't load until refresh (but only sometimes)
-	// ? play local / vs ai not quite aligned when on a large screen
-
 
 // TODO IMPROVEMENTS
 	// ? take into account score when recording on database
@@ -13,13 +10,8 @@
 	// ? handle edge cases like players leaving in middle of game for stats (count as defeat)
 	
 	// ? implement better ai
-	
-	// ? output both player names at start of match and winner name at the end
 
 	// ? cute animation showing the roll of pong value in casino
-	// ? should make the sound button highlight like others when hovering
-
-	// ? comment EVERYTHING
 
 let spritesheet : any;
 let spritedata : any;

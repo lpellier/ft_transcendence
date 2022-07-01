@@ -29,20 +29,20 @@ class Buttons {
 	
 	createButtons() {
 		this.create_game = createCustomButton("Create game", createGameMenu, highlightButton, resetButton, consts.std_width, consts.std_height);
-		this.create_game.style("border", (consts.WIDTH / 400).toString() + "px solid white");
+		this.create_game.style("border", (consts.DIAGONAL / 250).toString() + "px solid white");
 		
 		this.join = createCustomButton("Join game", readRoomID, highlightButton, resetButton, consts.std_width, consts.std_height);
-		this.join.style("border", (consts.WIDTH / 400).toString() + "px solid white");
+		this.join.style("border", (consts.DIAGONAL / 250).toString() + "px solid white");
 
 		this.matchmaking = createCustomButton("Match making", matchmaking, highlightButton, resetButton, consts.std_width, consts.std_height);
-		this.matchmaking.style("border", (consts.WIDTH / 400).toString() + "px solid white");
+		this.matchmaking.style("border", (consts.DIAGONAL / 250).toString() + "px solid white");
 
 		this.return = createCustomButton("", goToMainMenu, highlightButton, resetButton, consts.medium_square_diameter, consts.medium_square_diameter);
 		this.return.style("border", "none");
 		this.return.style("background-color", "rgba(0, 0, 0, 0)");
 		this.return.position(consts.WIDTH * 0.90, consts.HEIGHT * 0.01);
 		
-		this.sound = createCustomButton("", clickSound, highlightButton, resetButton, consts.medium_square_diameter, consts.medium_square_diameter);
+		this.sound = createCustomButton("", clickSound, highlightSoundButton, resetSoundButton, consts.medium_square_diameter, consts.medium_square_diameter);
 		this.sound.style("border", "none");
 		this.sound.style("background-color", "rgba(0, 0, 0, 0)");
 		this.sound.size(consts.small_square_diameter * 1.65, consts.small_square_diameter * 1.65);
@@ -51,7 +51,7 @@ class Buttons {
 		this.anyone_can_join = createCustomButton("Anyone can join", clickAnyone, highlightButton, resetButton, consts.medium_width, consts.medium_height);
 		this.anyone_can_join.style("background-color", "rgba(0, 0, 0, 0)");
 		this.anyone_can_join.style("font-size", consts.medium_font_size.toString() + "px");
-		this.anyone_can_join.style("border", "3px solid");
+		this.anyone_can_join.style("border", (consts.DIAGONAL / 250).toString() + "px solid white");
 		this.anyone_can_join.style("outline", "none");
 		this.invitation_only = createCustomButton("Invitation only", clickInvitation, highlightButton, resetButton, consts.medium_width, consts.medium_height);
 		this.invitation_only.style("background-color", "rgba(0, 0, 0, 0)");
@@ -82,7 +82,7 @@ class Buttons {
 		this.map_original = createCustomButton("Original", clickMapOriginal, highlightButton, resetButton, consts.WIDTH * 0.2 + consts.WIDTH / 48, consts.HEIGHT * 0.2 + consts.WIDTH / 48);
 		this.map_original.style("background", "none");
 		this.map_original.style("outline", "none");
-		this.map_original.style("border", "3px solid");
+		this.map_original.style("border", (consts.DIAGONAL / 250).toString() + "px solid white");
 		
 		this.map_city = createCustomButton("City", clickMapCity, highlightButton, resetButton, consts.WIDTH * 0.2 + consts.WIDTH / 48, consts.HEIGHT * 0.2 + consts.WIDTH / 48);
 		this.map_city.style("background", "none");
@@ -104,7 +104,7 @@ class Buttons {
 
 		this.spectate = createCustomButton("", clickSpectate, highlightSpectateButton, resetSpectateButton, consts.WIDTH * 0.1, consts.HEIGHT * 0.1);
 		this.spectate.style("background-color", "rgba(0, 0, 0, 0)");
-		this.spectate.style("border", (consts.WIDTH / 400).toString() + "px solid white");
+		this.spectate.style("border", (consts.DIAGONAL / 250).toString() + "px solid white");
 
 		this.hide();
 		this.addParent();
@@ -117,29 +117,34 @@ class Buttons {
 	resize() {
 		this.create_game.size(consts.std_width, consts.std_height);
 		this.create_game.style("font-size", consts.std_font_size.toString() + "px");
-		this.create_game.style("border", (consts.WIDTH / 400).toString() + "px solid white");
+		this.create_game.style("border", (consts.DIAGONAL / 250).toString() + "px solid white");
 
 		this.join.size(consts.std_width, consts.std_height);
 		this.join.style("font-size", consts.std_font_size.toString() + "px");
-		this.join.style("border", (consts.WIDTH / 400).toString() + "px solid white");
+		this.join.style("border", (consts.DIAGONAL / 250).toString() + "px solid white");
 
 		this.matchmaking.size(consts.std_width, consts.std_height);
 		this.matchmaking.style("font-size", consts.std_font_size.toString() + "px");
-		this.matchmaking.style("border", (consts.WIDTH / 400).toString() + "px solid white");
+		this.matchmaking.style("border", (consts.DIAGONAL / 250).toString() + "px solid white");
 
 		this.opponent_left_ok.size(consts.std_width, consts.std_height);
 		this.opponent_left_ok.style("font-size", consts.std_font_size.toString() + "px");
 	
 		this.anyone_can_join.size(consts.medium_width, consts.medium_height);
 		this.anyone_can_join.style("font-size", consts.medium_font_size.toString() + "px");
+		this.anyone_can_join.style("border-width", (consts.DIAGONAL / 250).toString() + "px");
 		this.invitation_only.size(consts.medium_width, consts.medium_height);
 		this.invitation_only.style("font-size", consts.medium_font_size.toString() + "px");
+		this.invitation_only.style("border-width", (consts.DIAGONAL / 250).toString() + "px");
 		this.local.size(consts.medium_width, consts.medium_height);
 		this.local.style("font-size", consts.medium_font_size.toString() + "px");
+		this.local.style("border-width", (consts.DIAGONAL / 250).toString() + "px");
 		this.ai.size(consts.medium_width, consts.medium_height);
 		this.ai.style("font-size", consts.medium_font_size.toString() + "px");
+		this.ai.style("border-width", (consts.DIAGONAL / 250).toString() + "px");
 		this.validate.size(consts.medium_width, consts.medium_height);
 		this.validate.style("font-size", consts.medium_font_size.toString() + "px");
+		this.validate.style("border-width", (consts.DIAGONAL / 250).toString() + "px");
 	
 		this.plus.size(consts.small_square_diameter, consts.small_square_diameter);
 		this.plus.style("font-size", consts.small_font_size.toString() + "px");
@@ -161,10 +166,14 @@ class Buttons {
 		this.map_casino.style("font-size", consts.medium_font_size.toString() + "px");
 
 		this.map_original.position(consts.WIDTH * 0.0855, consts.HEIGHT * 0.56);
+		this.map_original.style("border-width", (consts.DIAGONAL / 250).toString() + "px");
 		this.map_city.position(consts.WIDTH * 0.3855, consts.HEIGHT * 0.56);
+		this.map_city.style("border-width", (consts.DIAGONAL / 250).toString() + "px");
 		this.map_casino.position(consts.WIDTH * 0.6855, consts.HEIGHT * 0.56);
+		this.map_casino.style("border-width", (consts.DIAGONAL / 250).toString() + "px");
 
 		this.spectate.size(consts.WIDTH * 0.1, consts.HEIGHT * 0.1);
+		this.spectate.style("border-width", (consts.DIAGONAL / 250).toString() + "px");
 	}
 
 	reset() {
@@ -255,7 +264,7 @@ class Buttons {
 	}
 
 	clickAnyone() {
-		this.anyone_can_join.style("border", "3px solid");
+		this.anyone_can_join.style("border", (consts.DIAGONAL / 250).toString() + "px solid white");
 		this.local.style("border", "none");
 		this.invitation_only.style("border", "none");
 		
@@ -268,7 +277,7 @@ class Buttons {
 
 	clickLocal() {
 		this.anyone_can_join.style("border", "none");
-		this.local.style("border", "3px solid");
+		this.local.style("border", (consts.DIAGONAL / 250).toString() + "px solid white");
 		this.invitation_only.style("border", "none");
 
 		this.ai.show();
@@ -279,7 +288,7 @@ class Buttons {
 	clickInvitation() {
 		this.anyone_can_join.style("border", "none");
 		this.local.style("border", "none");
-		this.invitation_only.style("border", "3px solid");
+		this.invitation_only.style("border", (consts.DIAGONAL / 250).toString() + "px solid white");
 
 		this.ai.hide();
 		this.ai.style("border", "none");

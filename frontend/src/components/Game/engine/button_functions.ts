@@ -74,6 +74,13 @@ function resetButton() {
 	this.style("color", "white");
 }
 
+function highlightSoundButton() {
+	tint_sound = true;
+}
+function resetSoundButton() {
+	tint_sound = false;
+}
+
 function plusScoreLimit() {
 	if (mouseButton === LEFT && game.score_limit < 15) {
 		game.score_limit++;
@@ -104,7 +111,7 @@ function clickSpectate() {
 		game.spectator = !game.spectator;
 		if (!game.spectator) {
 			// @ts-ignore : next-line
-			this.style("border-color", "white");	
+			this.style("border-color", "white");
 		}
 		else if (game.spectator) {
 			// @ts-ignore : next-line
@@ -134,7 +141,7 @@ function clickAi() {
 		}
 		else {
 			// @ts-ignore : next-line
-			this.style("border", "3px solid");
+			this.style("border", (consts.DIAGONAL / 250).toString() + "px solid white");
 		}
 		game.ai = !game.ai;
 	}
@@ -143,7 +150,7 @@ function clickAi() {
 function clickMapOriginal() {
 	if (mouseButton === LEFT) {
 		// @ts-ignore : next-line
-		this.style("border", "3px solid");
+		this.style("border", (consts.DIAGONAL / 250).toString() + "px solid white");
 		buttons.map_city.style("border", "none");
 			buttons.map_casino.style("border", "none");
 		game.map = consts.original_map;
@@ -152,7 +159,7 @@ function clickMapOriginal() {
 function clickMapCity() {
 	if (mouseButton === LEFT) {
 		// @ts-ignore : next-line
-		this.style("border", "3px solid");
+		this.style("border", (consts.DIAGONAL / 250).toString() + "px solid white");
 		buttons.map_original.style("border", "none");
 		buttons.map_casino.style("border", "none");
 		game.map = consts.city_map;
@@ -161,7 +168,7 @@ function clickMapCity() {
 function clickMapCasino() {
 	if (mouseButton === LEFT) {
 		// @ts-ignore : next-line
-		this.style("border", "3px solid");
+		this.style("border", (consts.DIAGONAL / 250).toString() + "px solid white");
 		buttons.map_city.style("border", "none");
 		buttons.map_original.style("border", "none");
 		game.map = consts.casino_map;
