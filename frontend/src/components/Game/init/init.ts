@@ -22,7 +22,7 @@ function createCustomInput(title : string) {
 	input.style("font-family", "PressStart2P-Regular");
 	input.style("background-color", "black");
 	input.style("color", "white");
-	input.style("border", "3px solid white");
+	input.style("border", (consts.DIAGONAL / 250).toString() + "px solid white");
 	input.style("border-radius", "0.5em");
 	input.style("outline", "none");
 
