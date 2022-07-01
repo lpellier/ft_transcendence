@@ -40,20 +40,40 @@ function outputCountdown() {
 }
 
 function outputScore(map_width : number, map_height : number) {
-	push();
-	textSize(consts.std_font_size);
-	push();
-	fill((game.score[0] > game.score[1] ? "white" : "grey")); // highlight better score
-	if (game.score[0].toString().length > 1)
-		text(game.score[0], map_width / 2 - map_width / 10, map_height / 9); // score
-	else
-		text(game.score[0], map_width / 2 - map_width / 16, map_height / 9); // score
-	pop();
-	push();
-	fill((game.score[1] > game.score[0] ? "white" : "grey"));
-	text(game.score[1], map_width / 2 + map_width / 30, map_height / 9); // score
-	pop();
-	pop();
+	if (game.players.length != 2)
+		return ;
+	if (game.players[0].index === 1) {
+		push();
+		textSize(consts.std_font_size);
+		push();
+		fill((game.score[0] > game.score[1] ? "white" : "grey")); // highlight better score
+		if (game.score[0].toString().length > 1)
+			text(game.score[0], map_width / 2 - map_width / 10, map_height / 9); // score
+		else
+			text(game.score[0], map_width / 2 - map_width / 16, map_height / 9); // score
+		pop();
+		push();
+		fill((game.score[1] > game.score[0] ? "white" : "grey"));
+		text(game.score[1], map_width / 2 + map_width / 30, map_height / 9); // score
+		pop();
+		pop();
+	}
+	else {
+		push();
+		textSize(consts.std_font_size);
+		push();
+		fill((game.score[1] > game.score[0] ? "white" : "grey")); // highlight better score
+		if (game.score[1].toString().length > 1)
+			text(game.score[1], map_width / 2 - map_width / 10, map_height / 9); // score
+		else
+			text(game.score[1], map_width / 2 - map_width / 16, map_height / 9); // score
+		pop();
+		push();
+		fill((game.score[0] > game.score[1] ? "white" : "grey"));
+		text(game.score[0], map_width / 2 + map_width / 30, map_height / 9); // score
+		pop();
+		pop();
+	}
 }
 
 function outputPlayerNames() {
@@ -61,7 +81,13 @@ function outputPlayerNames() {
 	textSize(consts.small_font_size / 2);
 	fill("rgba(255, 255, 255, 0.6)");
 	textAlign(CENTER)
-	text(game.players[0].username, consts.WIDTH * 0.1, consts.HEIGHT * 0.95);
-	text(game.players[1].username, consts.WIDTH * 0.9, consts.HEIGHT * 0.95);
+	if (game.players[0].index === 1) {
+		text(game.players[0].username, consts.WIDTH * 0.1, consts.HEIGHT * 0.95);
+		text(game.players[1].username, consts.WIDTH * 0.9, consts.HEIGHT * 0.95);
+	}
+	else {
+		text(game.players[1].username, consts.WIDTH * 0.1, consts.HEIGHT * 0.95);
+		text(game.players[0].username, consts.WIDTH * 0.9, consts.HEIGHT * 0.95);	
+	}
 	pop();
 }
