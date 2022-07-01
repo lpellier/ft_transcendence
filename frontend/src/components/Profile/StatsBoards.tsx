@@ -11,6 +11,7 @@ import UpdateIcon from '@mui/icons-material/Update';
 
 import { phoneSize } from 'index';
 import {StatTitle, StatBox} from "../../styles/tsxStyles/Home"
+import axios from 'axios'
 
 function BoardComponent(props: {icon: any, title: string}) {
 	return(
@@ -54,6 +55,23 @@ function TrophyBox(){
 }
 
 function LeaderboardBox(){
+	// const [leaders, setLeaders] = useState<>()
+
+	// useEffect(() => {
+
+	// 	axios.get(
+	// 		"http://127.0.0.1:3001/stats/lead",
+	// 		{
+	// 			withCredentials: true
+	// 		}
+	// 	)
+	// 	.then(res => {
+	// 		console.log("res : ", res)
+	// 	})
+	// 	.catch(err => {
+	// 		console.log("Get leader failed : ", err)
+	// 	})
+	// }, [leaders])
 
 	return(
 		<Stack spacing={1}>
