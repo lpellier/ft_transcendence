@@ -65,7 +65,7 @@ export class GameGateway {
 
 	timestep : number = 15; // ms
 
-	handleDisconnect(client : Socket) {
+	handleDisconnect(client : Socket) { // ? triggers when user disconnects from the website (either refresh or close tab)
 		let index = -1;
 		if ((index = this.clients.indexOf(client.id)) != -1) {
 			this.clients.splice(index, 1);
@@ -75,6 +75,19 @@ export class GameGateway {
 					if (player.id === client.id) {
 						this.server.to(game.room_id).emit("player-disconnect");
 						clearInterval(game.update_interval);
+						if (game.players.length === 2 && game.state === "in-game") {
+							if (game.players.indexOf(player) === 0) {
+								this.game_service.incrementVictories(game.players[1].real_id, game.score[1]);
+								this.game_service.createMatch({ladder: 0, winnerId : game.players[1].real_id, loserId: game.players[0].real_id});
+							} 
+							else {
+								this.game_service.incrementVictories(game.players[0].real_id, game.score[0]);
+								this.game_service.createMatch({ladder: 0, winnerId : game.players[0].real_id, loserId: game.players[1].real_id});
+							}
+							this.game_service.incrementLosses(player.real_id, game.score[game.players.indexOf(player)]);
+						}
+						game.state = "game-over"
+						console.log("been here handleDisconnect");
 						this.games.splice(this.games.indexOf(game), 1);
 						return ;
 					}
@@ -83,20 +96,33 @@ export class GameGateway {
 		}
 	}
 
-	@SubscribeMessage("quit-ongoing-game")
+	@SubscribeMessage("quit-ongoing-game") // ? triggers when player quits by going somewhere else on the website
 	handleQuitOngoing(@ConnectedSocket() client : Socket) {
 		for (let game of this.games) {
 			for (let player of game.players) {
 				if (player.id === client.id) {
 					this.server.to(game.room_id).emit("player-disconnect");
 					clearInterval(game.update_interval);
+					if (game.players.length === 2 && game.state === "in-game") {
+						if (game.players.indexOf(player) === 0) {
+							this.game_service.incrementVictories(game.players[1].real_id, game.score[1]);
+							this.game_service.createMatch({ladder: 0, winnerId : game.players[1].real_id, loserId: game.players[0].real_id});
+						} 
+						else {
+							this.game_service.incrementVictories(game.players[0].real_id, game.score[0]);
+							this.game_service.createMatch({ladder: 0, winnerId : game.players[0].real_id, loserId: game.players[1].real_id});
+						}
+						this.game_service.incrementLosses(player.real_id, game.score[game.players.indexOf(player)]);
+					}
+					game.state = "game-over"
+					console.log("been here handleQuitOngoing");
 					this.games.splice(this.games.indexOf(game), 1);
 					return ;
 				}
 			}
 		}
 	}
-	@SubscribeMessage("quit-own-game")
+	@SubscribeMessage("quit-own-game") // ? triggers when player hits return button while waiting for player
 	handleQuitOwn(@ConnectedSocket() client : Socket) {
 		for (let game of this.games) {
 			for (let player of game.players) {
@@ -182,7 +208,8 @@ export class GameGateway {
 			game.score, game.pong.value);
 		for (let i = 1; i < 5; i++)
 			setTimeout(() => {
-				test.to(game.room_id).emit("countdown-server");
+				if (game.state != "game-over")
+					test.to(game.room_id).emit("countdown-server");
 				if (i === 4) {
 					let calculate_state : string = "none";
 					game.update_interval = setInterval(() => {
@@ -200,8 +227,8 @@ export class GameGateway {
 								w_id = game.players[1].real_id;
 								l_id = game.players[0].real_id;
 							}
-							this.game_service.incrementVictories(w_id);
-							this.game_service.incrementLosses(l_id);
+							this.game_service.incrementVictories(w_id, game.score[0] > game.score[1] ? game.score[0] : game.score[1]);
+							this.game_service.incrementLosses(l_id, game.score[0] < game.score[1] ? game.score[0] : game.score[1]);
 							this.game_service.createMatch({ladder: 0, winnerId : w_id, loserId: l_id});
 							this.games.splice(this.games.indexOf(game), 1);
 							return ;
@@ -214,10 +241,12 @@ export class GameGateway {
 							if (!game.over()) {
 								setTimeout(() => {
 									game.scorePoint();
-									test.to(game.room_id).emit("relaunch");
+									if (game.state != "game-over")
+										test.to(game.room_id).emit("relaunch");
 									for (var j = 1; j < 3; j++) {
 										setTimeout((index : number) => {
-											test.to(game.room_id).emit("countdown-server");
+											if (game.state != "game-over")
+												test.to(game.room_id).emit("countdown-server");
 											if (index === 2) {
 												calculate_state = "none";
 											}

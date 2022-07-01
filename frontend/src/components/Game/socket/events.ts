@@ -132,12 +132,7 @@ function listenMoveEvents() {
 		pong_value : number
 	) => {
 			if (game.state === "in-game" || game.state === "relaunch-countdown" || game.state === "countdown") {
-				if (game.score[0] != score[0] || game.score[1] != score[1]) {
-					game.frame_count_shake = 0;
-					consts.playScore();
-				}
-				game.score[0] = score[0];
-				game.score[1] = score[1];
+				
 				game.pong.pos[0] = pong_pos[0] * consts.WIDTH / 1200;
 				game.pong.pos[1] = pong_pos[1] * consts.HEIGHT / 750;
 				game.pong.velocity = pong_vel;
@@ -146,18 +141,36 @@ function listenMoveEvents() {
 					game.players[0].pos[1] = p1_state[1][1] * consts.HEIGHT / 750;
 					game.players[1].pos[0] = p2_state[1][0] * consts.WIDTH / 1200;
 					game.players[1].pos[1] = p2_state[1][1] * consts.HEIGHT / 750;
+					if (game.score[0] != score[0] || game.score[1] != score[1]) {
+						game.frame_count_shake = 0;
+						consts.playScore();
+					}
+					game.score[0] = score[0];
+					game.score[1] = score[1];
 				}
 				else if (p2_state[0] === socket.id) {
 					game.players[0].pos[0] = p2_state[1][0] * consts.WIDTH / 1200;
 					game.players[0].pos[1] = p2_state[1][1] * consts.HEIGHT / 750;
 					game.players[1].pos[0] = p1_state[1][0] * consts.WIDTH / 1200;
 					game.players[1].pos[1] = p1_state[1][1] * consts.HEIGHT / 750;
+					if (game.score[0] != score[1] || game.score[1] != score[0]) {
+						game.frame_count_shake = 0;
+						consts.playScore();
+					}
+					game.score[0] = score[1];
+					game.score[1] = score[0];
 				}
 				else { // spectate
 					game.players[0].pos[0] = p1_state[1][0] * consts.WIDTH / 1200;
 					game.players[0].pos[1] = p1_state[1][1] * consts.HEIGHT / 750;
 					game.players[1].pos[0] = p2_state[1][0] * consts.WIDTH / 1200;
 					game.players[1].pos[1] = p2_state[1][1] * consts.HEIGHT / 750;
+					if (game.score[0] != score[0] || game.score[1] != score[1]) {
+						game.frame_count_shake = 0;
+						consts.playScore();
+					}
+					game.score[0] = score[0];
+					game.score[1] = score[1];
 				}
 				game.pong.value = pong_value;	
 			}
