@@ -27,7 +27,7 @@ interface Message {
 
 interface Stats {
 	id: number;
-	wins: number;
+	victories: number;
 	losses: number;
 	level: number;
 	userId: number;

@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import ListItem from '@mui/material/ListItem';
 import List from '@mui/material/List';
-import ListItemText from '@mui/material/ListItemText';
+import Button from '@mui/material/Button';
 import {User} from 'interfaces';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import TimelineIcon from '@mui/icons-material/Timeline';
@@ -85,16 +85,20 @@ function LeaderboardBox(props: {users: User[]}){
 	
 		return (
 			<List >
-				{props.users.map(item => (
+				<Stack direction="row">
+					<h4> Wins </h4>
+					<h4> Level </h4>
+				</Stack>
+				{leaders.map(item => (
 					<div key={item.id}>
-						<ListItem>
-							<ListItemText primary={item.username}/>
-						</ListItem>
+							<ListItem >
+										<Button> {item.victories} </Button>
+										<Button> {item.level} </Button>
+							</ListItem>
 					</div>
 				))}
 			</List>
 		)
-	
 	}
 
 	return(
