@@ -1,4 +1,5 @@
 import Stack from '@mui/material/Stack'
+import Container from '@mui/material/Container'
 import Box from '@mui/material/Box'
 import StatsBoards from './StatsBoards'
 import Typography from '@mui/material/Typography'
@@ -7,10 +8,11 @@ import {PlayerBarStyle} from "../../styles/tsxStyles/Home";
 import './../../styles/Other/SkillBar.css'
 
 const OverallBoxStyle = {
-	justifyContent: 'center',
-	alignItems: 'center',
+	paddingTop: '4vh',
 	display: 'flex',
+	justifyContent: 'center',
 }
+
 
 function PlayerInfoBand(props: {level: number}) {
 	return (
@@ -27,17 +29,15 @@ function PlayerInfoBand(props: {level: number}) {
 export default function Profile(props: {user: User | undefined, users: User[]}) {
 
     return (
-		<Box sx={{OverallBoxStyle}}>
-			<Box sx={{width: '85vw',  whiteSpace: 'nowrap'}}>
-				{props.user?
-					<Stack spacing={1}>
-						<PlayerInfoBand level={props.user.level}/>
-						<StatsBoards user={props.user} users={props.users}/>
-					</Stack>
-						:
-						<div/>
-				}
-			</Box>
+		<Box sx={OverallBoxStyle}>
+			{props.user?
+				<Stack spacing={1}>
+					<PlayerInfoBand level={props.user.level}/>
+					<StatsBoards user={props.user} users={props.users}/>
+				</Stack>
+					:
+					<div/>
+			}
 		</Box>
     );
 }

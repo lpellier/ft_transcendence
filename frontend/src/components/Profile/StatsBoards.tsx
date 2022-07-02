@@ -8,7 +8,6 @@ import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import TimelineIcon from '@mui/icons-material/Timeline';
 import MilitaryTechIcon from '@mui/icons-material/MilitaryTech';
 import UpdateIcon from '@mui/icons-material/Update';
-import { phoneSize } from 'index';
 import {StatTitle, StatBox} from "../../styles/tsxStyles/Home"
 import {Stats} from 'interfaces'
 import axios from 'axios'
@@ -26,10 +25,14 @@ function BoardComponent(props: {icon: any, title: string}) {
 
 function StatsBox(props: {user: User}){
 	const [totGames, setTotGame] = useState<number>(props.user.victories + props.user.losses)
+	const [wins, setWins] = useState<number>(props.user.victories)
+	const [losses, setLosses] = useState<number>(props.user.losses)
 
 	useEffect(() => {
-		setTotGame(props.user.victories + props.user.losses)
-	}, [props.user])
+		setWins(props.user.victories)
+		setLosses(props.user.losses)
+		setTotGame(wins + losses)
+	}, [])
 
 	return (
 		<Stack spacing={1}>
@@ -37,15 +40,17 @@ function StatsBox(props: {user: User}){
 				icon={<TimelineIcon />} 
 				title="Stats" />
 				<Box sx={StatBox}>
-					<Stack direction="row" spacing={2}>
-						<Button>Victories</Button>
-						<Button>Games lost</Button>
-						<Button>Total games</Button>
-					</Stack>
-					<Stack direction="row" spacing={8}>
-						<Button>  {props.user.victories} </Button>
-						<Button>  {props.user.losses} </Button>
-						<Button>  {totGames} </Button>
+					<Stack>
+						<Stack direction="row" spacing={2}>
+							<Button>Victories</Button>
+							<Button>Games lost</Button>
+							<Button>Total games</Button>
+						</Stack>
+						<Stack direction="row" spacing={8}>
+							<Button>  {wins} </Button>
+							<Button>  {losses} </Button>
+							<Button>  {totGames} </Button>
+						</Stack>
 					</Stack>
 				</Box>
 		</Stack>
@@ -158,27 +163,7 @@ function MatchhistoryBox(){
 }
 
 export default function StatsBoards(props: {user: User, users: User[]}) {
-	const [width, setWidth] = useState(window.innerWidth);
 
-	useEffect(() => {
-		
-		const handleResizeWindow = () => setWidth(window.innerWidth);
-		 window.addEventListener("resize", handleResizeWindow);
-		 return () => {
-		   window.removeEventListener("resize", handleResizeWindow);
-		 };
-	}, [])
-
-	if (width <= phoneSize) {
-	  return (
-		<Stack spacing={1}>
-				<StatsBox user={props.user}/>
-				<TrophyBox />
-				<LeaderboardBox users={props.users}/>
-				<MatchhistoryBox />
-		</Stack>
-	  );
-	}
 	return (
 		<Stack direction="row" spacing={1}>
 			<Stack spacing={1}>

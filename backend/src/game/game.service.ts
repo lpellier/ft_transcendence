@@ -18,26 +18,40 @@ export class GameService {
                     ]
                 },
                 ladder: m_data.ladder,
-                winnerId: m_data.winnerId,
+                winnerId: m_data.winnerId
             }
         });
         return match.id;
     }
 
-    async incrementVictories(user_id : number) {
+    async incrementVictories(user_id : number, points_scored : number) {
+        let user_stats = await this.prisma.stats.findUnique({
+            where: {userId: user_id}
+        })
+        let current_xp : number = user_stats.xp + points_scored * 2;
+        let current_level : number = +(0.2 * Math.sqrt(current_xp)).toFixed(2) + 1;
         const victories = await this.prisma.stats.update({
             where: {userId: user_id},
             data: {
-                victories: {increment: 1}
+                victories: {increment: 1},
+                xp: current_xp,
+                level: current_level
             }
         });
     }
 
-    async incrementLosses(user_id : number) {
+    async incrementLosses(user_id : number, points_scored : number) {
+        let user_stats = await this.prisma.stats.findUnique({
+            where: {userId: user_id}
+        })
+        let current_xp : number = user_stats.xp + points_scored;
+        let current_level : number = +(0.2 * Math.sqrt(current_xp)).toFixed(2) + 1;
         const losses = await this.prisma.stats.update({
             where: {userId: user_id},
             data: {
-                losses: {increment: 1}
+                losses: {increment: 1},
+                xp: current_xp,
+                level: current_level
             }
         });
     }

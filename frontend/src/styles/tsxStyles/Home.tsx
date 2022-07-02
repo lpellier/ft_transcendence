@@ -1,5 +1,4 @@
 const PlayerBarStyle = {	
-	width: '100%',
     textAlign: 'center',
     alignComponent: 'center',
     padding: '1%',
@@ -25,7 +24,8 @@ const StatTitle = {
 }
 
 const StatBox = {
-	width: '30vw',
+	display: 'flex',
+	justifyContent: 'center',
 
     backgroundColor: 'rgb(211, 172, 223)',
 	color: 'white',
