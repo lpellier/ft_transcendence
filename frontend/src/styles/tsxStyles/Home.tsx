@@ -24,16 +24,13 @@ const StatTitle = {
 }
 
 const StatBox = {
-	display: 'flex',
-	justifyContent: 'center',
-
     backgroundColor: 'rgb(211, 172, 223)',
 	color: 'white',
 	border: '3px solid black',
     height: '30vh',
     overflowY: 'scroll',
     overflow: 'auto',
-	paddingLeft: '3vw',
+	paddingTop: '4%',
 }
 
 const SkillBarContourStyle = {

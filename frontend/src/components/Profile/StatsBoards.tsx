@@ -3,6 +3,7 @@ import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
 import {User} from 'interfaces';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import TimelineIcon from '@mui/icons-material/Timeline';
@@ -11,6 +12,13 @@ import UpdateIcon from '@mui/icons-material/Update';
 import {StatTitle, StatBox} from "../../styles/tsxStyles/Home"
 import {Stats} from 'interfaces'
 import axios from 'axios'
+
+
+const ButtonStatStyle = {
+	backgroundColor: "rgb(170, 50, 190)",
+	width: '20%',
+}
+
 
 function BoardComponent(props: {icon: any, title: string}) {
 	return(
@@ -42,14 +50,14 @@ function StatsBox(props: {user: User}){
 				<Box sx={StatBox}>
 					<Stack>
 						<Stack direction="row" spacing={2}>
-							<Button>Victories</Button>
-							<Button>Games lost</Button>
-							<Button>Total games</Button>
+							<Button variant="contained" style={ButtonStatStyle}>Victories</Button>
+							<Button variant="contained" style={ButtonStatStyle}>Games lost</Button>
+							<Button variant="contained" style={ButtonStatStyle}>Total games</Button>
 						</Stack>
-						<Stack direction="row" spacing={8}>
-							<Button>  {wins} </Button>
-							<Button>  {losses} </Button>
-							<Button>  {totGames} </Button>
+						<Stack direction="row" spacing={2}>
+							<Button style={{width: '20%'}}> {wins} </Button>
+							<Button style={{width: '20%'}}> {losses} </Button>
+							<Button style={{width: '20%'}}> {totGames} </Button>
 						</Stack>
 					</Stack>
 				</Box>
@@ -110,30 +118,30 @@ function LeaderboardBox(props: {users: User[]}){
 	function LeaderList(props: {users: User[]}) {
 
 		return (
-			<div >
-				<Stack direction="row" spacing={3}>
-					<Button> Best Player </Button>
-					<Button> Wins </Button>
-					<Button> Losses </Button>
-					<Button> Level </Button>
+			<Box sx={{ flexGrow: 1 }} >
+				<Stack direction="row" spacing={2}>
+						<Button variant="contained" style={ButtonStatStyle}> Best Player </Button>
+						<Button variant="contained" style={ButtonStatStyle}> Wins </Button>
+						<Button variant="contained" style={ButtonStatStyle}> Losses </Button>
+						<Button variant="contained" style={ButtonStatStyle}> Level </Button>
 				</Stack>
-				{leaders.map(item => (
-					<div key={item.id}>
-							<Stack direction="row" spacing={8}>
-								<Button> {FindUserName(item.userId)} </Button>
-								<Button> {item.victories} </Button>
-								<Button> {item.losses} </Button>
-								<Button> {Math.trunc(item.level)} </Button>
+					{leaders.map(item => (
+						<div  key={item.id}>
+							<Stack direction="row" spacing={2}>
+									<Button style={{width: '20%'}}> {FindUserName(item.userId)} </Button>
+									<Button style={{width: '20%'}}> {item.victories} </Button>
+									<Button style={{width: '20%'}}> {item.losses} </Button>
+									<Button style={{width: '20%'}}> {Math.trunc(item.level)} </Button>
 							</Stack>
 					</div>
-				))}
-			</div>
+					))}
+			</Box>
 		)
 	}
 
 	return(
 		<div>
-			{leaders? 
+			{leaders?
 				<Stack spacing={1}>
 					<BoardComponent 
 						icon={<MilitaryTechIcon />}
