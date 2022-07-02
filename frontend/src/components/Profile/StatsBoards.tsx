@@ -2,6 +2,9 @@ import {useState, useEffect} from 'react'
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import ListItem from '@mui/material/ListItem';
+import List from '@mui/material/List';
+import ListItemText from '@mui/material/ListItemText';
 import {User} from 'interfaces';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import TimelineIcon from '@mui/icons-material/Timeline';
@@ -9,6 +12,7 @@ import MilitaryTechIcon from '@mui/icons-material/MilitaryTech';
 import UpdateIcon from '@mui/icons-material/Update';
 import { phoneSize } from 'index';
 import {StatTitle, StatBox} from "../../styles/tsxStyles/Home"
+import {Stats} from 'interfaces'
 import axios from 'axios'
 
 function BoardComponent(props: {icon: any, title: string}) {
@@ -56,37 +60,59 @@ function TrophyBox(){
 		);
 }
 
-function LeaderboardBox(){
-	// const [leaders, setLeaders] = useState<>()
 
-	// useEffect(() => {
-
-	// 	axios.get(
-	// 		"http://127.0.0.1:3001/stats/lead",
-	// 		{
-	// 			withCredentials: true
-	// 		}
-	// 	)
-	// 	.then(res => {
-	// 		console.log("res : ", res)
-	// 	})
-	// 	.catch(err => {
-	// 		console.log("Get leader failed : ", err)
-	// 	})
-	// }, [leaders])
+function LeaderboardBox(props: {users: User[]}){
+	const [leaders, setLeaders] = useState<Stats[]>([])
+	
+	useEffect(() => {
+		
+		axios.get(
+			"http://127.0.0.1:3001/stats/lead",
+			{
+			withCredentials: true
+		}
+		)
+		.then(res => {
+			console.log("Get leader success: ", res.data)
+			setLeaders(res.data)
+		})
+		.catch(err => {
+			console.log("Get leader failed : ", err)
+		})
+	}, [])
+	
+	function LeaderList(props: {users: User[]}) {
+	
+		return (
+			<List >
+				{props.users.map(item => (
+					<div key={item.id}>
+						<ListItem>
+							<ListItemText primary={item.username}/>
+						</ListItem>
+					</div>
+				))}
+			</List>
+		)
+	
+	}
 
 	return(
-		<Stack spacing={1}>
-			<BoardComponent 
-				icon={<MilitaryTechIcon />}
-				title="Leaderboard" />
-				<Box sx={StatBox}>
-					<h3> Rank 1 : 'name first winner' 'level first winner'</h3>
-					<h3> Rank 2 : 'name second winner' 'level second winner'</h3>
-					<h3> Rank 3 : 'name third winner' 'level third winner'</h3>
-				</Box>
-			</Stack>
-		);
+		<div>
+			{leaders? 
+				<Stack spacing={1}>
+					<BoardComponent 
+						icon={<MilitaryTechIcon />}
+						title="Leaderboard" />
+						<Box sx={StatBox}>
+							<LeaderList users={props.users}/>
+						</Box>
+				</Stack>
+					:
+				<div/>
+			}
+		</div>
+	);
 }
 
 function MatchhistoryBox(){
@@ -102,7 +128,7 @@ function MatchhistoryBox(){
 	);
 }
 
-export default function StatsBoards(props: {user: User}) {
+export default function StatsBoards(props: {user: User, users: User[]}) {
 	const [width, setWidth] = useState(window.innerWidth);
 
 	useEffect(() => {
@@ -119,7 +145,7 @@ export default function StatsBoards(props: {user: User}) {
 		<Stack spacing={1}>
 				<StatsBox user={props.user}/>
 				<TrophyBox />
-				<LeaderboardBox />
+				<LeaderboardBox users={props.users}/>
 				<MatchhistoryBox />
 		</Stack>
 	  );
@@ -131,7 +157,7 @@ export default function StatsBoards(props: {user: User}) {
 				<TrophyBox />
 			</Stack>
 			<Stack spacing={1}>
-				<LeaderboardBox />
+				<LeaderboardBox users={props.users}/>
 				<MatchhistoryBox />
 			</Stack>
 		</Stack>

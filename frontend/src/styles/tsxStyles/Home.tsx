@@ -1,7 +1,3 @@
-const StatsPartStyle = {
-    width: '100%',
-}
-
 const PlayerBarStyle = {	
 	width: '100%',
     textAlign: 'center',
@@ -29,7 +25,7 @@ const StatTitle = {
 }
 
 const StatBox = {
-	width: '45vw',
+	width: '30vw',
 
     backgroundColor: 'rgb(211, 172, 223)',
 	color: 'white',
@@ -50,7 +46,6 @@ const TitleStyle = {
 	marginRight: '10px',
 }
 
-export {StatsPartStyle,
-        PlayerBarStyle, SkillBarStyle,
+export {PlayerBarStyle, SkillBarStyle,
         StatTitle, StatBox, SkillBarContourStyle,
         TitleStyle}

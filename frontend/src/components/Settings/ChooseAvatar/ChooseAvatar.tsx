@@ -10,8 +10,6 @@ import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn';
 import { CustomAvatarStyle } from '../../../styles/tsxStyles/Settings/Avatar';
 import {ModalChooseAvatar} from '../../../styles/tsxStyles/Settings/Avatar'
 import {ButtonModalStyle, IconStyle} from '../../../styles/tsxStyles/AppBar/PongMenu'
-import { redTheme, greenTheme } from '../../Themes'
-import { ThemeProvider } from '@mui/material/styles';
 import { styled } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';

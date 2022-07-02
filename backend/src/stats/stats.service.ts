@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Stats, PrismaClient } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 
 @Injectable()
 export class StatsService {
@@ -9,9 +9,8 @@ export class StatsService {
 		return this.prisma.stats.findMany({
 			orderBy: {
 				level: 'desc',
-			  }, 
+			}, 
 			take : 3,
 		});
 	}
-	
 }

@@ -4,10 +4,6 @@ import Box from '@mui/material/Box'
 import Stack from '@mui/material/Stack'
 import TextField from '@mui/material/TextField'
 import axios from 'axios'
-import {getUser} from 'requests'
-import { User, init_user } from 'interfaces'
-
-const profileUrl= "http://127.0.0.1:3000/profile"
 
 const BoxStyle = {
 	width: '30vw',
