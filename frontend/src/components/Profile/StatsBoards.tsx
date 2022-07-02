@@ -123,7 +123,7 @@ function LeaderboardBox(props: {users: User[]}){
 								<Button> {FindUserName(item.userId)} </Button>
 								<Button> {item.victories} </Button>
 								<Button> {item.losses} </Button>
-								<Button> {item.level} </Button>
+								<Button> {Math.trunc(item.level)} </Button>
 							</Stack>
 					</div>
 				))}

@@ -34,14 +34,21 @@ function SkillBar(props: {progression: number}) {
 	);
 }
 
-function PlayerInfoBand(props: {level: number, xp: number}) {
+function PlayerInfoBand(props: {level: number}) {
+	const [xp, setXp] = useState<number>((props.level * 100) % 100) 
+	const [level, setLevel] = useState<number>(Math.trunc(props.level)) 
+
+	useEffect(() => {
+		setXp((props.level * 100) % 100)
+	}, [])
+	
 	return (
 			<Box sx={PlayerBarStyle}>
 				<Stack spacing={2}>
 					<Typography variant="h6">
-						Level {props.level}
+						Level {level}
 					</Typography>
-					<SkillBar progression={props.xp}/>
+					<SkillBar progression={xp}/>
 				</Stack>
 			</Box>
 	);
@@ -53,7 +60,7 @@ export default function Profile(props: {user: User | undefined, users: User[]}) 
 		<Box sx={OverallBoxStyle}>
 			{props.user?
 				<Stack spacing={1}>
-					<PlayerInfoBand level={props.user.level} xp={props.user.level}/>
+					<PlayerInfoBand level={props.user.level}/>
 					<StatsBoards user={props.user} users={props.users}/>
 				</Stack>
 					:
