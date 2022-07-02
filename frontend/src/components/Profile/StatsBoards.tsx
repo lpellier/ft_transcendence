@@ -1,5 +1,6 @@
 import {useState, useEffect} from 'react'
 import Stack from '@mui/material/Stack';
+import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import ListItem from '@mui/material/ListItem';
@@ -82,22 +83,24 @@ function LeaderboardBox(props: {users: User[]}){
 	}, [])
 	
 	function LeaderList(props: {users: User[]}) {
-	
+		
+
+
 		return (
-			<List >
-				<Stack direction="row">
-					<h4> Wins </h4>
-					<h4> Level </h4>
+			<div >
+				<Stack direction="row" spacing={3}>
+					<Button> Wins </Button>
+					<Button> Level </Button>
 				</Stack>
 				{leaders.map(item => (
 					<div key={item.id}>
-							<ListItem >
-										<Button> {item.victories} </Button>
-										<Button> {item.level} </Button>
-							</ListItem>
+							<Stack direction="row" spacing={3}>
+								<Button> {item.victories} </Button>
+								<Button> {item.level} </Button>
+							</Stack>
 					</div>
 				))}
-			</List>
+			</div>
 		)
 	}
 
