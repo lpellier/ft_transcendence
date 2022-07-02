@@ -26,12 +26,12 @@ model User {
 }
 
 model Stats {
-  id        Int  @id @default(autoincrement())
-  victories Int  @default(0)
-  losses    Int  @default(0)
-  level     Int  @default(1)
-  userId    Int  @unique
-  User      User @relation(fields: [userId], references: [id])
+  id        Int  	@id @default(autoincrement())
+  victories Int  	@default(0)
+  losses    Int  	@default(0)
+  level     Int  	@default(1)
+  userId    Int  	@unique
+  User      User	@relation(fields: [userId], references: [id])
 }
 
 model Match {

@@ -8,7 +8,7 @@ export class StatsService {
 	async findLeaders() {
 		return this.prisma.stats.findMany({
 			orderBy: {
-				level: 'desc',
+				victories: 'desc',
 			}, 
 			take : 3,
 		});

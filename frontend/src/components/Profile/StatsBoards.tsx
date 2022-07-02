@@ -1,10 +1,7 @@
 import {useState, useEffect} from 'react'
 import Stack from '@mui/material/Stack';
-import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import ListItem from '@mui/material/ListItem';
-import List from '@mui/material/List';
 import Button from '@mui/material/Button';
 import {User} from 'interfaces';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
@@ -40,9 +37,16 @@ function StatsBox(props: {user: User}){
 				icon={<TimelineIcon />} 
 				title="Stats" />
 				<Box sx={StatBox}>
-					<h3> Victories : {props.user.victories} </h3>
-					<h3> Games lost : {props.user.losses} </h3>
-					<h3> Total games : {totGames} </h3>
+					<Stack direction="row" spacing={2}>
+						<Button>Victories</Button>
+						<Button>Games lost</Button>
+						<Button>Total games</Button>
+					</Stack>
+					<Stack direction="row" spacing={8}>
+						<Button>  {props.user.victories} </Button>
+						<Button>  {props.user.losses} </Button>
+						<Button>  {totGames} </Button>
+					</Stack>
 				</Box>
 		</Stack>
 	);
@@ -70,8 +74,8 @@ function LeaderboardBox(props: {users: User[]}){
 		axios.get(
 			"http://127.0.0.1:3001/stats/lead",
 			{
-			withCredentials: true
-		}
+				withCredentials: true
+			}
 		)
 		.then(res => {
 			console.log("Get leader success: ", res.data)
@@ -81,21 +85,39 @@ function LeaderboardBox(props: {users: User[]}){
 			console.log("Get leader failed : ", err)
 		})
 	}, [])
+
+
+	function FindUserName(userId: number) {
+		let username;
+		
+		for (let i in props.users)
+		{
+			if (props.users[Number(i)].id === userId){
+				username = props.users[Number(i)].username;
+			}
+		}
+
+		return (
+			<div> {username} </div>
+		)
+	}
 	
 	function LeaderList(props: {users: User[]}) {
-		
-
 
 		return (
 			<div >
 				<Stack direction="row" spacing={3}>
+					<Button> Best Player </Button>
 					<Button> Wins </Button>
+					<Button> Losses </Button>
 					<Button> Level </Button>
 				</Stack>
 				{leaders.map(item => (
 					<div key={item.id}>
-							<Stack direction="row" spacing={3}>
+							<Stack direction="row" spacing={8}>
+								<Button> {FindUserName(item.userId)} </Button>
 								<Button> {item.victories} </Button>
+								<Button> {item.losses} </Button>
 								<Button> {item.level} </Button>
 							</Stack>
 					</div>
