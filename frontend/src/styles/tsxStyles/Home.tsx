@@ -31,6 +31,7 @@ const StatBox = {
     overflowY: 'scroll',
     overflow: 'auto',
 	paddingTop: '4%',
+	paddingLeft: '4%',
 }
 
 const SkillBarContourStyle = {

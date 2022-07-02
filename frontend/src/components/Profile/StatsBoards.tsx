@@ -14,9 +14,14 @@ import {Stats} from 'interfaces'
 import axios from 'axios'
 
 
-const ButtonStatStyle = {
+const ButtonLeadStyle = {
 	backgroundColor: "rgb(170, 50, 190)",
 	width: '20%',
+}
+
+const ButtonStatStyle = {
+	backgroundColor: "rgb(170, 50, 190)",
+	width: '29%',
 }
 
 
@@ -55,9 +60,9 @@ function StatsBox(props: {user: User}){
 							<Button variant="contained" style={ButtonStatStyle}>Total games</Button>
 						</Stack>
 						<Stack direction="row" spacing={2}>
-							<Button style={{width: '20%'}}> {wins} </Button>
-							<Button style={{width: '20%'}}> {losses} </Button>
-							<Button style={{width: '20%'}}> {totGames} </Button>
+							<Button style={{width: '29%'}}> {wins} </Button>
+							<Button style={{width: '29%'}}> {losses} </Button>
+							<Button style={{width: '29%'}}> {totGames} </Button>
 						</Stack>
 					</Stack>
 				</Box>
@@ -120,10 +125,10 @@ function LeaderboardBox(props: {users: User[]}){
 		return (
 			<Box sx={{ flexGrow: 1 }} >
 				<Stack direction="row" spacing={2}>
-						<Button variant="contained" style={ButtonStatStyle}> Best Player </Button>
-						<Button variant="contained" style={ButtonStatStyle}> Wins </Button>
-						<Button variant="contained" style={ButtonStatStyle}> Losses </Button>
-						<Button variant="contained" style={ButtonStatStyle}> Level </Button>
+						<Button variant="contained" style={ButtonLeadStyle}> Best Player </Button>
+						<Button variant="contained" style={ButtonLeadStyle}> Wins </Button>
+						<Button variant="contained" style={ButtonLeadStyle}> Losses </Button>
+						<Button variant="contained" style={ButtonLeadStyle}> Level </Button>
 				</Stack>
 					{leaders.map(item => (
 						<div  key={item.id}>
@@ -166,7 +171,7 @@ function MatchhistoryBox(){
 				title="Match history" />
 				<Box sx={StatBox}>
 				</Box>
-			</Stack>
+		</Stack>
 	);
 }
 
@@ -174,14 +179,14 @@ export default function StatsBoards(props: {user: User, users: User[]}) {
 
 	return (
 		<Stack direction="row" spacing={1}>
-			<Stack spacing={1}>
-				<StatsBox user={props.user}/>
-				<TrophyBox />
+				<Stack spacing={1}>
+					<StatsBox user={props.user}/>
+					<TrophyBox />
+				</Stack>
+				<Stack spacing={1}>
+					<LeaderboardBox users={props.users}/>
+					<MatchhistoryBox />
+				</Stack>
 			</Stack>
-			<Stack spacing={1}>
-				<LeaderboardBox users={props.users}/>
-				<MatchhistoryBox />
-			</Stack>
-		</Stack>
 	);
 }
