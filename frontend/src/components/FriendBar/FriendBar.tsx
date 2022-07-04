@@ -58,13 +58,13 @@ export default function FriendBar(props: {user: User, users: User[]}) {
             console.log('new connection -> ', userId);
             setStatusMap(statusMap.set(userId, 'online'));
         })
-    }, []);
+    }, [statusMap]);
 
     useEffect(() => {
         socket.on('new disconnection', (userId: number) => {
             setStatusMap(statusMap.set(userId, 'offline'));
         })
-    }, [])
+    }, [statusMap]);
 
     useEffect(() => {
         socket.emit('get friends', props.user.id);
@@ -95,7 +95,6 @@ export default function FriendBar(props: {user: User, users: User[]}) {
         }
     }, [])
 
-    console.log('friends = ', friends);
 
     function addFriendSubmit(e: any) {
         e.preventDefault();
