@@ -94,7 +94,7 @@ function ProjectName() {
 	);
 }
 
-export default function SearchAppBar(props: {user: User, users: User[]}) {
+export default function SearchAppBar(props: {user: User, users: User[], setOtherUser: React.Dispatch<React.SetStateAction<User | undefined>>}) {
 	const [user, setUser] = useState<User>(props.user)
 
 	useEffect(() => {
@@ -127,9 +127,11 @@ export default function SearchAppBar(props: {user: User, users: User[]}) {
 		/>
         <Toolbar style={ BarStyle }>
 			<nav>
-				<Link to="profile" style={{ textDecoration: 'none' }}>
-					<PlayerAvatar image={'http://127.0.0.1:3001/avatars/' + user.id + '.png'} />
-				</Link>
+				<Button onClick={() => props.setOtherUser(props.user)}>
+					<Link to="profile" style={{ textDecoration: 'none' }}>
+						<PlayerAvatar image={'http://127.0.0.1:3001/avatars/' + user.id + '.png'} />
+					</Link>
+				</Button>
 			</nav>
 			<PlayerName name={user.username} />
 			<ProjectName />

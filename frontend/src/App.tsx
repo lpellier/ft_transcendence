@@ -30,13 +30,13 @@ export function toastIt(message: string) {
         });
 }
 
-export default function App(props: {user: User | undefined, users: User[]}) {
+export default function App(props: {user: User | undefined, users: User[], setOtherUser: React.Dispatch<React.SetStateAction<User | undefined>>}) {
 
     return (
 		<Stack >
             {props.user?
                 <div>
-                    <SearchAppBar user={props.user} users={props.users} />
+                    <SearchAppBar user={props.user} users={props.users} setOtherUser={props.setOtherUser}/>
                     <Outlet />
                 </div>
             		:

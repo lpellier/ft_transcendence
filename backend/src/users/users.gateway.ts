@@ -23,20 +23,20 @@ export class FriendsGateway
   constructor(private readonly usersService: UsersService) {}
 
   @SubscribeMessage('add friend')
-  add(
+  async add(
     @ConnectedSocket() client: Socket,
     @MessageBody() friendUserDto: FriendUserDto,
   ) {
-    this.usersService.addFriend(friendUserDto.userId, friendUserDto.friendId);
+    await this.usersService.addFriend(friendUserDto.userId, friendUserDto.friendId);
     client.emit('add friend');
   }
 
   @SubscribeMessage('remove friend')
-  remove(
+  async remove(
     @ConnectedSocket() client: Socket,
     @MessageBody() friendUserDto: FriendUserDto,
   ) {
-    this.usersService.removeFriend(
+    await this.usersService.removeFriend(
       friendUserDto.userId,
       friendUserDto.friendId,
     );

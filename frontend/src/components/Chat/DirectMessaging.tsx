@@ -11,7 +11,8 @@ import { socket } from 'index';
 import PersonIcon from '@mui/icons-material/Person';
 import BlockIcon from '@mui/icons-material/Block';
 import { Backdrop, ButtonGroup, IconButton, Button, Stack, Alert } from '@mui/material';
-import {Link} from 'react-router-dom'
+import {Link} from 'react-router-dom';
+import {Navigate} from 'react-router-dom';
 
 interface CreateDMRoomDto {
     name: string;
@@ -19,7 +20,7 @@ interface CreateDMRoomDto {
     user2Id: number;
 }
 
-export default function DirectMessaging(props: {user: User, users: User[], rooms: Room[], currentRoom: Room, setCurrentRoom: React.Dispatch<React.SetStateAction<Room>>}) {
+export default function DirectMessaging(props: {user: User, users: User[], rooms: Room[], currentRoom: Room, setCurrentRoom: React.Dispatch<React.SetStateAction<Room>>, setOtherUser: React.Dispatch<React.SetStateAction<User | undefined>>}) {
     
     let [showUserList, setShowUserList] = useState<boolean>(false);
     let [search, setSearch] = useState<string>("");
@@ -121,6 +122,7 @@ export default function DirectMessaging(props: {user: User, users: User[], rooms
                 socket.emit('create dm room', createDMRoomDto)
             }
         }
+        setShowUserList(false);
     }
 
 	useEffect(() => {
@@ -145,7 +147,7 @@ export default function DirectMessaging(props: {user: User, users: User[], rooms
 	})
     
     
-    function UserMod(props: {user: User, users: User[], room: Room}) {
+    function UserMod(props: {user: User, users: User[], room: Room, setOtherUser: React.Dispatch<React.SetStateAction<User | undefined>>}) {
         
         let [showBackdrop, setShowBackdrop] = useState<boolean>(false);
         
@@ -154,12 +156,18 @@ export default function DirectMessaging(props: {user: User, users: User[], rooms
             setShowBackdrop(false);
         }
 
+        function    goToProfile(user: User | undefined) {
+            props.setOtherUser(user);
+        }
+
         return (
             <div>
                 <Stack direction="row" justifyContent="space-between">
                     <ListItemText primary={parseUser(props.room.name)?.username}/>
                     <Stack direction="row" >
-                        <Link to="/profile"><PersonIcon/></Link>
+                        <Button onClick={() => goToProfile(parseUser(props.room.name))}>
+                            <Link to="/profile"><PersonIcon/></Link>
+                        </Button>
                         <IconButton onClick={() => setShowBackdrop(true)} ><BlockIcon/></IconButton>
                     </Stack>
                 </Stack>
@@ -192,6 +200,8 @@ export default function DirectMessaging(props: {user: User, users: User[], rooms
 					label="search"
 					color="warning"
 					variant="standard"
+                    onFocus={handleFocus}
+                    onBlur={handleBlur}
 				/>
             </form>
             {showUserList?
@@ -202,16 +212,16 @@ export default function DirectMessaging(props: {user: User, users: User[], rooms
             <List>
                 {props.rooms.map(room => (
                     <div key={room.id}>
-                        {room.ownerId === 0 && blocked.find(user => parseUser(room.name)?.username === user.username) === undefined?
+                        {blocked.find(user => parseUser(room.name)?.username === user.username) === undefined && room.ownerId === 0?
                             <div>
                                 { room.id !== props.currentRoom.id ?
 
                                     <ListItem button className="MenuItem" onClick={() => props.setCurrentRoom(room) } sx={{ alignContent:"center" }} >
-                                        <UserMod user={props.user} users={props.users} room={room}/>
+                                        <UserMod user={props.user} users={props.users} room={room} setOtherUser={props.setOtherUser}/>
                                     </ListItem>
                                 :
                                     <ListItem className="MenuItem" selected  sx={{ alignContent:"center"}}>
-                                           <UserMod user={props.user} users={props.users} room={room}/>
+                                        <UserMod user={props.user} users={props.users} room={room} setOtherUser={props.setOtherUser}/>
                                     </ListItem>
                                 }
                             </div>

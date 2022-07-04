@@ -121,7 +121,7 @@ function RoomList(props: {rooms: Room[], currentRoom: Room, setCurrentRoom: Reac
 	)
 }
 
-function Channels(props : {user: User, users: User[], currentRoom: Room, setCurrentRoom: React.Dispatch<React.SetStateAction<Room>>, setCanWrite: React.Dispatch<React.SetStateAction<boolean>>, roomAdmins:User[]}) {
+function Channels(props : {user: User, users: User[], currentRoom: Room, setCurrentRoom: React.Dispatch<React.SetStateAction<Room>>, setCanWrite: React.Dispatch<React.SetStateAction<boolean>>, roomAdmins:User[], setOtherUser: React.Dispatch<React.SetStateAction<User | undefined>>}) {
 
 	let [addRoomClicked, setAddRoomClicked] = useState<number>(0);
 	let [rooms, setRooms] = useState<Room[]>([]);
@@ -286,7 +286,7 @@ function Channels(props : {user: User, users: User[], currentRoom: Room, setCurr
 				</div>
 			</Stack>
 			:
-			<DirectMessaging user={props.user} users={props.users} rooms={rooms} currentRoom={props.currentRoom} setCurrentRoom={props.setCurrentRoom} />
+			<DirectMessaging user={props.user} users={props.users} rooms={rooms} currentRoom={props.currentRoom} setCurrentRoom={props.setCurrentRoom} setOtherUser={props.setOtherUser}/>
 			}
 		</Stack>
 		</div>

@@ -34,6 +34,7 @@ export default function AllRoutes()  {
 	const [isAuth, setAuth] = useState(true);
 	const [user, setUser] = useState<User>();
     let [users, setUsers] = useState<User[]>([]);
+	let [otherUser, setOtherUser] = useState<User>();
 
     useEffect(() => {
 		const handler = (usersData: User[]) => {
@@ -64,6 +65,7 @@ export default function AllRoutes()  {
 			console.log("Is Authenticated")
 			setAuth(true);
             setUser(res.data);
+			setOtherUser(res.data);
 
         })
         .catch(function (err) {
@@ -77,9 +79,9 @@ export default function AllRoutes()  {
 	        <Routes>
 	            <Route path="/login" element={<LogIn user={user} auth={isAuth}/>} />
 				<Route path="tfauth" element={<TFAuth setAuth={setAuth}/>} />
-	            <Route path="/" element={ <ProtectedRoute auth={isAuth}><App user={user} users={users}/></ProtectedRoute>}>
-					<Route path="profile" element={ < Profile user={user} users={users}/>}/>
-					<Route path="chat" element={<Chat user={user} users={users}/>}/>
+	            <Route path="/" element={ <ProtectedRoute auth={isAuth}><App user={user} users={users} setOtherUser={setOtherUser}/></ProtectedRoute>}>
+					<Route path="profile" element={ < Profile user={otherUser} users={users}/>}/>
+					<Route path="chat" element={<Chat user={user} users={users} setOtherUser={setOtherUser} />}/>
 					<Route path="game" element={<Game user={user}/>}/>
 					<Route path="settings" element={<Settings user={user}/>}/>
 				</Route>
