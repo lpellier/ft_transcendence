@@ -4,8 +4,6 @@ import AvatarList from './ChooseAvatar/ChooseAvatar'
 import ChooseName from './ChooseName/ChooseName'
 import ChooseAuth from './ChooseAuth/ChooseAuth'
 import {User} from 'interfaces'
-import { useEffect } from 'react'
-
 
 const SettingStyle = {
     height:  '100vh',

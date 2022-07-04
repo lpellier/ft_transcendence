@@ -111,6 +111,7 @@ export default function SearchAppBar(props: {user: User, users: User[]}) {
 		})
 	}, )
 
+
   return (
       <AppBar position="static">
 		<ToastContainer
@@ -127,7 +128,7 @@ export default function SearchAppBar(props: {user: User, users: User[]}) {
         <Toolbar style={ BarStyle }>
 			<nav>
 				<Link to="profile" style={{ textDecoration: 'none' }}>
-					<PlayerAvatar image={'http://127.0.0.1:3001/avatars/' + user.id + '.png'}/>
+					<PlayerAvatar image={'http://127.0.0.1:3001/avatars/' + user.id + '.png'} />
 				</Link>
 			</nav>
 			<PlayerName name={user.username} />
