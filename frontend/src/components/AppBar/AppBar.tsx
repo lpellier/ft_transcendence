@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react'
 import {Link} from 'react-router-dom'
-import {User} from 'interfaces';
+import {init_user, User} from 'interfaces';
 import {PlayerAvatar} from	'../Avatars';
 import FriendBar from 'components/FriendBar/FriendBar';
 import {ToastContainer} from 'react-toastify';
@@ -95,9 +95,21 @@ function ProjectName() {
 }
 
 export default function SearchAppBar(props: {user: User, users: User[]}) {
+	const [user, setUser] = useState<User>(init_user)
 
 	useEffect(() => {
-	}, [props.user])
+		axios.get(
+		'http://127.0.0.1:3001/users/me',
+		{
+				withCredentials: true,
+		})
+		.then(res => {
+			setUser(res.data)
+		})
+		.catch(err => {
+			console.log("Appbar get request failed : ", err)
+		})
+	},)
 
   return (
       <AppBar position="static">
@@ -115,10 +127,10 @@ export default function SearchAppBar(props: {user: User, users: User[]}) {
         <Toolbar style={ BarStyle }>
 			<nav>
 				<Link to="profile" style={{ textDecoration: 'none' }}>
-					<PlayerAvatar image={'http://127.0.0.1:3001/avatars/' + props.user.id + '.png'}/>
+					<PlayerAvatar image={'http://127.0.0.1:3001/avatars/' + user.id + '.png'}/>
 				</Link>
 			</nav>
-			<PlayerName name={props.user.username} />
+			<PlayerName name={user.username} />
 			<ProjectName />
 			<Stack direction="row" spacing={2}>
 				<FriendBar user={props.user} users={props.users}/>

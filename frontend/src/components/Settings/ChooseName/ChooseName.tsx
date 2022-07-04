@@ -36,7 +36,6 @@ function NameInput(props: {username: string, setter: any, setOpen: any}) {
 	}
 
 	function PatchRequest() {
-		console.log("sending : ", props.username, " as ", typeof(props.username))
 
 		axios.patch(
 			'http://127.0.0.1:3001/users/me',
@@ -85,7 +84,7 @@ export default function ChooseName(props: {user: User}) {
 	const handleOpen = () => {
 		setOpen(true);
 	};
-	
+
 	const handleClose = () => {
 		setOpen(false);
 	};
@@ -107,7 +106,7 @@ export default function ChooseName(props: {user: User}) {
 				<Box sx={ModalChooseName}>
 					<Stack spacing={3}>
             	    	<NameButton />
-						<NameInput 
+						<NameInput
 							username={new_username} 
 							setter={setNewUsername} 
 							setOpen={setOpen}/>
