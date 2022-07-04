@@ -139,7 +139,6 @@ function ChooseAvatarButton(props: {user: User, setOpenOne: any}) {
 
   const closeOne = () => {
     props.setOpenOne(false);
-	window.location.reload()
   };
 
   return (

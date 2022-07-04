@@ -36,7 +36,7 @@ function PlayerAvatar(props: {image: string } ) {
     
     return(
         <IconButton >
-            <Tooltip title="Home" placement="bottom">
+            <Tooltip title="Profile" placement="bottom">
                 <Avatar src={props.image}  sx={SmallAvatar}/>
             </Tooltip>
         </IconButton>
@@ -46,7 +46,6 @@ function PlayerAvatar(props: {image: string } ) {
 function CreateAvatar(props: {img: string, style: any}) {
     
     const handleClick = () => {
-		console.log("data input : ", props.img, " is :", typeof(props.img))
 
 		const formData = new FormData();
 		formData.append('avatar', props.img)

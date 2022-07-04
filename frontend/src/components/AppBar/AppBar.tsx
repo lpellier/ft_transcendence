@@ -95,7 +95,7 @@ function ProjectName() {
 }
 
 export default function SearchAppBar(props: {user: User, users: User[]}) {
-	const [user, setUser] = useState<User>(init_user)
+	const [user, setUser] = useState<User>(props.user)
 
 	useEffect(() => {
 		axios.get(
@@ -109,7 +109,7 @@ export default function SearchAppBar(props: {user: User, users: User[]}) {
 		.catch(err => {
 			console.log("Appbar get request failed : ", err)
 		})
-	},)
+	}, )
 
   return (
       <AppBar position="static">

@@ -32,7 +32,6 @@ function NameInput(props: {username: string, setter: any, setOpen: any}) {
 		props.setter(e.target[0].value);
 		e.target[0].value = "";
 		setIsSubmitted(true)
-		// window.location.reload()
 	}
 
 	function PatchRequest() {
