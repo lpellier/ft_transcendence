@@ -16,6 +16,7 @@ import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import {useState} from 'react'
 import Button from '@mui/material/Button';
 import axios from 'axios'
+import { ImageIdContext } from 'App';
 import { ownerWindow } from '@mui/material';
 
 const Input = styled('input')({
@@ -76,7 +77,7 @@ function UploadButton(props: {setOpen: any}) {
 		})
 
 		props.setOpen(false)
-		window.location.reload()
+		// window.location.reload()
 	};
 
 	function closeModal() {
@@ -106,10 +107,18 @@ function UploadButton(props: {setOpen: any}) {
 				:
 				<p>No file selected yet</p>
 			}
-			<Stack direction="row" spacing={3}>
-				<YesButton onClick={handleSubmit}/>
-				<NoButton onClick={closeModal}/>
-			</Stack>
+			<ImageIdContext.Consumer>
+				{({imageId, setImageId}) => 
+					<Stack direction="row" spacing={3}>
+						<YesButton onClick={() => {
+							handleSubmit();
+							setImageId(imageId + 1)
+						}}/>
+						<NoButton onClick={closeModal}/>
+					</Stack>
+				}
+			</ ImageIdContext.Consumer>
+
 		</div>
 	  );
 }
@@ -137,7 +146,7 @@ function ChooseAvatarButton(props: {user: User, setOpenOne: any}) {
 
   const closeOne = () => {
     props.setOpenOne(false);
-	window.location.reload()
+	// window.location.reload()
   };
 
   return (
@@ -197,7 +206,7 @@ export default function AvatarList(props: {user: User}){
         	  <Box sx={ModalChooseAvatar}>
         	    <Container>
         	      <Stack spacing={2} style={{justifyContent: 'center'}}>
-        	            {/* <DotsMobileStepper /> */}
+        	            <DotsMobileStepper />
         	            <ChooseAvatarButton user={props.user} setOpenOne={setOpen}/>
         	      </Stack>
         	    </Container>

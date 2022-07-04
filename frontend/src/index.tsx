@@ -13,6 +13,7 @@ export const socket = io(SERVER, {
 	withCredentials:true,
 });
 
+
 ReactDOM.render(
     <AllRoutes />,
     Root

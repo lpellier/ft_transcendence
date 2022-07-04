@@ -25,7 +25,7 @@ import Ptero from       "../images/Avatar/Ptero.png"
 import EasterEgg from   "../images/Avatar/EasterEgg.png"
 import Mouse from       "../images/Avatar/Mouse.png"
 import Sloth from       "../images/Avatar/Sloth.png"
-
+import {ImageIdContext} from "App"
 // Styles
 
 const BigAvatar = {border: 2, width: 150, height: 150}
@@ -34,11 +34,18 @@ const SmallAvatar = {border: 2, width: 50, height: 50}
 function PlayerAvatar(props: {image: string} ) {
 
     return(
-        <IconButton >
-            <Tooltip title="Profile" placement="bottom">
-                <Avatar src={props.image}  sx={SmallAvatar} />
-            </Tooltip>
-        </IconButton>
+        <ImageIdContext.Consumer>
+         {({imageId}) => 
+		 <div >
+            <IconButton >
+                <Tooltip title="Profile" placement="bottom">
+                    <Avatar src={props.image + "?" + imageId}  sx={SmallAvatar} />
+                </Tooltip>
+            </IconButton>
+		 </div>
+        }
+        </ ImageIdContext.Consumer>
+
     );
 }
 
