@@ -16,6 +16,7 @@ import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import {useState} from 'react'
 import Button from '@mui/material/Button';
 import axios from 'axios'
+import { ownerWindow } from '@mui/material';
 
 const Input = styled('input')({
 	display: 'none',
@@ -58,8 +59,6 @@ function UploadButton(props: {setOpen: any}) {
 		const formData = new FormData();
 		formData.append('avatar', selectedFile)
 
-		console.log("axios put data : ", formData, "type is : ", typeof(formData))
-
 		axios.put("http://127.0.0.1:3001/users/upload-avatar",
 		formData,
 		{
@@ -77,6 +76,7 @@ function UploadButton(props: {setOpen: any}) {
 		})
 
 		props.setOpen(false)
+		window.location.reload()
 	};
 
 	function closeModal() {
@@ -153,9 +153,9 @@ function ChooseAvatarButton(props: {user: User, setOpenOne: any}) {
 		open={open}
 		onClose={handleClose}
       >
-        <Box sx={CustomAvatarStyle}>
-        	<CustomAvatar setOpen={setOpen}/>
-        </Box>
+    	<Box sx={CustomAvatarStyle}>
+    		<CustomAvatar setOpen={setOpen}/>
+    	</Box>
       </Modal>
 	  <Button
           onClick={closeOne}

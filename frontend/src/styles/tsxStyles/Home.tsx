@@ -1,6 +1,6 @@
 const PlayerBarStyle = {	
     textAlign: 'center',
-    alignComponent: 'center',
+    verticalAlign: 'baseline',
     padding: '1%',
     paddingRight: '3%',
     paddingLeft: '3%',

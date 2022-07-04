@@ -6,6 +6,7 @@ import Typography from '@mui/material/Typography'
 import {User} from 'interfaces'
 import {PlayerBarStyle, SkillBarContourStyle, TitleStyle} from "../../styles/tsxStyles/Home";
 import './../../styles/Other/SkillBar.css'
+import {PlayerAvatar} from	'../Avatars';
 
 const OverallBoxStyle = {
 	paddingTop: '4vh',
@@ -34,20 +35,29 @@ function SkillBar(props: {progression: number}) {
 	);
 }
 
-function PlayerInfoBand(props: {level: number}) {
+function PlayerInfoBand(props: {level: number, user: User}) {
 	const [xp, setXp] = useState<number>((props.level * 100) % 100) 
 	const [level, setLevel] = useState<number>(Math.trunc(props.level)) 
 
 	useEffect(() => {
+		setLevel(Math.trunc(props.level))
 		setXp((props.level * 100) % 100)
-	}, [])
+	}, [props.level])
 	
 	return (
 			<Box sx={PlayerBarStyle}>
-				<Stack spacing={2}>
-					<Typography variant="h6">
-						Level {level}
-					</Typography>
+				<Stack >
+					<Stack direction="row" spacing={35}>
+						<PlayerAvatar image={'http://127.0.0.1:3001/avatars/' + props.user.id + '.png'} />
+						<Stack spacing={1} >
+							<Typography variant="h5">
+							 	{props.user.username}
+							</Typography>
+							<Typography variant="h6">
+								Level {level}
+							</Typography>
+						</Stack>
+					</Stack>
 					<SkillBar progression={xp}/>
 				</Stack>
 			</Box>
@@ -60,8 +70,8 @@ export default function Profile(props: {user: User | undefined, users: User[]}) 
 		<Box sx={OverallBoxStyle}>
 			{props.user?
 				<Stack spacing={1}>
-					<PlayerInfoBand level={props.user.level}/>
-					<StatsBoards user={props.user} users={props.users}/>
+					<PlayerInfoBand level={props.user.level} user={props.user} />
+					<StatsBoards user={props.user} users={props.users} />
 				</Stack>
 					:
 					<div/>
