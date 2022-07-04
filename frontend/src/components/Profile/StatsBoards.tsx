@@ -3,7 +3,6 @@ import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import ButtonGroup from '@mui/material/ButtonGroup';
 import {User} from 'interfaces';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import TimelineIcon from '@mui/icons-material/Timeline';
@@ -45,7 +44,7 @@ function StatsBox(props: {user: User}){
 		setWins(props.user.victories)
 		setLosses(props.user.losses)
 		setTotGame(wins + losses)
-	}, [])
+	}, [props.user])
 
 	return (
 		<Stack spacing={1}>
