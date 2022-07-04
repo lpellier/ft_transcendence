@@ -17,7 +17,6 @@ function GenerateQRCode(props: {url: string, setOpen: any}) {
 	
 	function handleClick() {
 		props.setOpen(false)
-		window.location.reload()
 	}
 
 	return (
@@ -40,6 +39,21 @@ function GenerateQRCode(props: {url: string, setOpen: any}) {
 function TFAButton(props: {user: User, setOpen: any}) {
 	const [input, showedInput] = useState(false);
 	const [url, setUrl] = useState("");
+	const [user, setUser] = useState(props.user)
+
+	useEffect(() => {
+		axios.get(
+		'http://127.0.0.1:3001/users/me',
+		{
+				withCredentials: true,
+		})
+		.then(res => {
+			setUser(res.data)
+		})
+		.catch(err => {
+			console.log("Appbar get request failed : ", err)
+		})
+	}, [props.setOpen])
 
 	function patchTfaTrue() {
 
@@ -50,25 +64,28 @@ function TFAButton(props: {user: User, setOpen: any}) {
 				withCredentials: true, 
 			})
 			.then(res => {
-				const secret = res.data;
-				setUrl("otpauth://totp/transcendance_BoopBipBoop?secret=" + secret);
+				console.log("TFA activated")
+				setUrl("otpauth://totp/transcendance_BoopBipBoop?secret=" + res.data);
 			})
 			.catch(function (err) {
 				console.log("Setting tfa failed :", err)
 			})
-	}
-
-	function patchTfaFalse() {
-
+		}
+		
+		function patchTfaFalse() {
+			
 		axios.patch(
-			'http://127.0.0.1:3001/users/me', 
-			{tfa:false},
-			{
-				withCredentials: true, 
-			})
-			.catch(function (err) {
-				console.log("Setting tfa failed :", err)
-			})
+		'http://127.0.0.1:3001/users/me', 
+		{tfa:false},
+		{
+			withCredentials: true, 
+		})
+		.then(res => {
+			console.log("TFA disabled")
+		})
+		.catch(function (err) {
+			console.log("Setting tfa failed :", err)
+		})
 	}
 
 	function showFlashcode() {
@@ -79,29 +96,28 @@ function TFAButton(props: {user: User, setOpen: any}) {
 	function deactivateTfa() {
 		patchTfaFalse()
 		props.setOpen(false)
-		window.location.reload()
 	}
 
-	if (props.user.tfa == false) {
-		return (
-			<Stack>
-    			< Button
-					onClick={showFlashcode}
-					variant="contained"
-					color="secondary">
-					Activate Two Factor Authentication
-				</Button>
-				{input && < GenerateQRCode url={url} setOpen={props.setOpen} />}
-			</Stack>
-    	);}
 	return (
 		<Stack>
-    		< Button
-				onClick={deactivateTfa}
-				variant="contained"
-				color="secondary">
-				Deactivate Two Factor Authentication
-			</Button>
+			{user.tfa === false ?
+				<div>
+    				< Button
+						onClick={showFlashcode}
+						variant="contained"
+						color="secondary">
+						Activate Two Factor Authentication
+					</Button>
+					{input && <GenerateQRCode url={url} setOpen={props.setOpen} />}
+				</div>
+					:
+    			< Button
+					onClick={deactivateTfa}
+					variant="contained"
+					color="secondary">
+					Deactivate Two Factor Authentication
+				</Button>
+			}
 		</Stack>
 	)
 }

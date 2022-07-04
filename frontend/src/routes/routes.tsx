@@ -18,7 +18,6 @@ import Game from "./Game";
 
 
 function ProtectedRoute(props: {children: JSX.Element, auth: any}) {
-	console.log("auth", props.auth)
 
 	if (props.auth === true) {
 		return (
@@ -62,29 +61,15 @@ export default function AllRoutes()  {
             withCredentials: true
         })
         .then(res => {
-            console.log("Get user request success")
-            const resUser = res.data;
-            setUser(resUser);
+			console.log("Is Authenticated")
+			setAuth(true);
+            setUser(res.data);
+
         })
         .catch(function (err) {
-            console.log("Get user request failed : ", err)
-        });
-	}, [])
-
-	useEffect (() => {
-		axios.get('http://127.0.0.1:3001/users/me', {
-			withCredentials: true,
-		})
-		.then(res => {
-			setAuth(true);
-			setUser(res.data)
-			console.log("Authentication get request success")
-		})
-		.catch(function (err) {
+			console.log("Authentication has failed : ", err)
 			setAuth(false);
-			console.log("Authentication get request failed : ", err)
-		})
-		console.log("Auth is : ", isAuth)
+        });
 	}, [isAuth])
 	
 	return (

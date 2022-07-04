@@ -13,7 +13,6 @@ import KeyOffIcon from '@mui/icons-material/KeyOff';
 import ToggleButton from '@mui/material/ToggleButton';
 import Dialog from '@mui/material/Dialog';
 import bcrypt from 'bcryptjs';
-import { ThemeProvider } from '@mui/styles';
 import { toastThatError } from 'App';
 import {useState, useEffect} from 'react'
 import {Room, User} from 'interfaces'
@@ -34,6 +33,11 @@ export interface UserRoomDto {
     userId: number;
     roomId: number;
 };
+
+const ButtonStyle = {
+	border: '1px solid black',
+	backgroundColor: 'rgb(235, 116, 30, 0.75)',
+}
 
 function PasswordInput(props: {openPassword: boolean, setOpenPassword: React.Dispatch<React.SetStateAction<boolean>>, 
 	room: Room, setCurrentRoom: React.Dispatch<React.SetStateAction<Room>>}) {
@@ -229,8 +233,8 @@ function Channels(props : {user: User, users: User[], currentRoom: Room, setCurr
 		<div>
 		<Stack className='channels' spacing={1} >
 			<Stack spacing={0.5} direction="row">
-				<Button variant="contained" size="small" color="warning" onClick={() => setTab('channels')}>Channels</Button>
-				<Button variant="contained" size="small" color="warning" onClick={() => setTab('dms')}>DMs</Button>
+				<Button variant="contained" size="small" style={ButtonStyle} onClick={() => setTab('channels')}>Channels</Button>
+				<Button variant="contained" size="small" style={ButtonStyle} onClick={() => setTab('dms')}>DMs</Button>
 			</Stack>
 			{tab === 'channels'?
 			<Stack justifyContent='space-between'>
@@ -268,12 +272,12 @@ function Channels(props : {user: User, users: User[], currentRoom: Room, setCurr
 										:
 										<div/>
 									}
-									<Button variant="contained" color="success" type="submit">Create</Button>
+									<Button variant="contained" sx={{backgroundColor: 'rgb(70, 195, 150, 0.65)', border: '2px solid black'}} type="submit">Create</Button>
 								</Stack>
-									<Button variant="contained" color="error" onClick={() => setAddRoomClicked(0)}>Cancel</Button>
+									<Button variant="contained" sx={{backgroundColor: 'rgb(195, 60, 40, 0.65)', border: '2px solid black'}} onClick={() => setAddRoomClicked(0)}>Cancel</Button>
 							</Stack>
 						:
-						<Button onClick={() => setAddRoomClicked(1)} variant='contained' color="warning" sx={{ width: '100%' }}>Create Room</Button>
+						<Button onClick={() => setAddRoomClicked(1)} variant='contained' color="warning" sx={ButtonStyle}>Create Room</Button>
 					}
 				</Box>
 				<div>
