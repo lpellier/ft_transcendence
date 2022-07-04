@@ -169,7 +169,6 @@ export class UsersService {
       where: { id: userId },
       select: { friendIds: true },
     });
-    console.log('friendIds = ', friendIds);
     return friendIds;
   }
 

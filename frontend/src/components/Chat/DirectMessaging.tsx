@@ -121,6 +121,7 @@ export default function DirectMessaging(props: {user: User, users: User[], rooms
                 socket.emit('create dm room', createDMRoomDto)
             }
         }
+        setShowUserList(false);
     }
 
 	useEffect(() => {
@@ -192,6 +193,8 @@ export default function DirectMessaging(props: {user: User, users: User[], rooms
 					label="search"
 					color="warning"
 					variant="standard"
+                    onFocus={handleFocus}
+                    onBlur={handleBlur}
 				/>
             </form>
             {showUserList?
@@ -202,7 +205,7 @@ export default function DirectMessaging(props: {user: User, users: User[], rooms
             <List>
                 {props.rooms.map(room => (
                     <div key={room.id}>
-                        {room.ownerId === 0 && blocked.find(user => parseUser(room.name)?.username === user.username) === undefined?
+                        {blocked.find(user => parseUser(room.name)?.username === user.username) === undefined && room.ownerId === 0?
                             <div>
                                 { room.id !== props.currentRoom.id ?
 

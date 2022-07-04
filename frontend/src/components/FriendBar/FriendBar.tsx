@@ -58,25 +58,26 @@ export default function FriendBar(props: {user: User, users: User[]}) {
             console.log('new connection -> ', userId);
             setStatusMap(statusMap.set(userId, 'online'));
         })
-    }, [statusMap])
+    }, []);
 
     useEffect(() => {
         socket.on('new disconnection', (userId: number) => {
             setStatusMap(statusMap.set(userId, 'offline'));
         })
-    }, [statusMap])
+    }, [])
 
     useEffect(() => {
         socket.emit('get friends', props.user.id);
     }, [props.user.id])
 
     useEffect(() => {
-        const handler = () => {socket.emit('get friends', props.user?.id)}
+        const handler = () => {socket.emit('get friends', props.user?.id)
+    console.log('add friend received')}
         socket.on('add friend', handler);
         return () => {
             socket.off('add friend', handler);
         }
-    },[])
+    }, [props.user.id])
 
     function closeFriendBar() {
         setOpen(false);
@@ -92,14 +93,13 @@ export default function FriendBar(props: {user: User, users: User[]}) {
         return () => {
             socket.off('get friends', handler);
         }
-    },[])
+    }, [])
 
+    console.log('friends = ', friends);
 
     function addFriendSubmit(e: any) {
         e.preventDefault();
-        console.log('add friend called');
         const username: string = e.target[0].value;
-        console.log('username = ', username);
         if( props.users.find(user => user.username === username) )
         {
             console.log('user exists')
@@ -115,10 +115,7 @@ export default function FriendBar(props: {user: User, users: User[]}) {
             }
         }
         else
-        {
             toastThatError("username doesn't exist")
-            console.log("user doesn't exist")
-        }
     }
 
     function removeFriend(user: User) {
