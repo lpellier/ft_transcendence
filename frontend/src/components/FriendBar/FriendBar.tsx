@@ -22,20 +22,20 @@ function UserList(props: {currentUser: User, users: User[], friends: User[]}) {
     return (
         <List className='user-list'>
         {props.users.map(item => (
-            <div key={item.id}>
-                {props.friends.find(friend => friend.id === item.id)?
-                    <div/>
-                :
-                    <div>
-                        {props.currentUser.id !== item.id?
-                            <ListItem>
-                                <ListItemText primary={item.username}/>
-                            </ListItem>
-                        	:
-                        <div/>
-                        }
-                    </div>
-                }
+            	<div key={item.id}>
+            	    {props.friends.find(friend => friend.id === item.id)?
+            	<div/>
+                	:
+            	<div>
+            	    {props.currentUser.id !== item.id?
+            	        <ListItem>
+            	            <ListItemText primary={item.username}/>
+            	        </ListItem>
+            	    	:
+            	    <div/>
+            	    }
+            	</div>
+            }
             </div>
         ))}
         </List>
@@ -134,20 +134,35 @@ export default function FriendBar(props: {user: User, users: User[]}) {
                     anchor='left'
                     open={open}
                     onClose={closeFriendBar}
+					PaperProps={{
+						sx: { width: "15vw", paddingLeft: '2%', paddingTop:'1.5%', backgroundColor: 'rgb(172, 180, 235)'},
+					}}
                 >
-                <Button onClick={addFriendClick} variant="contained">
+                <Button 
+					onClick={addFriendClick} 
+					variant="contained"
+					style={{backgroundColor: 'rgb(150, 100, 200)', width: '13vw', border: '2px solid black', borderRadius: '5%'}}
+					>
                     Add Friend
                 </Button>
                 {addFriendClicked?
                     <Stack component="form" onSubmit={addFriendSubmit} spacing={1}>
                         <TextField id="roomName" label="friend name" variant="standard" />
                         <UserList currentUser={props.user} users={props.users} friends={friends}/>
-                        <Button variant="contained" color="success" type="submit">
-                            Add
-                        </Button>
-                        <Button variant="contained" color="error" onClick={() => setAddFriendClicked(false)}>
-                            Cancel
-                        </Button>
+                        	<Button 
+								variant="contained" 
+								type="submit"
+								style={{backgroundColor: 'rgb(70, 195, 150)', width: '13vw', border: '2px solid black', borderRadius: '5%'}}
+								>
+                        	    Add
+                        	</Button>
+                        	<Button 
+								variant="contained" 
+								onClick={() => setAddFriendClicked(false)}
+								style={{backgroundColor: 'rgb(195, 60, 40)', width: '13vw', border: '2px solid black', borderRadius: '5%'}}
+							>
+                        	    Cancel
+                        	</Button>
                     </Stack>
                     :
                     <div/>
