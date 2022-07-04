@@ -53,7 +53,6 @@ function NameInput(props: {username: string, setter: any, setOpen: any}) {
 		.catch(err => {
 			console.log("Put request failed : ", err)
 		});
-
 	}
 
 	return (

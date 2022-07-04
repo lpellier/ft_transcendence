@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react'
 import {Link} from 'react-router-dom'
-import {init_user, User} from 'interfaces';
+import {User} from 'interfaces';
 import {PlayerAvatar} from	'../Avatars';
 import FriendBar from 'components/FriendBar/FriendBar';
 import {ToastContainer} from 'react-toastify';
