@@ -1,5 +1,4 @@
 import axios from 'axios'
-
 import Avatar from '@mui/material/Avatar'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
@@ -45,25 +44,25 @@ function PlayerAvatar(props: {image: string} ) {
 
 function CreateAvatar(props: {img: string, style: any}) {
 
-    const handleClick = () => {
+	const handleClick = () => {
+		// const formData = new FormData();
+		
+		// formData.append('avatar', file)
 
-	// 	const formData = new FormData();
-	// 	formData.append('avatar', props.img)
-
-    //     axios.put('http://127.0.0.1:3001/users/upload-avatar',
-	// 	formData,
-    //     {
-    //         withCredentials: true,
-    //         headers: {
-    //             "Content-Type": "multipart/form-data",
-    //         }
-    //     })
-	// 	.then(res => {
-	// 		console.log("Put request success : ", res)
-	// 	})
-    //     .catch(function (err) {
-    //         console.log("Put request failed : ", err)
-    //     });
+        // axios.put('http://127.0.0.1:3001/users/upload-avatar',
+		// formData,
+        // {
+        //     withCredentials: true,
+        //     headers: {
+        //         "Content-Type": "multipart/form-data",
+        //     }
+        // })
+		// .then(res => {
+		// 	console.log("Put request success : ", res)
+		// })
+        // .catch(function (err) {
+        //     console.log("Put request failed : ", err)
+        // });
     }
     
     return (
