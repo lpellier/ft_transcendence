@@ -64,6 +64,7 @@ function TFAButton(props: {user: User, setOpen: any}) {
 				withCredentials: true, 
 			})
 			.then(res => {
+				console.log("TFA activated")
 				setUrl("otpauth://totp/transcendance_BoopBipBoop?secret=" + res.data);
 			})
 			.catch(function (err) {
@@ -71,13 +72,16 @@ function TFAButton(props: {user: User, setOpen: any}) {
 			})
 		}
 		
-	function patchTfaFalse() {
-		
+		function patchTfaFalse() {
+			
 		axios.patch(
 		'http://127.0.0.1:3001/users/me', 
 		{tfa:false},
 		{
 			withCredentials: true, 
+		})
+		.then(res => {
+			console.log("TFA disabled")
 		})
 		.catch(function (err) {
 			console.log("Setting tfa failed :", err)
