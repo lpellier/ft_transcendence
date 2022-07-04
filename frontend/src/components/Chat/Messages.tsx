@@ -1,6 +1,5 @@
 import {useEffect, useState} from 'react';
 import {socket} from 'index';
-// import {socket} from './Chat'
 import Stack from '@mui/material/Stack'
 import Box from '@mui/material/Box'
 import Avatar from '@mui/material/Avatar'
@@ -61,7 +60,7 @@ function Messages(props : {user: User, users: User[], currentRoom: Room, canWrit
 									<div className='message current flex'>
 										<Stack direction="row" className='user' spacing={1}>
 											<li className=''>{item.content}</li>
-											<Avatar src={"http://127.0.0.1:3001/avatars/"+item.userId.toString()+".png"} sx={{width: '3vw', height: '3vh'}}/>
+											<Avatar src={"http://127.0.0.1:3001/avatars/"+item.userId.toString()+".png"} sx={{width: '3vw', height: '3vh', border: 1}}/>
 										</Stack>
 											<div className='user'>
 												{props.users.find(user => user.id === item.userId)?.username}
@@ -69,12 +68,12 @@ function Messages(props : {user: User, users: User[], currentRoom: Room, canWrit
 									</div>
 									:
 									<div className='message other flex'>
-										<li className=''>{item.content}</li>
-											<div className='user' >
-												<Stack direction="row" className='user'>
-													<Avatar src={"http://127.0.0.1:3001/avatars/"+item.userId.toString()+".png"} sx={{width: '3vw', height: '3vh'}}/>
+										<Stack direction="row" className='user' spacing={1}>
+											<Avatar src={"http://127.0.0.1:3001/avatars/"+item.userId.toString()+".png"} sx={{width: '3vw', height: '3vh', border: 1}}/>
+											<li className=''>{item.content}</li>
+										</Stack>
+												<div className='user' >
 													{props.users.find(user => user.id === item.userId)?.username}
-												</Stack>
 											</div>
 									</div>
 									}
