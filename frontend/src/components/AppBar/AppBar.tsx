@@ -66,6 +66,7 @@ function AppBarButton(props: {icon: any, link: string, tooltip: any}) {
 }
 
 function PlayerName(props: {name: string}) {
+	
 	return (
 		<Typography
 		  variant="h6"
@@ -95,6 +96,9 @@ function ProjectName() {
 
 export default function SearchAppBar(props: {user: User, users: User[]}) {
 
+	useEffect(() => {
+	}, [props.user])
+
   return (
       <AppBar position="static">
 		<ToastContainer
@@ -109,12 +113,12 @@ export default function SearchAppBar(props: {user: User, users: User[]}) {
                 pauseOnHover
 		/>
         <Toolbar style={ BarStyle }>
-		<nav>
-			<Link to="profile" style={{ textDecoration: 'none' }}>
-				<PlayerAvatar image={'http://127.0.0.1:3001/avatars/' + props.user.id + '.png'}/>
-			</Link>
+			<nav>
+				<Link to="profile" style={{ textDecoration: 'none' }}>
+					<PlayerAvatar image={'http://127.0.0.1:3001/avatars/' + props.user.id + '.png'}/>
+				</Link>
 			</nav>
-			<PlayerName name={props.user.username}/>
+			<PlayerName name={props.user.username} />
 			<ProjectName />
 			<Stack direction="row" spacing={2}>
 				<FriendBar user={props.user} users={props.users}/>
@@ -124,6 +128,6 @@ export default function SearchAppBar(props: {user: User, users: User[]}) {
 				<LogOutLink />
 			</Stack>
         </Toolbar>
-      </AppBar>
+    	</AppBar>
 	);
 }

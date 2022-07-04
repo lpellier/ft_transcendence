@@ -6,14 +6,10 @@ import { TextField } from '@mui/material';
 import { User } from 'interfaces';
 import { socket } from 'index';
 import { toastThatError, toastIt } from 'App';
-
 import '../../styles/Chat/Channels.css';
-
-
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
-
 import Stack from '@mui/material/Stack';
 
 

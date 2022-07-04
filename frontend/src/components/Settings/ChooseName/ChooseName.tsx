@@ -24,16 +24,18 @@ function NameButton() {
 }
 
 function NameInput(props: {username: string, setter: any, setOpen: any}) {
+	const [isSubmitted, setIsSubmitted] = useState<boolean>(false)
 
 	function handleSubmit(e: any)
 	{
 		e.preventDefault();
 		props.setter(e.target[0].value);
 		e.target[0].value = "";
-		window.location.reload()
+		setIsSubmitted(true)
+		// window.location.reload()
 	}
 
-	useEffect(() => {
+	function PatchRequest() {
 		console.log("sending : ", props.username, " as ", typeof(props.username))
 
 		axios.patch(
@@ -54,7 +56,7 @@ function NameInput(props: {username: string, setter: any, setOpen: any}) {
 			console.log("Put request failed : ", err)
 		});
 
-	}, [props.username])
+	}
 
 	return (
 		<Stack direction="row">
@@ -66,6 +68,11 @@ function NameInput(props: {username: string, setter: any, setOpen: any}) {
 					style={{width: '50%', justifyContent: 'center'}}
 					id='name'
 				/>
+			{isSubmitted === true?
+				PatchRequest()
+					:
+				<div/>
+			}
 			</form>
 		</Stack>
 	);
@@ -96,7 +103,7 @@ export default function ChooseName(props: {user: User}) {
 			<Modal
 			  open={open}
 			  onClose={handleClose}
-			> 
+			>
 				<Box sx={ModalChooseName}>
 					<Stack spacing={3}>
             	    	<NameButton />
@@ -104,7 +111,6 @@ export default function ChooseName(props: {user: User}) {
 							username={new_username} 
 							setter={setNewUsername} 
 							setOpen={setOpen}/>
-
 					</Stack>
           		</Box>
         	</Modal>
