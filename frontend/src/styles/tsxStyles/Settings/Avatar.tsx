@@ -31,14 +31,12 @@ const CustomAvatarStyle = {
     transform: 'translate(-50%, -50%)',
 
     width: '30vw',
-    height: '20vh',
+    height: '30vh',
 
     bgcolor: 'rgb(160, 130, 170, 0.95)',
     border: '2px solid #000',
     boxShadow: 24,
-    pt: 2,
     px: 4,
-    pb: 3,
 }
 
 export {AvatarListStyle, ModalChooseAvatar, CustomAvatarStyle}

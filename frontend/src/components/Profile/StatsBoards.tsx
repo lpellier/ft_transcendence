@@ -2,14 +2,28 @@ import {useState, useEffect} from 'react'
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
 import {User} from 'interfaces';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import TimelineIcon from '@mui/icons-material/Timeline';
 import MilitaryTechIcon from '@mui/icons-material/MilitaryTech';
 import UpdateIcon from '@mui/icons-material/Update';
-import { phoneSize } from 'index';
 import {StatTitle, StatBox} from "../../styles/tsxStyles/Home"
+import {Stats} from 'interfaces'
 import axios from 'axios'
+
+
+const ButtonLeadStyle = {
+	backgroundColor: "rgb(170, 50, 190)",
+	width: '20%',
+}
+
+const ButtonStatStyle = {
+	backgroundColor: "rgb(170, 50, 190)",
+	width: '29%',
+}
+
 
 function BoardComponent(props: {icon: any, title: string}) {
 	return(
@@ -24,10 +38,14 @@ function BoardComponent(props: {icon: any, title: string}) {
 
 function StatsBox(props: {user: User}){
 	const [totGames, setTotGame] = useState<number>(props.user.victories + props.user.losses)
+	const [wins, setWins] = useState<number>(props.user.victories)
+	const [losses, setLosses] = useState<number>(props.user.losses)
 
 	useEffect(() => {
-		setTotGame(props.user.victories + props.user.losses)
-	}, [props.user])
+		setWins(props.user.victories)
+		setLosses(props.user.losses)
+		setTotGame(wins + losses)
+	}, [])
 
 	return (
 		<Stack spacing={1}>
@@ -35,9 +53,18 @@ function StatsBox(props: {user: User}){
 				icon={<TimelineIcon />} 
 				title="Stats" />
 				<Box sx={StatBox}>
-					<h3> Victories : {props.user.victories} </h3>
-					<h3> Games lost : {props.user.losses} </h3>
-					<h3> Total games : {totGames} </h3>
+					<Stack>
+						<Stack direction="row" spacing={2}>
+							<Button variant="contained" style={ButtonStatStyle}>Victories</Button>
+							<Button variant="contained" style={ButtonStatStyle}>Games lost</Button>
+							<Button variant="contained" style={ButtonStatStyle}>Total games</Button>
+						</Stack>
+						<Stack direction="row" spacing={2}>
+							<Button style={{width: '29%'}}> {wins} </Button>
+							<Button style={{width: '29%'}}> {losses} </Button>
+							<Button style={{width: '29%'}}> {totGames} </Button>
+						</Stack>
+					</Stack>
 				</Box>
 		</Stack>
 	);
@@ -56,37 +83,83 @@ function TrophyBox(){
 		);
 }
 
-function LeaderboardBox(){
-	// const [leaders, setLeaders] = useState<>()
 
-	// useEffect(() => {
+function LeaderboardBox(props: {users: User[]}){
+	const [leaders, setLeaders] = useState<Stats[]>([])
+	
+	useEffect(() => {
+		
+		axios.get(
+			"http://127.0.0.1:3001/stats/lead",
+			{
+				withCredentials: true
+			}
+		)
+		.then(res => {
+			console.log("Get leader success: ", res.data)
+			setLeaders(res.data)
+		})
+		.catch(err => {
+			console.log("Get leader failed : ", err)
+		})
+	}, [])
 
-	// 	axios.get(
-	// 		"http://127.0.0.1:3001/stats/lead",
-	// 		{
-	// 			withCredentials: true
-	// 		}
-	// 	)
-	// 	.then(res => {
-	// 		console.log("res : ", res)
-	// 	})
-	// 	.catch(err => {
-	// 		console.log("Get leader failed : ", err)
-	// 	})
-	// }, [leaders])
+
+	function FindUserName(userId: number) {
+		let username;
+		
+		for (let i in props.users)
+		{
+			if (props.users[Number(i)].id === userId){
+				username = props.users[Number(i)].username;
+			}
+		}
+
+		return (
+			<div> {username} </div>
+		)
+	}
+	
+	function LeaderList(props: {users: User[]}) {
+
+		return (
+			<Box sx={{ flexGrow: 1 }} >
+				<Stack direction="row" spacing={2}>
+						<Button variant="contained" style={ButtonLeadStyle}> Best Player </Button>
+						<Button variant="contained" style={ButtonLeadStyle}> Wins </Button>
+						<Button variant="contained" style={ButtonLeadStyle}> Losses </Button>
+						<Button variant="contained" style={ButtonLeadStyle}> Level </Button>
+				</Stack>
+					{leaders.map(item => (
+						<div  key={item.id}>
+							<Stack direction="row" spacing={2}>
+									<Button style={{width: '20%'}}> {FindUserName(item.userId)} </Button>
+									<Button style={{width: '20%'}}> {item.victories} </Button>
+									<Button style={{width: '20%'}}> {item.losses} </Button>
+									<Button style={{width: '20%'}}> {Math.trunc(item.level)} </Button>
+							</Stack>
+					</div>
+					))}
+			</Box>
+		)
+	}
 
 	return(
-		<Stack spacing={1}>
-			<BoardComponent 
-				icon={<MilitaryTechIcon />}
-				title="Leaderboard" />
-				<Box sx={StatBox}>
-					<h3> Rank 1 : 'name first winner' 'level first winner'</h3>
-					<h3> Rank 2 : 'name second winner' 'level second winner'</h3>
-					<h3> Rank 3 : 'name third winner' 'level third winner'</h3>
-				</Box>
-			</Stack>
-		);
+		<div>
+			{leaders?
+				<Stack spacing={1}>
+					<BoardComponent 
+						icon={<MilitaryTechIcon />}
+						title="Leaderboard" />
+						<Box sx={StatBox}>
+							<LeaderList users={props.users}/>
+						</Box>
+				</Stack>
+					:
+				<div/>
+			}
+		</div>
+	);
 }
 
 function MatchhistoryBox(){
@@ -98,42 +171,22 @@ function MatchhistoryBox(){
 				title="Match history" />
 				<Box sx={StatBox}>
 				</Box>
-			</Stack>
+		</Stack>
 	);
 }
 
-export default function StatsBoards(props: {user: User}) {
-	const [width, setWidth] = useState(window.innerWidth);
+export default function StatsBoards(props: {user: User, users: User[]}) {
 
-	useEffect(() => {
-		
-		const handleResizeWindow = () => setWidth(window.innerWidth);
-		 window.addEventListener("resize", handleResizeWindow);
-		 return () => {
-		   window.removeEventListener("resize", handleResizeWindow);
-		 };
-	}, [])
-
-	if (width <= phoneSize) {
-	  return (
-		<Stack spacing={1}>
-				<StatsBox user={props.user}/>
-				<TrophyBox />
-				<LeaderboardBox />
-				<MatchhistoryBox />
-		</Stack>
-	  );
-	}
 	return (
 		<Stack direction="row" spacing={1}>
-			<Stack spacing={1}>
-				<StatsBox user={props.user}/>
-				<TrophyBox />
+				<Stack spacing={1}>
+					<StatsBox user={props.user}/>
+					<TrophyBox />
+				</Stack>
+				<Stack spacing={1}>
+					<LeaderboardBox users={props.users}/>
+					<MatchhistoryBox />
+				</Stack>
 			</Stack>
-			<Stack spacing={1}>
-				<LeaderboardBox />
-				<MatchhistoryBox />
-			</Stack>
-		</Stack>
 	);
 }

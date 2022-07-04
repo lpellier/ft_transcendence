@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Stats, PrismaClient } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 
 @Injectable()
 export class StatsService {
@@ -8,10 +8,9 @@ export class StatsService {
 	async findLeaders() {
 		return this.prisma.stats.findMany({
 			orderBy: {
-				level: 'desc',
-			  }, 
+				victories: 'desc',
+			}, 
 			take : 3,
 		});
 	}
-	
 }

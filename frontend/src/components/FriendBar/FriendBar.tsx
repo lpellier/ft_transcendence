@@ -12,7 +12,6 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import Stack from '@mui/material/Stack';
 
-
 interface FriendUserDto {
     userId: number;
     friendId: number;
@@ -32,7 +31,7 @@ function UserList(props: {currentUser: User, users: User[], friends: User[]}) {
                             <ListItem>
                                 <ListItemText primary={item.username}/>
                             </ListItem>
-                        :
+                        	:
                         <div/>
                         }
                     </div>

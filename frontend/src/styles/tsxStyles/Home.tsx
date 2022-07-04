@@ -1,9 +1,4 @@
-const StatsPartStyle = {
-    width: '100%',
-}
-
 const PlayerBarStyle = {	
-	width: '100%',
     textAlign: 'center',
     alignComponent: 'center',
     padding: '1%',
@@ -29,15 +24,14 @@ const StatTitle = {
 }
 
 const StatBox = {
-	width: '45vw',
-
     backgroundColor: 'rgb(211, 172, 223)',
 	color: 'white',
 	border: '3px solid black',
     height: '30vh',
     overflowY: 'scroll',
     overflow: 'auto',
-	paddingLeft: '3vw',
+	paddingTop: '4%',
+	paddingLeft: '4%',
 }
 
 const SkillBarContourStyle = {
@@ -50,7 +44,6 @@ const TitleStyle = {
 	marginRight: '10px',
 }
 
-export {StatsPartStyle,
-        PlayerBarStyle, SkillBarStyle,
+export {PlayerBarStyle, SkillBarStyle,
         StatTitle, StatBox, SkillBarContourStyle,
         TitleStyle}
