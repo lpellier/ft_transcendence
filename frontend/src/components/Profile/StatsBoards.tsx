@@ -1,9 +1,9 @@
-import {useState, useEffect} from 'react'
+import {useState, useEffect, useRef} from 'react'
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import {User} from 'interfaces';
+import {init_user, User} from 'interfaces';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import TimelineIcon from '@mui/icons-material/Timeline';
 import MilitaryTechIcon from '@mui/icons-material/MilitaryTech';
@@ -11,7 +11,6 @@ import UpdateIcon from '@mui/icons-material/Update';
 import {StatTitle, StatBox} from "../../styles/tsxStyles/Home"
 import {Stats} from 'interfaces'
 import axios from 'axios'
-
 
 const ButtonLeadStyle = {
 	backgroundColor: "rgb(170, 50, 190)",
@@ -22,7 +21,6 @@ const ButtonStatStyle = {
 	backgroundColor: "rgb(170, 50, 190)",
 	width: '29%',
 }
-
 
 function BoardComponent(props: {icon: any, title: string}) {
 	return(
@@ -36,14 +34,10 @@ function BoardComponent(props: {icon: any, title: string}) {
 }
 
 function StatsBox(props: {user: User}){
-	const [totGames, setTotGame] = useState<number>(props.user.victories + props.user.losses)
-	const [wins, setWins] = useState<number>(props.user.victories)
-	const [losses, setLosses] = useState<number>(props.user.losses)
+	const [tot_games, setTotgame] = useState<number>(props.user.victories + props.user.losses)
 
 	useEffect(() => {
-		setWins(props.user.victories)
-		setLosses(props.user.losses)
-		setTotGame(wins + losses)
+		setTotgame(props.user.victories + props.user.losses)
 	}, [props.user])
 
 	return (
@@ -59,9 +53,9 @@ function StatsBox(props: {user: User}){
 							<Button variant="contained" style={ButtonStatStyle}>Total games</Button>
 						</Stack>
 						<Stack direction="row" spacing={2}>
-							<Button style={{width: '29%'}}> {wins} </Button>
-							<Button style={{width: '29%'}}> {losses} </Button>
-							<Button style={{width: '29%'}}> {totGames} </Button>
+							<Button style={{width: '29%'}}> {props.user.victories} </Button>
+							<Button style={{width: '29%'}}> {props.user.losses} </Button>
+							<Button style={{width: '29%'}}> {tot_games} </Button>
 						</Stack>
 					</Stack>
 				</Box>
@@ -82,7 +76,6 @@ function TrophyBox(){
 		);
 }
 
-
 function LeaderboardBox(props: {users: User[]}){
 	const [leaders, setLeaders] = useState<Stats[]>([])
 	
@@ -95,7 +88,7 @@ function LeaderboardBox(props: {users: User[]}){
 			}
 		)
 		.then(res => {
-			console.log("Get leader success: ", res.data)
+			console.log("Get leader success")
 			setLeaders(res.data)
 		})
 		.catch(err => {
