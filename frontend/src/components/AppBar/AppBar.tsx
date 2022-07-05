@@ -109,8 +109,7 @@ export default function SearchAppBar(props: {user: User, users: User[], setOther
 		.catch(err => {
 			console.log("Appbar get request failed : ", err)
 		})
-	}, )
-
+	}, [props.user])
 
   return (
       <AppBar position="static">
