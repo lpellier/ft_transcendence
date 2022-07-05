@@ -7,6 +7,7 @@ import '../../styles/Chat/Chat.css';
 import {User, Room} from 'interfaces';
 import {socket} from 'index';
 
+
 const ChatBoxComponentStyle = {	
     width: '87vw',
     minWidth: '510px',

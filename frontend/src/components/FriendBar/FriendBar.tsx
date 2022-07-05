@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import Drawer from '@mui/material/Drawer';
 import Button from '@mui/material/Button';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
-import { TextField } from '@mui/material';
+import { TextField, Tooltip } from '@mui/material';
 import { User } from 'interfaces';
 import { socket } from 'index';
 import { toastThatError, toastIt } from 'App';
@@ -123,9 +123,11 @@ export default function FriendBar(props: {user: User, users: User[]}) {
 
     return (
         <div>
-            <Button onClick={toggleFriendBar} variant="contained" color="secondary">   
-                <PeopleAltIcon/>
-            </Button>
+            <Tooltip title='Friends'>
+                <Button onClick={toggleFriendBar} variant="contained" color="secondary">   
+                    <PeopleAltIcon/>
+                </Button>
+            </Tooltip>
                 <Drawer
                     anchor='left'
                     open={open}

@@ -48,7 +48,7 @@ function PlayerInfoBand(props: {level: number, user: User}) {
 			<Box sx={PlayerBarStyle}>
 				<Stack >
 					<Stack direction="row" spacing={35}>
-						<PlayerAvatar image={'http://127.0.0.1:3001/avatars/' + props.user.id + '.png'} />
+						<PlayerAvatar image={'http://127.0.0.1:3001/avatars/' + props.user.id + '.png'} onClick={ () => {} }/>
 						<Stack spacing={1} >
 							<Typography variant="h5">
 							 	{props.user.username}

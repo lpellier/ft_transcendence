@@ -10,9 +10,9 @@ import ListItemText from '@mui/material/ListItemText';
 import { socket } from 'index';
 import PersonIcon from '@mui/icons-material/Person';
 import BlockIcon from '@mui/icons-material/Block';
-import { Backdrop, ButtonGroup, IconButton, Button, Stack, Alert } from '@mui/material';
+import Games from '@mui/icons-material/Games';
+import { Backdrop, ButtonGroup, IconButton, Button, Stack, Alert, Tooltip } from '@mui/material';
 import {Link} from 'react-router-dom';
-import {Navigate} from 'react-router-dom';
 
 interface CreateDMRoomDto {
     name: string;
@@ -36,7 +36,7 @@ export default function DirectMessaging(props: {user: User, users: User[], rooms
         return () => {
             socket.off('add blocked', handler);
         }
-    })
+    }, [props.user?.id])
 
     console.log("blocked = ", blocked);
 
@@ -46,7 +46,7 @@ export default function DirectMessaging(props: {user: User, users: User[], rooms
         return () => {
             socket.off('get blocked', handler);
         }
-    })
+    }, [])
 
     function    parseUser(roomName: string) {
         const user1Id:number = parseInt(roomName.split('-')[0]);
@@ -134,7 +134,7 @@ export default function DirectMessaging(props: {user: User, users: User[], rooms
 		return ( () => {
 			socket.off('create room', handler);
 		})
-	})
+	}, [props.user.id]);
 
 	useEffect(() => {
 		const handler = () => {
@@ -144,7 +144,7 @@ export default function DirectMessaging(props: {user: User, users: User[], rooms
 		return ( () => {
 			socket.off('create dm room', handler);
 		})
-	})
+	}, [props.user.id])
     
     
     function UserMod(props: {user: User, users: User[], room: Room, setOtherUser: React.Dispatch<React.SetStateAction<User | undefined>>}) {
@@ -162,13 +162,24 @@ export default function DirectMessaging(props: {user: User, users: User[], rooms
 
         return (
             <div>
-                <Stack direction="row" justifyContent="space-between">
+                <Stack justifyContent="space-between">
                     <ListItemText primary={parseUser(props.room.name)?.username}/>
                     <Stack direction="row" >
-                        <Button onClick={() => goToProfile(parseUser(props.room.name))}>
-                            <Link to="/profile"><PersonIcon/></Link>
-                        </Button>
-                        <IconButton onClick={() => setShowBackdrop(true)} ><BlockIcon/></IconButton>
+                        <Tooltip title="Go to profile">
+                            <IconButton onClick={() => goToProfile(parseUser(props.room.name))} size="small">
+                                <Link to="/profile"><PersonIcon/></Link>
+                            </IconButton>
+                        </Tooltip>
+                        <Tooltip title="Invite for a match">
+                            <IconButton size="small">
+                                <Games/>
+                            </IconButton>   
+                        </Tooltip>
+                        <Tooltip title="Block user">
+                            <IconButton color='error' onClick={() => setShowBackdrop(true)} size="small">
+                                <BlockIcon/>
+                            </IconButton>
+                        </Tooltip>
                     </Stack>
                 </Stack>
                 <Backdrop
