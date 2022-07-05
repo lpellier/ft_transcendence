@@ -10,6 +10,7 @@ import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutli
 import {ModalChooseName} from '../../../styles/tsxStyles/Settings/Name'
 import {ButtonModalStyle, IconStyle} from '../../../styles/tsxStyles/AppBar/PongMenu'
 import {User} from 'interfaces'
+import {toastThatError, toastIt} from '../../../routes/routes'
 
 function NameButton() {
 	return (
@@ -51,7 +52,7 @@ function NameInput(props: {username: string, setter: any, setOpen: any}) {
 			props.setOpen(false)
 		})
 		.catch(err => {
-			console.log("Put request failed : ", err)
+			toastThatError('invalid username');
 		});
 	}
 

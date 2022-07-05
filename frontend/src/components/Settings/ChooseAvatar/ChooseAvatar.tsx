@@ -17,8 +17,7 @@ import {useState} from 'react'
 import Button from '@mui/material/Button';
 import axios from 'axios'
 import { ImageIdContext } from 'App';
-import { ownerWindow } from '@mui/material';
-
+import {toastThatError, toastIt} from '../../../routes/routes'
 const Input = styled('input')({
 	display: 'none',
   });
@@ -73,7 +72,7 @@ function UploadButton(props: {setOpen: any}) {
 			props.setOpen(false)
 		})
 		.catch(err => {
-			console.log("Put avatar request failed : ", err)
+			toastThatError('Avatar upload failed')
 		})
 
 		props.setOpen(false)
