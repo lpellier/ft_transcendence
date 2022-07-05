@@ -17,6 +17,7 @@ import { ProfileWithSettings } from './interfaces/profile-with-settings.interfac
 import { Profile } from './interfaces/profile.interface';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
+import { UserParams } from './params/user.params';
 
 @UseGuards(JwtAuthGuard)
 @Controller('users')
@@ -60,7 +61,7 @@ export class UsersController {
   uploadAvatar(@UploadedFile() file: Express.Multer.File) {}
 
   @Get(':id')
-  async findOne(@Param('id') id: string): Promise<Profile> {
-    return this.usersService.getProfile(+id);
+  async findOne(@Param() params: UserParams): Promise<Profile> {
+    return this.usersService.getProfile(params.id);
   }
 }

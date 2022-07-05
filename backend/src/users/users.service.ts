@@ -26,9 +26,9 @@ export class UsersService {
   async getMock() {
     const user = await this.prisma.user.findUnique({
       where: {
-        id: 1
-      }
-    })
+        id: 1,
+      },
+    });
     return user;
   }
 
@@ -176,13 +176,13 @@ export class UsersService {
     const friends = await this.prisma.user.findMany({
       where: {
         id: {
-    in: ids,
+          in: ids,
         },
       },
     });
     return friends;
   }
-  
+
   async addFriend(userId: number, friendId: number) {
     const friendIds: number[] = await this.findFriendsIds(userId);
 
@@ -208,5 +208,4 @@ export class UsersService {
       },
     });
   }
-
 }
