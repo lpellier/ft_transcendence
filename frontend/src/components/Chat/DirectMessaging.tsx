@@ -12,7 +12,6 @@ import PersonIcon from '@mui/icons-material/Person';
 import BlockIcon from '@mui/icons-material/Block';
 import { Backdrop, ButtonGroup, IconButton, Button, Stack, Alert } from '@mui/material';
 import {Link} from 'react-router-dom';
-import {Navigate} from 'react-router-dom';
 
 interface CreateDMRoomDto {
     name: string;
