@@ -91,7 +91,6 @@ export default function AllRoutes()  {
 			setAuth(true);
             setUser(res.data);
 			setOtherUser(res.data);
-
         })
         .catch(function (err) {
 			console.log("Authentication has failed : ", err)
@@ -120,7 +119,7 @@ export default function AllRoutes()  {
 					<Route path="profile" element={ < Profile user={otherUser} users={users}/>}/>
 					<Route path="chat" element={<Chat user={user} users={users} setOtherUser={setOtherUser} />}/>
 					<Route path="game" element={<Game user={user}/>}/>
-					<Route path="settings" element={<Settings user={user}/>}/>
+					<Route path="settings" element={<Settings user={user} setUser={setUser}/>}/>
 				</Route>
 			</Routes>
 
