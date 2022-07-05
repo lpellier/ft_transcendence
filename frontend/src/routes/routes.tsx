@@ -15,7 +15,31 @@ import {socket} from 'index';
 import Chat from "../components/Chat/Chat";
 import Settings from "../components/Settings/Settings";
 import Game from "./Game";
+import { toast, ToastContainer } from 'react-toastify';
 
+export function toastThatError(message: string) {
+    toast.error(message, {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        });
+}
+
+export function toastIt(message: string) {
+    toast.success(message, {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        });
+}
 
 function ProtectedRoute(props: {children: JSX.Element, auth: any}) {
 
@@ -75,6 +99,18 @@ export default function AllRoutes()  {
 	}, [isAuth])
 	
 	return (
+		<div>
+		     <ToastContainer
+                position="top-center"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover={false}
+            />
 		<BrowserRouter>
 	        <Routes>
 	            <Route path="/login" element={<LogIn user={user} auth={isAuth}/>} />
@@ -88,5 +124,6 @@ export default function AllRoutes()  {
 			</Routes>
 
 	    </BrowserRouter>
+		</div>
 	)
 }

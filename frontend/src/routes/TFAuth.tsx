@@ -4,6 +4,7 @@ import Box from '@mui/material/Box'
 import Stack from '@mui/material/Stack'
 import TextField from '@mui/material/TextField'
 import axios from 'axios'
+import { toastThatError } from './routes'
 
 const BoxStyle = {
 	width: '30vw',
@@ -26,31 +27,36 @@ const TitleStyle = {
 }
 
 function PinField(props: {value: string, setPininput: any, setRedirect: any, setAuth: any}) {
+	const [hasSubmitted, setHastSubmitted] = useState<boolean>(false)
 
 	useEffect(() => {
-		console.log(props.value, typeof props.value)
+		if (hasSubmitted === true) {
 
-		axios.post(
-		'http://127.0.0.1:3001/auth/google-authenticator', 
-		props.value,
-		{
-			withCredentials: true, 
-		})
-		.then(res => {
-			console.log("Post request success :")
-			props.setRedirect(res.data)
-			props.setAuth(res.data)
-		})
-		.catch(function (err) {
-			console.log("Post request failed :", err)
-		})
-	}, [props.value])
+			axios.post(
+			'http://127.0.0.1:3001/auth/google-authenticator', 
+			props.value,
+			{
+				withCredentials: true, 
+			})
+			.then(res => {
+				console.log("Pin Post request success :")
+				props.setRedirect(res.data)
+				props.setAuth(res.data)
+			})
+			.catch(function (err) {
+				console.log("Pin Post request failed :", err)
+				toastThatError("Ho no! That Pin is not valid! :/")
+			})
+			setHastSubmitted(false)
+		}
+	}, )
 
 	function handleSubmit(e: any)
 	{
 		e.preventDefault();
 		props.setPininput({value: e.target[0].value});
 		e.target[0].value = "";
+		setHastSubmitted(true)
 	}
 
 	return (
@@ -69,6 +75,10 @@ function PinField(props: {value: string, setPininput: any, setRedirect: any, set
 export default function TFAuth(props: {setAuth: any}) {
 	const [pinInput, setPininput] = useState<string>("");
 	const [redirect, setRedirect] = useState<boolean>(false);
+
+	useEffect(() => {
+		setRedirect(redirect)
+	}, )
 
 	return (
 		<Box sx={BoxStyle}>
