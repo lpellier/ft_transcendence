@@ -8,6 +8,7 @@ import { CreateMessageDto } from "./dto/create-message.dto";
 import { CreateDMRoomDto } from "./dto/create-dm-room.dto"
 import { UpdatePasswordDto } from "./dto/update-password.dto"
 import { BlockedUserDto } from "./dto/blocked-user.dto"
+import { CheckPasswordDto } from "./dto/check-password.dto";
 	
 import * as bcrypt from 'bcrypt';
 
@@ -201,4 +202,15 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect
 		console.log('get blocked called', blocked)
 	  }
 
-}
+	  @SubscribeMessage('check password')
+	  async checkPassword(@ConnectedSocket() client:Socket ,@MessageBody() checkPasswordDto: CheckPasswordDto) {
+		bcrypt.compare(checkPasswordDto.password, await this.chatService.getPassword(checkPasswordDto.roomId), (err, res) => {
+			if (err) {
+				console.log(err);
+			}
+			client.emit('check password', res);
+		});
+	  }	
+	}
+
+

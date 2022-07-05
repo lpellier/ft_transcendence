@@ -197,4 +197,12 @@ export class ChatService {
     return (blocked);
   }
 
+  async getPassword(roomId: number) { 
+    const room = await this.prisma.room.findUnique({
+      where: {id: roomId},
+      select: {password: true}
+    })
+    return room.password;
+  }
+
 }
