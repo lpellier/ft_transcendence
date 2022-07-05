@@ -5,10 +5,7 @@
 	// ? when opening the site on a page for the first time, game doesn't load until refresh (but only sometimes)
 
 // TODO IMPROVEMENTS
-	// ? take into account score when recording on database
-	// ? add player xp and level
-	// ? handle edge cases like players leaving in middle of game for stats (count as defeat)
-	
+	// ? wasd keys do not show up in multiplayer 
 	// ? implement better ai
 
 	// ? cute animation showing the roll of pong value in casino

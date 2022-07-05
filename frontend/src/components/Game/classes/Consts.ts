@@ -218,6 +218,8 @@ class Consts {
 	}
 	
 	fadeMusicUp(music : any) {
+		if (this.max_volume === 0)
+			return ;
 		music.currentTime = 0;
 		music.volume = this.max_volume;
 		music.play();
