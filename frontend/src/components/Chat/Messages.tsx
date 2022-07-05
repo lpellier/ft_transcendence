@@ -31,12 +31,16 @@ function Messages(props : {user: User, users: User[], currentRoom: Room, canWrit
 	}
 
 	useEffect(() => {
-		socket.on('chat message', (msg:Message) => {
-			addMessage(msg);
+		const handler = (newMessage: Message) => {
+			addMessage(newMessage)
 			let objDiv = document.getElementById('messagebox');
             if (objDiv != null)
 				objDiv.scrollTop = objDiv.scrollHeight;
-		})
+		}
+		socket.on('chat message', handler)
+		return () => {
+			socket.off('chat message', handler)
+		}
 	}, [])
 
 	useEffect(() => {
