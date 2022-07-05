@@ -66,7 +66,7 @@ function PasswordInput(props: {openPassword: boolean, setOpenPassword: React.Dis
 		return () => {
 			socket.off('check password', handler);
 		}
-	}, [props.room.id]);
+	}, [props.room, handleClose]);
 
 	return(
 		<Dialog open={props.openPassword}  onClose={handleClose}>
