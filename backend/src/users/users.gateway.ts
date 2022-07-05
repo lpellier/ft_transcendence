@@ -27,7 +27,10 @@ export class FriendsGateway
     @ConnectedSocket() client: Socket,
     @MessageBody() friendUserDto: FriendUserDto,
   ) {
-    await this.usersService.addFriend(friendUserDto.userId, friendUserDto.friendId);
+    await this.usersService.addFriend(
+      friendUserDto.userId,
+      friendUserDto.friendId,
+    );
     client.emit('add friend');
   }
 

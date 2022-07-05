@@ -96,7 +96,6 @@ function ProjectName() {
 
 export default function SearchAppBar(props: {user: User, users: User[], setOtherUser: React.Dispatch<React.SetStateAction<User | undefined>>}) {
 
-
   return (
       <AppBar position="static">
 		<ToastContainer

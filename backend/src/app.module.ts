@@ -7,6 +7,13 @@ import { ChatModule } from './chat/chat.module';
 import { GameModule } from './game/game.module';
 
 @Module({
-  imports: [AuthModule, UsersModule, StatsModule, ConfigModule.forRoot({isGlobal: true}), ChatModule, GameModule],
+  imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
+    AuthModule,
+    UsersModule,
+    StatsModule,
+    ChatModule,
+    GameModule,
+  ],
 })
 export class AppModule {}
