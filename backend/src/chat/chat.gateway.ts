@@ -168,7 +168,17 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect
 
 	@SubscribeMessage('update password')
 	async handeUpdstePassword(@MessageBody() updatePasswordDto: UpdatePasswordDto) {
-		await this.chatService.updatePassword(updatePasswordDto.roomId, updatePasswordDto.password);
+		if (updatePasswordDto.password != "") {
+			bcrypt.hash(updatePasswordDto.password, 10, async (err, hash) => {
+				if (err) {
+					console.log(err);
+				}
+				else
+					await this.chatService.updatePassword(updatePasswordDto.roomId, hash);
+			})
+		}
+		else
+			await this.chatService.updatePassword(updatePasswordDto.roomId, updatePasswordDto.password);
 		this.server.emit('password updated', updatePasswordDto.roomId);
 		this.server.emit('create room');
 	}
