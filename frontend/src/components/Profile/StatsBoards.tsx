@@ -34,22 +34,11 @@ function BoardComponent(props: {icon: any, title: string}) {
 }
 
 function StatsBox(props: {user: User}){
-	const [user, setUser] = useState<User>(props.user)
 	const [tot_games, setTotgame] = useState<number>(props.user.victories + props.user.losses)
 
 	useEffect(() => {
-
-		axios.get("http://127.0.0.1:3001/users/me",
-		{ withCredentials: true })
-		.then(res => {
-			console.log("Get user in stat success")
-			setUser(res.data)
-			setTotgame(res.data.victories + res.data.losses)})
-		.catch(err => {
-			console.log("Get user in stat failed : ", err)		
-		})
-		
-	}, [])
+		setTotgame(props.user.victories + props.user.losses)
+	}, [props.user])
 
 	return (
 		<Stack spacing={1}>
@@ -64,8 +53,8 @@ function StatsBox(props: {user: User}){
 							<Button variant="contained" style={ButtonStatStyle}>Total games</Button>
 						</Stack>
 						<Stack direction="row" spacing={2}>
-							<Button style={{width: '29%'}}> {user.victories} </Button>
-							<Button style={{width: '29%'}}> {user.losses} </Button>
+							<Button style={{width: '29%'}}> {props.user.victories} </Button>
+							<Button style={{width: '29%'}}> {props.user.losses} </Button>
 							<Button style={{width: '29%'}}> {tot_games} </Button>
 						</Stack>
 					</Stack>
