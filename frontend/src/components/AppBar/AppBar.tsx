@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react'
+import {useEffect, useState, useContext} from 'react'
 import {Link} from 'react-router-dom'
 import {User} from 'interfaces';
 import {PlayerAvatar} from	'../Avatars';
@@ -17,6 +17,7 @@ import WebhookIcon from '@mui/icons-material/Webhook'
 import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
 import axios from 'axios';
 import {BarStyle} from '../../styles/tsxStyles/AppBar/AppBar'
+import {UserUpdateContext} from 'App'
 
 function LogOutLink() {
 
@@ -68,14 +69,16 @@ function AppBarButton(props: {icon: any, link: string, tooltip: any}) {
 function PlayerName(props: {name: string}) {
 	
 	return (
-		<Typography
-		  variant="h6"
-		  noWrap
-		  component="div"
-		  sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
-		>
-		  {props.name}
-		</Typography>
+		<div>
+			<Typography
+			  variant="h6"
+			  noWrap
+			  component="div"
+			  sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
+			  >
+				{props.name}
+			</Typography>
+		</div>
 	);
 }
 
@@ -96,6 +99,7 @@ function ProjectName() {
 
 export default function SearchAppBar(props: {user: User, users: User[], setOtherUser: React.Dispatch<React.SetStateAction<User | undefined>>}) {
 	const [user, setUser] = useState<User>(props.user)
+	const contextValue = useContext(UserUpdateContext);
 
 	useEffect(() => {
 		axios.get(
@@ -104,13 +108,14 @@ export default function SearchAppBar(props: {user: User, users: User[], setOther
 				withCredentials: true,
 		})
 		.then(res => {
+			console.log("Appbar get request success")
 			setUser(res.data)
 		})
 		.catch(err => {
 			console.log("Appbar get request failed : ", err)
 		})
-	}, )
 
+	}, [contextValue])
 
   return (
       <AppBar position="static">
@@ -133,13 +138,13 @@ export default function SearchAppBar(props: {user: User, users: User[], setOther
 			</nav>
 			<PlayerName name={user.username} />
 			<ProjectName />
-			<Stack direction="row" spacing={2}>
-				<FriendBar user={props.user} users={props.users}/>
-				<AppBarButton link="../game" tooltip={"Game"} icon={<GamesIcon />}/>
-				<AppBarButton link="../chat" tooltip={"Forum"} icon={<ForumIcon />}/>
-				<AppBarButton link="../settings" tooltip={"Settings"} icon={<SettingsIcon />}/>
-				<LogOutLink />
-			</Stack>
+				<Stack direction="row" spacing={2} >
+					<FriendBar user={props.user} users={props.users}/>
+					<AppBarButton link="../game" tooltip={"Game"} icon={<GamesIcon />}/>
+					<AppBarButton link="../chat" tooltip={"Forum"} icon={<ForumIcon />}/>
+					<AppBarButton link="../settings" tooltip={"Settings"} icon={<SettingsIcon />}/>
+					<LogOutLink />
+				</Stack>
         </Toolbar>
     	</AppBar>
 	);

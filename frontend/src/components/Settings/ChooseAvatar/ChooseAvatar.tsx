@@ -17,7 +17,6 @@ import {useState} from 'react'
 import Button from '@mui/material/Button';
 import axios from 'axios'
 import { ImageIdContext } from 'App';
-import { ownerWindow } from '@mui/material';
 
 const Input = styled('input')({
 	display: 'none',
@@ -55,7 +54,6 @@ function UploadButton(props: {setOpen: any}) {
 	};
 
 	function handleSubmit() {
-		console.log("data input : ", selectedFile, " is :", typeof(selectedFile))
 
 		const formData = new FormData();
 		formData.append('avatar', selectedFile)
@@ -77,7 +75,6 @@ function UploadButton(props: {setOpen: any}) {
 		})
 
 		props.setOpen(false)
-		// window.location.reload()
 	};
 
 	function closeModal() {

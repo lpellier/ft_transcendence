@@ -7,7 +7,6 @@ const BarStyle = {
 }
 
 const ProjectNameStyle = {
-	
 }
 
 const SearchStyle = styled('div')(({ theme }) => ({
@@ -48,8 +47,7 @@ const SearchStyle = styled('div')(({ theme }) => ({
         },
       },
     },
-  }));
-
+}));
 
 export { BarStyle, SearchStyle, SearchIconWrapper, StyledInputBase, 
 	ProjectNameStyle }

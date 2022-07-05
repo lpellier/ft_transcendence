@@ -10,6 +10,7 @@ import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutli
 import {ModalChooseName} from '../../../styles/tsxStyles/Settings/Name'
 import {ButtonModalStyle, IconStyle} from '../../../styles/tsxStyles/AppBar/PongMenu'
 import {User} from 'interfaces'
+import {UserUpdateContext} from 'App'
 
 function NameButton() {
 	return (
@@ -26,12 +27,13 @@ function NameButton() {
 function NameInput(props: {username: string, setter: any, setOpen: any}) {
 	const [isSubmitted, setIsSubmitted] = useState<boolean>(false)
 
-	function handleSubmit(e: any)
+	function handleSubmit(e: any, setter: any, changeUser: number)
 	{
 		e.preventDefault();
 		props.setter(e.target[0].value);
 		e.target[0].value = "";
 		setIsSubmitted(true)
+		setter(changeUser + 1)
 	}
 
 	function PatchRequest() {
@@ -57,7 +59,10 @@ function NameInput(props: {username: string, setter: any, setOpen: any}) {
 
 	return (
 		<Stack direction="row">
-			<form id='ChangeNameForm' onSubmit={handleSubmit} style={{width: '100%'}}>
+		<UserUpdateContext.Consumer >
+			{({changeUser, setChangeUser}) =>
+			<form id='ChangeNameForm' onSubmit={e => handleSubmit(e, setChangeUser, changeUser)}
+			style={{width: '100%'}}>
 				<TextField
 					type="text"
 					label="Your name" 
@@ -66,11 +71,12 @@ function NameInput(props: {username: string, setter: any, setOpen: any}) {
 					id='name'
 				/>
 			{isSubmitted === true?
-				PatchRequest()
-					:
+					PatchRequest()
+				:
 				<div/>
 			}
 			</form>
+		}</UserUpdateContext.Consumer >
 		</Stack>
 	);
 }
