@@ -36,12 +36,12 @@ function SkillBar(props: {progression: number}) {
 }
 
 function PlayerInfoBand(props: {level: number, user: User}) {
-	const [xp, setXp] = useState<number>((props.level * 100) % 100) 
+	const [xp, setXp] = useState<number>(Math.trunc(props.level * 100) % 100) 
 	const [level, setLevel] = useState<number>(Math.trunc(props.level)) 
 
 	useEffect(() => {
 		setLevel(Math.trunc(props.level))
-		setXp((props.level * 100) % 100)
+		setXp(Math.trunc(props.level * 100) % 100)
 	}, [props.level])
 	
 	return (

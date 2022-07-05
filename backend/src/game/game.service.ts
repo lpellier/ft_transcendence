@@ -51,7 +51,7 @@ export class GameService {
             data: {
                 losses: {increment: 1},
                 xp: current_xp,
-                level: current_level
+                level: current_level,
             }
         });
     }
