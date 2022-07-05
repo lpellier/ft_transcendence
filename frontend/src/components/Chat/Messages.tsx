@@ -25,7 +25,6 @@ function Messages(props : {user: User, users: User[], currentRoom: Room, canWrit
 		e.preventDefault();
 		const message: string = e.target[0].value;
 		const messageDto: CreateMessageDto = {content: message, user: props.user.id, room: props.currentRoom.id, type: true} 
-		console.log("messageDto = ", messageDto);
 		if (message)
 			socket.emit('chat message', messageDto);
 		e.target[0].value = '';
@@ -41,13 +40,14 @@ function Messages(props : {user: User, users: User[], currentRoom: Room, canWrit
 	}, [])
 
 	useEffect(() => {
-		socket.on('get all messages', (msgs:Message[]) => {
-			setMessages(msgs);
-		})
+		const handler = (data: Message[]) => {setMessages(data);};
+		socket.on('get all messages', handler);
+		return () => {
+			socket.off('get all messages', handler);
+		}
 	}, [])
 
-	console.log('currentRoom = ', props.currentRoom);
-	console.log('messages = ', messages);
+
     return (
 	<Box sx={{width:'100%'}}>
         <Stack className='chat' spacing={2} justifyContent='space-between'>

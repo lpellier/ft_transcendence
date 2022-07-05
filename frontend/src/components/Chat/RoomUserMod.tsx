@@ -10,8 +10,6 @@ import {useState, useEffect } from 'react'
 import {Room, User} from 'interfaces'
 import {socket} from 'index'
 import { toastIt, toastThatError } from '../../routes/routes';
-import bcrypt from 'bcryptjs';
-
 
 export interface RoomUserDto {
     userId: number;
@@ -204,14 +202,7 @@ function RoomUserMod(props : {currentUser: User, users: User[], room: Room, room
 		e.preventDefault();
 
 		let password:string = e.target[0].value;
-		if (password !== "")
-		{
-			bcrypt.hash(password, 10, function(err, hash) {
-				socket.emit('update password', {roomId: props.room.id, password: hash})
-			})
-		}
-		else
-			socket.emit('update password', {roomId: props.room.id, password: ""})
+		socket.emit('update password', {roomId: props.room.id, password: password})
 		setPasswordClicked(false);
 	}
 

@@ -12,7 +12,6 @@ import KeyIcon from '@mui/icons-material/Key';
 import KeyOffIcon from '@mui/icons-material/KeyOff';
 import ToggleButton from '@mui/material/ToggleButton';
 import Dialog from '@mui/material/Dialog';
-import bcrypt from 'bcryptjs';
 import { toastThatError } from '../../routes/routes';
 import {useState, useEffect} from 'react'
 import {Room, User} from 'interfaces'
@@ -49,8 +48,12 @@ function PasswordInput(props: {openPassword: boolean, setOpenPassword: React.Dis
 	function handlePasswordSubmit(e:any) {
 		const submittedPassword = e.target[0].value;
 		e.preventDefault();
-		bcrypt.compare(submittedPassword, props.room.password, function(err, result) {
-			if (result)
+		socket.emit('check password', {roomId: props.room.id, password: submittedPassword});
+	}
+
+	useEffect(() => {
+		const handler = (data: any) => {
+			if (data)
 			{
 				props.setCurrentRoom(props.room);
 				socket.emit('get admins', props.room.id);
@@ -58,8 +61,12 @@ function PasswordInput(props: {openPassword: boolean, setOpenPassword: React.Dis
 			}
 			else
 				toastThatError("wrong password");
-		})
-	}
+		}
+		socket.on('check password', handler);
+		return () => {
+			socket.off('check password', handler);
+		}
+	}, [props.room, handleClose]);
 
 	return(
 		<Dialog open={props.openPassword}  onClose={handleClose}>

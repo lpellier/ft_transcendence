@@ -127,11 +127,9 @@ export default function SearchAppBar(props: {user: User, users: User[], setOther
 		/>
         <Toolbar style={ BarStyle }>
 			<nav>
-				<Button onClick={() => props.setOtherUser(props.user)}>
-					<Link to="profile" style={{ textDecoration: 'none' }}>
-						<PlayerAvatar image={'http://127.0.0.1:3001/avatars/' + user.id + '.png'} />
-					</Link>
-				</Button>
+				<Link to="profile" style={{ textDecoration: 'none' }}>
+					<PlayerAvatar image={'http://127.0.0.1:3001/avatars/' + user.id + '.png'} onClick={() => props.setOtherUser(props.user)} />
+				</Link>
 			</nav>
 			<PlayerName name={user.username} />
 			<ProjectName />
