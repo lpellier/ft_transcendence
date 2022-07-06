@@ -35,7 +35,7 @@ services:
     working_dir: /frontend
     ports:
       - 3000:3000
-    command:  sh -c "npm install
+    command:  sh -c "npm install --legacy-peer-deps
                && npx tsc -p src/components/Game
                && npm start"
     env_file:
