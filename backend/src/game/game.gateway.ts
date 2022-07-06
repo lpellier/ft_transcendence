@@ -7,7 +7,6 @@ import { GameService } from "./game.service"
 import { ConfigService } from "@nestjs/config";
 
 
-
 // ? How to create a game of pong
 // ? First, server sends page to which clients can connect
 // ? clients connected are separeted into rooms, there can only be two clients per room
@@ -71,6 +70,11 @@ export class GameGateway {
 	games : Game[] = [];
 
 	timestep : number = 15; // ms
+
+	@SubscribeMessage("invitation_accepted") 
+	handleInvitation(@ConnectedSocket() client: Socket, @MessageBody() data: any) {
+		console.log("alo");
+	}
 
 	handleDisconnect(client : Socket) { // ? triggers when user disconnects from the website (either refresh or close tab)
 		let index = -1;

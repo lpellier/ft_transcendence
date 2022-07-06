@@ -10,6 +10,7 @@ import { ConfigService } from '@nestjs/config';
 import { FriendUserDto } from './dto/friend-user.dto';
 import { Socket } from 'socket.io';
 import { UsersService } from './users.service';
+import { ClientRequest } from 'http';
 
 @WebSocketGateway({
   cors: {
@@ -64,6 +65,10 @@ export class FriendsGateway
     console.log('client disconnected');
   }
 
+  // @SubscribeMessage('countdown_start')
+  //   handleInGame(@ConnectedSocket() client: Socket, @MessageBody() data: any) {
+  //     console.log('data = ', data);
+  // }
   // @SubscribeMessage('updateFriend')
   // update(@MessageBody() updateFriendDto: UpdateFriendDto) {
   //   return this.friendsService.update(updateFriendDto.id, updateFriendDto);
