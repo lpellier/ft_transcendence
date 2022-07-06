@@ -4,8 +4,14 @@ function goToMainMenu() {
 }
 
 function clickSound() {
-	if (mouseButton === LEFT)
+	if (mouseButton === LEFT) {
 		consts.max_volume += 0.25;
+		if (consts.max_volume === 0.25 && game.state === "in-menu")
+			consts.switchMusic("menu");
+		else if (consts.max_volume === 0.25 && (game.state === "waiting-player" || game.state === "waiting-readiness"))
+			consts.switchMusic(game.map.name);
+	
+	}
 	else if (mouseButton === RIGHT)
 		consts.max_volume -= 0.25;
 	

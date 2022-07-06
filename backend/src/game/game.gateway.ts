@@ -5,7 +5,6 @@ import * as consts from "./classes/Consts"
 import * as utils from "./utils"
 import { GameService } from "./game.service"
 
-
 // ? How to create a game of pong
 // ? First, server sends page to which clients can connect
 // ? clients connected are separeted into rooms, there can only be two clients per room
@@ -65,6 +64,11 @@ export class GameGateway {
 
 	timestep : number = 15; // ms
 
+	@SubscribeMessage("invitation_accepted") 
+	handleInvitation(@ConnectedSocket() client: Socket, @MessageBody() data: any) {
+		console.log("alo");
+	}
+
 	handleDisconnect(client : Socket) { // ? triggers when user disconnects from the website (either refresh or close tab)
 		let index = -1;
 		if ((index = this.clients.indexOf(client.id)) != -1) {
@@ -87,7 +91,6 @@ export class GameGateway {
 							this.game_service.incrementLosses(player.real_id, game.score[game.players.indexOf(player)]);
 						}
 						game.state = "game-over"
-						console.log("been here handleDisconnect");
 						this.games.splice(this.games.indexOf(game), 1);
 						return ;
 					}
@@ -115,7 +118,6 @@ export class GameGateway {
 						this.game_service.incrementLosses(player.real_id, game.score[game.players.indexOf(player)]);
 					}
 					game.state = "game-over"
-					console.log("been here handleQuitOngoing");
 					this.games.splice(this.games.indexOf(game), 1);
 					return ;
 				}

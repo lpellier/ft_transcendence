@@ -102,7 +102,7 @@ function listenMoveEvents() {
 		}
 		if (count === game.players.length) {
 			game.setState("countdown");
-			socket.emit("countdown_start");
+			socket.emit("countdown_start", game.players[0].username, game.players[1].username);
 			consts.playBip(consts.BIP);
 		}
 	});

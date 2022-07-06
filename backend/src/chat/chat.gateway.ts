@@ -1,6 +1,6 @@
 import { ConfigService } from "@nestjs/config";
 import { MessageBody, ConnectedSocket, SubscribeMessage, WebSocketGateway, WebSocketServer, OnGatewayConnection, OnGatewayDisconnect } from "@nestjs/websockets";
-import { Socket } from "socket.io";
+import { Socket, Server } from "socket.io";
 import { ChatService } from './chat.service';
 import { UserRoomDto } from "./dto/user-room.dto";
 import { CreateRoomDto } from './dto/create-room.dto';
@@ -25,7 +25,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect
 	constructor(private readonly chatService: ChatService) {}
 
 	@WebSocketServer()
-	server: Socket;
+	server: Server;
 
 	@SubscribeMessage('create room') 
 	async handleCreateRoom(@ConnectedSocket () client : Socket, @MessageBody()  createRoomDto: CreateRoomDto) {		
@@ -221,6 +221,12 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect
 			client.emit('check password', res);
 		});
 	  }	
+
+
+		@SubscribeMessage('countdown_start')
+		handleInGame(@ConnectedSocket() client: Socket, @MessageBody() data: any) {
+			this.server.emit("invitation_accepted");
+		}
 	}
 
 
