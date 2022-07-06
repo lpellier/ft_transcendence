@@ -119,8 +119,8 @@ function draw() {
 		should_load = true;
 		consts.switchMusic("none");
 	}
-	else if (should_load)
-		inMainMenu();
+	// else if (should_load)
+	// 	inMainMenu();
 	if (game.state === "waiting-player" || game.state === "waiting-readiness" || game.state === "countdown" || game.state === "relaunch-countdown" || game.state === "in-game")
 		game.map.render(1);
 	if (game.state === "in-menu-input" || game.state === "waiting-player" || game.state === "in-menu-create")

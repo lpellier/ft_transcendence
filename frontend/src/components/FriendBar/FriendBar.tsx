@@ -76,6 +76,24 @@ export default function FriendBar(props: {user: User, users: User[]}) {
         }
     }, [props.user.id])
 
+    useEffect(() => {
+        const handler = (userId: number) => {setStatusMap(statusMap.set(userId, 'in game'))}
+        socket.on('new gamer', handler);
+        return () => {
+            socket.off('new gamer', handler);
+        }
+    }, [statusMap]);
+
+    useEffect(() => {
+        const handler = (userId: number) => {
+            setStatusMap(statusMap.set(userId, 'online'))
+        }
+        socket.on('quit-game', handler);
+        return () => {
+            socket.off('quit-game', handler);
+        }
+    }, [statusMap]);
+
     function closeFriendBar() {
         setOpen(false);
     }
@@ -169,7 +187,13 @@ export default function FriendBar(props: {user: User, users: User[]}) {
                                 {statusMap.get(item.id) === 'online'?
                                     <ListItemText primary={item.username} secondary='online'/>
                                     :
-                                    <ListItemText primary={item.username} secondary='offline' />
+                                    <div>
+                                        {statusMap.get(item.id) === 'in game'?
+                                            <ListItemText primary={item.username} secondary='in game'/>
+                                            :
+                                            <ListItemText primary={item.username} secondary='offline' />
+                                        }
+                                    </div>
                                 }
                                 <Button variant="contained" color="error" onClick={() => removeFriend(item)}>remove</Button>
                             </ListItem>

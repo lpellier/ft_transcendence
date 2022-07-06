@@ -9,10 +9,12 @@ import { CreateDMRoomDto } from "./dto/create-dm-room.dto"
 import { UpdatePasswordDto } from "./dto/update-password.dto"
 import { BlockedUserDto } from "./dto/blocked-user.dto"
 import { CheckPasswordDto } from "./dto/check-password.dto";
+import { InviteDto } from "./dto/invite.dto";
 	
 import * as bcrypt from 'bcrypt';
 
 let socketUser = new Map<string, number>();
+let socketGame = new Map<string, number>();
 
 @WebSocketGateway({
   cors: {
@@ -185,6 +187,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect
 
 	handleDisconnect(@ConnectedSocket() client:Socket) {
 		console.log('client disconnected');
+		socketGame.delete(client.id);
 		this.server.emit('disconnection', socketUser.get(client.id))
 	}
 
@@ -220,7 +223,23 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect
 			}
 			client.emit('check password', res);
 		});
-	  }	
+	  }
+
+	  @SubscribeMessage('countdown_start')
+	countdown_start(@ConnectedSocket() client:Socket ,@MessageBody() userId: number) {
+		// socketGame.set(client.id, parseInt(countdownDto.user1));
+
+		this.server.emit('new gamer', userId);
+		// console.log('countdown_start called', countdownDto)
+	  }
+
+	  @SubscribeMessage('invite for game')
+	  inviteForGame(@ConnectedSocket() client:Socket ,@MessageBody() inviteDto: InviteDto) {
+		for (let [key, value] of socketUser.entries()) {
+			if (value === inviteDto.otherUserId)
+				this.server.to(key).emit('invite for game', {userId: inviteDto.userId, inviterId: client.id, inviteeId: key});
+		}
+	  }
 	}
 
 

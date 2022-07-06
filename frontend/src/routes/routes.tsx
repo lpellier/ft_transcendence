@@ -16,6 +16,12 @@ import Chat from "../components/Chat/Chat";
 import Settings from "../components/Settings/Settings";
 import Game from "./Game";
 import { toast, ToastContainer } from 'react-toastify';
+import Snackbar from '@mui/material/Snackbar';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
+import Button from '@mui/material/Button';
+
+
 
 export function toastThatError(message: string) {
     toast.error(message, {
@@ -56,10 +62,19 @@ function ProtectedRoute(props: {children: JSX.Element, auth: any}) {
 }
 
 export default function AllRoutes()  {
-	const [isAuth, setAuth] = useState(true);
+
+    interface inviteDto {
+        userId: number,
+        inviterId: number,
+        inviteeId: number,
+    }
+
+    const [isAuth, setAuth] = useState(true);
 	const [user, setUser] = useState<User>();
     let [users, setUsers] = useState<User[]>([]);
 	let [otherUser, setOtherUser] = useState<User>();
+    const [open, setOpen] = useState(false);
+    const [invite, setInvite] = useState<inviteDto>();
 
     useEffect(() => {
 		const handler = (usersData: User[]) => {
@@ -98,6 +113,45 @@ export default function AllRoutes()  {
         });
 	}, [isAuth])
 	
+
+    useEffect(() => {
+        const handler = (data: any) => { 
+            setOpen(true)  
+            setInvite(data)
+        }
+        socket.on('invite for game', handler);
+        return () => {
+            socket.off('invite for game', handler);
+        }
+    }, [])
+
+    const handleClose = (event: React.SyntheticEvent | Event, reason?: string) => {
+        if (reason === 'clickaway') {
+          return;
+        }
+        setOpen(false);
+      };    
+
+
+      const action = (
+        // <React.Fragment>
+        <div>
+        
+          <Button color="secondary" size="small" onClick={() => socket.emit('accepted game', invite, user?.id)} >
+            Accept
+          </Button>
+          <IconButton
+            size="small"
+            aria-label="close"
+            color="inherit"
+            onClick={handleClose}
+          >
+            <CloseIcon fontSize="small" />
+          </IconButton>
+        </div>
+        // </React.Fragment>
+      );
+
 	return (
 		<div>
 		     <ToastContainer
@@ -111,6 +165,13 @@ export default function AllRoutes()  {
                 draggable
                 pauseOnHover={false}
             />
+                <Snackbar
+                open={open}
+                autoHideDuration={6000}
+                onClose={handleClose}
+                message={`You have been invited to play a game with ${users.find(user => user?.id === invite?.userId)?.username}`}
+                action={action}
+                />
 		<BrowserRouter>
 	        <Routes>
 	            <Route path="/login" element={<LogIn user={user} auth={isAuth}/>} />

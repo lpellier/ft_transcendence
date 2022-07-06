@@ -4,6 +4,8 @@ import { Game } from "./classes/Game"
 import * as consts from "./classes/Consts"
 import * as utils from "./utils"
 import { GameService } from "./game.service"
+import { ConfigService } from "@nestjs/config";
+
 
 
 // ? How to create a game of pong
@@ -44,18 +46,23 @@ import { GameService } from "./game.service"
 	for (const game of games) {
 		if (game.players.length === 2 && game.state === "waiting-player") {
 			game.state = "waiting-readiness";
-			server.to(game.room_id).emit("waiting-readiness", game.players[0].id, game.players[1].id, game.players[0].real_name, game.players[1].real_name);
+			server.to(game.room_id).emit("waiting-readiness", game.players[0].id, game.players[1].id, game.players[0].real_name, game.players[1].real_name, game.players[0].real_id, game.players[1].real_id);
 		}
 	}
 }
 
+
+
 @WebSocketGateway({
 	cors: {
-		origin: "http://127.0.0.1:3000"
-	}
-})
+		origin: (new ConfigService).get("FRONT_URL"),
+		credentials: true
+	  }
+  })
 export class GameGateway {
 	constructor(private readonly game_service: GameService) {}
+
+
 	@WebSocketServer()
 	server: Server;
 
@@ -87,14 +94,17 @@ export class GameGateway {
 							this.game_service.incrementLosses(player.real_id, game.score[game.players.indexOf(player)]);
 						}
 						game.state = "game-over"
-						console.log("been here handleDisconnect");
+						this.server.emit("new disconnection", game.players[game.players.indexOf(player)].real_id);
+						this.server.emit("quit-game", game.players[(game.players.indexOf(player) + 1) % 2].real_id);
 						this.games.splice(this.games.indexOf(game), 1);
+						game.players[game.players.indexOf(player)]
 						return ;
 					}
 				}
 			}
 		}
 	}
+
 
 	@SubscribeMessage("quit-ongoing-game") // ? triggers when player quits by going somewhere else on the website
 	handleQuitOngoing(@ConnectedSocket() client : Socket) {
@@ -115,7 +125,8 @@ export class GameGateway {
 						this.game_service.incrementLosses(player.real_id, game.score[game.players.indexOf(player)]);
 					}
 					game.state = "game-over"
-					console.log("been here handleQuitOngoing");
+					this.server.emit("quit-game", game.players[0].real_id)
+					this.server.emit("quit-game", game.players[1].real_id)
 					this.games.splice(this.games.indexOf(game), 1);
 					return ;
 				}
@@ -140,6 +151,27 @@ export class GameGateway {
 	getConnection(@MessageBody() data : [string, string, string]) {
 		this.clients.push(data[0]);
 		this.users.push([data[1], data[2]]);
+	}
+
+    //[ {
+    //     userId: number,
+    //     inviterId: number,
+    //     inviteeId: number,
+    // }, userId
+	// ]
+
+	@SubscribeMessage('accepted game')
+	async handleInviteCreationGame(@MessageBody() data : [any, number]) {
+		let user1 = await this.game_service.getUsername(data[0].userId);
+		let user2 = await this.game_service.getUsername(data[1]);
+		this.games.push(new Game(utils.randomRoomId()));
+		this.games[this.games.length - 1].addPlayer(data[0].inviterId, [data[0].userId.toString(), user1]);
+		this.games[this.games.length - 1].addPlayer(data[0].inviteeId, [data[1].toString(), user2]);
+		
+		this.server.to(this.games[this.games.length - 1].room_id).emit("waiting-player", this.games[this.games.length - 1].room_id, this.games[this.games.length - 1].score_limit, this.games[this.games.length - 1].map.name);
+		this.games[this.games.length - 1].state = "waiting-readiness";
+					
+		this.server.to(this.games[this.games.length - 1].room_id).emit("waiting-readiness", this.games[this.games.length - 1].players[0].id, this.games[this.games.length - 1].players[1].id, this.games[this.games.length - 1].players[0].real_name, this.games[this.games.length - 1].players[1].real_name, this.games[this.games.length - 1].players[0].real_id, this.games[this.games.length - 1].players[1].real_id);	
 	}
 
 	@SubscribeMessage('matchmaking')
@@ -181,14 +213,15 @@ export class GameGateway {
 				if (data[1] === true) {
 					client.join(game.room_id);
 					game.addSpectator(client.id);
-					this.server.to(client.id).emit("spectate", game.room_id, game.score_limit, game.map.name, game.state, game.players[0].id, (game.players.length > 1 ? game.players[1].id : "null"), game.players[0].real_name, (game.players.length > 1 ? game.players[1].real_name : "null")); // need to handle case where only one user is connected
+					this.server.to(client.id).emit("spectate", game.room_id, game.score_limit, game.map.name, game.state, game.players[0].id, (game.players.length > 1 ? game.players[1].id : "null"), game.players[0].real_name, (game.players.length > 1 ? game.players[1].real_name : "null"), game.players[0].real_id, (game.players.length > 1 ? game.players[1].real_id : 0)); // need to handle case where only one user is connected
 				}
 				else if (game.players.length < 2) {
 					client.join(game.room_id);
 					game.addPlayer(client.id, this.users[this.clients.indexOf(client.id)]);
 					this.server.to(game.room_id).emit("waiting-player", game.room_id, game.score_limit, game.map.name);
 					game.state = "waiting-readiness";
-					this.server.to(game.room_id).emit("waiting-readiness", game.players[0].id, game.players[1].id, game.players[0].real_name, game.players[1].real_name);						
+					// startGameFullRooms(this.games, this.server);
+					this.server.to(game.room_id).emit("waiting-readiness", game.players[0].id, game.players[1].id, game.players[0].real_name, game.players[1].real_name, game.players[0].real_id, game.players[1].real_id);						
 				}
 				else
 					this.server.to(client.id).emit("matchmaking-error", "game_full");
@@ -230,6 +263,8 @@ export class GameGateway {
 							this.game_service.incrementVictories(w_id, game.score[0] > game.score[1] ? game.score[0] : game.score[1]);
 							this.game_service.incrementLosses(l_id, game.score[0] < game.score[1] ? game.score[0] : game.score[1]);
 							this.game_service.createMatch({ladder: 0, winnerId : w_id, loserId: l_id});
+							this.server.emit("quit-game", game.players[0].real_id)
+							this.server.emit("quit-game", game.players[1].real_id)
 							this.games.splice(this.games.indexOf(game), 1);
 							return ;
 						}

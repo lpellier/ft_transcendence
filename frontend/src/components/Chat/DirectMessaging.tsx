@@ -158,6 +158,17 @@ export default function DirectMessaging(props: {user: User, users: User[], rooms
             props.setOtherUser(user);
         }
 
+        // ? Jean mi  appuie sur invite pour lpellier
+        // ? l'info est envoyee au backend avec les ids des deux personnes concernees
+        // ? le backend va envoyer un event au joueur concerne
+        // ? le client du jouer concerne va afficher "jean mi vous a envoye une invitation"
+        // ? si le bouton est accepte, on renvoie un event au backend du jeu avec les ids des deux personnes concernees
+        // ? le bakcend du jeu cree une room privee et fous les deux joueurs dedans
+        // ? faudra redrigirer les joueurs depuis le chat sur le jeu
+        function    inviteForGame(user: User| undefined) {
+            socket.emit('invite for game', {userId: props.user.id, otherUserId: user?.id});
+        }
+
         return (
             <div>
                 <Stack justifyContent="space-between">
@@ -169,7 +180,7 @@ export default function DirectMessaging(props: {user: User, users: User[], rooms
                             </IconButton>
                         </Tooltip>
                         <Tooltip title="Invite for a match">
-                            <IconButton size="small">
+                            <IconButton size="small" onClick={() => inviteForGame(parseUser(props.room.name))}>
                                 <Games/>
                             </IconButton>   
                         </Tooltip>

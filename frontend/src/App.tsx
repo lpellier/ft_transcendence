@@ -5,6 +5,9 @@ import SearchAppBar from 'components/AppBar/AppBar'
 import {User} from 'interfaces';
 import 'react-toastify/dist/ReactToastify.css';
 import { Outlet, Navigate, useOutlet } from 'react-router-dom'
+import { useEffect } from 'react'
+import { socket } from 'index'
+import { toastIt } from 'routes/routes';
 
 
 export const ImageIdContext = React.createContext({imageId : 1, setImageId : (n: number) => {}}); 

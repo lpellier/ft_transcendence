@@ -26,7 +26,7 @@ function LogOutLink() {
 	  {
 		  withCredentials: true,
 	  })
-	  .then(res => {
+	  .then(res => {	
 		console.log("Logout ")
 	  })
 	  .catch(function (err) {
