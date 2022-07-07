@@ -41,6 +41,10 @@ function Chat(props: {user: User | undefined, users: User[], setOtherUser: React
 	let [canWrite, setCanWrite] = useState<boolean>(true);
 	let [roomAdmins, setRoomAdmins] = useState<User[]>([]);
 
+	useEffect(() => {
+		socket.on('exception', (data: any) => console.log("exception:", data));
+	})
+
 	useEffect (() => {
 		const handler = (data: User[]) => { 
 			setRoomAdmins(data);
