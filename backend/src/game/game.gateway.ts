@@ -195,8 +195,6 @@ export class GameGateway {
 		this.server.emit("please send back", {name : user1, id : data[0].userId, r_id : game.room_id});
 		this.server.emit("please send back", {name : user2, id : data[1], r_id : game.room_id});
 
-
-
 		console.log("in gamebackend", data[0].inviterId, data[0].inviteeId)
 
 		// ? need to get sockets so sending an event to ids
