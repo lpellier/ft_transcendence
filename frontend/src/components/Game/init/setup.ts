@@ -32,6 +32,7 @@ let user_name : string;
 let user_id : string;
 
 function preload() {
+	console.log("in preload")
 	consts = new Consts();
 	keys = new Keys();
 

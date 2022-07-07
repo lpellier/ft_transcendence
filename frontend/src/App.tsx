@@ -26,7 +26,7 @@ export default function App(props: {user: User | undefined, users: User[], setOt
                     {outlet?
                         <Outlet />
                         :
-                        <Navigate replace to="/profile"/> 
+                        <Navigate replace to="/game"/> 
                     }
                 </div>
             		:
