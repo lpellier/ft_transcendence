@@ -31,7 +31,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect
 	constructor(private readonly chatService: ChatService) {}
 
 	@WebSocketServer()
-	server: Server;
+	server: Socket;
 
 	@SubscribeMessage('create room') 
 	async handleCreateRoom(@ConnectedSocket () client : Socket, @MessageBody()  createRoomDto: CreateRoomDto) {		

@@ -104,7 +104,7 @@ function GameComponent() {
 	);
 }
 
-export default function Game( props: {user: User | undefined}) {	
+export default function Game( props: {user: User | undefined, setNavigate: React.Dispatch<React.SetStateAction<boolean>> }) {	
 	useEffect(() => {
 		console.log("alo")
 
@@ -140,6 +140,11 @@ export default function Game( props: {user: User | undefined}) {
 		addScript("/sketch/engine/button_functions.js");
 		addScript("https://cdn.jsdelivr.net/npm/p5@1.4.1/lib/p5.min.js");
 		}, [props.user?.id, props.user])
+
+		useEffect(() => {
+			props.setNavigate(false);
+		}, [props.setNavigate])
+
 
 	return (
 		<Stack id="test_parent" spacing={5}>

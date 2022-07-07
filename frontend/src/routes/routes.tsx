@@ -79,7 +79,6 @@ export default function AllRoutes()  {
     const [navigate, setNavigate] = useState(false);
     let [statusMap, setStatusMap] = useState<Map<number, string> >(new Map<number, string>());
 
-
     useEffect(() => {
 		const handler = (usersData: User[]) => {
 			setUsers(usersData);
@@ -145,7 +144,7 @@ export default function AllRoutes()  {
     useEffect(() => {
         const handler = () => { 
             setNavigate(true) 
-            setNavigate(false)
+            // setNavigate(false)
         }
         socket.on('accepted game', handler);
         return () => {
@@ -193,7 +192,7 @@ export default function AllRoutes()  {
             action={action}
             />
             {navigate?
-                <Navigate to="/game" />
+                <Navigate replace to="/game" />
             :
                 <div/>
             }
@@ -203,7 +202,7 @@ export default function AllRoutes()  {
 	            <Route path="/" element={ <ProtectedRoute auth={isAuth}><App user={user} users={users} setOtherUser={setOtherUser} statusMap={statusMap} setStatusMap={setStatusMap}/></ProtectedRoute>}>
 					<Route path="profile" element={ < Profile user={otherUser} users={users}/>}/>
 					<Route path="chat" element={<Chat user={user} users={users} setOtherUser={setOtherUser} statusMap={statusMap}/>}/>
-					<Route path="game" element={<Game user={user}/>}/>
+					<Route path="game" element={<Game user={user} setNavigate={setNavigate}/> }/>
 					<Route path="settings" element={<Settings user={user} setUser={setUser}/>}/>
 				</Route>
 			</Routes>
