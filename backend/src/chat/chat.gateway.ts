@@ -187,45 +187,50 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect
 
 	handleDisconnect(@ConnectedSocket() client:Socket) {
 		console.log('client disconnected');
+		this.server.emit('new disconnection', socketUser.get(client.id))
 		socketGame.delete(client.id);
-		this.server.emit('disconnection', socketUser.get(client.id))
 	}
 
 	handleConnection(@ConnectedSocket() client:Socket) {
 		console.log('client connected');
-	  }
+	}
 
-	  @SubscribeMessage('add blocked')
-	  add(@ConnectedSocket() client:Socket, @MessageBody() blockedUserDto: BlockedUserDto) {
+	// @SubscribeMessage('status map')
+	// handleStatusMap(@MessageBody() statusMap: any) {
+	// 	this.server.emit('status map', statusMap);
+	// }
+
+	@SubscribeMessage('add blocked')
+	add(@ConnectedSocket() client:Socket, @MessageBody() blockedUserDto: BlockedUserDto) {
 		this.chatService.add(blockedUserDto.userId, blockedUserDto.blockedId);
 		client.emit('add blocked');
 		console.log('add blocked called -> ', blockedUserDto);
-	  }
+	}
 	
-	  @SubscribeMessage('removeBlocked')
-	  remove(@MessageBody() blockedUserDto: BlockedUserDto) {
+	@SubscribeMessage('removeBlocked')
+	remove(@MessageBody() blockedUserDto: BlockedUserDto) {
 		return this.chatService.remove(blockedUserDto.userId, blockedUserDto.blockedId);
-	  }
-	
-	  @SubscribeMessage('get blocked')
-	  async findAll(@ConnectedSocket() client:Socket , @MessageBody() userId: number) {
+	}
+
+	@SubscribeMessage('get blocked')
+	async findAll(@ConnectedSocket() client:Socket , @MessageBody() userId: number) {
 		const blockedIds: number[] = await this.chatService.findAllIds(userId);
 		const blocked = await this.chatService.findAll(blockedIds);
 		client.emit('get blocked', blocked);
 		console.log('get blocked called', blocked)
-	  }
+	}
 
-	  @SubscribeMessage('check password')
-	  async checkPassword(@ConnectedSocket() client:Socket ,@MessageBody() checkPasswordDto: CheckPasswordDto) {
+	@SubscribeMessage('check password')
+	async checkPassword(@ConnectedSocket() client:Socket ,@MessageBody() checkPasswordDto: CheckPasswordDto) {
 		bcrypt.compare(checkPasswordDto.password, await this.chatService.getPassword(checkPasswordDto.roomId), (err, res) => {
 			if (err) {
 				console.log(err);
 			}
 			client.emit('check password', res);
 		});
-	  }
+	}
 
-	  @SubscribeMessage('countdown_start')
+	@SubscribeMessage('countdown_start')
 	countdown_start(@ConnectedSocket() client:Socket ,@MessageBody() userId: number) {
 		// socketGame.set(client.id, parseInt(countdownDto.user1));
 
@@ -233,13 +238,13 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect
 		// console.log('countdown_start called', countdownDto)
 	  }
 
-	  @SubscribeMessage('invite for game')
-	  inviteForGame(@ConnectedSocket() client:Socket ,@MessageBody() inviteDto: InviteDto) {
-		for (let [key, value] of socketUser.entries()) {
-			if (value === inviteDto.otherUserId)
-				this.server.to(key).emit('invite for game', {userId: inviteDto.userId, inviterId: client.id, inviteeId: key});
-		}
-	  }
+	@SubscribeMessage('invite for game')
+	inviteForGame(@ConnectedSocket() client:Socket ,@MessageBody() inviteDto: InviteDto) {
+	for (let [key, value] of socketUser.entries()) {
+		if (value === inviteDto.otherUserId)
+			this.server.to(key).emit('invite for game', {userId: inviteDto.userId, inviterId: client.id, inviteeId: key});
 	}
+	}
+}
 
 

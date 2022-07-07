@@ -2,7 +2,8 @@ import {
     BrowserRouter,
     Routes,
     Route,
-    Navigate
+    Navigate,
+    Link,
 } from "react-router-dom";
 import axios from 'axios'
 import LogIn from './LogIn'
@@ -133,24 +134,28 @@ export default function AllRoutes()  {
       };    
 
 
-      const action = (
-        // <React.Fragment>
+    function acceptGame() {
+        socket.emit('accepted game', invite, user?.id)
+        setOpen(false);
+    }
+    
+    const action = (
         <div>
-        
-          <Button color="secondary" size="small" onClick={() => socket.emit('accepted game', invite, user?.id)} >
-            Accept
-          </Button>
-          <IconButton
+            <Button color="secondary" size="small" onClick={acceptGame} >
+                <Link to='/game' style={{ textDecoration: 'none' }}>
+                    Accept
+                </Link>
+            </Button>
+            <IconButton
             size="small"
             aria-label="close"
             color="inherit"
             onClick={handleClose}
-          >
-            <CloseIcon fontSize="small" />
-          </IconButton>
+            >
+                <CloseIcon fontSize="small" />
+            </IconButton>
         </div>
-        // </React.Fragment>
-      );
+    );
 
 	return (
 		<div>
@@ -165,14 +170,14 @@ export default function AllRoutes()  {
                 draggable
                 pauseOnHover={false}
             />
-                <Snackbar
-                open={open}
-                autoHideDuration={6000}
-                onClose={handleClose}
-                message={`You have been invited to play a game with ${users.find(user => user?.id === invite?.userId)?.username}`}
-                action={action}
-                />
 		<BrowserRouter>
+            <Snackbar
+            open={open}
+            autoHideDuration={6000}
+            onClose={handleClose}
+            message={`You have been invited to play a game with ${users.find(user => user?.id === invite?.userId)?.username}`}
+            action={action}
+            />
 	        <Routes>
 	            <Route path="/login" element={<LogIn user={user} auth={isAuth}/>} />
 				<Route path="tfauth" element={<TFAuth setAuth={setAuth}/>} />
