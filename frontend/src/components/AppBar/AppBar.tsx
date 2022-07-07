@@ -114,15 +114,15 @@ export default function SearchAppBar(props: {user: User, users: User[], setOther
 					<PlayerAvatar image={'http://127.0.0.1:3001/avatars/' + props.user.id + '.png'} onClick={() => props.setOtherUser(props.user)} />
 				</Link>
 			</nav>
-				<PlayerName name={props.user.username} />
-				<ProjectName />
-				<Stack direction="row" spacing={2}>
-					<FriendBar user={props.user} users={props.users}/>
-					<AppBarButton link="../game" tooltip={"Game"} icon={<GamesIcon />}/>
-					<AppBarButton link="../chat" tooltip={"Forum"} icon={<ForumIcon />}/>
-					<AppBarButton link="../settings" tooltip={"Settings"} icon={<SettingsIcon />}/>
-					<LogOutLink />
-				</Stack>
+			<PlayerName name={props.user.username} />
+			<ProjectName />
+			<Stack direction="row" spacing={2}>
+				<FriendBar user={props.user} users={props.users}/>
+				<AppBarButton link="../game" tooltip={"Game"} icon={<GamesIcon />}/>
+				<AppBarButton link="../chat" tooltip={"Forum"} icon={<ForumIcon />}/>
+				<AppBarButton link="../settings" tooltip={"Settings"} icon={<SettingsIcon />}/>
+				<LogOutLink />
+			</Stack>
         </Toolbar>
     	</AppBar>
 	);
