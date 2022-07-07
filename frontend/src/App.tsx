@@ -6,7 +6,6 @@ import {User} from 'interfaces';
 import 'react-toastify/dist/ReactToastify.css';
 import { Outlet, Navigate, useOutlet } from 'react-router-dom'
 
-
 export const ImageIdContext = React.createContext({imageId : 1, setImageId : (n: number) => {}}); 
 
 export default function App(props: {user: User | undefined, users: User[], setOtherUser: React.Dispatch<React.SetStateAction<User | undefined>>}) {
