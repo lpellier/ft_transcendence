@@ -161,6 +161,7 @@ export class GameGateway {
 
 	@SubscribeMessage('accepted game')
 	async handleInviteCreationGame(@MessageBody() data : [any, number]) {
+		this.server.to(data[0].inviterId).emit("accepted game");
 		let user1 = await this.game_service.getUsername(data[0].userId);
 		let user2 = await this.game_service.getUsername(data[1]);
 		this.games.push(new Game(utils.randomRoomId()));
