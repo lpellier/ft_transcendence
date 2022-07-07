@@ -1,7 +1,8 @@
-import { IsBoolean, IsNumber, IsString } from "class-validator";
+import { IsBoolean, IsNumber, IsString, MaxLength } from "class-validator";
 
 export class CreateMessageDto {
     @IsString()
+    @MaxLength(1024)
     content: string;
 
     @IsNumber()
