@@ -68,11 +68,13 @@ export class GameGateway {
 	clients : string[] = [];
 	users : [string, string][] = [];
 	games : Game[] = [];
+	socketUser = new Map<string, number>();
 
 	timestep : number = 15; // ms
 
 	handleDisconnect(client : Socket) { // ? triggers when user disconnects from the website (either refresh or close tab)
 		let index = -1;
+		this.socketUser.delete(client.id);
 		if ((index = this.clients.indexOf(client.id)) != -1) {
 			this.clients.splice(index, 1);
 			this.users.splice(index, 1);
@@ -94,9 +96,9 @@ export class GameGateway {
 						}
 						game.state = "game-over"
 						this.server.emit("new disconnection", game.players[game.players.indexOf(player)].real_id);
-						this.server.emit("quit-game", game.players[(game.players.indexOf(player) + 1) % 2].real_id);
+						if (game.players.length > 1)
+							this.server.emit("quit-game", game.players[(game.players.indexOf(player) + 1) % 2].real_id);
 						this.games.splice(this.games.indexOf(game), 1);
-						game.players[game.players.indexOf(player)]
 						return ;
 					}
 				}
@@ -125,7 +127,8 @@ export class GameGateway {
 					}
 					game.state = "game-over"
 					this.server.emit("quit-game", game.players[0].real_id)
-					this.server.emit("quit-game", game.players[1].real_id)
+					if (game.players.length > 1)
+						this.server.emit("quit-game", game.players[1].real_id)
 					this.games.splice(this.games.indexOf(game), 1);
 					return ;
 				}
@@ -159,23 +162,44 @@ export class GameGateway {
     // }, userId
 	// ]
 
+	@SubscribeMessage('socket response')
+	async handleSocketResponseInvitation(@ConnectedSocket() client : Socket, @MessageBody() data : any) {
+		for (let i = 0; i < this.games.length; i++) {
+			if (this.games[i].room_id === data.r_id) {
+				this.games[i].connected_sockets++;
+				console.log(client.id, [data.id.toString(), data.name])
+				client.join(this.games[i].room_id);
+				this.games[i].addPlayer(client.id, [data.id.toString(), data.name]);
+				this.server.to(this.games[i].room_id).emit("waiting-player", this.games[i].room_id, this.games[i].score_limit, this.games[i].map.name);
+				if (this.games[i].connected_sockets === 2) {
+					this.games[i].state = "waiting-readiness";
+					this.server.to(this.games[i].room_id).emit("waiting-readiness", this.games[i].players[0].id, this.games[i].players[1].id, this.games[i].players[0].real_name, this.games[i].players[1].real_name, this.games[i].players[0].real_id, this.games[i].players[1].real_id);			
+				}
+			}
+		}
+	}
+
+	@SubscribeMessage('new user')
+	async handleNewUser(@ConnectedSocket() client : Socket, @MessageBody() user_id : any) {
+		this.socketUser.set(client.id, user_id.userId);
+	}
+
 	@SubscribeMessage('accepted game')
 	async handleInviteCreationGame(@MessageBody() data : [any, number]) {
 		this.server.to(data[0].inviterId).emit("accepted game");
 		let user1 = await this.game_service.getUsername(data[0].userId);
 		let user2 = await this.game_service.getUsername(data[1]);
 		this.games.push(new Game(utils.randomRoomId()));
+		let game = this.games[this.games.length - 1];
 
-		// ? clients need to join room...
-		data[0].inviterId.join(this.games[this.games.length - 1].room_id);
+		this.server.emit("please send back", {name : user1, id : data[0].userId, r_id : game.room_id});
+		this.server.emit("please send back", {name : user2, id : data[1], r_id : game.room_id});
 
-		this.games[this.games.length - 1].addPlayer(data[0].inviterId.id, [data[0].userId.toString(), user1]);
-		this.games[this.games.length - 1].addPlayer(data[0].inviteeId, [data[1].toString(), user2]);
-		
-		this.server.to(this.games[this.games.length - 1].room_id).emit("waiting-player", this.games[this.games.length - 1].room_id, this.games[this.games.length - 1].score_limit, this.games[this.games.length - 1].map.name);
-		this.games[this.games.length - 1].state = "waiting-readiness";
-					
-		this.server.to(this.games[this.games.length - 1].room_id).emit("waiting-readiness", this.games[this.games.length - 1].players[0].id, this.games[this.games.length - 1].players[1].id, this.games[this.games.length - 1].players[0].real_name, this.games[this.games.length - 1].players[1].real_name, this.games[this.games.length - 1].players[0].real_id, this.games[this.games.length - 1].players[1].real_id);
+
+
+		console.log("in gamebackend", data[0].inviterId, data[0].inviteeId)
+
+		// ? need to get sockets so sending an event to ids
 	}
 
 	@SubscribeMessage('matchmaking')

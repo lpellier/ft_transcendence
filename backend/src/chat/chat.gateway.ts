@@ -189,7 +189,9 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect
 		console.log('client disconnected');
 		this.server.emit('new disconnection', socketUser.get(client.id))
 		socketGame.delete(client.id);
+		socketUser.delete(client.id);
 	}
+
 
 	handleConnection(@ConnectedSocket() client:Socket) {
 		console.log('client connected');
@@ -242,7 +244,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect
 	inviteForGame(@ConnectedSocket() client:Socket ,@MessageBody() inviteDto: InviteDto) {
 	for (let [key, value] of socketUser.entries()) {
 		if (value === inviteDto.otherUserId)
-			this.server.to(key).emit('invite for game', {userId: inviteDto.userId, inviterId: client, inviteeId: key});
+			this.server.to(key).emit('invite for game', {userId: inviteDto.userId, inviterId: client.id, inviteeId: key});
 	}
 	}
 }

@@ -11,8 +11,6 @@
 
 	// ? cute animation showing the roll of pong value in casino
 
-
-
 let spritesheet : any;
 let spritedata : any;
 
@@ -33,8 +31,6 @@ let socket : any = null;
 
 let user_name : string;
 let user_id : string;
-
-// p5.disableFriendlyErrors = true;
 
 function preload() {
 	consts = new Consts();
@@ -123,9 +119,10 @@ function draw() {
 		socket.emit("quit-ongoing-game");
 		should_load = true;
 		consts.switchMusic("none");
+		return ;
 	}
-	// else if (should_load)
-	// 	inMainMenu();
+	else if (should_load)
+		inMainMenu();
 	if (game.state === "waiting-player" || game.state === "waiting-readiness" || game.state === "countdown" || game.state === "relaunch-countdown" || game.state === "in-game")
 		game.map.render(1);
 	if (game.state === "in-menu-input" || game.state === "waiting-player" || game.state === "in-menu-create")

@@ -25,6 +25,7 @@ export class Game {
 	update_interval : any;
 
 	invert : boolean;
+	connected_sockets : number;
 
 	constructor(room_id: any) {
 		this.room_id = room_id;
@@ -32,12 +33,13 @@ export class Game {
 		this.players = [];
 		this.spectators = [];
 		this.score = [0, 0];
-		this.score_limit = 0;
+		this.score_limit = 10;
 		this.pong = new Pong();
 		this.map = consts.original_map;
 		this.frames_since_point = 0;
 		this.publicity = "public";
 		this.invert = false;
+		this.connected_sockets = 0;
 	}
 
 	spaceAvailable() {
@@ -59,9 +61,14 @@ export class Game {
 			player.reset(this.players.length);
 		this.state = "waiting-player";
 		this.score = [0, 0];
+		this.score_limit = 10;
+		this.map = consts.original_map;
 		delete this.pong;
 		this.pong = new Pong();
 		this.frames_since_point = 0;
+		this.publicity = "public";
+		this.invert = false;
+		this.connected_sockets = 0;
 	}
 
 	addSpectator(id : any) {
