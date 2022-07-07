@@ -144,6 +144,7 @@ export default function AllRoutes()  {
         const handler = () => { 
             setNavigate(true) 
             setNavigate(false)
+            console.log("been here")
         }
         socket.on('accepted game', handler);
         return () => {

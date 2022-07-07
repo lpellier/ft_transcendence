@@ -4,8 +4,6 @@
 // TODO ISSUES
 	// ? when opening the site on a page for the first time, game doesn't load until refresh (but only sometimes)
 	// ? game doesnt update username if changed because getting the username once in setup, should check periodically if it's still the same
-	// ? max number of characters to input in room id
-
 
 // TODO IMPROVEMENTS
 	// ? implement better ai

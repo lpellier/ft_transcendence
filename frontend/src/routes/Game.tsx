@@ -114,7 +114,9 @@ export default function Game( props: {user: User | undefined}) {
 		
 		document.head.append(user);
 
+		
 		addScript("https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.0/socket.io.js");
+		addScript("https://cdn.jsdelivr.net/npm/p5@1.4.1/lib/p5.js");
 		addScript("/sketch/classes/Buttons.js");
 		addScript("/sketch/classes/Vector.js");
 		addScript("/sketch/classes/Bumper.js");
@@ -136,7 +138,6 @@ export default function Game( props: {user: User | undefined}) {
 		addScript("/sketch/engine/input.js");
 		addScript("/sketch/engine/menus.js");
 		addScript("/sketch/engine/button_functions.js");
-		addScript("https://cdn.jsdelivr.net/npm/p5@1.4.1/lib/p5.js");
 		}, [props.user?.id, props.user])
 
 	return (
