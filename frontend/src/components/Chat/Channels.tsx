@@ -190,6 +190,9 @@ function Channels(props : {user: User, users: User[], currentRoom: Room, setCurr
 		const handler = () => {
 			socket.emit('get rooms', props.user.id)
 			socket.emit('get public rooms');
+			let objDiv = document.getElementById('channels');
+            if (objDiv != null)
+				objDiv.scrollTop = objDiv.scrollHeight;
 		};
 		socket.on('create room', handler);
 		return ( () => {
@@ -200,6 +203,9 @@ function Channels(props : {user: User, users: User[], currentRoom: Room, setCurr
 	useEffect(() => {
 		const handler = () => {
 			socket.emit('get rooms', props.user.id)
+			let objDiv = document.getElementById('channels');
+            if (objDiv != null)
+				objDiv.scrollTop = objDiv.scrollHeight;
 		};
 		socket.on('create dm room', handler);
 		return ( () => {
@@ -287,7 +293,7 @@ function Channels(props : {user: User, users: User[], currentRoom: Room, setCurr
 						<Button onClick={() => setAddRoomClicked(1)} variant='contained' color="warning" sx={ButtonStyle}>Create Room</Button>
 					}
 				</Box>
-				<div>
+				<div >
 					<RoomList rooms = {publicRooms} currentRoom = {props.currentRoom} setCurrentRoom = {props.setCurrentRoom} users = {props.users} user = {props.user} visibility = "public" roomAdmins={props.roomAdmins} />
 					<RoomList rooms = {rooms} currentRoom = {props.currentRoom} setCurrentRoom = {props.setCurrentRoom} users = {props.users} user = {props.user} visibility="private" roomAdmins={props.roomAdmins} />
 				</div>

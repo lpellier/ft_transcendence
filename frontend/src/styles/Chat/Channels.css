@@ -7,6 +7,17 @@
 	border: 5px solid black;
 	background-color: rgb(160, 150, 230);
 	border-radius: 10px;
+
+	overflow-y: scroll;
+	-ms-overflow-style: none;
+	scrollbar-width: none;
+}
+
+.room-list {
+	overflow-y: scroll;
+	-ms-overflow-style: none;
+	scrollbar-width: none;
+	height: 63vh;
 }
 
 .current-channel {
