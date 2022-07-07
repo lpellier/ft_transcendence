@@ -34,12 +34,16 @@ const OverallChatStyle = {
 	paddingTop: '5vh',
 }
 
-function Chat(props: {user: User | undefined, users: User[], setOtherUser: React.Dispatch<React.SetStateAction<User | undefined>>}) {
+function Chat(props: {user: User | undefined, users: User[], setOtherUser: React.Dispatch<React.SetStateAction<User | undefined>>, statusMap: Map<number, string>}) {
 	
 	let [status, setStatus] = useState('waiting for connection');
 	let [currentRoom, setCurrentRoom] = useState<Room> ({id: 1, name: "general", ownerId: 60040, visibility: "public", password:""});
 	let [canWrite, setCanWrite] = useState<boolean>(true);
 	let [roomAdmins, setRoomAdmins] = useState<User[]>([]);
+
+	useEffect(() => {
+		socket.on('exception', (data: any) => console.log("exception:", data));
+	})
 
 	useEffect (() => {
 		const handler = (data: User[]) => { 
@@ -96,7 +100,7 @@ function Chat(props: {user: User | undefined, users: User[], setOtherUser: React
 					<Stack direction='row' className='chmsg'>
 						<Stack>
 							{status}
-							<Channels user={props.user} users={props.users} currentRoom={currentRoom} setCurrentRoom = {setCurrentRoom} setCanWrite = {setCanWrite} roomAdmins={roomAdmins} setOtherUser={props.setOtherUser} />
+							<Channels user={props.user} users={props.users} currentRoom={currentRoom} setCurrentRoom = {setCurrentRoom} setCanWrite = {setCanWrite} roomAdmins={roomAdmins} setOtherUser={props.setOtherUser} statusMap={props.statusMap}/>
 						</Stack>
 						<Messages user={props.user} users={props.users} currentRoom={currentRoom} canWrite = {canWrite} />
 					</Stack>

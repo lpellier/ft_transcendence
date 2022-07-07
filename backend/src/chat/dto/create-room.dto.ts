@@ -1,7 +1,8 @@
-import { IsNumber, IsString } from "class-validator";
+import { IsNumber, IsString, Length, MaxLength, MinLength } from "class-validator";
 
 export class CreateRoomDto {
     @IsString()
+    @Length(2, 16)
     name: string;
 
     @IsNumber()
@@ -11,5 +12,6 @@ export class CreateRoomDto {
     visibility: string;
     
     @IsString()
+    @MaxLength(16)
     password:string;
 };

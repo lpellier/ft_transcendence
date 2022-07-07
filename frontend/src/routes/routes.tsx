@@ -77,6 +77,7 @@ export default function AllRoutes()  {
     const [open, setOpen] = useState(false);
     const [invite, setInvite] = useState<inviteDto>();
     const [navigate, setNavigate] = useState(false);
+    let [statusMap, setStatusMap] = useState<Map<number, string> >(new Map<number, string>());
 
     useEffect(() => {
 		const handler = (usersData: User[]) => {
@@ -143,8 +144,7 @@ export default function AllRoutes()  {
     useEffect(() => {
         const handler = () => { 
             setNavigate(true) 
-            setNavigate(false)
-            console.log("been here")
+            // setNavigate(false)
         }
         socket.on('accepted game', handler);
         return () => {
@@ -192,17 +192,17 @@ export default function AllRoutes()  {
             action={action}
             />
             {navigate?
-                <Navigate to="/game" />
+                <Navigate replace to="/game" />
             :
                 <div/>
             }
 	        <Routes>
 	            <Route path="/login" element={<LogIn user={user} auth={isAuth}/>} />
 				<Route path="tfauth" element={<TFAuth setAuth={setAuth}/>} />
-	            <Route path="/" element={ <ProtectedRoute auth={isAuth}><App user={user} users={users} setOtherUser={setOtherUser}/></ProtectedRoute>}>
+	            <Route path="/" element={ <ProtectedRoute auth={isAuth}><App user={user} users={users} setOtherUser={setOtherUser} statusMap={statusMap} setStatusMap={setStatusMap}/></ProtectedRoute>}>
 					<Route path="profile" element={ < Profile user={otherUser} users={users}/>}/>
-					<Route path="chat" element={<Chat user={user} users={users} setOtherUser={setOtherUser} />}/>
-					<Route path="game" element={<Game user={user}/>}/>
+					<Route path="chat" element={<Chat user={user} users={users} setOtherUser={setOtherUser} statusMap={statusMap}/>}/>
+					<Route path="game" element={<Game user={user} setNavigate={setNavigate}/> }/>
 					<Route path="settings" element={<Settings user={user} setUser={setUser}/>}/>
 				</Route>
 			</Routes>
