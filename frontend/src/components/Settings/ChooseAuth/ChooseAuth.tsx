@@ -12,7 +12,6 @@ import VpnKeyIcon from '@mui/icons-material/VpnKey'
 import {ButtonModalStyle, IconStyle} from '../../../styles/tsxStyles/AppBar/PongMenu'
 import {ModalChooseAuth} from '../../../styles/tsxStyles/Settings/Auth'
 
-
 function GenerateQRCode(props: {url: string, setOpen: any}) {
 	
 	function handleClick() {

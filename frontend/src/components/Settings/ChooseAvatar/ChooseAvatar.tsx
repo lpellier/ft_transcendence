@@ -17,7 +17,8 @@ import {useState} from 'react'
 import Button from '@mui/material/Button';
 import axios from 'axios'
 import { ImageIdContext } from 'App';
-import {toastThatError, toastIt} from '../../../routes/routes'
+import {toastThatError} from '../../../routes/routes'
+
 const Input = styled('input')({
 	display: 'none',
   });
@@ -145,7 +146,6 @@ function ChooseAvatarButton(props: {user: User, setOpenOne: any}) {
 
   const closeOne = () => {
     props.setOpenOne(false);
-	// window.location.reload()
   };
 
   return (
