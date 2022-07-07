@@ -94,7 +94,7 @@ function ProjectName() {
 	);
 }
 
-export default function SearchAppBar(props: {user: User, users: User[], setOtherUser: React.Dispatch<React.SetStateAction<User | undefined>>}) {
+export default function SearchAppBar(props: {user: User, users: User[], setOtherUser: React.Dispatch<React.SetStateAction<User | undefined>>, statusMap: Map<number, string>, setStatusMap: React.Dispatch<React.SetStateAction<Map<number, string>>>}) {
 
   return (
       <AppBar position="static">
@@ -118,7 +118,7 @@ export default function SearchAppBar(props: {user: User, users: User[], setOther
 			<PlayerName name={props.user.username} />
 			<ProjectName />
 			<Stack direction="row" spacing={2}>
-				<FriendBar user={props.user} users={props.users}/>
+				<FriendBar user={props.user} users={props.users} statusMap={props.statusMap} setStatusMap={props.setStatusMap}/>
 				<AppBarButton link="../game" tooltip={"Game"} icon={<GamesIcon />}/>
 				<AppBarButton link="../chat" tooltip={"Forum"} icon={<ForumIcon />}/>
 				<AppBarButton link="../settings" tooltip={"Settings"} icon={<SettingsIcon />}/>
