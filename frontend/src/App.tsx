@@ -31,6 +31,5 @@ export default function App(props: {user: User | undefined, users: User[], setOt
             }
 		</Stack>
         </ ImageIdContext.Provider>
-
     );
 }
