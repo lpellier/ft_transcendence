@@ -5,8 +5,6 @@ import Button from '@mui/material/Button';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import Stack from '@mui/material/Stack';
-import { ThemeProvider } from '@emotion/react'
-import { orangeTheme } from '../../Themes';
 import {CactusAvatar, RobotAvatar, CoffeaAvatar, IceCreamAvatar,
 	OwlAvatar, PenguinAvatar,
     PandaAvatar, FoxAvatar, CatAvatar, DogAvatar,
@@ -91,7 +89,6 @@ export default function DotsMobileStepper() {
 
   return (
     <Stack spacing={2}>
-    <ThemeProvider theme={orangeTheme}>
     < MobileStepper
       variant="dots"
       steps={3}
@@ -119,7 +116,6 @@ export default function DotsMobileStepper() {
         </Button>
       }
       />
-      </ThemeProvider>
       {steps[activeStep].content}
     </Stack>
   );
