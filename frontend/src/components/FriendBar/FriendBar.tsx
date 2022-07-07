@@ -53,27 +53,6 @@ export default function FriendBar(props: {user: User, users: User[], statusMap: 
     }
 
     useEffect(() => {
-        const handler = (userId: number) => {
-            props.setStatusMap(props.statusMap.set(userId, 'online'));
-            socket.emit('status map', props.statusMap);
-        }
-        socket.on('new connection', handler)
-        return () => {
-            socket.off('new connection', handler)
-        }
-    }, [props.statusMap]);
-
-    useEffect(() => {
-        const handler = (userId: number) => {
-            props.setStatusMap(props.statusMap.set(userId, 'offline'));
-        }
-        socket.on('new disconnection', handler);
-        return () => {
-            socket.off('new disconnection', handler);
-        }
-    }, [props.statusMap]);
-
-    useEffect(() => {
         socket.emit('get friends', props.user.id);
     }, [props.user.id])
 

@@ -80,6 +80,27 @@ export default function AllRoutes()  {
     let [statusMap, setStatusMap] = useState<Map<number, string> >(new Map<number, string>());
 
     useEffect(() => {
+        const handler = (userId: number) => {
+            setStatusMap(statusMap.set(userId, 'online'));
+            socket.emit('status map', statusMap);
+        }
+        socket.on('new connection', handler)
+        return () => {
+            socket.off('new connection', handler)
+        }
+    }, [statusMap]);
+
+    useEffect(() => {
+        const handler = (userId: number) => {
+            setStatusMap(statusMap.set(userId, 'offline'));
+        }
+        socket.on('new disconnection', handler);
+        return () => {
+            socket.off('new disconnection', handler);
+        }
+    }, [statusMap]);
+
+    useEffect(() => {
 		const handler = (usersData: User[]) => {
 			setUsers(usersData);
 		}
