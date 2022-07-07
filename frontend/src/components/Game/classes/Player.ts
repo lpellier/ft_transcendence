@@ -9,11 +9,12 @@ class Player {
 	ready : boolean = false;
 
 	username : string;
+	real_id : number;
 	moving_name : MovingText;
 
 	timestep : number;
 
-	constructor(index : number, id : any, username : string) {
+	constructor(index : number, id : any, username : string, real_id : number) {
 		if (index == 1)
 			this.pos = [consts.WIDTH / 12, consts.HEIGHT / 2 - consts.PLAYER_HEIGHT / 2];
 		else
@@ -25,6 +26,7 @@ class Player {
 		this.color = game.map.object_color;
 		this.index = index;
 		this.id = id;
+		this.real_id = real_id;
 		this.ready = false;
 		this.username = username;
 

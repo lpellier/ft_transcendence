@@ -25,6 +25,13 @@ function addScript(url : string) : any {
 	return script;
 }
 
+function removeScripts() {
+	let scripts = document.getElementsByClassName("p5-script");
+	for (let i = 0; i < scripts.length; i++) {
+		scripts[i].parentNode?.removeChild(scripts[i]);
+	}
+}
+
 let observer : any = null;
 let canvas : any = null;
 
@@ -97,17 +104,19 @@ function GameComponent() {
 	);
 }
 
-export default function Game( props: {user: User | undefined}) {	
+export default function Game( props: {user: User | undefined, setNavigate: React.Dispatch<React.SetStateAction<boolean>> }) {	
 	useEffect(() => {
 		let user = document.createElement("div");
-		const propsUser: any =props.user;
+		const propsUser: any = props.user;
 		user.setAttribute("user_name", propsUser.username);
 		user.setAttribute("user_id", propsUser.id.toString());
 		user.id = "user";
 		
 		document.head.append(user);
 
+		
 		addScript("https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.0/socket.io.js");
+		addScript("https://cdn.jsdelivr.net/npm/p5@1.4.1/lib/p5.js");
 		addScript("/sketch/classes/Buttons.js");
 		addScript("/sketch/classes/Vector.js");
 		addScript("/sketch/classes/Bumper.js");
@@ -132,9 +141,14 @@ export default function Game( props: {user: User | undefined}) {
 		addScript("https://cdn.jsdelivr.net/npm/p5@1.4.1/lib/p5.min.js");
 		}, [props.user?.id, props.user])
 
+		useEffect(() => {
+			props.setNavigate(false);
+		}, [props.setNavigate])
+
+
 	return (
-		<Stack id="test_parent" spacing={5}>
-			<Box sx={{paddingTop: '12vh', }} >
+		<Stack id="test_parent" spacing={1}>
+			<Box sx={{paddingTop: '2%', }} >
 				<GameComponent />
 			</Box>
 		</Stack>
