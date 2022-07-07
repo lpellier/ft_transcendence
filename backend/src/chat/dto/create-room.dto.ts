@@ -1,7 +1,8 @@
-import { IsNumber, IsString } from "class-validator";
+import { IsNumber, IsString, Length, MinLength } from "class-validator";
 
 export class CreateRoomDto {
     @IsString()
+    @Length(2, 15)
     name: string;
 
     @IsNumber()
