@@ -26,5 +26,7 @@ function createCustomInput(title : string) {
 	input.style("border-radius", "0.5em");
 	input.style("outline", "none");
 
+	input.attribute("maxlength", "16");
+
 	return input;
 }

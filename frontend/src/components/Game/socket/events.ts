@@ -1,5 +1,6 @@
 function listenStartEvents() {
 	socket.on("waiting-player", (r_id : string, score_limit : number, map : string) => {
+		console.log("waiting player")
 		game.room_id = r_id;
 		game.score_limit = score_limit;
 		errors.set_false();
@@ -14,7 +15,7 @@ function listenStartEvents() {
 			game.map = consts.casino_map;
 		game.setState("waiting-player");
 	});
-	socket.on("spectate", (r_id : string, score_limit : number, map : string, game_state : string, id_p1 : string, id_p2 : string, name_p1 : string, name_p2 : string) => {
+	socket.on("spectate", (r_id : string, score_limit : number, map : string, game_state : string, id_p1 : string, id_p2 : string, name_p1 : string, name_p2 : string, real_id_p1 : number, real_id_p2 : number) => {
 		game.room_id = r_id;
 		game.score_limit = score_limit;
 		errors.set_false();
@@ -27,8 +28,8 @@ function listenStartEvents() {
 		buttons.hide();
 		inputs.hide();
 
-		game.players.push(new Player(1, id_p1, name_p1));
-		game.players.push(new Player(2, id_p2, name_p2));
+		game.players.push(new Player(1, id_p1, name_p1, real_id_p1));
+		game.players.push(new Player(2, id_p2, name_p2, real_id_p2));
 		game.pong = new Pong;
 	});
 
@@ -37,26 +38,37 @@ function listenStartEvents() {
 		if (error === "game_full")
 			errors.game_full = true;
 		else if (error === "game_not_found")
-			errors.game_not_found = true;	
+			errors.game_not_found = true;
+		else if (error === "already_in_game")
+			errors.already_in_game = true;	
 	});
 
-	socket.on("waiting-readiness", (id_p1 : string, id_p2 : string, name_p1 : string, name_p2 : string) => {
+	socket.on("please send back", (data : any) => {
+		if (data.name === user_name) {
+			socket.emit("socket response", data);
+		}
+	});
+
+	socket.on("waiting-readiness", (id_p1 : string, id_p2 : string, name_p1 : string, name_p2 : string, real_id_p1 : number, real_id_p2 : number) => {
+		console.log("waiting readiness")
 		if (game.players.length == 2) {
 			if (game.players[1].id == "null")
 				game.players[1].id = id_p2;
 			if (game.players[1].username == "null")
-				game.players[1].username = id_p2;
+				game.players[1].username = name_p2;
+			if (game.players[1].real_id == 0)
+				game.players[1].real_id = real_id_p2;
 			game.setState("waiting-readiness");
 		}
 		if (game.players.length === 0) {
 			game.setState("waiting-readiness");
 			if (socket.id === id_p1) {
-				game.players.push(new Player(1, id_p1, name_p1));
-				game.players.push(new Player(2, id_p2, name_p2));
+				game.players.push(new Player(1, id_p1, name_p1, real_id_p1));
+				game.players.push(new Player(2, id_p2, name_p2, real_id_p2));
 			}
 			else if (socket.id === id_p2) {
-				game.players.push(new Player(2, id_p2, name_p2));
-				game.players.push(new Player(1, id_p1, name_p1));
+				game.players.push(new Player(2, id_p2, name_p2, real_id_p2));
+				game.players.push(new Player(1, id_p1, name_p1, real_id_p1));
 			}
 			game.pong = new Pong;
 		}
@@ -102,7 +114,8 @@ function listenMoveEvents() {
 		}
 		if (count === game.players.length) {
 			game.setState("countdown");
-			socket.emit("countdown_start");
+			console.log('game ids -> ',game.players[0].real_id, game.players[1].real_id);
+			socket.emit("countdown_start", game.players[0].real_id);
 			consts.playBip(consts.BIP);
 		}
 	});
@@ -178,20 +191,28 @@ function listenMoveEvents() {
 }
 
 function resizeEverything() {
-	consts.resize();
-	for (let player of game.players)
-		if (player)	
-			player.resize();
-	if (game.pong)
-		game.pong.resize();
-	if (game.map)
-		game.map.resize(consts.WIDTH, consts.HEIGHT);
-	buttons.resize();
-	keys.resize();
-	inputs.resize();
+	if (consts)
+		consts.resize();
+	if (game) {
+		for (let player of game.players)
+			if (player)	
+				player.resize();
+		if (game.pong)
+			game.pong.resize();
+		if (game.map)
+			game.map.resize(consts.WIDTH, consts.HEIGHT);
+	}
+	if (buttons)
+		buttons.resize();
+	if (keys)
+		keys.resize();
+	if (inputs)
+		inputs.resize();
 0
-	for (let bumper of bumpers) {
-		bumper.resize();
+	if (bumpers) {
+		for (let bumper of bumpers) {
+			bumper.resize();
+		}
 	}
 }
 

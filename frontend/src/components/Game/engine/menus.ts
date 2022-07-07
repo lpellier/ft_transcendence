@@ -1,6 +1,8 @@
 function inMainMenu() {
 	if (game.state === "waiting-player")
+	{
 		socket.emit("quit-own-game");
+	}
 	should_load = false;
 	game.reset();
 	errors.set_false();

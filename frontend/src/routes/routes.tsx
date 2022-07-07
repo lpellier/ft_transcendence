@@ -2,7 +2,8 @@ import {
     BrowserRouter,
     Routes,
     Route,
-    Navigate
+    Navigate,
+    Link,
 } from "react-router-dom";
 import axios from 'axios'
 import LogIn from './LogIn'
@@ -16,6 +17,12 @@ import Chat from "../components/Chat/Chat";
 import Settings from "../components/Settings/Settings";
 import Game from "./Game";
 import { toast, ToastContainer } from 'react-toastify';
+import Snackbar from '@mui/material/Snackbar';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
+import Button from '@mui/material/Button';
+
+
 
 export function toastThatError(message: string) {
     toast.error(message, {
@@ -56,10 +63,21 @@ function ProtectedRoute(props: {children: JSX.Element, auth: any}) {
 }
 
 export default function AllRoutes()  {
-	const [isAuth, setAuth] = useState(true);
+
+    interface inviteDto {
+        userId: number,
+        inviterId: number,
+        inviteeId: number,
+    }
+
+    const [isAuth, setAuth] = useState(true);
 	const [user, setUser] = useState<User>();
     let [users, setUsers] = useState<User[]>([]);
 	let [otherUser, setOtherUser] = useState<User>();
+    const [open, setOpen] = useState(false);
+    const [invite, setInvite] = useState<inviteDto>();
+    const [navigate, setNavigate] = useState(false);
+    let [statusMap, setStatusMap] = useState<Map<number, string> >(new Map<number, string>());
 
     useEffect(() => {
 		const handler = (usersData: User[]) => {
@@ -98,6 +116,60 @@ export default function AllRoutes()  {
         });
 	}, [isAuth])
 	
+
+    useEffect(() => {
+        const handler = (data: any) => { 
+            setOpen(true)  
+            setInvite(data)
+        }
+        socket.on('invite for game', handler);
+        return () => {
+            socket.off('invite for game', handler);
+        }
+    }, [])
+
+    const handleClose = (event: React.SyntheticEvent | Event, reason?: string) => {
+        if (reason === 'clickaway') {
+          return;
+        }
+        setOpen(false);
+      };    
+
+
+    function acceptGame() {
+        socket.emit('accepted game', invite, user?.id)
+        setOpen(false);
+    }
+
+    useEffect(() => {
+        const handler = () => { 
+            setNavigate(true) 
+            // setNavigate(false)
+        }
+        socket.on('accepted game', handler);
+        return () => {
+            socket.off('accepted game', handler);
+        }
+    }, [])
+    
+    const action = (
+        <div>
+            <Button color="secondary" size="small" onClick={acceptGame} >
+                <Link to='/game' style={{ textDecoration: 'none' }}>
+                    Accept
+                </Link>
+            </Button>
+            <IconButton
+            size="small"
+            aria-label="close"
+            color="inherit"
+            onClick={handleClose}
+            >
+                <CloseIcon fontSize="small" />
+            </IconButton>
+        </div>
+    );
+
 	return (
 		<div>
 		     <ToastContainer
@@ -112,13 +184,25 @@ export default function AllRoutes()  {
                 pauseOnHover={false}
             />
 		<BrowserRouter>
+            <Snackbar
+            open={open}
+            autoHideDuration={6000}
+            onClose={handleClose}
+            message={`You have been invited to play a game with ${users.find(user => user?.id === invite?.userId)?.username}`}
+            action={action}
+            />
+            {navigate?
+                <Navigate replace to="/game" />
+            :
+                <div/>
+            }
 	        <Routes>
 	            <Route path="/login" element={<LogIn user={user} auth={isAuth}/>} />
 				<Route path="tfauth" element={<TFAuth setAuth={setAuth}/>} />
-	            <Route path="/" element={ <ProtectedRoute auth={isAuth}><App user={user} users={users} setOtherUser={setOtherUser}/></ProtectedRoute>}>
+	            <Route path="/" element={ <ProtectedRoute auth={isAuth}><App user={user} users={users} setOtherUser={setOtherUser} statusMap={statusMap} setStatusMap={setStatusMap}/></ProtectedRoute>}>
 					<Route path="profile" element={ < Profile user={otherUser} users={users}/>}/>
-					<Route path="chat" element={<Chat user={user} users={users} setOtherUser={setOtherUser} />}/>
-					<Route path="game" element={<Game user={user}/>}/>
+					<Route path="chat" element={<Chat user={user} users={users} setOtherUser={setOtherUser} statusMap={statusMap}/>}/>
+					<Route path="game" element={<Game user={user} setNavigate={setNavigate}/> }/>
 					<Route path="settings" element={<Settings user={user} setUser={setUser}/>}/>
 				</Route>
 			</Routes>
