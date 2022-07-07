@@ -6,12 +6,9 @@
 	// ? game doesnt update username if changed because getting the username once in setup, should check periodically if it's still the same
 
 // TODO IMPROVEMENTS
-	// ? wasd keys do not show up in multiplayer 
 	// ? implement better ai
 
 	// ? cute animation showing the roll of pong value in casino
-
-
 
 let spritesheet : any;
 let spritedata : any;
@@ -34,9 +31,8 @@ let socket : any = null;
 let user_name : string;
 let user_id : string;
 
-// p5.disableFriendlyErrors = true;
-
 function preload() {
+	console.log("in preload")
 	consts = new Consts();
 	keys = new Keys();
 
@@ -123,9 +119,10 @@ function draw() {
 		socket.emit("quit-ongoing-game");
 		should_load = true;
 		consts.switchMusic("none");
+		return ;
 	}
-	// else if (should_load)
-	// 	inMainMenu();
+	else if (should_load)
+		inMainMenu();
 	if (game.state === "waiting-player" || game.state === "waiting-readiness" || game.state === "countdown" || game.state === "relaunch-countdown" || game.state === "in-game")
 		game.map.render(1);
 	if (game.state === "in-menu-input" || game.state === "waiting-player" || game.state === "in-menu-create")
@@ -148,6 +145,9 @@ function draw() {
 			outputAnnouncement("This game is already full", consts.small_font_size, consts.WIDTH / 2, consts.HEIGHT / 2, "white");
 		else if (errors.game_not_found)
 			outputAnnouncement("This game doesn't exist", consts.small_font_size, consts.WIDTH / 2, consts.HEIGHT / 2, "white");	
+		else if (errors.already_in_game)
+			outputAnnouncement("You are already in this game", consts.small_font_size, consts.WIDTH / 2, consts.HEIGHT / 2, "white");	
+	
 	}
 	else if (game.state === "waiting-player") {
 		if (game.spectator)
@@ -183,6 +183,8 @@ function draw() {
 		}
 	}
 	else if (game.state === "relaunch-countdown") {
+		if (game.spectator)
+			drawSpectate();
 		outputCountdown();
 		movePlayers();
 		for (let player of game.players)

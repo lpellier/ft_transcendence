@@ -20,7 +20,7 @@ export class AuthController {
 		res.cookie(authentication.type, authentication.token, { sameSite: 'strict' , httpOnly: true });
 		if (isAuthenticated === true) {
 			console.log("user is authenticated")
-			return ({ url: 'http://127.0.0.1:3000/profile' })}
+			return ({ url: 'http://127.0.0.1:3000/game' })}
 	}
 
 	@UseGuards(OAuth2AuthGuard)
@@ -32,7 +32,7 @@ export class AuthController {
 		res.cookie(authentication.type, authentication.token, { sameSite: 'strict', httpOnly: true });
 		if (isAuthenticated === true) {
 			console.log("user is authenticated")
-			return ({ url: 'http://127.0.0.1:3000/profile' })
+			return ({ url: 'http://127.0.0.1:3000/game' })
 		} else {
 			return ({ url: 'http://127.0.0.1:3000/tfauth' })
 		}

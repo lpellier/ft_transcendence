@@ -106,8 +106,6 @@ function GameComponent() {
 
 export default function Game( props: {user: User | undefined, setNavigate: React.Dispatch<React.SetStateAction<boolean>> }) {	
 	useEffect(() => {
-		console.log("alo")
-
 		let user = document.createElement("div");
 		const propsUser: any = props.user;
 		user.setAttribute("user_name", propsUser.username);
@@ -116,7 +114,9 @@ export default function Game( props: {user: User | undefined, setNavigate: React
 		
 		document.head.append(user);
 
+		
 		addScript("https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.0/socket.io.js");
+		addScript("https://cdn.jsdelivr.net/npm/p5@1.4.1/lib/p5.js");
 		addScript("/sketch/classes/Buttons.js");
 		addScript("/sketch/classes/Vector.js");
 		addScript("/sketch/classes/Bumper.js");
@@ -147,8 +147,8 @@ export default function Game( props: {user: User | undefined, setNavigate: React
 
 
 	return (
-		<Stack id="test_parent" spacing={5}>
-			<Box sx={{paddingTop: '12vh', }} >
+		<Stack id="test_parent" spacing={1}>
+			<Box sx={{paddingTop: '2%', }} >
 				<GameComponent />
 			</Box>
 		</Stack>

@@ -193,7 +193,9 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect
 		console.log('client disconnected');
 		this.server.emit('new disconnection', socketUser.get(client.id))
 		socketGame.delete(client.id);
+		socketUser.delete(client.id);
 	}
+
 
 	handleConnection(@ConnectedSocket() client:Socket) {
 		console.log('client connected');
