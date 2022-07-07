@@ -1,5 +1,6 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import Stack from '@mui/material/Stack';
+import Box from '@mui/material/Box';
 
 import "./../styles/Game/canvas.css"
 import "./../styles/Game/buttons.css"
@@ -129,11 +130,13 @@ export default function Game( props: {user: User | undefined}) {
 		addScript("/sketch/engine/menus.js");
 		addScript("/sketch/engine/button_functions.js");
 		addScript("https://cdn.jsdelivr.net/npm/p5@1.4.1/lib/p5.min.js");
-		}, [props.user?.id])
+		}, [props.user?.id, props.user])
 
 	return (
 		<Stack id="test_parent" spacing={5}>
-			<GameComponent />
+			<Box sx={{paddingTop: '12vh', }} >
+				<GameComponent />
+			</Box>
 		</Stack>
 	);
 }

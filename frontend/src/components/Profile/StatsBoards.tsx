@@ -1,9 +1,9 @@
-import {useState, useEffect, useRef} from 'react'
+import {useState, useEffect} from 'react'
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import {init_user, User} from 'interfaces';
+import {User} from 'interfaces';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import TimelineIcon from '@mui/icons-material/Timeline';
 import MilitaryTechIcon from '@mui/icons-material/MilitaryTech';

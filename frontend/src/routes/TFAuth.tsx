@@ -29,6 +29,8 @@ const TitleStyle = {
 function PinField(props: {value: string, setPininput: any, setRedirect: any, setAuth: any}) {
 	const [hasSubmitted, setHastSubmitted] = useState<boolean>(false)
 
+	const {setPininput, setRedirect, setAuth} = props;
+
 	useEffect(() => {
 		if (hasSubmitted === true) {
 
@@ -40,8 +42,8 @@ function PinField(props: {value: string, setPininput: any, setRedirect: any, set
 			})
 			.then(res => {
 				console.log("Pin Post request success :")
-				props.setRedirect(res.data)
-				props.setAuth(res.data)
+				setRedirect(res.data)
+				setAuth(res.data)
 			})
 			.catch(function (err) {
 				console.log("Pin Post request failed :", err)
@@ -49,12 +51,12 @@ function PinField(props: {value: string, setPininput: any, setRedirect: any, set
 			})
 			setHastSubmitted(false)
 		}
-	},[] )
+	}, [hasSubmitted, setAuth, setRedirect, props.value])
 
 	function handleSubmit(e: any)
 	{
 		e.preventDefault();
-		props.setPininput({value: e.target[0].value});
+		setPininput({value: e.target[0].value});
 		e.target[0].value = "";
 		setHastSubmitted(true)
 	}
@@ -78,7 +80,7 @@ export default function TFAuth(props: {setAuth: any}) {
 
 	useEffect(() => {
 		setRedirect(redirect)
-	}, )
+	}, [redirect])
 
 	return (
 		<Box sx={BoxStyle}>
