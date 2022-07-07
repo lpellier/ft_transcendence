@@ -9,7 +9,6 @@ import { useEffect } from 'react'
 import { socket } from 'index'
 import { toastIt } from 'routes/routes';
 
-
 export const ImageIdContext = React.createContext({imageId : 1, setImageId : (n: number) => {}}); 
 
 export default function App(props: {user: User | undefined, users: User[], setOtherUser: React.Dispatch<React.SetStateAction<User | undefined>>}) {
