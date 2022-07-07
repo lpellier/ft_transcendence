@@ -140,8 +140,8 @@ export default function Game( props: {user: User | undefined}) {
 		}, [props.user?.id, props.user])
 
 	return (
-		<Stack id="test_parent" spacing={5}>
-			<Box sx={{paddingTop: '12vh', }} >
+		<Stack id="test_parent" spacing={1}>
+			<Box sx={{paddingTop: '2%', }} >
 				<GameComponent />
 			</Box>
 		</Stack>

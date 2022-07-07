@@ -188,20 +188,28 @@ function listenMoveEvents() {
 }
 
 function resizeEverything() {
-	consts.resize();
-	for (let player of game.players)
-		if (player)	
-			player.resize();
-	if (game.pong)
-		game.pong.resize();
-	if (game.map)
-		game.map.resize(consts.WIDTH, consts.HEIGHT);
-	buttons.resize();
-	keys.resize();
-	inputs.resize();
+	if (consts)
+		consts.resize();
+	if (game) {
+		for (let player of game.players)
+			if (player)	
+				player.resize();
+		if (game.pong)
+			game.pong.resize();
+		if (game.map)
+			game.map.resize(consts.WIDTH, consts.HEIGHT);
+	}
+	if (buttons)
+		buttons.resize();
+	if (keys)
+		keys.resize();
+	if (inputs)
+		inputs.resize();
 0
-	for (let bumper of bumpers) {
-		bumper.resize();
+	if (bumpers) {
+		for (let bumper of bumpers) {
+			bumper.resize();
+		}
 	}
 }
 
