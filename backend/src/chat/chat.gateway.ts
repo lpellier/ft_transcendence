@@ -242,7 +242,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect
 	inviteForGame(@ConnectedSocket() client:Socket ,@MessageBody() inviteDto: InviteDto) {
 	for (let [key, value] of socketUser.entries()) {
 		if (value === inviteDto.otherUserId)
-			this.server.to(key).emit('invite for game', {userId: inviteDto.userId, inviterId: client.id, inviteeId: key});
+			this.server.to(key).emit('invite for game', {userId: inviteDto.userId, inviterId: client, inviteeId: key});
 	}
 	}
 }

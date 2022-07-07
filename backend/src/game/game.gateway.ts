@@ -71,11 +71,6 @@ export class GameGateway {
 
 	timestep : number = 15; // ms
 
-	@SubscribeMessage("invitation_accepted") 
-	handleInvitation(@ConnectedSocket() client: Socket, @MessageBody() data: any) {
-		console.log("alo");
-	}
-
 	handleDisconnect(client : Socket) { // ? triggers when user disconnects from the website (either refresh or close tab)
 		let index = -1;
 		if ((index = this.clients.indexOf(client.id)) != -1) {
@@ -169,13 +164,17 @@ export class GameGateway {
 		let user1 = await this.game_service.getUsername(data[0].userId);
 		let user2 = await this.game_service.getUsername(data[1]);
 		this.games.push(new Game(utils.randomRoomId()));
-		this.games[this.games.length - 1].addPlayer(data[0].inviterId, [data[0].userId.toString(), user1]);
+
+		// ? clients need to join room...
+		data[0].inviterId.join(this.games[this.games.length - 1].room_id);
+
+		this.games[this.games.length - 1].addPlayer(data[0].inviterId.id, [data[0].userId.toString(), user1]);
 		this.games[this.games.length - 1].addPlayer(data[0].inviteeId, [data[1].toString(), user2]);
 		
 		this.server.to(this.games[this.games.length - 1].room_id).emit("waiting-player", this.games[this.games.length - 1].room_id, this.games[this.games.length - 1].score_limit, this.games[this.games.length - 1].map.name);
 		this.games[this.games.length - 1].state = "waiting-readiness";
 					
-		this.server.to(this.games[this.games.length - 1].room_id).emit("waiting-readiness", this.games[this.games.length - 1].players[0].id, this.games[this.games.length - 1].players[1].id, this.games[this.games.length - 1].players[0].real_name, this.games[this.games.length - 1].players[1].real_name, this.games[this.games.length - 1].players[0].real_id, this.games[this.games.length - 1].players[1].real_id);	
+		this.server.to(this.games[this.games.length - 1].room_id).emit("waiting-readiness", this.games[this.games.length - 1].players[0].id, this.games[this.games.length - 1].players[1].id, this.games[this.games.length - 1].players[0].real_name, this.games[this.games.length - 1].players[1].real_name, this.games[this.games.length - 1].players[0].real_id, this.games[this.games.length - 1].players[1].real_id);
 	}
 
 	@SubscribeMessage('matchmaking')

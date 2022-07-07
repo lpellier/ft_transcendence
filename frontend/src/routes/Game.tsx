@@ -105,8 +105,6 @@ function GameComponent() {
 
 export default function Game( props: {user: User | undefined}) {	
 	useEffect(() => {
-		console.log("alo")
-
 		let user = document.createElement("div");
 		const propsUser: any = props.user;
 		user.setAttribute("user_name", propsUser.username);
