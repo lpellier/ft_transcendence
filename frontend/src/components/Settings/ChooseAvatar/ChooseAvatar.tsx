@@ -205,7 +205,7 @@ export default function AvatarList(props: {user: User}){
         	  <Box sx={ModalChooseAvatar}>
         	    <Container>
         	      <Stack spacing={2} style={{justifyContent: 'center'}}>
-        	            <DotsMobileStepper />
+        	            {/* <DotsMobileStepper /> */}
         	            <ChooseAvatarButton user={props.user} setOpenOne={setOpen}/>
         	      </Stack>
         	    </Container>
