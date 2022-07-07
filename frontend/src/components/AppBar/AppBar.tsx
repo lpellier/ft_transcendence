@@ -1,4 +1,3 @@
-import {useEffect, useState, useContext} from 'react'
 import {Link} from 'react-router-dom'
 import {User} from 'interfaces';
 import {PlayerAvatar} from	'../Avatars';
@@ -17,7 +16,6 @@ import WebhookIcon from '@mui/icons-material/Webhook'
 import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
 import axios from 'axios';
 import {BarStyle} from '../../styles/tsxStyles/AppBar/AppBar'
-import {UserUpdateContext} from 'App'
 
 function LogOutLink() {
 
@@ -88,7 +86,7 @@ function ProjectName() {
 		  variant="h4"
 		  noWrap
 		  component="div"
-		  sx={{paddingRight: '10vw'}}
+		  sx={{paddingRight: '15%'}}
 		>
 		  		GnaGna
 				<WebhookIcon />
