@@ -29,9 +29,9 @@ import { ConfigService } from "@nestjs/config";
  * @returns game if one with 1 or less players in it
  * @returns null otherwise
  */
- function existingEmptyGame(games : Game[]) : Game {
+ function existingEmptyGame(games : Game[], username : string) : Game {
 	for (const game of games) {
-		if (game.spaceAvailable() && game.publicity === "public") // should check if game accepts friends and if user is one
+		if (game.spaceAvailable(username) && game.publicity === "public") // should check if game accepts friends and if user is one
 			return game;
 	}
 	return null;
@@ -68,13 +68,11 @@ export class GameGateway {
 	clients : string[] = [];
 	users : [string, string][] = [];
 	games : Game[] = [];
-	socketUser = new Map<string, number>();
 
 	timestep : number = 15; // ms
 
 	handleDisconnect(client : Socket) { // ? triggers when user disconnects from the website (either refresh or close tab)
 		let index = -1;
-		this.socketUser.delete(client.id);
 		if ((index = this.clients.indexOf(client.id)) != -1) {
 			this.clients.splice(index, 1);
 			this.users.splice(index, 1);
@@ -167,7 +165,6 @@ export class GameGateway {
 		for (let i = 0; i < this.games.length; i++) {
 			if (this.games[i].room_id === data.r_id) {
 				this.games[i].connected_sockets++;
-				console.log(client.id, [data.id.toString(), data.name])
 				client.join(this.games[i].room_id);
 				this.games[i].addPlayer(client.id, [data.id.toString(), data.name]);
 				this.server.to(this.games[i].room_id).emit("waiting-player", this.games[i].room_id, this.games[i].score_limit, this.games[i].map.name);
@@ -177,11 +174,6 @@ export class GameGateway {
 				}
 			}
 		}
-	}
-
-	@SubscribeMessage('new user')
-	async handleNewUser(@ConnectedSocket() client : Socket, @MessageBody() user_id : any) {
-		this.socketUser.set(client.id, user_id.userId);
 	}
 
 	@SubscribeMessage('accepted game')
@@ -194,9 +186,6 @@ export class GameGateway {
 
 		this.server.emit("please send back", {name : user1, id : data[0].userId, r_id : game.room_id});
 		this.server.emit("please send back", {name : user2, id : data[1], r_id : game.room_id});
-
-		console.log("in gamebackend", data[0].inviterId, data[0].inviteeId)
-
 		// ? need to get sockets so sending an event to ids
 	}
 
@@ -207,7 +196,7 @@ export class GameGateway {
 	) {
 		let existing_game : Game = null;
 		if (data[0] === "public" && data[1])
-			existing_game = existingEmptyGame(this.games);
+			existing_game = existingEmptyGame(this.games, this.users[this.clients.indexOf(client.id)][1]);
 		
 		if (existing_game === null) {
 			this.games.push(new Game(utils.randomRoomId()));
@@ -241,14 +230,15 @@ export class GameGateway {
 					game.addSpectator(client.id);
 					this.server.to(client.id).emit("spectate", game.room_id, game.score_limit, game.map.name, game.state, game.players[0].id, (game.players.length > 1 ? game.players[1].id : "null"), game.players[0].real_name, (game.players.length > 1 ? game.players[1].real_name : "null"), game.players[0].real_id, (game.players.length > 1 ? game.players[1].real_id : 0)); // need to handle case where only one user is connected
 				}
-				else if (game.players.length < 2) {
+				else if (game.players.length < 2 && game.spaceAvailable(this.users[this.clients.indexOf(client.id)][1])) {
 					client.join(game.room_id);
 					game.addPlayer(client.id, this.users[this.clients.indexOf(client.id)]);
 					this.server.to(game.room_id).emit("waiting-player", game.room_id, game.score_limit, game.map.name);
 					game.state = "waiting-readiness";
-					// startGameFullRooms(this.games, this.server);
 					this.server.to(game.room_id).emit("waiting-readiness", game.players[0].id, game.players[1].id, game.players[0].real_name, game.players[1].real_name, game.players[0].real_id, game.players[1].real_id);						
 				}
+				else if (game.players.length < 2)
+					this.server.to(client.id).emit("matchmaking-error", "already_in_game");
 				else
 					this.server.to(client.id).emit("matchmaking-error", "game_full");
 			}

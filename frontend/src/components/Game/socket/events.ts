@@ -38,12 +38,15 @@ function listenStartEvents() {
 		if (error === "game_full")
 			errors.game_full = true;
 		else if (error === "game_not_found")
-			errors.game_not_found = true;	
+			errors.game_not_found = true;
+		else if (error === "already_in_game")
+			errors.already_in_game = true;	
 	});
 
 	socket.on("please send back", (data : any) => {
-		if (data.name === user_name)
+		if (data.name === user_name) {
 			socket.emit("socket response", data);
+		}
 	});
 
 	socket.on("waiting-readiness", (id_p1 : string, id_p2 : string, name_p1 : string, name_p2 : string, real_id_p1 : number, real_id_p2 : number) => {

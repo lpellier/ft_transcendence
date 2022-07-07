@@ -65,9 +65,4 @@ function keyPressed() {
 			inputs.join.value(inputs.join.value().slice(1));
 		socket.emit("find_game", inputs.join.value(), game.spectator);
 	}
-	if (game.state === "in-menu-create" && keyCode === ENTER) {
-		if (inputs.join.value()[0] === '#')
-			inputs.join.value(inputs.join.value().slice(1));
-		socket.emit("find_game", inputs.join.value());
-	}
 }

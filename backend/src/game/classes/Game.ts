@@ -42,7 +42,10 @@ export class Game {
 		this.connected_sockets = 0;
 	}
 
-	spaceAvailable() {
+	spaceAvailable(username : string) {
+		for (let player of this.players)
+			if (player.real_name === username)
+				return false;
 		return (this.players.length <= 1);
 	}
 

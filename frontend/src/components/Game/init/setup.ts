@@ -4,9 +4,8 @@
 // TODO ISSUES
 	// ? when opening the site on a page for the first time, game doesn't load until refresh (but only sometimes)
 	// ? game doesnt update username if changed because getting the username once in setup, should check periodically if it's still the same
-
+	// ? max number of characters to input in room id
 // TODO IMPROVEMENTS
-	// ? wasd keys do not show up in multiplayer 
 	// ? implement better ai
 
 	// ? cute animation showing the roll of pong value in casino
@@ -145,6 +144,9 @@ function draw() {
 			outputAnnouncement("This game is already full", consts.small_font_size, consts.WIDTH / 2, consts.HEIGHT / 2, "white");
 		else if (errors.game_not_found)
 			outputAnnouncement("This game doesn't exist", consts.small_font_size, consts.WIDTH / 2, consts.HEIGHT / 2, "white");	
+		else if (errors.already_in_game)
+			outputAnnouncement("You are already in this game", consts.small_font_size, consts.WIDTH / 2, consts.HEIGHT / 2, "white");	
+	
 	}
 	else if (game.state === "waiting-player") {
 		if (game.spectator)
@@ -180,6 +182,8 @@ function draw() {
 		}
 	}
 	else if (game.state === "relaunch-countdown") {
+		if (game.spectator)
+			drawSpectate();
 		outputCountdown();
 		movePlayers();
 		for (let player of game.players)
