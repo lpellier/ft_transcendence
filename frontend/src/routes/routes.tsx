@@ -76,6 +76,7 @@ export default function AllRoutes()  {
 	let [otherUser, setOtherUser] = useState<User>();
     const [open, setOpen] = useState(false);
     const [invite, setInvite] = useState<inviteDto>();
+    const [navigate, setNavigate] = useState(false);
 
     useEffect(() => {
 		const handler = (usersData: User[]) => {
@@ -138,6 +139,17 @@ export default function AllRoutes()  {
         socket.emit('accepted game', invite, user?.id)
         setOpen(false);
     }
+
+    useEffect(() => {
+        const handler = () => { 
+            setNavigate(true) 
+            setNavigate(false)
+        }
+        socket.on('accepted game', handler);
+        return () => {
+            socket.off('accepted game', handler);
+        }
+    }, [])
     
     const action = (
         <div>
@@ -178,6 +190,11 @@ export default function AllRoutes()  {
             message={`You have been invited to play a game with ${users.find(user => user?.id === invite?.userId)?.username}`}
             action={action}
             />
+            {navigate?
+                <Navigate to="/game" />
+            :
+                <div/>
+            }
 	        <Routes>
 	            <Route path="/login" element={<LogIn user={user} auth={isAuth}/>} />
 				<Route path="tfauth" element={<TFAuth setAuth={setAuth}/>} />
