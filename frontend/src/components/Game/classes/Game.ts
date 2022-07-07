@@ -63,6 +63,8 @@ class Game {
 				this.score[0] += this.pong.value;
 		}
 		setTimeout(() => {
+			if (!document.getElementById("canvas-parent"))
+				return ;
 			if (this.over()) {
 				this.setState("game-over");
 				return ;
@@ -71,6 +73,8 @@ class Game {
 			this.timer = 2;
 			for (let i = 0; i < 3; i++) {
 				setTimeout(() => {
+					if (!document.getElementById("canvas-parent"))
+                        return ;
 					this.timer--;
 					if (this.timer === 0)
 						consts.playBip(consts.BIP_FINAL);

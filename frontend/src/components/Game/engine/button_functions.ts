@@ -4,8 +4,14 @@ function goToMainMenu() {
 }
 
 function clickSound() {
-	if (mouseButton === LEFT)
+	if (mouseButton === LEFT) {
 		consts.max_volume += 0.25;
+		if (consts.max_volume === 0.25 && game.state === "in-menu")
+			consts.switchMusic("menu");
+		else if (consts.max_volume === 0.25 && (game.state === "waiting-player" || game.state === "waiting-readiness"))
+			consts.switchMusic(game.map.name);
+	
+	}
 	else if (mouseButton === RIGHT)
 		consts.max_volume -= 0.25;
 	
@@ -194,8 +200,8 @@ function startLocal() {
 			}, i * 1000);
 		}
 		game.setState("countdown");
-		game.players.push(new Player(1, "first", user_name));
-		game.players.push(new Player(2, "second", "P2"));		
+		game.players.push(new Player(1, "first", user_name, 0));
+		game.players.push(new Player(2, "second", "P2", 0));		
 		game.pong = new Pong();
 		game.room_id = "Local";
 	}

@@ -56,4 +56,11 @@ export class GameService {
         });
     }
 
+    async getUsername(user_id : number) {
+        let user = await this.prisma.user.findUnique({
+            where: {id: user_id}
+        })
+        return user.username;
+    }
+
 }

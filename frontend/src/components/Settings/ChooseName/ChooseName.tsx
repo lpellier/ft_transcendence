@@ -66,7 +66,7 @@ function NameInput(props: {username: string, setter: any, setOpen: any, setUser:
 
 	return (
 		<Stack direction="row">
-			<form id='ChangeNameForm' onSubmit={handleSubmit} style={{width: '100%'}}>
+			<form id='ChangeNameForm' onSubmit={handleSubmit} style={{width: '100%'}} >
 				<TextField
 					type="text"
 					label="Your name" 
@@ -75,8 +75,8 @@ function NameInput(props: {username: string, setter: any, setOpen: any, setUser:
 					id='name'
 				/>
 			{isSubmitted === true?
-				PatchRequest()
-					:
+					PatchRequest()
+				:
 				<div/>
 			}
 			</form>

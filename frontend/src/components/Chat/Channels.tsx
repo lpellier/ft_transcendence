@@ -128,7 +128,7 @@ function RoomList(props: {rooms: Room[], currentRoom: Room, setCurrentRoom: Reac
 	)
 }
 
-function Channels(props : {user: User, users: User[], currentRoom: Room, setCurrentRoom: React.Dispatch<React.SetStateAction<Room>>, setCanWrite: React.Dispatch<React.SetStateAction<boolean>>, roomAdmins:User[], setOtherUser: React.Dispatch<React.SetStateAction<User | undefined>>}) {
+function Channels(props : {user: User, users: User[], currentRoom: Room, setCurrentRoom: React.Dispatch<React.SetStateAction<Room>>, setCanWrite: React.Dispatch<React.SetStateAction<boolean>>, roomAdmins:User[], setOtherUser: React.Dispatch<React.SetStateAction<User | undefined>>,statusMap: Map<number, string>}) {
 
 	let [addRoomClicked, setAddRoomClicked] = useState<number>(0);
 	let [rooms, setRooms] = useState<Room[]>([]);
@@ -190,6 +190,9 @@ function Channels(props : {user: User, users: User[], currentRoom: Room, setCurr
 		const handler = () => {
 			socket.emit('get rooms', props.user.id)
 			socket.emit('get public rooms');
+			let objDiv = document.getElementById('channels');
+            if (objDiv != null)
+				objDiv.scrollTop = objDiv.scrollHeight;
 		};
 		socket.on('create room', handler);
 		return ( () => {
@@ -200,6 +203,9 @@ function Channels(props : {user: User, users: User[], currentRoom: Room, setCurr
 	useEffect(() => {
 		const handler = () => {
 			socket.emit('get rooms', props.user.id)
+			let objDiv = document.getElementById('channels');
+            if (objDiv != null)
+				objDiv.scrollTop = objDiv.scrollHeight;
 		};
 		socket.on('create dm room', handler);
 		return ( () => {
@@ -287,13 +293,13 @@ function Channels(props : {user: User, users: User[], currentRoom: Room, setCurr
 						<Button onClick={() => setAddRoomClicked(1)} variant='contained' color="warning" sx={ButtonStyle}>Create Room</Button>
 					}
 				</Box>
-				<div>
+				<div >
 					<RoomList rooms = {publicRooms} currentRoom = {props.currentRoom} setCurrentRoom = {props.setCurrentRoom} users = {props.users} user = {props.user} visibility = "public" roomAdmins={props.roomAdmins} />
 					<RoomList rooms = {rooms} currentRoom = {props.currentRoom} setCurrentRoom = {props.setCurrentRoom} users = {props.users} user = {props.user} visibility="private" roomAdmins={props.roomAdmins} />
 				</div>
 			</Stack>
 			:
-			<DirectMessaging user={props.user} users={props.users} rooms={rooms} currentRoom={props.currentRoom} setCurrentRoom={props.setCurrentRoom} setOtherUser={props.setOtherUser}/>
+			<DirectMessaging user={props.user} users={props.users} rooms={rooms} currentRoom={props.currentRoom} setCurrentRoom={props.setCurrentRoom} setOtherUser={props.setOtherUser} statusMap={props.statusMap}/>
 			}
 		</Stack>
 		</div>

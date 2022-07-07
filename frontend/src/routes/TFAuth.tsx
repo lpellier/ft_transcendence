@@ -90,7 +90,7 @@ export default function TFAuth(props: {setAuth: any}) {
 				</h1>
 				<PinField value={pinInput} setPininput={setPininput} setRedirect={setRedirect} setAuth={props.setAuth}/>
 				{redirect === true ?
-					<Navigate to="/profile" />
+					<Navigate to="/game" />
 						:
 					<div/>
 				}

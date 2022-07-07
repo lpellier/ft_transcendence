@@ -13,6 +13,7 @@ import BlockIcon from '@mui/icons-material/Block';
 import Games from '@mui/icons-material/Games';
 import { Backdrop, ButtonGroup, IconButton, Button, Stack, Alert, Tooltip } from '@mui/material';
 import {Link} from 'react-router-dom';
+import { toastThatError } from 'routes/routes';
 
 interface CreateDMRoomDto {
     name: string;
@@ -20,7 +21,7 @@ interface CreateDMRoomDto {
     user2Id: number;
 }
 
-export default function DirectMessaging(props: {user: User, users: User[], rooms: Room[], currentRoom: Room, setCurrentRoom: React.Dispatch<React.SetStateAction<Room>>, setOtherUser: React.Dispatch<React.SetStateAction<User | undefined>>}) {
+export default function DirectMessaging(props: {user: User, users: User[], rooms: Room[], currentRoom: Room, setCurrentRoom: React.Dispatch<React.SetStateAction<Room>>, setOtherUser: React.Dispatch<React.SetStateAction<User | undefined>>, statusMap: Map<number, string>}) {
     
     let [showUserList, setShowUserList] = useState<boolean>(false);
     let [search, setSearch] = useState<string>("");
@@ -102,7 +103,7 @@ export default function DirectMessaging(props: {user: User, users: User[], rooms
         const submittedUsername: string = e.target[0].value;
         console.log('submittedUsername = ', submittedUsername)
         let clickedUser:any = props.users.find(user => user.username === submittedUsername);
-        if (clickedUser)
+        if (clickedUser && clickedUser.id !== props.user.id)
         {
             if (clickedUser.id < props.user.id)
                 roomName = clickedUser.id.toString() + '-' + props.user.id.toString();
@@ -110,7 +111,6 @@ export default function DirectMessaging(props: {user: User, users: User[], rooms
                 roomName = props.user.id.toString() + '-' + clickedUser.id.toString();
             if (props.rooms.find(room => room.name === roomName))
             {
-                console.log('room exists')
                 let room: any = props.rooms.find(room => room.name === roomName);
                 props.setCurrentRoom(room);
             }
@@ -145,7 +145,7 @@ export default function DirectMessaging(props: {user: User, users: User[], rooms
 	}, [props.user.id])
     
     
-    function UserMod(props: {user: User, users: User[], room: Room, setOtherUser: React.Dispatch<React.SetStateAction<User | undefined>>}) {
+    function UserMod(props: {user: User, users: User[], room: Room, setOtherUser: React.Dispatch<React.SetStateAction<User | undefined>>, statusMap: Map<number, string>}) {
         
         let [showBackdrop, setShowBackdrop] = useState<boolean>(false);
         
@@ -156,6 +156,20 @@ export default function DirectMessaging(props: {user: User, users: User[], rooms
 
         function    goToProfile(user: User | undefined) {
             props.setOtherUser(user);
+        }
+
+        function    inviteForGame(user: User| undefined) {
+            if (user)
+            {
+                // if (user && props.statusMap.get(user?.id) === 'online')
+                    socket.emit('invite for game', {userId: props.user.id, otherUserId: user?.id});
+                // else if (props.statusMap.get(user?.id) === 'in game')
+                    // toastThatError('user is already in game');
+                // else
+                    // toastThatError('user is offline');
+            }
+            else
+                toastThatError('user is offline');
         }
 
         return (
@@ -169,7 +183,7 @@ export default function DirectMessaging(props: {user: User, users: User[], rooms
                             </IconButton>
                         </Tooltip>
                         <Tooltip title="Invite for a match">
-                            <IconButton size="small">
+                            <IconButton size="small" onClick={() => inviteForGame(parseUser(props.room.name))}>
                                 <Games/>
                             </IconButton>   
                         </Tooltip>
@@ -226,11 +240,11 @@ export default function DirectMessaging(props: {user: User, users: User[], rooms
                                 { room.id !== props.currentRoom.id ?
 
                                     <ListItem button className="MenuItem" onClick={() => props.setCurrentRoom(room) } sx={{ alignContent:"center" }} >
-                                        <UserMod user={props.user} users={props.users} room={room} setOtherUser={props.setOtherUser}/>
+                                        <UserMod user={props.user} users={props.users} room={room} setOtherUser={props.setOtherUser} statusMap={props.statusMap}/>
                                     </ListItem>
                                 :
                                     <ListItem className="MenuItem" selected  sx={{ alignContent:"center"}}>
-                                        <UserMod user={props.user} users={props.users} room={room} setOtherUser={props.setOtherUser}/>
+                                        <UserMod user={props.user} users={props.users} room={room} setOtherUser={props.setOtherUser} statusMap={props.statusMap}/>
                                     </ListItem>
                                 }
                             </div>

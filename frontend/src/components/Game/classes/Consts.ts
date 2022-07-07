@@ -283,11 +283,11 @@ class Consts {
 		this.OLD_WIDTH = this.WIDTH;
 		this.OLD_HEIGHT = this.HEIGHT;
 	
-		this.WIDTH = windowWidth * 5 / 6;
+		this.WIDTH = windowWidth * 4 / 6;
 		this.HEIGHT = this.WIDTH / 1.6;
 
 		if (this.HEIGHT > windowHeight) {
-			this.HEIGHT = windowHeight * 5 / 6;
+			this.HEIGHT = windowHeight * 4 / 6;
 			this.WIDTH = this.HEIGHT * 1.6;
 		}
 		this.DIAGONAL = Math.sqrt(Math.pow(this.WIDTH, 2) + Math.pow(this.HEIGHT, 2));
