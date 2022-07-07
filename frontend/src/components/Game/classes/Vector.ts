@@ -1,4 +1,4 @@
-function sub(v1 : Vector, v2 : Vector) : Vector {
+function sub_vec(v1 : Vector, v2 : Vector) : Vector {
 	let ret : Vector = new Vector([v1.x, v1.y]);
 	ret.x -= v2.x;
 	ret.y -= v2.y;

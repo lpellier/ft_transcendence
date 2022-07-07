@@ -49,7 +49,7 @@ function PinField(props: {value: string, setPininput: any, setRedirect: any, set
 			})
 			setHastSubmitted(false)
 		}
-	}, )
+	},[] )
 
 	function handleSubmit(e: any)
 	{

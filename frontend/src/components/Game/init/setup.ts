@@ -5,10 +5,7 @@
 	// ? when opening the site on a page for the first time, game doesn't load until refresh (but only sometimes)
 
 // TODO IMPROVEMENTS
-	// ? take into account score when recording on database
-	// ? add player xp and level
-	// ? handle edge cases like players leaving in middle of game for stats (count as defeat)
-	
+	// ? wasd keys do not show up in multiplayer 
 	// ? implement better ai
 
 	// ? cute animation showing the roll of pong value in casino
@@ -208,10 +205,8 @@ function draw() {
 	else if (game.state === "game-over") {
 		buttons.return.show();
 		image(consts.RETURN_ICON, consts.WIDTH * 0.90, consts.HEIGHT * 0.01, consts.medium_square_diameter, consts.medium_square_diameter);
-		if (game.players.length === 2) {
-			console.log(game.score);
+		if (game.players.length === 2)
 			outputAnnouncement((game.score[0] > game.score[1] ? game.players[0].username : game.players[1].username) + " won the game!", consts.std_font_size, width / 2, height / 2, "white")
-		}
 		outputScore(consts.WIDTH, consts.HEIGHT);
 	}
 	if (game.state === "in-menu" || game.state === "waiting-player" || game.state === "waiting-readiness") {

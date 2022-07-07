@@ -10,7 +10,7 @@ import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutli
 import {ModalChooseName} from '../../../styles/tsxStyles/Settings/Name'
 import {ButtonModalStyle, IconStyle} from '../../../styles/tsxStyles/AppBar/PongMenu'
 import {User} from 'interfaces'
-import {UserUpdateContext} from 'App'
+import {toastThatError, toastIt} from '../../../routes/routes'
 
 function NameButton() {
 	return (
@@ -24,16 +24,15 @@ function NameButton() {
 	);
 }
 
-function NameInput(props: {username: string, setter: any, setOpen: any}) {
+function NameInput(props: {username: string, setter: any, setOpen: any, setUser: React.Dispatch<React.SetStateAction<User | undefined>>}) {
 	const [isSubmitted, setIsSubmitted] = useState<boolean>(false)
 
-	function handleSubmit(e: any, setter: any, changeUser: number)
+	function handleSubmit(e: any)
 	{
 		e.preventDefault();
 		props.setter(e.target[0].value);
 		e.target[0].value = "";
 		setIsSubmitted(true)
-		setter(changeUser + 1)
 	}
 
 	function PatchRequest() {
@@ -48,21 +47,26 @@ function NameInput(props: {username: string, setter: any, setOpen: any}) {
 				}
 			}
 		)
-		.then(res => {
+		.then(async res => {
 			console.log("Changing name success : ", props.username)
 			props.setOpen(false)
+			await axios.get( 'http://127.0.0.1:3001/users/me',{ withCredentials: true,})
+			.then(res => {
+				props.setUser(res.data)
+				console.log("User : ", res.data);
+			})
+			.catch(err => {
+				console.log("Appbar get request failed : ", err)
+			})
 		})
 		.catch(err => {
-			console.log("Put request failed : ", err)
+			toastThatError('invalid username');
 		});
 	}
 
 	return (
 		<Stack direction="row">
-		<UserUpdateContext.Consumer >
-			{({changeUser, setChangeUser}) =>
-			<form id='ChangeNameForm' onSubmit={e => handleSubmit(e, setChangeUser, changeUser)}
-			style={{width: '100%'}}>
+			<form id='ChangeNameForm' onSubmit={handleSubmit} style={{width: '100%'}} >
 				<TextField
 					type="text"
 					label="Your name" 
@@ -76,12 +80,11 @@ function NameInput(props: {username: string, setter: any, setOpen: any}) {
 				<div/>
 			}
 			</form>
-		}</UserUpdateContext.Consumer >
 		</Stack>
 	);
 }
 
-export default function ChooseName(props: {user: User}) {
+export default function ChooseName(props: {user: User, setUser: React.Dispatch<React.SetStateAction<User | undefined>>}) {
     const [new_username, setNewUsername] = useState(props.user.username);
 	const [open, setOpen] = useState(false);
 
@@ -113,7 +116,8 @@ export default function ChooseName(props: {user: User}) {
 						<NameInput
 							username={new_username} 
 							setter={setNewUsername} 
-							setOpen={setOpen}/>
+							setOpen={setOpen}
+							setUser={props.setUser}/>
 					</Stack>
           		</Box>
         	</Modal>

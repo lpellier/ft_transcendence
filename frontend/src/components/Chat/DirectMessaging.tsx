@@ -38,8 +38,6 @@ export default function DirectMessaging(props: {user: User, users: User[], rooms
         }
     }, [props.user?.id])
 
-    console.log("blocked = ", blocked);
-
     useEffect(() => {
         const handler = (data: User[]) => {setBlocked(data);};
         socket.on('get blocked', handler);

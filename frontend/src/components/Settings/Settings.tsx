@@ -12,14 +12,14 @@ const SettingStyle = {
     alignItems: 'center',
 }
 
-export default function Settings(props: {user: User | undefined}) {
+export default function Settings(props: {user: User | undefined, setUser: React.Dispatch<React.SetStateAction<User | undefined>>}) {
 
     return (
         <Box sx={SettingStyle}>
 			{props.user?
             	<Stack spacing={5}>
             		<AvatarList user={props.user} />
-            	    <ChooseName user={props.user} />
+            	    <ChooseName user={props.user} setUser={props.setUser}/>
             	    <ChooseAuth user={props.user} />
 		    	</Stack>
 					:

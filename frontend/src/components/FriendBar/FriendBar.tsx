@@ -18,7 +18,6 @@ interface FriendUserDto {
 }
 
 function UserList(props: {currentUser: User, users: User[], friends: User[]}) {
-    console.log('users = ', props.users);
     return (
         <List className='user-list'>
         {props.users.map(item => (
@@ -55,7 +54,6 @@ export default function FriendBar(props: {user: User, users: User[]}) {
 
     useEffect(() => {
         socket.on('new connection', (userId: number) => {
-            console.log('new connection -> ', userId);
             setStatusMap(statusMap.set(userId, 'online'));
         })
     }, [statusMap]);
@@ -71,8 +69,7 @@ export default function FriendBar(props: {user: User, users: User[]}) {
     }, [props.user.id])
 
     useEffect(() => {
-        const handler = () => {socket.emit('get friends', props.user?.id)
-    console.log('add friend received')}
+        const handler = () => {socket.emit('get friends', props.user?.id)}
         socket.on('add friend', handler);
         return () => {
             socket.off('add friend', handler);
@@ -169,7 +166,11 @@ export default function FriendBar(props: {user: User, users: User[]}) {
                     {friends.map(item => (
                         <div key={item.id}>
                             <ListItem >
-                                <ListItemText primary={item.username} secondary={statusMap.get(item.id)? statusMap.get(item.id) : 'offline'}/>
+                                {statusMap.get(item.id) === 'online'?
+                                    <ListItemText primary={item.username} secondary='online'/>
+                                    :
+                                    <ListItemText primary={item.username} secondary='offline' />
+                                }
                                 <Button variant="contained" color="error" onClick={() => removeFriend(item)}>remove</Button>
                             </ListItem>
                         </div>

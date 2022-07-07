@@ -98,24 +98,6 @@ function ProjectName() {
 }
 
 export default function SearchAppBar(props: {user: User, users: User[], setOtherUser: React.Dispatch<React.SetStateAction<User | undefined>>}) {
-	const [user, setUser] = useState<User>(props.user)
-	const contextValue = useContext(UserUpdateContext);
-
-	useEffect(() => {
-		axios.get(
-		'http://127.0.0.1:3001/users/me',
-		{
-				withCredentials: true,
-		})
-		.then(res => {
-			console.log("Appbar get request success")
-			setUser(res.data)
-		})
-		.catch(err => {
-			console.log("Appbar get request failed : ", err)
-		})
-
-	}, [contextValue])
 
   return (
       <AppBar position="static">
@@ -133,10 +115,10 @@ export default function SearchAppBar(props: {user: User, users: User[], setOther
         <Toolbar style={ BarStyle }>
 			<nav>
 				<Link to="profile" style={{ textDecoration: 'none' }}>
-					<PlayerAvatar image={'http://127.0.0.1:3001/avatars/' + user.id + '.png'} onClick={() => props.setOtherUser(props.user)} />
+					<PlayerAvatar image={'http://127.0.0.1:3001/avatars/' + props.user.id + '.png'} onClick={() => props.setOtherUser(props.user)} />
 				</Link>
 			</nav>
-			<PlayerName name={user.username} />
+			<PlayerName name={props.user.username} />
 			<ProjectName />
 				<Stack direction="row" spacing={2} >
 					<FriendBar user={props.user} users={props.users}/>

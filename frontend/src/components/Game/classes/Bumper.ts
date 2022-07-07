@@ -80,8 +80,8 @@ class Bumper {
 		let cp = this.center;
 		let r = (this.diameter * 0.85) / 2;
 
-		let d = sub(l, e);
-		let f = sub(e, cp);
+		let d = sub_vec(l, e);
+		let f = sub_vec(e, cp);
 
 		let a = d.dot(d);
 		let b = 2 * f.dot(d);
@@ -102,7 +102,7 @@ class Bumper {
 				this.collision.y = e.y;
 				this.hit = true;
 				
-				this.bounce_vec = sub(this.collision, this.center);
+				this.bounce_vec = sub_vec(this.collision, this.center);
 				this.bounce_vec.normalize();
 				let vec_pong = new Vector(pong.velocity);
 				this.bounce_vec.mult(vec_pong.mag());
