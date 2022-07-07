@@ -1,7 +1,6 @@
 import { IsNumber, IsString } from "class-validator";
 
 export class CreateDMRoomDto {
-
     @IsString()
     name: string;
     

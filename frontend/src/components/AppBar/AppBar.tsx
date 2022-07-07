@@ -1,4 +1,3 @@
-import {useEffect, useState} from 'react'
 import {Link} from 'react-router-dom'
 import {User} from 'interfaces';
 import {PlayerAvatar} from	'../Avatars';
@@ -85,7 +84,7 @@ function ProjectName() {
 		  variant="h4"
 		  noWrap
 		  component="div"
-		  sx={{paddingRight: '10vw'}}
+		  sx={{paddingRight: '15%'}}
 		>
 		  		GnaGna
 				<WebhookIcon />

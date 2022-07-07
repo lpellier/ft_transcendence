@@ -1,6 +1,6 @@
 import { ConfigService } from "@nestjs/config";
-import { MessageBody, ConnectedSocket, SubscribeMessage, WebSocketGateway, WebSocketServer, OnGatewayConnection, OnGatewayDisconnect } from "@nestjs/websockets";
-import { Socket, Server } from "socket.io";
+import { MessageBody, ConnectedSocket, SubscribeMessage, WebSocketGateway, WebSocketServer, OnGatewayConnection, OnGatewayDisconnect, WsException } from "@nestjs/websockets";
+import { Socket } from "socket.io";
 import { ChatService } from './chat.service';
 import { UserRoomDto } from "./dto/user-room.dto";
 import { CreateRoomDto } from './dto/create-room.dto';
@@ -12,10 +12,14 @@ import { CheckPasswordDto } from "./dto/check-password.dto";
 import { InviteDto } from "./dto/invite.dto";
 	
 import * as bcrypt from 'bcrypt';
+import { UseFilters, UsePipes, ValidationPipe } from "@nestjs/common";
+import { ValidationFilter } from "./filters/validation.filter";
 
 let socketUser = new Map<string, number>();
 let socketGame = new Map<string, number>();
 
+@UseFilters(new ValidationFilter())
+@UsePipes(new ValidationPipe())
 @WebSocketGateway({
   cors: {
 	  origin: (new ConfigService).get("FRONT_URL"),
@@ -35,15 +39,15 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect
 		console.log('create room called', createRoomDto);
 		let roomId: number
 		const handler = async (err, hashed: string) => {
-		   if (err) {
-			   console.log(err);
-		   } else {
-			  roomId = await this.chatService.createRoom({name: createRoomDto.name, userId: createRoomDto.userId, visibility: createRoomDto.visibility, password: hashed});
-			   await this.chatService.addUserToRoom(createRoomDto.userId, roomId);
-			   await this.chatService.addAdminToRoom(createRoomDto.userId, roomId);
-			   client.emit('create room');
-		   }
-	   }
+			if (err) {
+				console.log(err);
+			} else {
+				roomId = await this.chatService.createRoom({name: createRoomDto.name, userId: createRoomDto.userId, visibility: createRoomDto.visibility, password: hashed});
+				await this.chatService.addUserToRoom(createRoomDto.userId, roomId);
+				await this.chatService.addAdminToRoom(createRoomDto.userId, roomId);
+				client.emit('create room');
+			}
+		}
 		if (createRoomDto.password !== "")
 		{
 			bcrypt.hash(createRoomDto.password, 10, handler);

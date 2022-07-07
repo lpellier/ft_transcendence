@@ -1,9 +1,10 @@
-import { IsNumber } from "class-validator";
+import { IsNumber, IsString, MaxLength } from "class-validator";
 
 export class UpdatePasswordDto {
     @IsNumber()
     roomId: number;
 
-    @IsNumber()
+    @IsString()
+    @MaxLength(16)
     password: string;
 }
