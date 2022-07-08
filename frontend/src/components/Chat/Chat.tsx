@@ -6,6 +6,7 @@ import Box from '@mui/material/Box';
 import '../../styles/Chat/Chat.css';
 import {User, Room} from 'interfaces';
 import {socket} from 'index';
+import { toastThatError } from 'routes/routes';
 
 
 const ChatBoxComponentStyle = {	
@@ -40,10 +41,6 @@ function Chat(props: {user: User | undefined, users: User[], setOtherUser: React
 	let [currentRoom, setCurrentRoom] = useState<Room> ({id: 1, name: "general", ownerId: 60040, visibility: "public", password:""});
 	let [canWrite, setCanWrite] = useState<boolean>(true);
 	let [roomAdmins, setRoomAdmins] = useState<User[]>([]);
-
-	useEffect(() => {
-		socket.on('exception', (data: any) => console.log("exception:", data));
-	})
 
 	useEffect (() => {
 		const handler = (data: User[]) => { 
