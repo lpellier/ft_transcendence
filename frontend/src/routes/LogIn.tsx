@@ -98,18 +98,39 @@ export default function LogIn(props: {user: User | undefined, auth: boolean}) {
 		.catch(err => { console.log("Get user failed : ", err)})
 	}, [])
 
-	function submitName() {
+	function submitNameAndAvatar() {
 		if (username.length > 0) {
 			axios.patch(UserAPI, {username: username}, {withCredentials: true})
 			.then(res => {
 				console.log("Change name success : ", username)
 				setOpen(false)
-			})
-			
-			setOpen(false)
-		}
+			})}
 
+		if (selectedFile) {
+			handleSubmitAvatar();
+		}		
+		
+		setOpen(false)
+		setCanRedirect(true)
 	}
+
+
+	function handleSubmitAvatar() {
+
+		const formData = new FormData();
+		formData.append('avatar', selectedFile)
+
+		axios.put("http://127.0.0.1:3001/users/upload-avatar",
+		formData,
+		{
+			withCredentials: true,
+			headers: {
+				"Content-Type": "multipart/form-data",
+			}
+		})
+		.then(res => {console.log("Put avatar request success")})
+		.catch(err => {toastThatError('Avatar upload failed')})
+	};
 	
 	function ChooseFirstName() {
 		const [firstName, setFirstName] = useState<string>("")
@@ -136,30 +157,14 @@ export default function LogIn(props: {user: User | undefined, auth: boolean}) {
 		)
 	}
 
+
 	function ChooseFirstAvatar() {
 	
-	const changeHandler = (event: any) => {
-		setSelectedFile(event.target.files[0]);
-		setisSelected(true);
-	};
-	
-		function handleSubmitAvatar() {
-
-			const formData = new FormData();
-			formData.append('avatar', selectedFile)
-
-			axios.put("http://127.0.0.1:3001/users/upload-avatar",
-			formData,
-			{
-				withCredentials: true,
-				headers: {
-					"Content-Type": "multipart/form-data",
-				}
-			})
-			.then(res => {console.log("Put avatar request success")})
-			.catch(err => {toastThatError('Avatar upload failed')})
+		const changeHandler = (event: any) => {
+			setSelectedFile(event.target.files[0]);
+			setisSelected(true);
 		};
-		
+	
 		return (
 			<Box sx={LittleBoxForInput}>
 			<Stack sx={{paddingLeft: '1vw', paddingTop: '1vh'}} spacing={10} direction="row">
@@ -210,7 +215,7 @@ export default function LogIn(props: {user: User | undefined, auth: boolean}) {
 					<MockLogInButton />
 				</a>
 			</nav>
-			{props.user ?
+			{props.user && props.user.username === null ?
 				<Modal open={open} >
 					<Box sx={FirstConnexionModal}>
 						<Stack spacing={3}>
@@ -224,7 +229,7 @@ export default function LogIn(props: {user: User | undefined, auth: boolean}) {
 							<ChooseFirstName />
 							<ChooseFirstAvatar />
 							<Button 
-								onClick={submitName}
+								onClick={submitNameAndAvatar}
 								variant="contained"
 								sx={{
 									backgroundColor: 'rgb(100, 190, 100)',
@@ -253,7 +258,7 @@ export default function LogIn(props: {user: User | undefined, auth: boolean}) {
 			}
 			{canRedirect === true ?
 				<Navigate replace to='/game'/>
-				:
+					:
 				<div />	
 			}
         </Stack>
