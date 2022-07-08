@@ -74,7 +74,39 @@ function MockLogInButton()
           Mock Login
         </Button>
       );
-	}
+}
+
+function ChooseFirstName(props: {setter: any, value: string}) {
+	const [firstName, setFirstName] = useState<string>("")
+
+	console.log("firstName", firstName)
+	console.log("props.value", props.value)
+
+	useEffect(() => {
+		props.setter(firstName)
+	}, [firstName])
+
+	return (
+		<Box sx={LittleBoxForInput}>
+			<Stack sx={{paddingLeft: '1vw', paddingTop: '1vh'}}>
+					<Typography
+						variant="h6"
+						color='rgb(200, 100, 30)'
+						sx={TitleStyle}
+					>
+						Choose your nickname :
+					</Typography>
+					<TextField
+						color="warning"
+						label="No space, no digit por favor !" 
+						variant="standard"
+						onChange={(e) => setFirstName(e.target.value)}
+						style={{width: '50%', justifyContent: 'center'}}
+					/>
+			</Stack>
+		</Box>
+	)
+}
 	
 export default function LogIn(props: {user: User | undefined, auth: boolean}) {
 	const [open, setOpen] = useState(true);
@@ -83,15 +115,13 @@ export default function LogIn(props: {user: User | undefined, auth: boolean}) {
 	const [isSelected, setisSelected] = useState(false);
 	const [canRedirect, setCanRedirect] = useState(false);
 	
-	const handleOpen = () => {setOpen(true);};
-	
 	const handleClose = () => {
 		setOpen(false);
 		setCanRedirect(true);
 	};
 	
 	useEffect(() => {
-		
+
 		axios.get("http://127.0.0.1:3001/users/me",
 		{ withCredentials: true })
 		.then(res => { console.log("Get user success")})
@@ -99,12 +129,13 @@ export default function LogIn(props: {user: User | undefined, auth: boolean}) {
 	}, [])
 
 	function submitNameAndAvatar() {
+
 		if (username.length > 0) {
 			axios.patch(UserAPI, {username: username}, {withCredentials: true})
 			.then(res => {
 				console.log("Change name success : ", username)
 				setOpen(false)
-			})}
+		})}
 
 		if (selectedFile) {
 			handleSubmitAvatar();
@@ -113,7 +144,6 @@ export default function LogIn(props: {user: User | undefined, auth: boolean}) {
 		setOpen(false)
 		setCanRedirect(true)
 	}
-
 
 	function handleSubmitAvatar() {
 
@@ -132,32 +162,6 @@ export default function LogIn(props: {user: User | undefined, auth: boolean}) {
 		.catch(err => {toastThatError('Avatar upload failed')})
 	};
 	
-	function ChooseFirstName() {
-		const [firstName, setFirstName] = useState<string>("")
-
-		return (
-			<Box sx={LittleBoxForInput}>
-				<Stack sx={{paddingLeft: '1vw', paddingTop: '1vh'}}>
-						<Typography
-							variant="h6"
-							color='rgb(200, 100, 30)'
-							sx={TitleStyle}
-						>
-							Choose your nickname :
-						</Typography>
-						<TextField
-							color="warning"
-							label="No space, no digit por favor !" 
-							variant="standard"
-							onChange={(e) => setFirstName(e.target.value)}
-							style={{width: '50%', justifyContent: 'center'}}
-						/>
-				</Stack>
-			</Box>
-		)
-	}
-
-
 	function ChooseFirstAvatar() {
 	
 		const changeHandler = (event: any) => {
@@ -226,7 +230,7 @@ export default function LogIn(props: {user: User | undefined, auth: boolean}) {
 							>
 								Hey, First LogIn ?
 							</Typography>
-							<ChooseFirstName />
+							<ChooseFirstName setter={setUsername} value={username} />
 							<ChooseFirstAvatar />
 							<Button 
 								onClick={submitNameAndAvatar}
@@ -253,8 +257,8 @@ export default function LogIn(props: {user: User | undefined, auth: boolean}) {
 						</Stack>
 					</Box>
         		</Modal>
-				:
-				<div />
+					:
+				<div />			
 			}
 			{canRedirect === true ?
 				<Navigate replace to='/game'/>
