@@ -64,7 +64,6 @@ function NameInput(props: {username: string, setter: any, setOpen: any, setUser:
 
 	return (
 		<div>
-		<form id='ChangeNameForm' style={{width: '100%'}}>
 			<Stack spacing={4}>
 				<TextField
 					type="text"
@@ -74,6 +73,7 @@ function NameInput(props: {username: string, setter: any, setOpen: any, setUser:
 					style={{width: '85%', justifyContent: 'center'}}
 					id='name'
 				/>
+				<form id='ChangeNameForm' style={{width: '100%'}}>
 					<Stack direction="row" spacing={2} sx={{display: 'flex', justifyContent: 'center'}}>
 						<Button
 							onClick={handleSubmit}
@@ -90,13 +90,13 @@ function NameInput(props: {username: string, setter: any, setOpen: any, setUser:
 							Nope !
 						</Button>
 					</Stack>
+				</form>
 				</Stack>
 				{isSubmitted === true?
 					PatchRequest()
 					:
 					<div/>
 				}
-			</form>
 			</div>
 	);
 }

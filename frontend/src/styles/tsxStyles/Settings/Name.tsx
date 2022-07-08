@@ -4,9 +4,6 @@ const ModalChooseName = {
     left: '50%',
     transform: 'translate(-50%, -50%)',
 
-    width: '30vw',
-    height: '10vh',
-
     backgroundColor: 'rgb(128, 161, 212, 0.90)',
     border: '3px solid black',
     boxShadow: 24,
