@@ -1,4 +1,5 @@
 import {useEffect, useState} from 'react'
+import { Navigate } from 'react-router-dom';
 import axios from 'axios'
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
@@ -21,7 +22,12 @@ const MockAuthAPI = "http://127.0.0.1:3001/auth/mock"
 
 const Input = styled('input')({
 	display: 'none',
-  });
+});
+
+const TitleStyle = {
+	fontWeight: '800', 
+	textShadow: '1px 1px 1px black',
+}
 
 const LittleBoxForInput = {
 	width: '50vw',
@@ -75,10 +81,14 @@ export default function LogIn(props: {user: User | undefined, auth: boolean}) {
 	const [username, setUsername] = useState<string>("")
 	const [selectedFile, setSelectedFile] = useState<any>();
 	const [isSelected, setisSelected] = useState(false);
+	const [canRedirect, setCanRedirect] = useState(false);
 	
 	const handleOpen = () => {setOpen(true);};
 	
-	const handleClose = () => {setOpen(false);};
+	const handleClose = () => {
+		setOpen(false);
+		setCanRedirect(true);
+	};
 	
 	useEffect(() => {
 		
@@ -107,16 +117,19 @@ export default function LogIn(props: {user: User | undefined, auth: boolean}) {
 		return (
 			<Box sx={LittleBoxForInput}>
 				<Stack sx={{paddingLeft: '1vw', paddingTop: '1vh'}}>
-						<Typography>
+						<Typography
+							variant="h6"
+							color='rgb(200, 100, 30)'
+							sx={TitleStyle}
+						>
 							Choose your nickname :
 						</Typography>
 						<TextField
-							type="text"
-							label="Type it in here!" 
+							color="warning"
+							label="No space, no digit por favor !" 
 							variant="standard"
 							onChange={(e) => setFirstName(e.target.value)}
 							style={{width: '50%', justifyContent: 'center'}}
-							id='name'
 						/>
 				</Stack>
 			</Box>
@@ -153,9 +166,13 @@ export default function LogIn(props: {user: User | undefined, auth: boolean}) {
 				<label htmlFor="icon-button-file">
 					<Button 
 						variant="contained"
-						sx={{backgroundColor: 'rgb(180, 70, 100)'}}
+						sx={{
+							backgroundColor: 'rgb(180, 70, 100)',
+							textShadow: '1px 1px 1px black',
+							border: '2px solid black',
+						}}
 					>
-						Choose a file :
+						You can choose a file :
 					</Button>
 					<Input type="file" id="icon-button-file" name="file" onChange={changeHandler} />
 					<IconButton component="span" sx={{color: 'rgb(200, 70, 70)'}}>
@@ -193,10 +210,17 @@ export default function LogIn(props: {user: User | undefined, auth: boolean}) {
 					<MockLogInButton />
 				</a>
 			</nav>
-			{props.user && props.user.username === undefined ?
+			{props.user ?
 				<Modal open={open} >
 					<Box sx={FirstConnexionModal}>
 						<Stack spacing={3}>
+							<Typography 
+								variant="h5"
+								color='rgb(85, 70, 230)'
+								sx={TitleStyle}
+							>
+								Hey, First LogIn ?
+							</Typography>
 							<ChooseFirstName />
 							<ChooseFirstAvatar />
 							<Button 
@@ -205,16 +229,18 @@ export default function LogIn(props: {user: User | undefined, auth: boolean}) {
 								sx={{
 									backgroundColor: 'rgb(100, 190, 100)',
 									border: '2px solid black',
+									textShadow: '1px 1px 1px black',
 								}}
 								>
 								I'm all set !
 							</Button>
-							{}
 							<Button 
 								onClick={handleClose}
 								variant="contained"
-								sx={{backgroundColor: 'rgb(180, 70, 100)',
-								border: '2px solid black',
+								sx={{
+									backgroundColor: 'rgb(180, 70, 100)',
+									border: '2px solid black',
+									textShadow: '1px 1px 1px black',
 								}}
 								>
 								Nay I'll do it later...
@@ -224,6 +250,11 @@ export default function LogIn(props: {user: User | undefined, auth: boolean}) {
         		</Modal>
 				:
 				<div />
+			}
+			{canRedirect === true ?
+				<Navigate replace to='/game'/>
+				:
+				<div />	
 			}
         </Stack>
 	);
