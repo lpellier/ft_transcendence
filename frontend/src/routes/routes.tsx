@@ -80,6 +80,26 @@ export default function AllRoutes()  {
     let [statusMap, setStatusMap] = useState<Map<number, string> >(new Map<number, string>());
 
     useEffect(() => {
+        const handler = (userId: number) => {
+            setStatusMap(statusMap.set(userId, 'online'));
+        }
+        socket.on('new connection', handler)
+        return () => {
+            socket.off('new connection', handler)
+        }
+    }, [statusMap]);
+
+    useEffect(() => {
+        const handler = (userId: number) => {
+            setStatusMap(statusMap.set(userId, 'offline'));
+        }
+        socket.on('new disconnection', handler);
+        return () => {
+            socket.off('new disconnection', handler);
+        }
+    }, [statusMap]);
+
+    useEffect(() => {
 		const handler = (usersData: User[]) => {
 			setUsers(usersData);
 		}
@@ -90,9 +110,27 @@ export default function AllRoutes()  {
 	}, [])
 
     useEffect(() => {
+        const handler = (maps: {online: number[], inGame: number[]}) => {
+            console.log('maps', maps);
+            maps.online.forEach(userId => {
+                setStatusMap(statusMap.set(userId, 'online'));
+            })
+            maps.inGame.forEach(userId => {
+                setStatusMap(statusMap.set(userId, 'in game'));
+            })
+        }
+        socket.on('status map', handler);
+        return () => {
+            socket.off('status map', handler);
+        }
+    }, [statusMap]);
+
+    useEffect(() => {
         const init = () => {
             if (user)
+            {
                 socket.emit('new user', {userId: user.id, roomId: 1});
+            }
         }
             if (socket.connected)
                 init();
@@ -144,7 +182,6 @@ export default function AllRoutes()  {
     useEffect(() => {
         const handler = () => { 
             setNavigate(true) 
-            // setNavigate(false)
         }
         socket.on('accepted game', handler);
         return () => {
@@ -202,7 +239,7 @@ export default function AllRoutes()  {
 	            <Route path="/" element={ <ProtectedRoute auth={isAuth}><App user={user} users={users} setOtherUser={setOtherUser} statusMap={statusMap} setStatusMap={setStatusMap}/></ProtectedRoute>}>
 					<Route path="profile" element={ < Profile user={otherUser} users={users}/>}/>
 					<Route path="chat" element={<Chat user={user} users={users} setOtherUser={setOtherUser} statusMap={statusMap}/>}/>
-					<Route path="game" element={<Game user={user} setNavigate={setNavigate}/> }/>
+					<Route path="game" element={<Game user={user} navigate={navigate} setNavigate={setNavigate}/> }/>
 					<Route path="settings" element={<Settings user={user} setUser={setUser}/>}/>
 				</Route>
 			</Routes>

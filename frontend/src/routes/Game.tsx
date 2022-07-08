@@ -104,7 +104,7 @@ function GameComponent() {
 	);
 }
 
-export default function Game( props: {user: User | undefined, setNavigate: React.Dispatch<React.SetStateAction<boolean>> }) {	
+export default function Game( props: {user: User | undefined, navigate: boolean, setNavigate: React.Dispatch<React.SetStateAction<boolean>> }) {	
 	useEffect(() => {
 		let user = document.createElement("div");
 		const propsUser: any = props.user;
@@ -145,6 +145,11 @@ export default function Game( props: {user: User | undefined, setNavigate: React
 			props.setNavigate(false);
 		}, [props.setNavigate])
 
+		useEffect(() => {
+			if (props.navigate) {
+				props.setNavigate(false);
+			}
+		}, [props.navigate, props.setNavigate])
 
 	return (
 		<Stack id="test_parent" spacing={1}>
