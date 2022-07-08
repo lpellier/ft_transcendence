@@ -5,6 +5,7 @@ import { OAuth2AuthGuard } from './guards/oauth2-auth.guard';
 import { JwtOtpAuthGuard } from './guards/jwt-otp-auth.guard';
 import { ValidateOtpDto } from './dto/validate-otp.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { userInfo } from 'os';
 
 @Controller('auth')
 export class AuthController {
@@ -30,11 +31,13 @@ export class AuthController {
 		const isAuthenticated = !req.user.tfa;
 		const authentication = await this.authService.login(req.user.id, isAuthenticated);
 		res.cookie(authentication.type, authentication.token, { sameSite: 'strict', httpOnly: true });
+		// if (isAuthenticated === true && user.username === null)
+		//return ({ url: 'http://127.0.0.1:3000/login' })
 		if (isAuthenticated === true) {
 			console.log("user is authenticated")
-			return ({ url: 'http://127.0.0.1:3000/login' })
-		// } else {
-			// return ({ url: 'http://127.0.0.1:3000/tfauth' })
+			return ({ url: 'http://127.0.0.1:3000/game' })
+		} else {
+			return ({ url: 'http://127.0.0.1:3000/tfauth' })
 		}
 	}
 

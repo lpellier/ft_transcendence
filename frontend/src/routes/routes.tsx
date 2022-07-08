@@ -53,7 +53,6 @@ function ProtectedRoute(props: {children: JSX.Element, auth: any}) {
 	if (props.auth === true) {
 		return (
 			<>{props.children}</>
-			// <Navigate replace to="/profile" />
 		)}
     else {
         return (

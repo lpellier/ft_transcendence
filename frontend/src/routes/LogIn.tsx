@@ -48,6 +48,12 @@ const FirstConnexionModal = {
 
 function LogInButton()
 {
+	function handleClick()
+	{
+		return (
+			<Navigate replace to='/game'/>)
+	}
+
 	return (
         <Button
 			sx={ButtonStyle}
@@ -55,6 +61,7 @@ function LogInButton()
             startIcon={<LoginIcon />}
             size="large"
             color="primary"
+			onClick={handleClick}
 		>
           Log in
         </Button>
@@ -78,9 +85,6 @@ function MockLogInButton()
 
 function ChooseFirstName(props: {setter: any, value: string}) {
 	const [firstName, setFirstName] = useState<string>("")
-
-	console.log("firstName", firstName)
-	console.log("props.value", props.value)
 
 	useEffect(() => {
 		props.setter(firstName)
@@ -258,7 +262,7 @@ export default function LogIn(props: {user: User | undefined, auth: boolean}) {
 					</Box>
         		</Modal>
 					:
-				<div />			
+				<div />
 			}
 			{canRedirect === true ?
 				<Navigate replace to='/game'/>
