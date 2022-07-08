@@ -18,6 +18,23 @@ const OverallBoxStyle = {
 	justifyContent: 'center',
 }
 
+const LittleBoxForInput = {
+	width: '50vw',
+	height: '14vh',
+	
+	border: '4px solid black',
+	backgroundColor: 'rgb(120, 100, 220, 0.95)',
+}
+
+const FirstConnexionModal = {
+	padding: 4,
+	backgroundColor: 'rgb(128, 161, 212, 0.95)',
+	border: '2px solid black',
+	position: 'absolute',
+	top: '20%',
+	left: '20%',
+}
+
 function SkillBar(props: {progression: number}) {
 	const [length, setLength] = useState(0);
 	const totwidth = length + "px";
@@ -70,7 +87,7 @@ function PlayerInfoBand(props: {level: number, user: User}) {
 
 export default function Profile(props: {user: User | undefined, users: User[]}) {
 	const [user, setUser] = useState<User | undefined>(props.user)
-	const [open, setOpen] = useState(false);
+	const [open, setOpen] = useState(true);
 	const [isSubmitted, setIsSubmitted] = useState<boolean>(false)
 	const [username, setUsername] = useState<string>("")
 
@@ -133,32 +150,40 @@ export default function Profile(props: {user: User | undefined, users: User[]}) 
 		}
 
 		return (
-			<Stack direction="row">
-			<form id='ChangeNameForm' onSubmit={handleSubmit} style={{width: '100%'}}>
-				<TextField
-					type="text"
-					label="Enter a nickname !" 
-					variant="standard"
-					style={{width: '50%', justifyContent: 'center'}}
-					id='name'
-				/>
-			{isSubmitted === true?
-				PatchRequest()
-					:
-				<div/>
-			}
-			</form>
-		</Stack>
+			<Box sx={LittleBoxForInput}>
+				<Stack sx={{paddingLeft: '1vw', paddingTop: '1vh'}}>
+						<Typography>
+							Choose your nickname :
+						</Typography>
+						<TextField
+							type="text"
+							label="Type it in here!" 
+							variant="standard"
+							style={{width: '50%', justifyContent: 'center'}}
+							id='name'
+						/>
+					{isSubmitted === true?
+						PatchRequest()
+						:
+						<div/>
+					}
+				</Stack>
+			</Box>
 		)
 	}
 
-	// function ChooseFirstAvatar() {
+	function ChooseFirstAvatar() {
 
-	// }
-
-	// function ChooseFirstTFA() {
-
-	// }
+		return (
+			<Box sx={LittleBoxForInput}>
+				<Stack sx={{paddingLeft: '1vw', paddingTop: '1vh'}}>
+						<Typography>
+							You can upload an avatar :
+						</Typography>
+				</Stack>
+			</Box>
+		)
+	}
 
     return (
 		<Box sx={OverallBoxStyle}>
@@ -166,11 +191,10 @@ export default function Profile(props: {user: User | undefined, users: User[]}) 
 			  open={open}
 			  onClose={handleClose}
 			>
-				<Box>
+				<Box sx={FirstConnexionModal}>
 					<Stack spacing={3}>
 						<ChooseFirstName />
-						{/* <ChooseFirstAvatar />
-						<ChooseFirstTFA /> */}
+						<ChooseFirstAvatar />
 					</Stack>
           		</Box>
         	</Modal>
