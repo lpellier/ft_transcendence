@@ -2,6 +2,7 @@ import { useState } from "react";
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button';
+import FormGroup from '@mui/material/FormGroup';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import { NameButtonStyle } from '../../../styles/tsxStyles/Settings/Name'
@@ -26,20 +27,17 @@ function NameButton() {
 
 function NameInput(props: {username: string, setter: any, setOpen: any, setUser: React.Dispatch<React.SetStateAction<User | undefined>>}) {
 	const [isSubmitted, setIsSubmitted] = useState<boolean>(false)
+	const [value, setValue] = useState<string>("")
 
-	function handleSubmit(e: any)
-	{
-		e.preventDefault();
-		props.setter(e.target[0].value);
-		e.target[0].value = "";
-		setIsSubmitted(true)
-	}
+	function closeModal() {props.setOpen(false)}
+
+	function handleSubmit(e: any) {setIsSubmitted(true)}
 
 	function PatchRequest() {
 
 		axios.patch(
 			'http://127.0.0.1:3001/users/me',
-			{username : props.username},
+			{username : value},
 			{
 				withCredentials: true,
 				headers: {
@@ -65,22 +63,41 @@ function NameInput(props: {username: string, setter: any, setOpen: any, setUser:
 	}
 
 	return (
-		<Stack direction="row">
-			<form id='ChangeNameForm' onSubmit={handleSubmit} style={{width: '100%'}}>
+		<div>
+		<form id='ChangeNameForm' style={{width: '100%'}}>
+			<Stack spacing={4}>
 				<TextField
 					type="text"
 					label="Your name" 
 					variant="standard"
-					style={{width: '50%', justifyContent: 'center'}}
+					onChange={(e) => setValue(e.target.value) } 
+					style={{width: '85%', justifyContent: 'center'}}
 					id='name'
 				/>
-			{isSubmitted === true?
-				PatchRequest()
+					<Stack direction="row" spacing={2} sx={{display: 'flex', justifyContent: 'center'}}>
+						<Button
+							onClick={handleSubmit}
+							variant="contained"
+							sx={{backgroundColor: 'rgb(70, 195, 150, 0.65)', width: '20vw'}}
+							>
+							Ok I'm done !
+						</Button>
+						<Button
+							onClick={closeModal}
+							variant="contained"
+							sx={{backgroundColor: 'rgb(195, 60, 40, 0.65)', width: '20vw'}}
+							>
+							Nope !
+						</Button>
+					</Stack>
+				</Stack>
+				{isSubmitted === true?
+					PatchRequest()
 					:
-				<div/>
-			}
+					<div/>
+				}
 			</form>
-		</Stack>
+			</div>
 	);
 }
 
