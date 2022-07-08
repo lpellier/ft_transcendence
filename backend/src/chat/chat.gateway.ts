@@ -36,7 +36,6 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect
 	@SubscribeMessage('create room') 
 	async handleCreateRoom(@ConnectedSocket () client : Socket, @MessageBody()  createRoomDto: CreateRoomDto) {		
 		
-		console.log('create room called', createRoomDto);
 		let roomId: number
 		const handler = async (err, hashed: string) => {
 			if (err) {

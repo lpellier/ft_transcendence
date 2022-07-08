@@ -70,6 +70,7 @@ export default function AllRoutes()  {
         inviteeId: number,
     }
 
+    
     const [isAuth, setAuth] = useState(true);
 	const [user, setUser] = useState<User>();
     let [users, setUsers] = useState<User[]>([]);
@@ -78,6 +79,16 @@ export default function AllRoutes()  {
     const [invite, setInvite] = useState<inviteDto>();
     const [navigate, setNavigate] = useState(false);
     let [statusMap, setStatusMap] = useState<Map<number, string> >(new Map<number, string>());
+
+    useEffect(() => {
+        const handler = (data: any) => {
+            toastThatError(data.message);
+        }
+		socket.on('exception', handler);
+        return () => {
+            socket.off('exception', handler);
+        }
+    }, []);
 
     useEffect(() => {
         const handler = (userId: number) => {
@@ -209,21 +220,10 @@ export default function AllRoutes()  {
 
 	return (
 		<div>
-		     <ToastContainer
-                position="top-center"
-                autoClose={5000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover={false}
-            />
+		     <ToastContainer />
 		<BrowserRouter>
             <Snackbar
             open={open}
-            autoHideDuration={6000}
             onClose={handleClose}
             message={`You have been invited to play a game with ${users.find(user => user?.id === invite?.userId)?.username}`}
             action={action}
