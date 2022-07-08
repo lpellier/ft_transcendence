@@ -1,30 +1,31 @@
-import { Injectable } from "@nestjs/common";
-import { PassportStrategy } from "@nestjs/passport";
-import { ExtractJwt, Strategy } from "passport-jwt";
-import { jwtConstants } from "../constants";
-import { JwtPayload } from "../interfaces/jwt-payload.interface";
+import { Injectable } from '@nestjs/common';
+import { PassportStrategy } from '@nestjs/passport';
+import { ExtractJwt, Strategy } from 'passport-jwt';
+import { jwtConstants } from '../constants';
 
 @Injectable()
 export class JwtOtpStrategy extends PassportStrategy(Strategy, 'jwt-otp') {
-	constructor() {
-		super({
-			jwtFromRequest: ExtractJwt.fromExtractors([JwtOtpStrategy.cookieExtractor]),
-			secretOrKey: jwtConstants.secret
-		});
-	}
+  constructor() {
+    super({
+      jwtFromRequest: ExtractJwt.fromExtractors([
+        JwtOtpStrategy.cookieExtractor,
+      ]),
+      secretOrKey: jwtConstants.secret,
+    });
+  }
 
-	static cookieExtractor(req) {
-		let token = null;
-		if (req && req.cookies) {
-			token = req.cookies['jwt-otp']
-		}
-		console.log("token : ", token)
-		return token;
-	}
+  static cookieExtractor(req) {
+    let token = null;
+    if (req && req.cookies) {
+      token = req.cookies['jwt'];
+    }
+    return token;
+  }
 
-	async validate(payload: any): Promise<JwtPayload> {
-		const user = {id: payload.sub,
-			isAuthenticated: payload.isAuthenticated};
-		return user;
+  async validate(payload: any): Promise<any> {
+    if (payload.isAuthenticated === false) {
+		const user = { id: payload.sub };
+    	return user;
 	}
+  }
 }
