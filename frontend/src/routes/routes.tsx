@@ -70,6 +70,7 @@ export default function AllRoutes()  {
         inviteeId: number,
     }
 
+    
     const [isAuth, setAuth] = useState(true);
 	const [user, setUser] = useState<User>();
     let [users, setUsers] = useState<User[]>([]);
@@ -78,6 +79,36 @@ export default function AllRoutes()  {
     const [invite, setInvite] = useState<inviteDto>();
     const [navigate, setNavigate] = useState(false);
     let [statusMap, setStatusMap] = useState<Map<number, string> >(new Map<number, string>());
+
+    useEffect(() => {
+        const handler = (data: any) => {
+            toastThatError(data.message);
+        }
+		socket.on('exception', handler);
+        return () => {
+            socket.off('exception', handler);
+        }
+    }, []);
+
+    useEffect(() => {
+        const handler = (userId: number) => {
+            setStatusMap(statusMap.set(userId, 'online'));
+        }
+        socket.on('new connection', handler)
+        return () => {
+            socket.off('new connection', handler)
+        }
+    }, [statusMap]);
+
+    useEffect(() => {
+        const handler = (userId: number) => {
+            setStatusMap(statusMap.set(userId, 'offline'));
+        }
+        socket.on('new disconnection', handler);
+        return () => {
+            socket.off('new disconnection', handler);
+        }
+    }, [statusMap]);
 
     useEffect(() => {
 		const handler = (usersData: User[]) => {
@@ -90,9 +121,27 @@ export default function AllRoutes()  {
 	}, [])
 
     useEffect(() => {
+        const handler = (maps: {online: number[], inGame: number[]}) => {
+            console.log('maps', maps);
+            maps.online.forEach(userId => {
+                setStatusMap(statusMap.set(userId, 'online'));
+            })
+            maps.inGame.forEach(userId => {
+                setStatusMap(statusMap.set(userId, 'in game'));
+            })
+        }
+        socket.on('status map', handler);
+        return () => {
+            socket.off('status map', handler);
+        }
+    }, [statusMap]);
+
+    useEffect(() => {
         const init = () => {
             if (user)
+            {
                 socket.emit('new user', {userId: user.id, roomId: 1});
+            }
         }
             if (socket.connected)
                 init();
@@ -144,7 +193,6 @@ export default function AllRoutes()  {
     useEffect(() => {
         const handler = () => { 
             setNavigate(true) 
-            // setNavigate(false)
         }
         socket.on('accepted game', handler);
         return () => {
@@ -172,21 +220,10 @@ export default function AllRoutes()  {
 
 	return (
 		<div>
-		     <ToastContainer
-                position="top-center"
-                autoClose={5000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover={false}
-            />
+		     <ToastContainer />
 		<BrowserRouter>
             <Snackbar
             open={open}
-            autoHideDuration={6000}
             onClose={handleClose}
             message={`You have been invited to play a game with ${users.find(user => user?.id === invite?.userId)?.username}`}
             action={action}
@@ -202,7 +239,7 @@ export default function AllRoutes()  {
 	            <Route path="/" element={ <ProtectedRoute auth={isAuth}><App user={user} users={users} setOtherUser={setOtherUser} statusMap={statusMap} setStatusMap={setStatusMap}/></ProtectedRoute>}>
 					<Route path="profile" element={ < Profile user={otherUser} users={users}/>}/>
 					<Route path="chat" element={<Chat user={user} users={users} setOtherUser={setOtherUser} statusMap={statusMap}/>}/>
-					<Route path="game" element={<Game user={user} setNavigate={setNavigate}/> }/>
+					<Route path="game" element={<Game user={user} navigate={navigate} setNavigate={setNavigate}/> }/>
 					<Route path="settings" element={<Settings user={user} setUser={setUser}/>}/>
 				</Route>
 			</Routes>
