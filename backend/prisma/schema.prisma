@@ -41,6 +41,7 @@ model Match {
   players  User[]
   ladder   Int
   winnerId Int
+  score    Int[]
 }
 
 model Room {

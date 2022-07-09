@@ -84,11 +84,11 @@ export class GameGateway {
 						if (game.players.length === 2 && game.state === "in-game") {
 							if (game.players.indexOf(player) === 0) {
 								this.game_service.incrementVictories(game.players[1].real_id, game.score[1]);
-								this.game_service.createMatch({ladder: 0, winnerId : game.players[1].real_id, loserId: game.players[0].real_id});
+								this.game_service.createMatch({ladder: 0, winnerId : game.players[1].real_id, loserId: game.players[0].real_id, score: game.score});
 							} 
 							else {
 								this.game_service.incrementVictories(game.players[0].real_id, game.score[0]);
-								this.game_service.createMatch({ladder: 0, winnerId : game.players[0].real_id, loserId: game.players[1].real_id});
+								this.game_service.createMatch({ladder: 0, winnerId : game.players[0].real_id, loserId: game.players[1].real_id, score: game.score});
 							}
 							this.game_service.incrementLosses(player.real_id, game.score[game.players.indexOf(player)]);
 						}
@@ -115,11 +115,11 @@ export class GameGateway {
 					if (game.players.length === 2 && game.state === "in-game") {
 						if (game.players.indexOf(player) === 0) {
 							this.game_service.incrementVictories(game.players[1].real_id, game.score[1]);
-							this.game_service.createMatch({ladder: 0, winnerId : game.players[1].real_id, loserId: game.players[0].real_id});
+							this.game_service.createMatch({ladder: 0, winnerId : game.players[1].real_id, loserId: game.players[0].real_id, score: game.score});
 						} 
 						else {
 							this.game_service.incrementVictories(game.players[0].real_id, game.score[0]);
-							this.game_service.createMatch({ladder: 0, winnerId : game.players[0].real_id, loserId: game.players[1].real_id});
+							this.game_service.createMatch({ladder: 0, winnerId : game.players[0].real_id, loserId: game.players[1].real_id, score: game.score});
 						}
 						this.game_service.incrementLosses(player.real_id, game.score[game.players.indexOf(player)]);
 					}
@@ -278,7 +278,7 @@ export class GameGateway {
 							}
 							this.game_service.incrementVictories(w_id, game.score[0] > game.score[1] ? game.score[0] : game.score[1]);
 							this.game_service.incrementLosses(l_id, game.score[0] < game.score[1] ? game.score[0] : game.score[1]);
-							this.game_service.createMatch({ladder: 0, winnerId : w_id, loserId: l_id});
+							this.game_service.createMatch({ladder: 0, winnerId : w_id, loserId: l_id, score: game.score});
 							this.server.emit("quit-game", game.players[0].real_id)
 							this.server.emit("quit-game", game.players[1].real_id)
 							this.games.splice(this.games.indexOf(game), 1);

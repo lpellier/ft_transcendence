@@ -31,7 +31,9 @@ export class UsersController {
 
   @Get('me')
   async findMe(@Req() req): Promise<ProfileWithSettings> {
-    return this.usersService.getProfileWithSettings(req.user.id);
+    const user: any = await this.usersService.getProfileWithSettings(req.user.id);
+    console.log(user);
+    return user;
   }
 
   @Patch('me')
