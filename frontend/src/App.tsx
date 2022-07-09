@@ -4,6 +4,7 @@ import SearchAppBar from 'components/AppBar/AppBar'
 import {User} from 'interfaces';
 import 'react-toastify/dist/ReactToastify.css';
 import { Outlet, Navigate, useOutlet } from 'react-router-dom'
+import FirstLoginPrompt from './components/Prompt'
 
 export const ImageIdContext = createContext({imageId : 1, setImageId : (n: number) => {}}); 
 
@@ -16,7 +17,12 @@ export default function App(props: {user: User | undefined, users: User[], setOt
     return (
         <ImageIdContext.Provider value={{imageId, setImageId}}>
 		<Stack >
-            {props.user?
+			{props.user && props.user.username === null ? 
+				<FirstLoginPrompt user={props.user}/>
+				:
+				<div />
+			}
+            {props.user && props.user.username !== null?
                 <div>
                     <SearchAppBar user={props.user} users={props.users} setOtherUser={props.setOtherUser} statusMap={props.statusMap} setStatusMap={props.setStatusMap}/>
                     {outlet?

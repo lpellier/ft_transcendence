@@ -75,10 +75,6 @@ export default function FirstLoginPrompt(props: {user: User | undefined}) {
 	const [isSelected, setisSelected] = useState(false);
 	const [open, setOpen] = useState(true);
 	
-	const handleClose = () => {
-		setOpen(false);
-	};
-
 	function handleSubmitAvatar() {
 
 		const formData = new FormData();
@@ -103,13 +99,15 @@ export default function FirstLoginPrompt(props: {user: User | undefined}) {
 			.then(res => {
 				console.log("Change name success : ", username)
 				setOpen(false)
+				window.location.reload()
+			})
+			.catch(err => { 
+				toastThatError('Please choose another name')} )
 		
 			if (selectedFile) {
 				handleSubmitAvatar();}
 						
-				setOpen(false)
-				window.location.reload()
-		})}
+		}
 		else {
 			toastThatError("Please choose a nickname")
 		}
@@ -180,17 +178,6 @@ export default function FirstLoginPrompt(props: {user: User | undefined}) {
 							}}
 							>
 							I'm all set !
-						</Button>
-						<Button 
-							onClick={handleClose}
-							variant="contained"
-							sx={{
-								backgroundColor: 'rgb(180, 70, 100)',
-								border: '2px solid black',
-								textShadow: '1px 1px 1px black',
-							}}
-							>
-							Nay I'll do it later...
 						</Button>
 					</Stack>
 				</Box>
