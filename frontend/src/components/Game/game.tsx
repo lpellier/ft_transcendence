@@ -867,8 +867,6 @@ export const Sketch = (p: any) => {
       this.LEFT_BOUND = 0;
       this.RIGHT_BOUND = this.WIDTH;
 
-
-
       this.FONT = p.loadFont("/assets/fonts/PressStart2P-Regular.ttf");
 
       this.RETURN_ICON = p.loadImage("/assets/icons/return-button2.png");
@@ -2206,6 +2204,14 @@ export const Sketch = (p: any) => {
         bumper.resize();
       }
     }
+  }
+
+  p.windowResized = () => {
+    p.noLoop();
+    resizeEverything();
+  
+    p.resizeCanvas(consts.WIDTH, consts.HEIGHT);
+    p.loop();
   }
 
   p.preload = () => {
