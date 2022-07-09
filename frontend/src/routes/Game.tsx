@@ -8,29 +8,9 @@ import "./../styles/Game/icons.css"
 import "./../styles/Game/inputs.css"
 import "socket.io-client"
 import { User } from "interfaces";
+import { Sketch } from "../components/Game/game"
+import p5 from "p5";
 
-function addScript(url : string) : any {
-    let scripts = document.getElementsByTagName("script");
-	for (let i = scripts.length - 1; i >= 0; i--) {
-		if (scripts[i] && scripts[i].getAttribute("src") && scripts[i].getAttribute("src") === url)
-			return ;
-	}
-	const script = document.createElement('script');
-
-	script.src = url;
-	script.async = true;
-	script.classList.add("p5-script");
-
-	document.head.appendChild(script);
-	return script;
-}
-
-function removeScripts() {
-	let scripts = document.getElementsByClassName("p5-script");
-	for (let i = 0; i < scripts.length; i++) {
-		scripts[i].parentNode?.removeChild(scripts[i]);
-	}
-}
 
 let observer : any = null;
 let canvas : any = null;
@@ -40,9 +20,10 @@ function GameComponent() {
 		let canvas_parent : any = document.getElementById("canvas-parent");
 		if (canvas === null)
 			canvas = document.getElementById("defaultCanvas0");
-		else if (canvas_parent)
+		else if (canvas_parent) {
+			const p = new p5(Sketch, canvas_parent);
 			canvas_parent.appendChild(canvas);
-
+		}
 		if (canvas === null) {
 			observer = new MutationObserver(() => {
 				canvas = document.getElementById("defaultCanvas0");
@@ -111,34 +92,8 @@ export default function Game( props: {user: User | undefined, navigate: boolean,
 		user.setAttribute("user_name", propsUser.username);
 		user.setAttribute("user_id", propsUser.id.toString());
 		user.id = "user";
-		
 		document.head.append(user);
 
-		
-		addScript("https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.0/socket.io.js");
-		addScript("https://cdn.jsdelivr.net/npm/p5@1.4.1/lib/p5.js");
-		addScript("/sketch/classes/Buttons.js");
-		addScript("/sketch/classes/Vector.js");
-		addScript("/sketch/classes/Bumper.js");
-		addScript("/sketch/classes/Consts.js");
-		addScript("/sketch/classes/Errors.js");
-		addScript("/sketch/classes/Keys.js");
-		addScript("/sketch/classes/Game.js");
-		addScript("/sketch/classes/Inputs.js");
-		addScript("/sketch/classes/Player.js");
-		addScript("/sketch/classes/GameMap.js");
-		addScript("/sketch/classes/Pong.js");
-		addScript("/sketch/classes/MovingText.js");
-		addScript("/sketch/engine/collisions.js");
-		addScript("/sketch/engine/draw.js");
-		addScript("/sketch/engine/output.js");
-		addScript("/sketch/init/init.js");
-		addScript("/sketch/init/setup.js");
-		addScript("/sketch/socket/events.js");
-		addScript("/sketch/engine/input.js");
-		addScript("/sketch/engine/menus.js");
-		addScript("/sketch/engine/button_functions.js");
-		addScript("https://cdn.jsdelivr.net/npm/p5@1.4.1/lib/p5.min.js");
 		}, [props.user?.id, props.user])
 
 		useEffect(() => {
