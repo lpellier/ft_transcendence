@@ -16,9 +16,9 @@ let canvas : any = null;
 
 function GameComponent() {
 	useEffect(() => {
+		const p = new p5(Sketch);
 		let canvas_parent : any = document.getElementById("canvas-parent");
 		if (canvas === null){
-			const p = new p5(Sketch, canvas_parent);
 			canvas = document.getElementById("defaultCanvas0");
 		}
 		else if (canvas_parent) {
@@ -93,7 +93,6 @@ export default function Game( props: {user: User | undefined, navigate: boolean,
 		user.setAttribute("user_id", propsUser.id.toString());
 		user.id = "user";
 		document.head.append(user);
-
 		}, [props.user?.id, props.user])
 
 		useEffect(() => {
