@@ -36,7 +36,6 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect
 	@SubscribeMessage('create room') 
 	async handleCreateRoom(@ConnectedSocket () client : Socket, @MessageBody()  createRoomDto: CreateRoomDto) {		
 		
-		console.log('create room called', createRoomDto);
 		let roomId: number
 		const handler = async (err, hashed: string) => {
 			if (err) {
@@ -151,7 +150,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect
 		let admins = await this.chatService.getAdminsInRoom(id);
 		client.emit('get admins', admins);
 		//console.log('get admins called', id)
-
+		
 	}
 
 	@SubscribeMessage('get all messages')
@@ -164,11 +163,21 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect
 
 	@SubscribeMessage('new user')
 	async handleNewUser(@ConnectedSocket () client : Socket,@MessageBody() newUserDto: UserRoomDto) {
+		socketUser.set(client.id, newUserDto.userId);
 		await this.chatService.addUserToRoom(newUserDto.userId, 1);
 		const allUsers =  await this.chatService.getAllUsers();
-		socketUser.set(client.id, newUserDto.userId);
 		this.server.emit('new user', allUsers);
 		this.server.emit('new connection', newUserDto.userId);
+		console.log('socket user', socketUser);
+		let online: number[] = [];
+		socketUser.forEach((value, key) => {
+			online.push(value);
+		})
+		let inGame: number[] = [];
+		socketGame.forEach((value, key) => {
+			inGame.push(value);
+		})
+		client.emit('status map', {online: online, inGame: inGame});
 		// console.log('new user called', newUserDto)
 	}
 
@@ -190,21 +199,16 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect
 	}
 
 	handleDisconnect(@ConnectedSocket() client:Socket) {
-		console.log('client disconnected');
+		// console.log('client disconnected');
 		this.server.emit('new disconnection', socketUser.get(client.id))
-		socketGame.delete(client.id);
 		socketUser.delete(client.id);
+		socketGame.delete(client.id);
 	}
 
 
 	handleConnection(@ConnectedSocket() client:Socket) {
-		console.log('client connected');
+		// console.log('client connected');
 	}
-
-	// @SubscribeMessage('status map')
-	// handleStatusMap(@MessageBody() statusMap: any) {
-	// 	this.server.emit('status map', statusMap);
-	// }
 
 	@SubscribeMessage('add blocked')
 	add(@ConnectedSocket() client:Socket, @MessageBody() blockedUserDto: BlockedUserDto) {
@@ -238,11 +242,18 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect
 
 	@SubscribeMessage('countdown_start')
 	countdown_start(@ConnectedSocket() client:Socket ,@MessageBody() userId: number) {
-		// socketGame.set(client.id, parseInt(countdownDto.user1));
-
+		socketGame.set(client.id, userId);
 		this.server.emit('new gamer', userId);
-		// console.log('countdown_start called', countdownDto)
-	  }
+	}
+
+	@SubscribeMessage('remove gamer')
+	handleRemoveGamer(@ConnectedSocket() client:Socket ,@MessageBody() userId: number) {
+		for (let [key, value] of socketGame) {
+			if (value == userId) {
+				socketGame.delete(key);
+			}
+		}
+	}
 
 	@SubscribeMessage('invite for game')
 	inviteForGame(@ConnectedSocket() client:Socket ,@MessageBody() inviteDto: InviteDto) {

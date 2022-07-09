@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import Drawer from '@mui/material/Drawer';
 import Button from '@mui/material/Button';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
-import { TextField, Tooltip } from '@mui/material';
+import { IconButton, TextField, Tooltip} from '@mui/material';
 import { User } from 'interfaces';
 import { socket } from 'index';
 import { toastThatError, toastIt } from '../../routes/routes';
@@ -11,6 +11,7 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import Stack from '@mui/material/Stack';
+import Games from '@mui/icons-material/Games';
 
 interface FriendUserDto {
     userId: number;
@@ -53,27 +54,6 @@ export default function FriendBar(props: {user: User, users: User[], statusMap: 
     }
 
     useEffect(() => {
-        const handler = (userId: number) => {
-            props.setStatusMap(props.statusMap.set(userId, 'online'));
-            socket.emit('status map', props.statusMap);
-        }
-        socket.on('new connection', handler)
-        return () => {
-            socket.off('new connection', handler)
-        }
-    }, [props.statusMap]);
-
-    useEffect(() => {
-        const handler = (userId: number) => {
-            props.setStatusMap(props.statusMap.set(userId, 'offline'));
-        }
-        socket.on('new disconnection', handler);
-        return () => {
-            socket.off('new disconnection', handler);
-        }
-    }, [props.statusMap]);
-
-    useEffect(() => {
         socket.emit('get friends', props.user.id);
     }, [props.user.id])
 
@@ -96,6 +76,7 @@ export default function FriendBar(props: {user: User, users: User[], statusMap: 
     useEffect(() => {
         const handler = (userId: number) => {
             props.setStatusMap(props.statusMap.set(userId, 'online'))
+            socket.emit('remove gamer', userId);
         }
         socket.on('quit-game', handler);
         return () => {
@@ -144,6 +125,21 @@ export default function FriendBar(props: {user: User, users: User[], statusMap: 
     function removeFriend(user: User) {
         socket.emit('remove friend', {userId: props.user.id, friendId: user.id});
     }
+
+    function    inviteForGame(user: User| undefined) {
+        if (user)
+        {
+            if (user && props.statusMap.get(user?.id) === 'online')
+                socket.emit('invite for game', {userId: props.user.id, otherUserId: user?.id});
+            else if (props.statusMap.get(user?.id) === 'in game')
+                toastThatError('user is already in game');
+            else
+                toastThatError('user is offline');
+        }
+        else
+            toastThatError('user is offline');
+    }
+
 
     return (
         <div>
@@ -204,6 +200,11 @@ export default function FriendBar(props: {user: User, users: User[], statusMap: 
                                         }
                                     </div>
                                 }
+                                <Tooltip title="Invite for a match">
+                                    <IconButton size="small" onClick={() => inviteForGame(item)}>
+                                        <Games/>
+                                    </IconButton>   
+                                </Tooltip>
                                 <Button variant="contained" color="error" onClick={() => removeFriend(item)}>remove</Button>
                             </ListItem>
                         </div>

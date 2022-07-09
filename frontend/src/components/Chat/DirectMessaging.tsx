@@ -161,12 +161,12 @@ export default function DirectMessaging(props: {user: User, users: User[], rooms
         function    inviteForGame(user: User| undefined) {
             if (user)
             {
-                // if (user && props.statusMap.get(user?.id) === 'online')
+                if (user && props.statusMap.get(user?.id) === 'online')
                     socket.emit('invite for game', {userId: props.user.id, otherUserId: user?.id});
-                // else if (props.statusMap.get(user?.id) === 'in game')
-                    // toastThatError('user is already in game');
-                // else
-                    // toastThatError('user is offline');
+                else if (props.statusMap.get(user?.id) === 'in game')
+                    toastThatError('user is already in game');
+                else
+                    toastThatError('user is offline');
             }
             else
                 toastThatError('user is offline');
