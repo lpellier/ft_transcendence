@@ -11,17 +11,17 @@ import { User } from "interfaces";
 import { Sketch } from "../components/Game/game"
 import p5 from "p5";
 
-
 let observer : any = null;
 let canvas : any = null;
 
 function GameComponent() {
 	useEffect(() => {
 		let canvas_parent : any = document.getElementById("canvas-parent");
-		if (canvas === null)
-			canvas = document.getElementById("defaultCanvas0");
-		else if (canvas_parent) {
+		if (canvas === null){
 			const p = new p5(Sketch, canvas_parent);
+			canvas = document.getElementById("defaultCanvas0");
+		}
+		else if (canvas_parent) {
 			canvas_parent.appendChild(canvas);
 		}
 		if (canvas === null) {

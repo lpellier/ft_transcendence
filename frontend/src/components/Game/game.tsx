@@ -30,8 +30,8 @@ export const Sketch = (p: any) => {
 
   let canvas: any;
 
-  let user_name: string;
-  let user_id: string;
+  let user_name: string | null;
+  let user_id: string | null;
 
   class Bumper {
     animation: any;
@@ -1174,9 +1174,9 @@ export const Sketch = (p: any) => {
 
   class Game {
     players: Player[];
-    pong: Pong | null;
     score: [number, number];
     score_limit: number;
+    pong: any;
     timer: number;
     state: string;
     room_id: string;
@@ -2251,8 +2251,11 @@ export const Sketch = (p: any) => {
     errors = new Errors();
     buttons = new Buttons();
       
-    user_name = document.getElementById("user").getAttribute("user_name");
-    user_id = document.getElementById("user").getAttribute("user_id"); 
+    let user_dom = document.getElementById("user");
+    if (user_dom) {
+      user_name = user_dom.getAttribute("user_name");
+      user_id = user_dom.getAttribute("user_id"); 
+    }
 
     canvas = p.createCanvas(consts.WIDTH, consts.HEIGHT);
     canvas.parent(document.getElementById("canvas-parent"));
@@ -3383,7 +3386,9 @@ export const Sketch = (p: any) => {
         }, i * 1000);
       }
       game.setState("countdown");
-      game.players.push(new Player(1, "first", user_name, 0));
+      if (user_name !== null) {
+        game.players.push(new Player(1, "first", user_name, 0));
+      }
       game.players.push(new Player(2, "second", "P2", 0));
       game.pong = new Pong();
       game.room_id = "Local";
