@@ -88,7 +88,7 @@ export default function Profile(props: {user: User | undefined, users: User[]}) 
 					<StatsBoards user={user} users={props.users} />
 				</Stack>
 					:
-					<div/>
+				<div/>
 			}
 		</Box>
     );

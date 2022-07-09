@@ -25,6 +25,7 @@ import EasterEgg from   "../images/Avatar/EasterEgg.png"
 import Mouse from       "../images/Avatar/Mouse.png"
 import Sloth from       "../images/Avatar/Sloth.png"
 import {ImageIdContext} from "App"
+
 // Styles
 
 const BigAvatar = {border: 2, width: 150, height: 150}
@@ -44,7 +45,6 @@ function PlayerAvatar(props: {image: string , onClick: React.MouseEventHandler<H
 		 </div>
         }
         </ ImageIdContext.Consumer>
-
     );
 }
 
