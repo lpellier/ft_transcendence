@@ -85,7 +85,7 @@ function ProjectName() {
 		  variant="h4"
 		  noWrap
 		  component="div"
-		  sx={{paddingRight: '15%'}}
+		  sx={{paddingRight: '15vw', paddingLeft: '25vw'}}
 		>
 		  		GnaGna
 				<WebhookIcon />
