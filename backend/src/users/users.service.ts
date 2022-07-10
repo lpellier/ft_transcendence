@@ -75,7 +75,11 @@ export class UsersService {
       },
       include: {
         stats: true,
-        matchHistory: true,
+        matchHistory: {
+          include: {
+            players: true,
+          }
+        }
       },
     });
     return user;

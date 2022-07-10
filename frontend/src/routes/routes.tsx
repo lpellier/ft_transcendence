@@ -111,6 +111,7 @@ export default function AllRoutes()  {
 
     useEffect(() => {
 		const handler = (usersData: User[]) => {
+            console.log("usersData = ",usersData);
 			setUsers(usersData);
 		}
 		socket.on('new user', handler);
@@ -153,9 +154,11 @@ export default function AllRoutes()  {
             withCredentials: true
         })
         .then(res => {
-			console.log("Is Authenticated")
+			console.log("Is Authenticated", res.data)
 			setAuth(true);
+            
             setUser(res.data);
+
 			setOtherUser(res.data);
         })
         .catch(function (err) {
@@ -222,10 +225,10 @@ export default function AllRoutes()  {
 		     <ToastContainer />
 		<BrowserRouter>
             <Snackbar
-            open={open}
-            onClose={handleClose}
-            message={`You have been invited to play a game with ${users.find(user => user?.id === invite?.userId)?.username}`}
-            action={action}
+                open={open}
+                onClose={handleClose}
+                message={`You have been invited to play a game with ${users.find(user => user?.id === invite?.userId)?.username}`}
+                action={action}
             />
             {navigate?
                 <Navigate replace to="/game" />

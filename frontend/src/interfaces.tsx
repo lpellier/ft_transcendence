@@ -1,3 +1,13 @@
+
+interface Match {
+	date: string;
+	id: number;
+	ladder: number;
+	winnerId:number;
+	players: any[];
+	score: number[];
+}
+
 interface User {
 	id: number;
 	username: string;
@@ -5,6 +15,7 @@ interface User {
 	victories: number;
 	losses: number;
 	level: number;
+	matchHistory: Match[]
 }
 
 const init_user = {} as User
