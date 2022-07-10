@@ -11,7 +11,8 @@ import UpdateIcon from '@mui/icons-material/Update';
 import {StatTitle, StatBox, MatchHistoryBox} from "../../styles/tsxStyles/Home"
 import {Stats} from 'interfaces'
 import axios from 'axios'
-import { Table, TableHead, TableBody, TableRow, TableCell } from '@mui/material';
+import { Table, TableBody, TableRow, TableCell } from '@mui/material';
+import {ChangeAvatarTrophy, ChangeNameTrophy, QuitTrophy, OneWinTrophy, ThreeWinsTrophy} from "./Trophies"
 
 const ButtonLeadStyle = {
 	backgroundColor: "rgb(170, 50, 190)",
@@ -72,6 +73,13 @@ function TrophyBox(){
 					icon={<EmojiEventsIcon />}
 					title="Trophy" />
 				<Box sx={StatBox}>
+					<Stack spacing={3}>
+						<ChangeAvatarTrophy /> 
+						<ChangeNameTrophy /> 
+						<QuitTrophy /> 
+						<OneWinTrophy /> 
+						<ThreeWinsTrophy />
+					</Stack>
 				</Box>
 			</Stack>
 		);
