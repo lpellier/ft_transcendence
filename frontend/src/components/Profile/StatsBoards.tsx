@@ -8,9 +8,10 @@ import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import TimelineIcon from '@mui/icons-material/Timeline';
 import MilitaryTechIcon from '@mui/icons-material/MilitaryTech';
 import UpdateIcon from '@mui/icons-material/Update';
-import {StatTitle, StatBox} from "../../styles/tsxStyles/Home"
+import {StatTitle, StatBox, MatchHistoryBox} from "../../styles/tsxStyles/Home"
 import {Stats} from 'interfaces'
 import axios from 'axios'
+import { Table, TableHead, TableBody, TableRow, TableCell } from '@mui/material';
 
 const ButtonLeadStyle = {
 	backgroundColor: "rgb(170, 50, 190)",
@@ -154,14 +155,37 @@ function LeaderboardBox(props: {users: User[]}){
 	);
 }
 
-function MatchhistoryBox(){
+function MatchhistoryBox(props: {user: User}){
+	
+	const successColor: string = 'rgb(70, 195, 150)';
+	const failColor: string = 'rgb(195, 60, 40)';
 
 	return(
 		<Stack spacing={1}>
 			<BoardComponent 
 				icon={<UpdateIcon />}
 				title="Match history" />
-				<Box sx={StatBox}>
+				<Box sx={MatchHistoryBox}>
+					<Table>
+						<TableBody>
+							{props.user.matchHistory.map(match => (
+								<TableRow key={match.id} style={{backgroundColor: match.winnerId == props.user.id? successColor: failColor}}>
+									<TableCell>
+										<Typography>{match.players[0].username}</Typography>
+									</TableCell>
+									<TableCell>
+										<Typography>{match.score[0]}</Typography>
+									</TableCell>
+									<TableCell>
+										<Typography>{match.score[1]}</Typography>
+									</TableCell>
+									<TableCell>
+										<Typography>{match.players[1].username}</Typography>
+									</TableCell>
+								</TableRow>
+							))}
+						</TableBody>
+					</Table>
 				</Box>
 		</Stack>
 	);
@@ -169,6 +193,7 @@ function MatchhistoryBox(){
 
 export default function StatsBoards(props: {user: User, users: User[]}) {
 
+	console.log("StatsBoards props : ", props.user);
 	return (
 		<Stack direction="row" spacing={1}>
 				<Stack spacing={1}>
@@ -177,7 +202,7 @@ export default function StatsBoards(props: {user: User, users: User[]}) {
 				</Stack>
 				<Stack spacing={1}>
 					<LeaderboardBox users={props.users}/>
-					<MatchhistoryBox />
+					<MatchhistoryBox user={props.user}/>
 				</Stack>
 			</Stack>
 	);

@@ -18,7 +18,8 @@ export class GameService {
                     ]
                 },
                 ladder: m_data.ladder,
-                winnerId: m_data.winnerId
+                winnerId: m_data.winnerId,
+                score: m_data.score
             }
         });
         return match.id;

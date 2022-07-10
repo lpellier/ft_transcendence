@@ -66,29 +66,16 @@ function PlayerInfoBand(props: {level: number, user: User}) {
 }
 
 export default function Profile(props: {user: User | undefined, users: User[]}) {
-	const [user, setUser] = useState<User | undefined>(props.user)
-
-	useEffect(() => {
-
-		axios.get("http://127.0.0.1:3001/users/me",
-		{ withCredentials: true })
-		.then(res => {
-			console.log("Get user in profile success")
-			setUser(res.data)})
-		.catch(err => {
-			console.log("Get user in profile failed : ", err)		
-		})
-	}, [])
 
     return (
 		<Box sx={OverallBoxStyle}>
-			{user?
+			{props.user?
 				<Stack spacing={1}>
-					<PlayerInfoBand level={user.level} user={user} />
-					<StatsBoards user={user} users={props.users} />
+					<PlayerInfoBand level={props.user.level} user={props.user} />
+					<StatsBoards user={props.user} users={props.users} />
 				</Stack>
 					:
-					<div/>
+				<div/>
 			}
 		</Box>
     );

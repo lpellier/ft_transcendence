@@ -1,15 +1,12 @@
-import * as React from 'react'
-import {useState} from 'react'
+import {useState, createContext} from 'react'
 import Stack from '@mui/material/Stack'
 import SearchAppBar from 'components/AppBar/AppBar'
 import {User} from 'interfaces';
 import 'react-toastify/dist/ReactToastify.css';
 import { Outlet, Navigate, useOutlet } from 'react-router-dom'
-import { useEffect } from 'react'
-import { socket } from 'index'
-import { toastIt } from 'routes/routes';
+import FirstLoginPrompt from './components/Prompt'
 
-export const ImageIdContext = React.createContext({imageId : 1, setImageId : (n: number) => {}}); 
+export const ImageIdContext = createContext({imageId : 1, setImageId : (n: number) => {}}); 
 
 export default function App(props: {user: User | undefined, users: User[], setOtherUser: React.Dispatch<React.SetStateAction<User | undefined>>, statusMap: Map<number, string>, setStatusMap: React.Dispatch<React.SetStateAction<Map<number, string>>>}) {
 
@@ -20,7 +17,12 @@ export default function App(props: {user: User | undefined, users: User[], setOt
     return (
         <ImageIdContext.Provider value={{imageId, setImageId}}>
 		<Stack >
-            {props.user?
+			{props.user && props.user.username === null ? 
+				<FirstLoginPrompt user={props.user}/>
+				:
+				<div />
+			}
+            {props.user && props.user.username !== null?
                 <div>
                     <SearchAppBar user={props.user} users={props.users} setOtherUser={props.setOtherUser} statusMap={props.statusMap} setStatusMap={props.setStatusMap}/>
                     {outlet?
@@ -34,6 +36,5 @@ export default function App(props: {user: User | undefined, users: User[], setOt
             }
 		</Stack>
         </ ImageIdContext.Provider>
-
     );
 }

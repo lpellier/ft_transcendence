@@ -66,14 +66,16 @@ function AppBarButton(props: {icon: any, link: string, tooltip: any}) {
 function PlayerName(props: {name: string}) {
 	
 	return (
-		<Typography
-		  variant="h6"
-		  noWrap
-		  component="div"
-		  sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
-		>
-		  {props.name}
-		</Typography>
+		<div>
+			<Typography
+			  variant="h6"
+			  noWrap
+			  component="div"
+			  sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
+			  >
+				{props.name}
+			</Typography>
+		</div>
 	);
 }
 
@@ -83,7 +85,7 @@ function ProjectName() {
 		  variant="h4"
 		  noWrap
 		  component="div"
-		  sx={{paddingRight: '15%'}}
+		  sx={{paddingRight: '15vw', paddingLeft: '25vw'}}
 		>
 		  		GnaGna
 				<WebhookIcon />

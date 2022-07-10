@@ -12,7 +12,7 @@ datasource db {
 
 model User {
   id           Int       @id
-  username     String    @unique
+  username     String?   @unique
   tfa          Boolean   @default(false)
   otpSecret    String    @default("")
   stats        Stats?
@@ -41,6 +41,7 @@ model Match {
   players  User[]
   ladder   Int
   winnerId Int
+  score    Int[]
 }
 
 model Room {

@@ -116,9 +116,23 @@ export class ChatService {
     return room.admins;
   }
 
-  async getAllUsers() {
-    let users = await this.prisma.user.findMany();
-    return (users);
+  // async getAllUsers() {
+  //   let users = await this.prisma.user.findMany();
+  //   return (users);
+  // }
+
+  async getAllUsers(): Promise<any> {
+    const users = await this.prisma.user.findMany({
+      include: {
+        stats: true,
+        matchHistory: {
+          include: {
+            players: true,
+          }
+        }
+      },
+    });
+    return users;
   }
 
   async getAllMessagesForUser(id: number) {
