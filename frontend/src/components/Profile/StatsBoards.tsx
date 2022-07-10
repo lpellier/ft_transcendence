@@ -73,7 +73,7 @@ function TrophyBox(){
 					icon={<EmojiEventsIcon />}
 					title="Trophy" />
 				<Box sx={StatBox}>
-					<Stack spacing={3}>
+					<Stack spacing={2}>
 						<ChangeAvatarTrophy /> 
 						<ChangeNameTrophy /> 
 						<QuitTrophy /> 

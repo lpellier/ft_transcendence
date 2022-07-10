@@ -19,8 +19,8 @@ const ImgStyle = {
 
 const ATrophyStyle = {
 	border: "2px solid black",
-	width: "30vw",
-	backgroundColor: "rgb(100, 100, 200)"
+	backgroundColor: "rgb(100, 100, 200, 0.2)",
+	alignItems: 'center'
 }
 
 function ATrophie(props: {image: string, label: string}) {
@@ -42,7 +42,7 @@ function OneWinTrophy() {
 
 function ThreeWinsTrophy() {
 	return (
-		<ATrophie image={ThreeStars} label="Pong be like taking candy to a baby!" />
+		<ATrophie image={ThreeStars} label="Like taking candy to a baby!" />
   	);
 }
 
@@ -60,7 +60,7 @@ function ChangeNameTrophy() {
 
 function ChangeAvatarTrophy() {
 	return (
-		<ATrophie image={Frankencat} label="I'll have a piece of this, and a piece of that..." />
+		<ATrophie image={Frankencat} label="He has changed, for sure" />
   	);
 }
 
