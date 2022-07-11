@@ -15,6 +15,7 @@ import { JwtOtpAuthGuard } from './guards/jwt-otp-auth.guard';
 import { ValidateOtpDto } from './dto/validate-otp.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { ConfigService } from '@nestjs/config';
+import { cookieOptions } from './constants';
 
 @Controller('auth')
 export class AuthController {
@@ -27,14 +28,10 @@ export class AuthController {
   @Get()
   @Redirect()
   async login(@Req() req, @Res({ passthrough: true }) res: Response) {
-    const isAuthenticated = !req.user.tfa;
-    const token = await this.authService.login(req.user.id, isAuthenticated);
-    res.cookie('jwt', token, {
-      sameSite: 'strict',
-      httpOnly: true,
-    });
+    const token = await this.authService.login(req.user.id, req.user.isAuthenticated);
+    res.cookie('jwt', token, cookieOptions);
     let redirectUrl = this.configService.get('FRONT_URL');
-    if (isAuthenticated === false) {
+    if (req.user.isAuthenticated === false) {
       redirectUrl += '/tfauth';
     }
     return { url: redirectUrl };
@@ -59,10 +56,7 @@ export class AuthController {
     );
     if (validated === true) {
       const token = await this.authService.login(req.user.id, true);
-      res.cookie('jwt', token, {
-        sameSite: 'strict',
-        httpOnly: true,
-      });
+      res.cookie('jwt', token, cookieOptions);
       return true;
     }
     return false;
@@ -71,27 +65,20 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @Get('logout')
   async logout(@Res({ passthrough: true }) res: Response) {
-    res.cookie('jwt', '', {
-      expires: new Date(),
-      sameSite: 'strict',
-      httpOnly: true,
-    });
+    res.cookie('jwt', '', { ...cookieOptions, expires: new Date() });
   }
 
   @Get('mock')
   @Redirect()
-  async mockLogin(@Req() req, @Res({ passthrough: true }) res: Response) {
+  async mockLogin(@Res({ passthrough: true }) res: Response) {
     const user = await this.authService.getMock();
     const isAuthenticated = !user.tfa;
     const token = await this.authService.login(user.id, isAuthenticated);
-    res.cookie('jwt', token, {
-      sameSite: 'strict',
-      httpOnly: true,
-    });
-    if (isAuthenticated === true) {
-      return { url: this.configService.get('FRONT_URL') };
-    } else {
-      return { url: this.configService.get('FRONT_URL') + '/tfauth' };
+    res.cookie('jwt', token, cookieOptions);
+    let redirectUrl = this.configService.get('FRONT_URL');
+    if (isAuthenticated === false) {
+      redirectUrl += '/tfauth'
     }
+    return { url: redirectUrl };
   }
 }

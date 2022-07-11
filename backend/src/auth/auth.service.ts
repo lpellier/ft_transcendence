@@ -12,14 +12,17 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async validateUser(accessToken: string): Promise<any> {
+  async validateUser(accessToken: string): Promise<number> {
     const { data } = await axios({
       url: 'https://api.intra.42.fr/v2/me',
       headers: {
         Authorization: 'Bearer ' + accessToken,
       },
     });
-    return data;
+    if (!data) {
+      throw new UnauthorizedException();
+    }
+    return data.id;
   }
 
   async login(userId: number, isAuthenticated: boolean): Promise<string> {
@@ -35,6 +38,6 @@ export class AuthService {
   }
 
   async getMock() {
-    return this.usersService.getMock();
+    return this.usersService.findOrCreateUser(1);
   }
 }

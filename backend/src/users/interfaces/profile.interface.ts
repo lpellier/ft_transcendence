@@ -1,4 +1,4 @@
-import { Match } from "@prisma/client";
+import { Match } from '@prisma/client';
 
 export interface Profile {
   id: number;
@@ -6,5 +6,6 @@ export interface Profile {
   victories: number;
   losses: number;
   level: number;
-  matchHistory: Match[],
+  matchHistory: Match[];
+  achievements: number[];
 }

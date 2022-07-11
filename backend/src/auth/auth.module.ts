@@ -13,12 +13,12 @@ import { OAuth2Strategy } from './strategies/oauth2.strategy';
   controllers: [AuthController],
   providers: [AuthService, OAuth2Strategy, JwtStrategy, JwtOtpStrategy],
   imports: [
-	UsersModule,
-	PassportModule,
-	JwtModule.register({
-		secret: jwtConstants.secret,
-		signOptions: { expiresIn: "1h" }
-	}),
-  ]
+    UsersModule,
+    PassportModule,
+    JwtModule.register({
+      secret: jwtConstants.secret,
+      signOptions: { expiresIn: '1h' },
+    }),
+  ],
 })
 export class AuthModule {}
