@@ -18,24 +18,24 @@ let canvas : any = null;
 function GameComponent() {
 	useEffect(() => {
 		const p = new p5(Sketch);
-		let canvas_parent : any = document.getElementById("canvas-parent");
-		if (canvas === null){
-			canvas = document.getElementById("defaultCanvas0");
-		}
-		else if (canvas_parent) {
-			canvas_parent.appendChild(canvas);
-		}
-		if (canvas === null) {
-			observer = new MutationObserver(() => {
-				canvas = document.getElementById("defaultCanvas0");
-				if (canvas) {
-					canvas_parent.appendChild(canvas);
-					observer.disconnect();
-					observer = null;
-				}
-			});
-			observer.observe(document, {subtree: true, childList: true});
-		}
+		// let canvas_parent : any = document.getElementById("canvas-parent");
+		// if (canvas === null){
+		// 	canvas = document.getElementById("defaultCanvas0");
+		// }
+		// else if (canvas_parent) {
+		// 	canvas_parent.appendChild(canvas);
+		// }
+		// if (canvas === null) {
+		// 	observer = new MutationObserver(() => {
+		// 		canvas = document.getElementById("defaultCanvas0");
+		// 		if (canvas) {
+		// 			canvas_parent.appendChild(canvas);
+		// 			observer.disconnect();
+		// 			observer = null;
+		// 		}
+		// 	});
+		// 	observer.observe(document, {subtree: true, childList: true});
+		// }
 	}, []);
 
 	return (

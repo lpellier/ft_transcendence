@@ -106,6 +106,7 @@ export class GameGateway {
 
 	@SubscribeMessage("quit-ongoing-game") // ? triggers when player quits by going somewhere else on the website
 	handleQuitOngoing(@ConnectedSocket() client : Socket) {
+		console.log("quit ongoing game")
 		for (let game of this.games) {
 			for (let player of game.players) {
 				if (player.id === client.id) {
