@@ -73,7 +73,7 @@ export class GameGateway {
 
 	handleDisconnect(client : Socket) { // ? triggers when user disconnects from the website (either refresh or close tab)
 		let index = -1;
-		if ((index = this.clients.indexOf(client.id)) != -1) {
+		if ((index = this.clients.indexOf(client.id)) !== -1) {
 			this.clients.splice(index, 1);
 			this.users.splice(index, 1);
 			for (let game of this.games) {
@@ -257,7 +257,7 @@ export class GameGateway {
 			game.score, game.pong.value);
 		for (let i = 1; i < 5; i++)
 			setTimeout(() => {
-				if (game.state != "game-over")
+				if (game.state !== "game-over")
 					test.to(game.room_id).emit("countdown-server");
 				if (i === 4) {
 					let calculate_state : string = "none";
@@ -292,11 +292,11 @@ export class GameGateway {
 							if (!game.over()) {
 								setTimeout(() => {
 									game.scorePoint();
-									if (game.state != "game-over")
+									if (game.state !== "game-over")
 										test.to(game.room_id).emit("relaunch");
 									for (var j = 1; j < 3; j++) {
 										setTimeout((index : number) => {
-											if (game.state != "game-over")
+											if (game.state !== "game-over")
 												test.to(game.room_id).emit("countdown-server");
 											if (index === 2) {
 												calculate_state = "none";
