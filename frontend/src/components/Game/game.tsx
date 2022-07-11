@@ -4,7 +4,6 @@
 import { socket } from "index";
 
 // TODO ISSUES
-// ? when opening the site on a page for the first time, game doesn't load until refresh (but only sometimes)
 // ? game doesnt update username if changed because getting the username once in setup, should check periodically if it's still the same
 
 // TODO IMPROVEMENTS
@@ -1026,7 +1025,7 @@ export const Sketch = (p: any) => {
 
     switchMusic(music: string) {
       let tmp_music = this.musicPlaying();
-      if (tmp_music != "none") {
+      if (tmp_music !== "none") {
         if (music === "menu") {
           this.fadeMusicDown(tmp_music);
           this.fadeMusicUp(this.MENU_MUSIC);
@@ -1065,10 +1064,10 @@ export const Sketch = (p: any) => {
         (game.state === "in-menu" ||
           game.state === "in-menu-create" ||
           game.state === "in-menu-input") &&
-        this.music_playing != "menu"
+        this.music_playing !== "menu"
       )
         this.switchMusic("menu");
-      // else if ((game.state === "game-over" || game.state === "opponent-left-menu") && this.music_playing != "none")
+      // else if ((game.state === "game-over" || game.state === "opponent-left-menu") && this.music_playing !== "none")
       // 	this.switchMusic("none");
     }
 
@@ -1243,10 +1242,10 @@ export const Sketch = (p: any) => {
       ];
       if (!invert) {
         if (this.pong.value === -1 && this.score[0] > 0) this.score[0]--;
-        else if (this.pong.value != -1) this.score[1] += this.pong.value;
+        else if (this.pong.value !== -1) this.score[1] += this.pong.value;
       } else {
         if (this.pong.value === -1 && this.score[1] > 0) this.score[1]--;
-        else if (this.pong.value != -1) this.score[0] += this.pong.value;
+        else if (this.pong.value !== -1) this.score[0] += this.pong.value;
       }
       setTimeout(() => {
         if (!document.getElementById("canvas-parent")) return;
@@ -1683,7 +1682,7 @@ export const Sketch = (p: any) => {
     timestep: number;
 
     constructor(index: number, id: any, username: string, real_id: number) {
-      if (index == 1)
+      if (index === 1)
         this.pos = [
           consts.WIDTH / 12,
           consts.HEIGHT / 2 - consts.PLAYER_HEIGHT / 2,
@@ -1738,7 +1737,7 @@ export const Sketch = (p: any) => {
       let proportionnal_y = this.pos[1] / consts.OLD_HEIGHT;
       this.width = consts.PLAYER_WIDTH;
       this.height = consts.PLAYER_HEIGHT;
-      if (this.index == 1)
+      if (this.index === 1)
         this.pos = [consts.WIDTH / 12, consts.HEIGHT * proportionnal_y];
       else
         this.pos = [(consts.WIDTH * 11) / 12, consts.HEIGHT * proportionnal_y];
@@ -1851,7 +1850,7 @@ export const Sketch = (p: any) => {
 
     setNewValue() {
       // values (0 -> -1) (1 - 4 -> 1) (5 - 7 -> 2) (8 - 9 -> 3) (10 -> 4)
-      if (game.map.name != "casino") return;
+      if (game.map.name !== "casino") return;
       let rand: number = Math.floor(Math.random() * 11);
       if (rand === 0) this.value = -1;
       else if (rand <= 4) this.value = 1;
@@ -1981,7 +1980,6 @@ export const Sketch = (p: any) => {
     socket.on(
       "waiting-player",
       (r_id: string, score_limit: number, map: string) => {
-        console.log("waiting player");
         game.room_id = r_id;
         game.score_limit = score_limit;
         errors.set_false();
@@ -2049,11 +2047,11 @@ export const Sketch = (p: any) => {
         real_id_p2: number
       ) => {
         console.log("waiting readiness");
-        if (game.players.length == 2) {
-          if (game.players[1].id == "null") game.players[1].id = id_p2;
-          if (game.players[1].username == "null")
+        if (game.players.length === 2) {
+          if (game.players[1].id === "null") game.players[1].id = id_p2;
+          if (game.players[1].username === "null")
             game.players[1].username = name_p2;
-          if (game.players[1].real_id == 0)
+          if (game.players[1].real_id === 0)
             game.players[1].real_id = real_id_p2;
           game.setState("waiting-readiness");
         }
@@ -2153,7 +2151,7 @@ export const Sketch = (p: any) => {
             game.players[0].pos[1] = (p1_state[1][1] * consts.HEIGHT) / 750;
             game.players[1].pos[0] = (p2_state[1][0] * consts.WIDTH) / 1200;
             game.players[1].pos[1] = (p2_state[1][1] * consts.HEIGHT) / 750;
-            if (game.score[0] != score[0] || game.score[1] != score[1]) {
+            if (game.score[0] !== score[0] || game.score[1] !== score[1]) {
               game.frame_count_shake = 0;
               consts.playScore();
             }
@@ -2164,7 +2162,7 @@ export const Sketch = (p: any) => {
             game.players[0].pos[1] = (p2_state[1][1] * consts.HEIGHT) / 750;
             game.players[1].pos[0] = (p1_state[1][0] * consts.WIDTH) / 1200;
             game.players[1].pos[1] = (p1_state[1][1] * consts.HEIGHT) / 750;
-            if (game.score[0] != score[1] || game.score[1] != score[0]) {
+            if (game.score[0] !== score[1] || game.score[1] !== score[0]) {
               game.frame_count_shake = 0;
               consts.playScore();
             }
@@ -2176,7 +2174,7 @@ export const Sketch = (p: any) => {
             game.players[0].pos[1] = (p1_state[1][1] * consts.HEIGHT) / 750;
             game.players[1].pos[0] = (p2_state[1][0] * consts.WIDTH) / 1200;
             game.players[1].pos[1] = (p2_state[1][1] * consts.HEIGHT) / 750;
-            if (game.score[0] != score[0] || game.score[1] != score[1]) {
+            if (game.score[0] !== score[0] || game.score[1] !== score[1]) {
               game.frame_count_shake = 0;
               consts.playScore();
             }
@@ -2215,7 +2213,6 @@ export const Sketch = (p: any) => {
   }
 
   p.preload = () => {
-    console.log("in preload");
     consts = new Consts();
     keys = new Keys();
 
@@ -2269,15 +2266,12 @@ export const Sketch = (p: any) => {
     p.textFont(consts.FONT);
     p.frameRate(60);
 
-    // @ts-ignore:next-line
-    socket.on("connect", () => {
-      socket.emit("my_id", socket.id, user_id, user_name);
-    });
+	socket.emit("my_id", socket.id, user_id, user_name);
 
-    listenStartEvents();
-    listenStopEvents();
-    listenMoveEvents();
-
+	listenStartEvents();
+	listenStopEvents();
+	listenMoveEvents();	
+    
     resizeEverything();
     game.setState("in-menu");
     game.frame_count_shake = 0;
@@ -2288,6 +2282,17 @@ export const Sketch = (p: any) => {
     consts.MARK_ICON.hide();
     consts.CROSS_ICON.hide();
     consts.CROSS_ICON2.hide();
+  }
+
+  p.keyPressed = () => {
+	if (game === null) return;
+    if (!game.spectator && game.state === "waiting-readiness" && p.key === " ")
+      socket.emit("switch_readiness", game.players[0].id);
+    if (game.state === "in-menu-input" && p.keyCode === p.ENTER) {
+      if (inputs.join.value()[0] === "#")
+        inputs.join.value(inputs.join.value().slice(1));
+      socket.emit("find_game", inputs.join.value(), game.spectator);
+    }
   }
 
   p.draw = () => {
@@ -2321,7 +2326,7 @@ export const Sketch = (p: any) => {
     consts.playAppropriateMusic();
     p.push();
     if (
-      (game.score[0] != 0 || game.score[1] != 0) &&
+      (game.score[0] !== 0 || game.score[1] !== 0) &&
       (game.state === "in-game" || game.state === "relaunch-countdown") &&
       game.frame_count_shake < 30
     ) {
@@ -2624,11 +2629,11 @@ export const Sketch = (p: any) => {
           : (icon_p2 = consts.CROSS_ICON2);
       p.pop();
     }
-    if (icon_p1.parent() != document.getElementById("icon-player_one"))
+    if (icon_p1.parent() !== document.getElementById("icon-player_one"))
       icon_p1.parent(document.getElementById("icon-player_one"));
     icon_p1.show();
 
-    if (icon_p2.parent() != document.getElementById("icon-player_two"))
+    if (icon_p2.parent() !== document.getElementById("icon-player_two"))
       icon_p2.parent(document.getElementById("icon-player_two"));
     icon_p2.show();
   }
@@ -2644,7 +2649,7 @@ export const Sketch = (p: any) => {
   }
 
   function outputScore(map_width: number, map_height: number) {
-    if (game.players.length != 2) return;
+    if (game.players.length !== 2) return;
     if (game.players[0].index === 1) {
       p.push();
       p.textSize(consts.std_font_size);
@@ -2715,13 +2720,13 @@ export const Sketch = (p: any) => {
 
   function movePlayers() {
     if (!game.local && !game.spectator) {
-      if (game.players[0].index == 1) {
+      if (game.players[0].index === 1) {
         if (p.keyIsDown(87)) {
           socket.emit("move_up", game.players[0].id);
         } else if (p.keyIsDown(83)) {
           socket.emit("move_down", game.players[0].id);
         } else socket.emit("move_null", game.players[0].id);
-      } else if (game.players[0].index == 2) {
+      } else if (game.players[0].index === 2) {
         if (p.keyIsDown(p.UP_ARROW)) {
           socket.emit("move_up", game.players[0].id);
         } else if (p.keyIsDown(p.DOWN_ARROW)) {
@@ -2747,19 +2752,8 @@ export const Sketch = (p: any) => {
         else game.players[1].velocity[1] = 0;
       }
 
-      if (game.state != "relaunch-countdown" && game.local)
+      if (game.state !== "relaunch-countdown" && game.local)
         game.pong.calculateNewPos();
-    }
-  }
-
-  function keyPressed() {
-    if (game === null) return;
-    if (!game.spectator && game.state === "waiting-readiness" && p.key === " ")
-      socket.emit("switch_readiness", game.players[0].id);
-    if (game.state === "in-menu-input" && p.keyCode === p.ENTER) {
-      if (inputs.join.value()[0] === "#")
-        inputs.join.value(inputs.join.value().slice(1));
-      socket.emit("find_game", inputs.join.value(), game.spectator);
     }
   }
 
@@ -2887,7 +2881,7 @@ export const Sketch = (p: any) => {
   }
 
   function drawInput() {
-    if (game.players[0].index == 2) {
+    if (game.players[0].index === 2) {
       keys.up.show();
       keys.left.show();
       keys.down.show();
@@ -3079,7 +3073,7 @@ export const Sketch = (p: any) => {
       let intersection_point: [number, number, string][] = [[-1, -1, "side"]]; // array of one element so that the variable is referenced in functions
       angle = collisionPaddle(player, intersection_point, ball_points[i]);
 
-      if (intersection_point[0][0] != -1) {
+      if (intersection_point[0][0] !== -1) {
         consts.playRandomPaddleSound();
         let max_angle_percentage: number =
           Math.abs(angle) / ((Math.PI * 3) / 12); // ? number that lets me add speed to acute angled shots
@@ -3154,7 +3148,7 @@ export const Sketch = (p: any) => {
       paddle_side_hit[1]
     );
     intersection_point[0][2] = "side";
-    if (intersection_point[0][0] != -1)
+    if (intersection_point[0][0] !== -1)
       return relativeIntersection(
         intersection_point[0],
         paddle_side_hit[0],
@@ -3169,7 +3163,7 @@ export const Sketch = (p: any) => {
       paddle_bot_hit[1]
     );
     intersection_point[0][2] = "bot";
-    if (intersection_point[0][0] != -1)
+    if (intersection_point[0][0] !== -1)
       return relativeIntersection(
         intersection_point[0],
         paddle_bot_hit[0],
@@ -3183,7 +3177,7 @@ export const Sketch = (p: any) => {
       paddle_top_hit[1]
     );
     intersection_point[0][2] = "top";
-    if (intersection_point[0][0] != -1)
+    if (intersection_point[0][0] !== -1)
       return relativeIntersection(
         intersection_point[0],
         paddle_top_hit[0],
@@ -3256,7 +3250,7 @@ export const Sketch = (p: any) => {
   }
 
   function highlightSpectateButton() {
-    // @ts-ignore: next-linee
+    // @ts-ignore: next-line
     this.style("color", "#d4d4d4");
     game.hover_spectator = true;
   }
