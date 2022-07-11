@@ -17,6 +17,7 @@ model User {
   otpSecret    String    @default("")
   stats        Stats?
   matchHistory Match[]
+  achievements Int[]
   friendIds    Int[]
   rooms        Room[]    @relation("roomUsers")
   adminRooms   Room[]    @relation("roomAdmins")
@@ -26,13 +27,13 @@ model User {
 }
 
 model Stats {
-  id        Int  @id @default(autoincrement())
-  victories Int  @default(0)
-  losses    Int  @default(0)
-  xp        Int  @default(0)
-  level     Float  @default(1)
-  userId    Int  @unique
-  User      User @relation(fields: [userId], references: [id])
+  id        Int   @id @default(autoincrement())
+  victories Int   @default(0)
+  losses    Int   @default(0)
+  xp        Int   @default(0)
+  level     Float @default(1)
+  userId    Int   @unique
+  User      User  @relation(fields: [userId], references: [id])
 }
 
 model Match {

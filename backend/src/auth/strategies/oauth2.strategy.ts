@@ -3,8 +3,10 @@ import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { User } from '@prisma/client';
 import { Strategy } from 'passport-oauth2';
+import { UserRoomDto } from 'src/chat/dto/user-room.dto';
 import { UsersService } from 'src/users/users.service';
 import { AuthService } from '../auth.service';
+import { AuthUser } from '../interfaces/auth-user.interface';
 
 @Injectable()
 export class OAuth2Strategy extends PassportStrategy(Strategy, 'oauth2') {
@@ -22,15 +24,10 @@ export class OAuth2Strategy extends PassportStrategy(Strategy, 'oauth2') {
     });
   }
 
-  async validate(accessToken: string): Promise<User> {
-    const profile = await this.authService.validateUser(accessToken);
-    if (!profile) {
-      throw new UnauthorizedException();
-    }
-    const user = await this.usersService.findOrCreate({
-      id: profile.id,
-      username: profile.login,
-    });
-    return user;
+  async validate(accessToken: string): Promise<AuthUser> {
+    const userId = await this.authService.validateUser(accessToken);
+    const user = await this.usersService.findOrCreateUser(userId);
+    const authUser = { id: user.id, isAuthenticated: !user.tfa }
+    return authUser;
   }
 }
