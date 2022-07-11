@@ -6,13 +6,6 @@ import { socket } from "index";
 // TODO ISSUES
 // ? game doesnt update username if changed because getting the username once in setup, should check periodically if it's still the same
 
-// ! bugs due to react integration
-	// ! keyPressed doesn't work anymore, considered as defined but nevers used, this impacts :
-		// ! pressing enter on input screen to join a game
-		// ! pressing space in wainting-readiness screen to switch readiness
-	// ? this would be fixed by moving keyPressed content in draw function
-
-
 // TODO IMPROVEMENTS
 // ? implement better ai
 
@@ -2291,6 +2284,17 @@ export const Sketch = (p: any) => {
     consts.CROSS_ICON2.hide();
   }
 
+  p.keyPressed = () => {
+	if (game === null) return;
+    if (!game.spectator && game.state === "waiting-readiness" && p.key === " ")
+      socket.emit("switch_readiness", game.players[0].id);
+    if (game.state === "in-menu-input" && p.keyCode === p.ENTER) {
+      if (inputs.join.value()[0] === "#")
+        inputs.join.value(inputs.join.value().slice(1));
+      socket.emit("find_game", inputs.join.value(), game.spectator);
+    }
+  }
+
   p.draw = () => {
     if (p.keyIsDown(32)) {
       for (let player of game.players) {
@@ -2750,17 +2754,6 @@ export const Sketch = (p: any) => {
 
       if (game.state !== "relaunch-countdown" && game.local)
         game.pong.calculateNewPos();
-    }
-  }
-
-  function keyPressed() {
-    if (game === null) return;
-    if (!game.spectator && game.state === "waiting-readiness" && p.key === " ")
-      socket.emit("switch_readiness", game.players[0].id);
-    if (game.state === "in-menu-input" && p.keyCode === p.ENTER) {
-      if (inputs.join.value()[0] === "#")
-        inputs.join.value(inputs.join.value().slice(1));
-      socket.emit("find_game", inputs.join.value(), game.spectator);
     }
   }
 
