@@ -73,7 +73,7 @@ export class GameGateway {
 
 	handleDisconnect(client : Socket) { // ? triggers when user disconnects from the website (either refresh or close tab)
 		let index = -1;
-		if ((index = this.clients.indexOf(client.id)) != -1) {
+		if ((index = this.clients.indexOf(client.id)) !== -1) {
 			this.clients.splice(index, 1);
 			this.users.splice(index, 1);
 			for (let game of this.games) {
@@ -103,7 +103,6 @@ export class GameGateway {
 			}
 		}
 	}
-
 
 	@SubscribeMessage("quit-ongoing-game") // ? triggers when player quits by going somewhere else on the website
 	handleQuitOngoing(@ConnectedSocket() client : Socket) {
@@ -151,6 +150,7 @@ export class GameGateway {
 	getConnection(@MessageBody() data : [string, string, string]) {
 		this.clients.push(data[0]);
 		this.users.push([data[1], data[2]]);
+		console.log("my_id", data);
 	}
 
     //[ {
@@ -195,6 +195,7 @@ export class GameGateway {
 		@MessageBody() data : [string, boolean, number, string]
 	) {
 		let existing_game : Game = null;
+		console.log("test :", this.users[this.clients.indexOf(client.id)]);
 		if (data[0] === "public" && data[1])
 			existing_game = existingEmptyGame(this.games, this.users[this.clients.indexOf(client.id)][1]);
 		
@@ -257,7 +258,7 @@ export class GameGateway {
 			game.score, game.pong.value);
 		for (let i = 1; i < 5; i++)
 			setTimeout(() => {
-				if (game.state != "game-over")
+				if (game.state !== "game-over")
 					test.to(game.room_id).emit("countdown-server");
 				if (i === 4) {
 					let calculate_state : string = "none";
@@ -292,11 +293,11 @@ export class GameGateway {
 							if (!game.over()) {
 								setTimeout(() => {
 									game.scorePoint();
-									if (game.state != "game-over")
+									if (game.state !== "game-over")
 										test.to(game.room_id).emit("relaunch");
 									for (var j = 1; j < 3; j++) {
 										setTimeout((index : number) => {
-											if (game.state != "game-over")
+											if (game.state !== "game-over")
 												test.to(game.room_id).emit("countdown-server");
 											if (index === 2) {
 												calculate_state = "none";
