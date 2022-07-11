@@ -2,6 +2,7 @@
 	// ? Coding consistency : snake_case for variables | camelCase for functions | PascalCase for classes
 
 	import { socket } from "index";
+	import { audio_files } from "routes/Game"
 
 	// TODO ISSUES
 	// ? i think bounce angle is bigger when bounced on top of paddle than on bottom, weird stuff
@@ -767,34 +768,12 @@
 	CITY_BACKGROUND: any;
 	TOKYO_BACKGROUND: any;
 
-	PADDLE_HIT_1: any;
-	PADDLE_HIT_2: any;
-
-	BUMPER_HIT_1: any;
-	BUMPER_HIT_2: any;
-
-	WALL_HIT_1: any;
-	WALL_HIT_2: any;
-
-	BIP: any;
-	BIP_FINAL: any;
-
-	SCORE: any;
-
-	CASINO_MUSIC: any;
-	CITY_MUSIC: any;
-	ORIGINAL_MUSIC: any;
-	MENU_MUSIC: any;
-
-	music_playing: string;
-	max_volume: number;
-
 	constructor() {
 		this.WIDTH = 1200;
 		this.HEIGHT = 750;
 
 		this.original_map = new GameMap(1, this.WIDTH, this.HEIGHT);
-		this.city_map = new GameMap(2, this.WIDTH, this.HEIGHT);
+		this.city_map = new GameMap(2, this.WIDTH, this.HEIGHT); 
 		this.casino_map = new GameMap(3, this.WIDTH, this.HEIGHT);
 
 		this.OLD_WIDTH = this.WIDTH;
@@ -903,193 +882,8 @@
 
 		this.CITY_BACKGROUND = p.loadImage("/assets/backgrounds/city.jpg");
 		this.TOKYO_BACKGROUND = p.loadImage("/assets/backgrounds/tokyo.png");
-
-		this.PADDLE_HIT_1 = new Audio("/assets/sfx/paddle_hit_1.mp3");
-		this.PADDLE_HIT_2 = new Audio("/assets/sfx/paddle_hit_2.mp3");
-
-		this.BUMPER_HIT_1 = new Audio("/assets/sfx/bumper_hit_1.mp3");
-		this.BUMPER_HIT_2 = new Audio("/assets/sfx/bumper_hit_2.mp3");
-
-		this.WALL_HIT_1 = new Audio("/assets/sfx/paddle_hit_1.mp3");
-		this.WALL_HIT_2 = new Audio("/assets/sfx/paddle_hit_2.mp3");
-
-		this.BIP = new Audio("/assets/sfx/bip.mp3");
-		this.BIP_FINAL = new Audio("/assets/sfx/bip-final.mp3");
-
-		this.SCORE = new Audio("/assets/sfx/score.mp3");
-
-		this.max_volume = 0;
-
-		this.CASINO_MUSIC = new Audio("/assets/music/casino.mp3");
-		this.CASINO_MUSIC.loop = true;
-		this.CASINO_MUSIC.volume = this.max_volume;
-
-		this.CITY_MUSIC = new Audio("/assets/music/city.mp3");
-		this.CITY_MUSIC.loop = true;
-		this.CITY_MUSIC.volume = this.max_volume;
-
-		this.ORIGINAL_MUSIC = new Audio("/assets/music/original.mp3");
-		this.ORIGINAL_MUSIC.loop = true;
-		this.ORIGINAL_MUSIC.volume = this.max_volume;
-
-		this.MENU_MUSIC = new Audio("/assets/music/menu.mp3");
-		this.MENU_MUSIC.loop = true;
-		this.MENU_MUSIC.volume = this.max_volume;
-
-		this.music_playing = "none";
-		this.PADDLE_HIT_1.autoplay = false;
-		this.PADDLE_HIT_2.autoplay = false;
-		this.BUMPER_HIT_1.autoplay = false;
-		this.BUMPER_HIT_2.autoplay = false;
-		this.WALL_HIT_1.autoplay = false;
-		this.WALL_HIT_2.autoplay = false;
-		this.BIP.autoplay = false;
-		this.BIP_FINAL.autoplay = false;
-		this.SCORE.autoplay = false;
-		this.MENU_MUSIC.autoplay = false;
-		this.ORIGINAL_MUSIC.autoplay = false;
-		this.CITY_MUSIC.autoplay = false;
-		this.CASINO_MUSIC.autoplay = false;
 	}
 
-	deleteAudio() {
-		this.fadeMusicDown(this.PADDLE_HIT_1);
-		this.fadeMusicDown(this.PADDLE_HIT_2);
-		this.fadeMusicDown(this.BUMPER_HIT_1);
-		this.fadeMusicDown(this.BUMPER_HIT_2);
-		this.fadeMusicDown(this.WALL_HIT_1);
-		this.fadeMusicDown(this.WALL_HIT_2);
-		this.fadeMusicDown(this.BIP);
-		this.fadeMusicDown(this.BIP_FINAL);
-		this.fadeMusicDown(this.SCORE);
-		this.fadeMusicDown(this.CASINO_MUSIC);
-		this.fadeMusicDown(this.CITY_MUSIC);
-		this.fadeMusicDown(this.MENU_MUSIC);
-		this.fadeMusicDown(this.ORIGINAL_MUSIC);
-	}
-
-	playBip(bip: any) {
-		bip.currentTime = 0;
-		bip.volume = this.max_volume;
-		bip.play();
-	}
-
-	playScore() {
-		this.SCORE.currentTime = 0;
-		this.SCORE.volume = this.max_volume;
-		this.SCORE.play();
-	}
-
-	playRandomPaddleSound() {
-		this.PADDLE_HIT_1.volume = consts.max_volume;
-		this.PADDLE_HIT_2.volume = consts.max_volume;
-
-		let rand: number = Math.floor(Math.random() * 2);
-		if (rand === 0) this.PADDLE_HIT_1.play();
-		else if (rand === 1) this.PADDLE_HIT_2.play();
-	}
-
-	playRandomWallSound() {
-		this.WALL_HIT_1.volume = consts.max_volume;
-		this.WALL_HIT_2.volume = consts.max_volume;
-
-		let rand: number = Math.floor(Math.random() * 2);
-		if (rand === 0) this.WALL_HIT_1.play();
-		else if (rand === 1) this.WALL_HIT_2.play();
-	}
-
-	playRandomBumperSound() {
-		this.BUMPER_HIT_1.volume = consts.max_volume;
-		this.BUMPER_HIT_2.volume = consts.max_volume;
-
-		let rand: number = Math.floor(Math.random() * 2);
-		if (rand === 0) this.BUMPER_HIT_1.play();
-		else if (rand === 1) this.BUMPER_HIT_2.play();
-	}
-
-	musicPlaying(): any {
-		if (this.music_playing === "menu") return this.MENU_MUSIC;
-		else if (this.music_playing === "casino") return this.CASINO_MUSIC;
-		else if (this.music_playing === "city") return this.CITY_MUSIC;
-		else if (this.music_playing === "original") return this.ORIGINAL_MUSIC;
-		else return "none";
-	}
-
-	fadeMusicDown(music: any) {
-		music.pause();
-		// for (let i = 0; i < 10; i++) {
-		// 	setTimeout(() => {
-		// 		if (music.volume >= 0.1)
-		// 			music.volume -= 0.1;
-		// 		if (i === 9)
-		// 			music.pause();
-		// 	}, i * 200);
-		// }
-	}
-
-	fadeMusicUp(music: any) {
-		if (this.max_volume === 0) return;
-		music.currentTime = 0;
-		music.volume = this.max_volume;
-		music.play();
-		// music.volume = 0;
-		// for (let j = 0; j < 10; j++) {
-		// 	setTimeout(() => {
-		// 		if (music.volume <= 0.9)
-		// 			music.volume += 0.1;
-		// 		if (j === 9)
-		// 			music.volume = 1;
-		// 	}, j * 200);
-		// }
-	}
-
-	switchMusic(music: string) {
-		let tmp_music = this.musicPlaying();
-		if (tmp_music !== "none") {
-		if (music === "menu") {
-			this.fadeMusicDown(tmp_music);
-			this.fadeMusicUp(this.MENU_MUSIC);
-		} else if (music === "original") {
-			this.fadeMusicDown(tmp_music);
-			this.fadeMusicUp(this.ORIGINAL_MUSIC);
-		} else if (music === "city") {
-			this.fadeMusicDown(tmp_music);
-			this.fadeMusicUp(this.CITY_MUSIC);
-		} else if (music === "casino") {
-			this.fadeMusicDown(tmp_music);
-			this.fadeMusicUp(this.CASINO_MUSIC);
-		}
-		if (music === "none") this.fadeMusicDown(tmp_music);
-		this.music_playing = music;
-		} else {
-		if (music === "menu") this.fadeMusicUp(this.MENU_MUSIC);
-		else if (music === "original") this.fadeMusicUp(this.ORIGINAL_MUSIC);
-		else if (music === "city") this.fadeMusicUp(this.CITY_MUSIC);
-		else if (music === "casino") this.fadeMusicUp(this.CASINO_MUSIC);
-		this.music_playing = music;
-		}
-	}
-
-	playAppropriateMusic() {
-		if (
-		(game.state === "countdown" ||
-			game.state === "spectate" ||
-			game.state === "in-game" ||
-			game.state === "waiting-readiness" ||
-			game.state === "waiting-player") &&
-		this.music_playing === "menu"
-		)
-		this.switchMusic(game.map.name);
-		else if (
-		(game.state === "in-menu" ||
-			game.state === "in-menu-create" ||
-			game.state === "in-menu-input") &&
-		this.music_playing !== "menu"
-		)
-		this.switchMusic("menu");
-		// else if ((game.state === "game-over" || game.state === "opponent-left-menu") && this.music_playing !== "none")
-		// 	this.switchMusic("none");
-	}
 
 	setWindowSize() {
 		this.OLD_WIDTH = this.WIDTH;
@@ -1254,7 +1048,7 @@
 
 	scorePoint(invert: boolean) {
 		this.frame_count_shake = 0;
-		consts.playScore();
+		audio_files.playScore();
 		this.pong.velocity = [0, 0];
 		this.pong.pos = [
 		consts.WIDTH / 2 - consts.PONG_DIAMETER / 2,
@@ -1279,8 +1073,8 @@
 			setTimeout(() => {
 			if (!document.getElementById("canvas-parent")) return;
 			this.timer--;
-			if (this.timer === 0) consts.playBip(consts.BIP_FINAL);
-			else if (this.timer > 0) consts.playBip(consts.BIP);
+			if (this.timer === 0) audio_files.playBip(audio_files.BIP_FINAL);
+			else if (this.timer > 0) audio_files.playBip(audio_files.BIP);
 			if (this.timer === -1 && this.state === "relaunch-countdown")
 				this.setState("in-game");
 			}, i * 1000);
@@ -1293,7 +1087,7 @@
 
 	setState(state: string) {
 		this.state = state;
-		consts.playAppropriateMusic();
+		audio_files.playAppropriateMusic(this.state, this.map.name);
 	}
 	}
 
@@ -2092,8 +1886,8 @@ class Vector {
 		socket.on("countdown-server", () => {
 			if (game.state === "countdown" || game.state === "relaunch-countdown") {
 			game.timer--;
-			if (game.timer === 0) consts.playBip(consts.BIP_FINAL);
-			else if (game.timer > 0) consts.playBip(consts.BIP);
+			if (game.timer === 0) audio_files.playBip(audio_files.BIP_FINAL);
+			else if (game.timer > 0) audio_files.playBip(audio_files.BIP);
 			if (game.timer === -1) game.setState("in-game");
 			}
 		});
@@ -2101,7 +1895,7 @@ class Vector {
 		socket.on("relaunch", () => {
 			game.setState("relaunch-countdown");
 			game.timer = 1;
-			consts.playBip(consts.BIP);
+			audio_files.playBip(audio_files.BIP);
 		});
 	}
 
@@ -2130,22 +1924,22 @@ class Vector {
 			game.players[1].real_id
 		);
 		socket.emit("countdown_start", game.players[0].real_id);
-		consts.playBip(consts.BIP);
+		audio_files.playBip(audio_files.BIP);
 		}
 	});
 
 	socket.on("bumper-hit", (index: number) => {
-		consts.playRandomBumperSound();
+		audio_files.playRandomBumperSound();
 		if (index === 0) bumpers[0].hit = true;
 		if (index === 1) bumpers[1].hit = true;
 	});
 
 	socket.on("player-hit", () => {
-		consts.playRandomPaddleSound();
+		audio_files.playRandomPaddleSound();
 	});
 
 	socket.on("wall-hit", () => {
-		consts.playRandomWallSound();
+		audio_files.playRandomWallSound();
 	});
 
 	socket.on(
@@ -2173,7 +1967,7 @@ class Vector {
 			game.players[1].pos[1] = (p2_state[1][1] * consts.HEIGHT) / 750;
 			if (game.score[0] !== score[0] || game.score[1] !== score[1]) {
 				game.frame_count_shake = 0;
-				consts.playScore();
+				audio_files.playScore();
 			}
 			game.score[0] = score[0];
 			game.score[1] = score[1];
@@ -2184,7 +1978,7 @@ class Vector {
 			game.players[1].pos[1] = (p1_state[1][1] * consts.HEIGHT) / 750;
 			if (game.score[0] !== score[1] || game.score[1] !== score[0]) {
 				game.frame_count_shake = 0;
-				consts.playScore();
+				audio_files.playScore();
 			}
 			game.score[0] = score[1];
 			game.score[1] = score[0];
@@ -2196,7 +1990,7 @@ class Vector {
 			game.players[1].pos[1] = (p2_state[1][1] * consts.HEIGHT) / 750;
 			if (game.score[0] !== score[0] || game.score[1] !== score[1]) {
 				game.frame_count_shake = 0;
-				consts.playScore();
+				audio_files.playScore();
 			}
 			game.score[0] = score[0];
 			game.score[1] = score[1];
@@ -2339,7 +2133,7 @@ class Vector {
 		}
 	}
 
-	consts.playAppropriateMusic();
+	audio_files.playAppropriateMusic(game.state, game.map.name);
 	p.push();
 	if (
 		(game.score[0] !== 0 || game.score[1] !== 0) &&
@@ -2795,7 +2589,7 @@ class Vector {
 	p.push();
 	p.fill("white");
 	p.noStroke();
-	for (let i = 0; i < consts.max_volume * 4; i++)
+	for (let i = 0; i < audio_files.max_volume * 4; i++)
 	p.rect(
 		consts.WIDTH * 0.88,
 		consts.HEIGHT * 0.03 + rect_size * i + (rect_size / 3) * i,
@@ -3032,7 +2826,7 @@ class Vector {
 		else if (game.pong.pos[1] + game.pong.diameter > consts.BOT_BOUND)
 		game.pong.pos[1] =
 			consts.BOT_BOUND - game.pong.diameter - consts.HEIGHT * 0.005;
-		consts.playRandomWallSound();
+		audio_files.playRandomWallSound();
 		return;
 	}
 	if (
@@ -3047,7 +2841,7 @@ class Vector {
 		for (let bumper of bumpers) {
 		if (bumper.checkCollision(game.pong)) {
 			bumper.resetAnimation();
-			consts.playRandomBumperSound();
+			audio_files.playRandomBumperSound();
 			return;
 		}
 		}
@@ -3083,7 +2877,7 @@ class Vector {
 		angle = collisionPaddle(player, intersection_point, ball_points[i]);
 
 		if (intersection_point[0][0] !== -1) {
-		consts.playRandomPaddleSound();
+		audio_files.playRandomPaddleSound();
 		let max_angle_percentage: number =
 			Math.abs(angle) / ((Math.PI * 3) / 12); // ? number that lets me add speed to acute angled shots
 		// ? for bot / top collisions
@@ -3202,19 +2996,19 @@ class Vector {
 
 	function clickSound() {
 	if (p.mouseButton === p.LEFT) {
-		consts.max_volume += 0.25;
-		if (consts.max_volume === 0.25 && game.state === "in-menu")
-		consts.switchMusic("menu");
+		audio_files.max_volume += 0.25;
+		if (audio_files.max_volume === 0.25 && game.state === "in-menu")
+		audio_files.switchMusic("menu");
 		else if (
-		consts.max_volume === 0.25 &&
+		audio_files.max_volume === 0.25 &&
 		(game.state === "waiting-player" || game.state === "waiting-readiness")
 		)
-		consts.switchMusic(game.map.name);
-	} else if (p.mouseButton === p.RIGHT) consts.max_volume -= 0.25;
+		audio_files.switchMusic(game.map.name);
+	} else if (p.mouseButton === p.RIGHT) audio_files.max_volume -= 0.25;
 
-	if (consts.max_volume > 1) consts.max_volume = 0;
-	else if (consts.max_volume < 0) consts.max_volume = 1;
-	consts.musicPlaying().volume = consts.max_volume;
+	if (audio_files.max_volume > 1) audio_files.max_volume = 0;
+	else if (audio_files.max_volume < 0) audio_files.max_volume = 1;
+	audio_files.musicPlaying().volume = audio_files.max_volume;
 	}
 
 	function createGameMenu() {
@@ -3387,8 +3181,8 @@ class Vector {
 		for (let i = 0; i < 5; i++) {
 		setTimeout(() => {
 			game.timer--;
-			if (game.timer === 0) consts.playBip(consts.BIP_FINAL);
-			else if (game.timer >= 0) consts.playBip(consts.BIP);
+			if (game.timer === 0) audio_files.playBip(audio_files.BIP_FINAL);
+			else if (game.timer >= 0) audio_files.playBip(audio_files.BIP);
 			if (game.timer === -1 && game.state === "countdown") {
 			game.setState("in-game");
 			}
