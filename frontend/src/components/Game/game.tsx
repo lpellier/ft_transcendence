@@ -13,7 +13,7 @@ import { socket } from "index";
 	// ? this would be fixed by moving keyPressed content in draw function
 
 	// ! matchmaking now instantly causes an error in backend when clicked
-	
+
 
 // TODO IMPROVEMENTS
 // ? implement better ai
@@ -1989,7 +1989,6 @@ export const Sketch = (p: any) => {
     socket.on(
       "waiting-player",
       (r_id: string, score_limit: number, map: string) => {
-        console.log("waiting player");
         game.room_id = r_id;
         game.score_limit = score_limit;
         errors.set_false();
@@ -2269,7 +2268,6 @@ export const Sketch = (p: any) => {
       user_name = user_dom.getAttribute("user_name");
       user_id = user_dom.getAttribute("user_id"); 
     }
-	console.log(user_name, user_id);
 
     canvas = p.createCanvas(consts.WIDTH, consts.HEIGHT);
     canvas.parent(document.getElementById("canvas-parent"));
@@ -2277,15 +2275,12 @@ export const Sketch = (p: any) => {
     p.textFont(consts.FONT);
     p.frameRate(60);
 
-    // @ts-ignore:next-line
-    socket.on("connect", () => {
-      socket.emit("my_id", socket.id, user_id, user_name);
-    });
+	socket.emit("my_id", socket.id, user_id, user_name);
 
-    listenStartEvents();
-    listenStopEvents();
-    listenMoveEvents();
-
+	listenStartEvents();
+	listenStopEvents();
+	listenMoveEvents();	
+    
     resizeEverything();
     game.setState("in-menu");
     game.frame_count_shake = 0;
@@ -3264,7 +3259,7 @@ export const Sketch = (p: any) => {
   }
 
   function highlightSpectateButton() {
-    // @ts-ignore: next-linee
+    // @ts-ignore: next-line
     this.style("color", "#d4d4d4");
     game.hover_spectator = true;
   }
