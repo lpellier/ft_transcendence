@@ -149,14 +149,6 @@ class AudioFiles {
 
 	fadeMusicDown(music: any) {
 		music.pause();
-		// for (let i = 0; i < 10; i++) {
-		// 	setTimeout(() => {
-		// 		if (music.volume >= 0.1)
-		// 			music.volume -= 0.1;
-		// 		if (i === 9)
-		// 			music.pause();
-		// 	}, i * 200);
-		// }
 	}
 
 	fadeMusicUp(music: any) {
@@ -164,15 +156,6 @@ class AudioFiles {
 		music.currentTime = 0;
 		music.volume = this.max_volume;
 		music.play();
-		// music.volume = 0;
-		// for (let j = 0; j < 10; j++) {
-		// 	setTimeout(() => {
-		// 		if (music.volume <= 0.9)
-		// 			music.volume += 0.1;
-		// 		if (j === 9)
-		// 			music.volume = 1;
-		// 	}, j * 200);
-		// }
 	}
 
 	switchMusic(music: string) {
@@ -224,8 +207,6 @@ class AudioFiles {
 	}
 }
 
-let observer : any = null;
-let canvas : any = null;
 export let audio_files : AudioFiles;
 
 function GameComponent() {
@@ -259,28 +240,12 @@ function GameComponent() {
 			<div id="button-map-casino"/>
 			<div id="button-spectate"/>
 			<div id="icon-eye"/>
-			<div id="background-city"/>
-			<div id="icon-return"/>
-			<div id="icon-player_one"/>
-			<div id="icon-player_two"/>
 			<div id="buttons-plus-minus">	
 				<div id="button-plus"/>
 				<div id="button-minus"/>
 			</div>
 			<div id="input-join"/>
 			<div id="input-score_limit"/>
-			<div id="wasd-keys">
-				<div id="w-key"/>
-				<div id="a-key"/>
-				<div id="s-key"/>
-				<div id="d-key"/>
-			</div>
-			<div id="arrow-keys">
-				<div id="up-key"/>
-				<div id="left-key"/>
-				<div id="down-key"/>
-				<div id="right-key"/>
-			</div>
 			<div id="button-opp-left-ok"/>
 		</div>
 	);

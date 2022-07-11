@@ -826,24 +826,6 @@
 		this.city_map.resize(this.WIDTH, this.HEIGHT);
 		this.casino_map.resize(this.WIDTH, this.HEIGHT);
 
-		// if (this.RETURN_ICON)
-		// 	this.RETURN_ICON.size(this.medium_square_diameter, this.medium_square_diameter);
-		if (this.CROSS_ICON)
-		this.CROSS_ICON.size(
-			this.small_square_diameter * 1.5,
-			this.small_square_diameter * 1.5
-		);
-		if (this.CROSS_ICON2)
-		this.CROSS_ICON2.size(
-			this.small_square_diameter * 1.5,
-			this.small_square_diameter * 1.5
-		);
-		if (this.MARK_ICON)
-		this.MARK_ICON.size(
-			this.small_square_diameter * 1.7,
-			this.small_square_diameter * 1.5
-		);
-
 		this.TOP_BOUND = this.original_map.wall_width * 2;
 		this.BOT_BOUND = this.HEIGHT - this.original_map.wall_width * 2;
 		this.LEFT_BOUND = 0;
@@ -853,29 +835,9 @@
 
 		this.RETURN_ICON = p.loadImage("/assets/icons/return-button2.png");
 
-		this.CROSS_ICON = p.createImg(
-		"/assets/icons/red-cross.png",
-		"cross-icon"
-		);
-		this.CROSS_ICON.size(
-		this.small_square_diameter * 1.5,
-		this.small_square_diameter * 1.5
-		);
-
-		this.CROSS_ICON2 = p.createImg(
-		"/assets/icons/red-cross.png",
-		"cross-icon"
-		);
-		this.CROSS_ICON2.size(
-		this.small_square_diameter * 1.5,
-		this.small_square_diameter * 1.5
-		);
-
-		this.MARK_ICON = p.createImg("/assets/icons/green-mark.png", "mark-icon");
-		this.MARK_ICON.size(
-		this.small_square_diameter * 1.7,
-		this.small_square_diameter * 1.5
-		);
+		this.CROSS_ICON = p.loadImage("/assets/icons/red-cross.png");
+		this.CROSS_ICON2 = p.loadImage("/assets/icons/red-cross.png");
+		this.MARK_ICON = p.loadImage("/assets/icons/green-mark.png");
 
 		this.EYE_ICON = p.loadImage("/assets/icons/eye-icon.png");
 		this.SOUND_ICON = p.loadImage("/assets/icons/sfx_icon.png");
@@ -939,24 +901,6 @@
 		this.original_map.resize(this.WIDTH, this.HEIGHT);
 		this.city_map.resize(this.WIDTH, this.HEIGHT);
 		this.casino_map.resize(this.WIDTH, this.HEIGHT);
-
-		// if (this.RETURN_ICON)
-		// 	this.RETURN_ICON.size(this.medium_square_diameter, this.medium_square_diameter);
-		if (this.CROSS_ICON)
-		this.CROSS_ICON.size(
-			this.small_square_diameter * 1.5,
-			this.small_square_diameter * 1.5
-		);
-		if (this.CROSS_ICON2)
-		this.CROSS_ICON2.size(
-			this.small_square_diameter * 1.5,
-			this.small_square_diameter * 1.5
-		);
-		if (this.MARK_ICON)
-		this.MARK_ICON.size(
-			this.small_square_diameter * 1.7,
-			this.small_square_diameter * 1.5
-		);
 
 		this.TOP_BOUND = this.original_map.wall_width * 2;
 		this.BOT_BOUND = this.HEIGHT - this.original_map.wall_width * 2;
@@ -1285,122 +1229,15 @@ class Keys {
 	down: any;
 	right: any;
 
-	space: any;
-
 	constructor() {
-		this.w = p.createImg("/assets/keys/w-key.gif", "w-key-gif");
-		this.a = p.createImg("/assets/keys/tile-a.png", "a-key-png");
-		this.s = p.createImg("/assets/keys/s-key.gif", "s-key-gif");
-		this.d = p.createImg("/assets/keys/tile-d.png", "d-key-png");
-		this.up = p.createImg("/assets/keys/up-key.gif", "up-key-gif");
-		this.left = p.createImg("/assets/keys/tile-left.png", "left-key-png");
-		this.down = p.createImg("/assets/keys/down-key.gif", "down-key-gif");
-		this.right = p.createImg("/assets/keys/tile-right.png", "right-key-png");
-		this.space = p.createImg("/assets/keys/space-key.gif", "space-key-gif");
-	}
-
-	init() {
-		this.w.size(
-		consts.small_square_diameter * 1.5,
-		consts.small_square_diameter * 1.5
-		);
-		this.w.parent("w-key");
-		this.a.size(
-		consts.small_square_diameter * 1.5,
-		consts.small_square_diameter * 1.5
-		);
-		this.a.parent("a-key");
-		this.s.size(
-		consts.small_square_diameter * 1.5,
-		consts.small_square_diameter * 1.5
-		);
-		this.s.parent("s-key");
-		this.d.size(
-		consts.small_square_diameter * 1.5,
-		consts.small_square_diameter * 1.5
-		);
-		this.d.parent("d-key");
-
-		this.up.size(
-		consts.small_square_diameter * 1.5,
-		consts.small_square_diameter * 1.5
-		);
-		this.up.parent("up-key");
-		this.left.size(
-		consts.small_square_diameter * 1.5,
-		consts.small_square_diameter * 1.5
-		);
-		this.left.parent("left-key");
-		this.down.size(
-		consts.small_square_diameter * 1.5,
-		consts.small_square_diameter * 1.5
-		);
-		this.down.parent("down-key");
-		this.right.size(
-		consts.small_square_diameter * 1.5,
-		consts.small_square_diameter * 1.5
-		);
-		this.right.parent("right-key");
-
-		this.space.size(
-		consts.small_square_diameter * 3,
-		consts.small_square_diameter * 1.5
-		);
-		// this.space.parent("space-key");
-		this.hide();
-	}
-
-	resize() {
-		this.w.size(
-		consts.small_square_diameter * 1.5,
-		consts.small_square_diameter * 1.5
-		);
-		this.a.size(
-		consts.small_square_diameter * 1.5,
-		consts.small_square_diameter * 1.5
-		);
-		this.s.size(
-		consts.small_square_diameter * 1.5,
-		consts.small_square_diameter * 1.5
-		);
-		this.d.size(
-		consts.small_square_diameter * 1.5,
-		consts.small_square_diameter * 1.5
-		);
-
-		this.up.size(
-		consts.small_square_diameter * 1.5,
-		consts.small_square_diameter * 1.5
-		);
-		this.left.size(
-		consts.small_square_diameter * 1.5,
-		consts.small_square_diameter * 1.5
-		);
-		this.down.size(
-		consts.small_square_diameter * 1.5,
-		consts.small_square_diameter * 1.5
-		);
-		this.right.size(
-		consts.small_square_diameter * 1.5,
-		consts.small_square_diameter * 1.5
-		);
-
-		this.space.size(
-		consts.small_square_diameter * 3,
-		consts.small_square_diameter * 1.5
-		);
-	}
-
-	hide() {
-		this.w.hide();
-		this.a.hide();
-		this.s.hide();
-		this.d.hide();
-		this.up.hide();
-		this.left.hide();
-		this.down.hide();
-		this.right.hide();
-		this.space.hide();
+		this.w = p.loadImage("/assets/keys/w-key.gif");
+		this.a = p.loadImage("/assets/keys/tile-a.png");
+		this.s = p.loadImage("/assets/keys/s-key.gif");
+		this.d = p.loadImage("/assets/keys/tile-d.png");
+		this.up = p.loadImage("/assets/keys/up-key.gif");
+		this.left = p.loadImage("/assets/keys/tile-left.png");
+		this.down = p.loadImage("/assets/keys/down-key.gif");
+		this.right = p.loadImage("/assets/keys/tile-right.png");
 	}
 }
 
@@ -2009,7 +1846,6 @@ class Vector {
 		if (game.map) game.map.resize(consts.WIDTH, consts.HEIGHT);
 	}
 	if (buttons) buttons.resize();
-	if (keys) keys.resize();
 	if (inputs) inputs.resize();
 	if (bumpers) for (let bumper of bumpers) bumper.resize();
 	}
@@ -2058,7 +1894,6 @@ class Vector {
 		)
 	);
 
-	keys.init();
 	game = new Game();
 	inputs = new Inputs();
 	errors = new Errors();
@@ -2086,13 +1921,6 @@ class Vector {
 	game.setState("in-menu");
 	game.frame_count_shake = 0;
 	};
-
-	function hideIcons() {
-	keys.hide();
-	consts.MARK_ICON.hide();
-	consts.CROSS_ICON.hide();
-	consts.CROSS_ICON2.hide();
-	}
 
 	p.keyPressed = () => {
 	if (game === null) return;
@@ -2144,7 +1972,6 @@ class Vector {
 		p.translate(Math.floor(p.random(-5, 6)), Math.floor(p.random(-5, 6)));
 	}
 	p.clear(0, 0, 0, 0);
-	hideIcons();
 	p.background(0);
 	if (
 		game.state === "waiting-player" ||
@@ -2433,13 +2260,8 @@ class Vector {
 			: (icon_p2 = consts.CROSS_ICON2);
 		p.pop();
 	}
-	if (icon_p1.parent() !== document.getElementById("icon-player_one"))
-		icon_p1.parent(document.getElementById("icon-player_one"));
-	icon_p1.show();
-
-	if (icon_p2.parent() !== document.getElementById("icon-player_two"))
-		icon_p2.parent(document.getElementById("icon-player_two"));
-	icon_p2.show();
+	p.image(icon_p1, consts.WIDTH * 0.3, consts.HEIGHT * 0.58, consts.small_square_diameter * 1.5, consts.small_square_diameter * 1.5);
+	p.image(icon_p2, consts.WIDTH * 0.80, consts.HEIGHT * 0.58, consts.small_square_diameter * 1.5, consts.small_square_diameter * 1.5);
 	}
 
 	function outputCountdown() {
@@ -2684,23 +2506,28 @@ class Vector {
 	}
 
 	function drawInput() {
-	if (game.players[0].index === 2) {
-		keys.up.show();
-		keys.left.show();
-		keys.down.show();
-		keys.right.show();
-	} else {
-		keys.w.show();
-		keys.a.show();
-		keys.s.show();
-		keys.d.show();
-	}
-
 	if (game.local && !game.ai) {
-		keys.up.show();
-		keys.left.show();
-		keys.down.show();
-		keys.right.show();
+		p.image(keys.up, consts.WIDTH * 0.78 + consts.small_square_diameter * 1.5 / 2, consts.HEIGHT * 0.66 + consts.small_square_diameter * 1.5 / 2, consts.small_square_diameter * 1.5, consts.small_square_diameter * 1.5);
+		p.image(keys.left, consts.WIDTH * 0.71 + consts.small_square_diameter * 1.5 / 2, consts.HEIGHT * 0.75 + consts.small_square_diameter * 1.5 / 2, consts.small_square_diameter * 1.5, consts.small_square_diameter * 1.5);
+		p.image(keys.down, consts.WIDTH * 0.78 + consts.small_square_diameter * 1.5 / 2, consts.HEIGHT * 0.75 + consts.small_square_diameter * 1.5 / 2, consts.small_square_diameter * 1.5, consts.small_square_diameter * 1.5);
+		p.image(keys.right, consts.WIDTH * 0.85 + consts.small_square_diameter * 1.5 / 2, consts.HEIGHT * 0.75 + consts.small_square_diameter * 1.5 / 2, consts.small_square_diameter * 1.5, consts.small_square_diameter * 1.5);
+		p.image(keys.w, consts.WIDTH * 0.21 - consts.small_square_diameter * 1.5 / 2, consts.HEIGHT * 0.16 - consts.small_square_diameter * 1.5 / 2, consts.small_square_diameter * 1.5, consts.small_square_diameter * 1.5);
+		p.image(keys.a, consts.WIDTH * 0.15 - consts.small_square_diameter * 1.5 / 2, consts.HEIGHT * 0.25 - consts.small_square_diameter * 1.5 / 2, consts.small_square_diameter * 1.5, consts.small_square_diameter * 1.5);
+		p.image(keys.s, consts.WIDTH * 0.22 - consts.small_square_diameter * 1.5 / 2, consts.HEIGHT * 0.25 - consts.small_square_diameter * 1.5 / 2, consts.small_square_diameter * 1.5, consts.small_square_diameter * 1.5);
+		p.image(keys.d, consts.WIDTH * 0.29 - consts.small_square_diameter * 1.5 / 2, consts.HEIGHT * 0.25 - consts.small_square_diameter * 1.5 / 2, consts.small_square_diameter * 1.5, consts.small_square_diameter * 1.5);
+	}
+	else {
+		if (game.players[0].index === 2) {
+			p.image(keys.up, consts.WIDTH * 0.78 + consts.small_square_diameter * 1.5 / 2, consts.HEIGHT * 0.66 + consts.small_square_diameter * 1.5 / 2, consts.small_square_diameter * 1.5, consts.small_square_diameter * 1.5);
+			p.image(keys.left, consts.WIDTH * 0.71 + consts.small_square_diameter * 1.5 / 2, consts.HEIGHT * 0.75 + consts.small_square_diameter * 1.5 / 2, consts.small_square_diameter * 1.5, consts.small_square_diameter * 1.5);
+			p.image(keys.down, consts.WIDTH * 0.78 + consts.small_square_diameter * 1.5 / 2, consts.HEIGHT * 0.75 + consts.small_square_diameter * 1.5 / 2, consts.small_square_diameter * 1.5, consts.small_square_diameter * 1.5);
+			p.image(keys.right, consts.WIDTH * 0.85 + consts.small_square_diameter * 1.5 / 2, consts.HEIGHT * 0.75 + consts.small_square_diameter * 1.5 / 2, consts.small_square_diameter * 1.5, consts.small_square_diameter * 1.5);	
+		} else {
+			p.image(keys.w, consts.WIDTH * 0.21 - consts.small_square_diameter * 1.5 / 2, consts.HEIGHT * 0.16 - consts.small_square_diameter * 1.5 / 2, consts.small_square_diameter * 1.5, consts.small_square_diameter * 1.5);
+			p.image(keys.a, consts.WIDTH * 0.15 - consts.small_square_diameter * 1.5 / 2, consts.HEIGHT * 0.25 - consts.small_square_diameter * 1.5 / 2, consts.small_square_diameter * 1.5, consts.small_square_diameter * 1.5);
+			p.image(keys.s, consts.WIDTH * 0.22 - consts.small_square_diameter * 1.5 / 2, consts.HEIGHT * 0.25 - consts.small_square_diameter * 1.5 / 2, consts.small_square_diameter * 1.5, consts.small_square_diameter * 1.5);
+			p.image(keys.d, consts.WIDTH * 0.29 - consts.small_square_diameter * 1.5 / 2, consts.HEIGHT * 0.25 - consts.small_square_diameter * 1.5 / 2, consts.small_square_diameter * 1.5, consts.small_square_diameter * 1.5);
+		}
 	}
 	}
 
