@@ -10,7 +10,6 @@ import { ConfigService } from '@nestjs/config';
 import { FriendUserDto } from './dto/friend-user.dto';
 import { Socket } from 'socket.io';
 import { UsersService } from './users.service';
-import { ClientRequest } from 'http';
 
 @WebSocketGateway({
   cors: {

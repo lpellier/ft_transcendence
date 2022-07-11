@@ -8,27 +8,17 @@ import { PrismaClient, User } from '@prisma/client';
 import * as fs from 'fs/promises';
 import { authenticator } from 'otplib';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { ProfileWithSettings } from './interfaces/profile-with-settings.interface';
 import { Profile } from './interfaces/profile.interface';
 
 @Injectable()
 export class UsersService {
   constructor(private readonly prisma: PrismaClient) {}
 
-  async findOrCreate(profile: any): Promise<User> {
-    let user = await this.findOne(profile.id);
+  async findOrCreateUser(id: number): Promise<User> {
+    let user = await this.findOne(id);
     if (!user) {
-      user = await this.create(profile);
+      user = await this.createUser(id);
     }
-    return user;
-  }
-
-  async getMock() {
-    const user = await this.prisma.user.findUnique({
-      where: {
-        id: 1,
-      },
-    });
     return user;
   }
 
@@ -38,10 +28,10 @@ export class UsersService {
     });
   }
 
-  async create(profile: any): Promise<User> {
+  async createUser(id: number): Promise<User> {
     const user = await this.prisma.user.create({
       data: {
-        id: profile.id,
+        id: id,
         stats: {
           create: {},
         },
@@ -49,7 +39,7 @@ export class UsersService {
     });
     await fs.copyFile(
       '/backend/public/avatars/default.png',
-      '/backend/public/avatars/' + profile.id + '.png',
+      '/backend/public/avatars/' + id + '.png',
     );
     await this.prisma.room.update({
       where: { id: 1 },
@@ -64,10 +54,6 @@ export class UsersService {
     return user;
   }
 
-  async findAll(): Promise<User[]> {
-    return this.prisma.user.findMany();
-  }
-
   async getUserWithStatsAndMatchHistory(id: number): Promise<any> {
     const user = await this.prisma.user.findUnique({
       where: {
@@ -78,25 +64,11 @@ export class UsersService {
         matchHistory: {
           include: {
             players: true,
-          }
-        }
+          },
+        },
       },
     });
     return user;
-  }
-
-  async getProfileWithSettings(id: number): Promise<ProfileWithSettings> {
-    const user = await this.getUserWithStatsAndMatchHistory(id);
-    const profile: ProfileWithSettings = {
-      id: user.id,
-      username: user.username,
-      tfa: user.tfa,
-      victories: user.stats.victories,
-      losses: user.stats.losses,
-      level: user.stats.level,
-      matchHistory: user.matchHistory,
-    };
-    return profile;
   }
 
   async getProfile(id: number): Promise<Profile> {
@@ -111,6 +83,7 @@ export class UsersService {
       losses: user.stats.losses,
       level: user.stats.level,
       matchHistory: user.matchHistory,
+      achievements: user.achievements,
     };
     return profile;
   }
@@ -128,21 +101,19 @@ export class UsersService {
   }
 
   async tryToChangeUsername(id: number, newUsername: string) {
-    const isTaken = await this.prisma.user.findUnique({
-      where: { username: newUsername },
-    });
-    if (isTaken) {
+    try {
+      const user = await this.prisma.user.update({
+        where: {
+          id: id,
+        },
+        data: {
+          username: newUsername,
+        },
+      });
+      return user.username;
+    } catch {
       throw new ConflictException();
     }
-    const user = await this.prisma.user.update({
-      where: {
-        id: id,
-      },
-      data: {
-        username: newUsername,
-      },
-    });
-    return user.username;
   }
 
   async tryToChangeAuthentication(id: number, tfa: boolean) {
@@ -187,13 +158,11 @@ export class UsersService {
   }
 
   async addFriend(userId: number, friendId: number) {
-    const friendIds: number[] = await this.findFriendsIds(userId);
-
     await this.prisma.user.update({
       where: { id: userId },
       data: {
         friendIds: {
-          set: [...friendIds, friendId],
+          push: friendId,
         },
       },
     });
@@ -210,5 +179,27 @@ export class UsersService {
         },
       },
     });
+  }
+
+  async addAchievement(userId: number, achievementId: number) {
+    await this.prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        achievements: {
+          push: achievementId,
+        },
+      },
+    });
+  }
+
+  async getMock() {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id: 1,
+      },
+    });
+    return user;
   }
 }
