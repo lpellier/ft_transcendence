@@ -12,8 +12,6 @@ import { socket } from "index";
 		// ! pressing space in wainting-readiness screen to switch readiness
 	// ? this would be fixed by moving keyPressed content in draw function
 
-	// ! matchmaking now instantly causes an error in backend when clicked
-
 
 // TODO IMPROVEMENTS
 // ? implement better ai
