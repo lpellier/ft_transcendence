@@ -31,7 +31,7 @@ export class FriendsGateway
       friendUserDto.userId,
       friendUserDto.friendId,
     );
-    client.emit('add friend');
+    return true;
   }
 
   @SubscribeMessage('remove friend')
@@ -43,7 +43,7 @@ export class FriendsGateway
       friendUserDto.userId,
       friendUserDto.friendId,
     );
-    client.emit('add friend');
+    return true;
   }
 
   @SubscribeMessage('get friends')
@@ -53,7 +53,7 @@ export class FriendsGateway
   ) {
     const friendsIds: number[] = await this.usersService.findFriendsIds(userId);
     const friends = await this.usersService.findFriends(friendsIds);
-    client.emit('get friends', friends);
+    return friends;
   }
 
   handleConnection(@ConnectedSocket() client: Socket) {
