@@ -17,7 +17,7 @@ import {useState} from 'react'
 import Button from '@mui/material/Button';
 import axios from 'axios'
 import { ImageIdContext } from 'App';
-import {toastThatError} from '../../../routes/routes'
+import {toastThatError, toastIt} from '../../../routes/routes'
 
 const Input = styled('input')({
 	display: 'none',
@@ -75,6 +75,10 @@ function UploadButton(props: {setOpen: any}) {
 			toastThatError('Avatar upload failed')
 		})
 
+		if (window.localStorage.getItem('TROPHY_AVATAR') === null) {
+			window.localStorage.setItem('TROPHY_AVATAR', "true");
+			toastIt('You have unlocked a trophy !')
+		}
 		props.setOpen(false)
 	};
 

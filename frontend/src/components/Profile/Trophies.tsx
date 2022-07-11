@@ -9,7 +9,7 @@ import Frankencat from "../../images/Trophies/frankencat.png"
 
 const ImgStyle = {
 	width: "4vw",
-	height: "4vh",
+	height: "4vw",
 	border: "2px solid black",
 
 	padding: 3,
@@ -23,44 +23,49 @@ const ATrophyStyle = {
 	alignItems: 'center'
 }
 
-function ATrophie(props: {image: string, label: string}) {
+function ATrophie(props: {image: string, title: string, label: string}) {
   return (
 		<Stack direction="row" sx={ATrophyStyle} spacing={2}>
 			<img src={props.image} style={ImgStyle} />
-			<Typography variant="h6" color="black">
-				{props.label}
-			</Typography>
+			<Stack>
+				<Typography variant="subtitle2">
+					{props.title}
+				</Typography>
+				<Typography variant="subtitle1" color="black">
+					{props.label}
+				</Typography>
+			</Stack>
 		</Stack>
   );
 }
 
 function OneWinTrophy() {
 	return (
-		<ATrophie image={Star} label="You're the star, man!" />
+		<ATrophie image={Star} label="You're the star, man!" title="First win" />
   	);
 }
 
 function ThreeWinsTrophy() {
 	return (
-		<ATrophie image={ThreeStars} label="Like taking candy to a baby!" />
+		<ATrophie image={ThreeStars} label="Like taking candy to a baby!" title="Three wins" />
   	);
 }
 
 function QuitTrophy() {
 	return (
-		<ATrophie image={TheQuitter} label="Baby please don't go" />
+		<ATrophie image={TheQuitter} label="Baby please don't go" title="Quit the game"/>
   	);
 }
 
 function ChangeNameTrophy() {
 	return (
-		<ATrophie image={Gandalf} label="Many are my names!" />
+		<ATrophie image={Gandalf} label="Many are my names!" title="Changed name"/>
   	);
 }
 
 function ChangeAvatarTrophy() {
 	return (
-		<ATrophie image={Frankencat} label="He has changed, for sure" />
+		<ATrophie image={Frankencat} label="He has changed, for sure" title="Changed avatar"/>
   	);
 }
 

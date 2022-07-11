@@ -10,7 +10,6 @@ export class StatsService {
 			orderBy: {
 				victories: 'desc',
 			}, 
-			take : 3,
 		});
 	}
 }

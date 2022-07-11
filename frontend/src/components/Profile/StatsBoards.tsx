@@ -65,7 +65,7 @@ function StatsBox(props: {user: User}){
 	);
 }
 	
-function TrophyBox(){
+function TrophyBox(props: {user: User}) {
 
 		return(
 			<Stack spacing={1}>
@@ -73,12 +73,27 @@ function TrophyBox(){
 					icon={<EmojiEventsIcon />}
 					title="Trophy" />
 				<Box sx={StatBox}>
-					<Stack spacing={2}>
-						<ChangeAvatarTrophy /> 
-						<ChangeNameTrophy /> 
-						<QuitTrophy /> 
+					<Stack spacing={1}>
+					{props.user.victories > 0 ?
 						<OneWinTrophy /> 
+						:
+						<div />}
+					{props.user.victories > 3 ?
 						<ThreeWinsTrophy />
+							:
+						<div />}
+					{/* {props.quit === true ? */}
+						{/* <QuitTrophy /> */}
+							{/* : */}
+						{/* <div />} */}
+					{window.localStorage.getItem('TROPHY_NAME') === "true" ? 
+						<ChangeNameTrophy /> 
+							:
+						<div />}
+					{window.localStorage.getItem('TROPHY_AVATAR') === "true" ?
+						<ChangeAvatarTrophy />
+							:
+						<div />}
 					</Stack>
 				</Box>
 			</Stack>
@@ -206,7 +221,7 @@ export default function StatsBoards(props: {user: User, users: User[]}) {
 		<Stack direction="row" spacing={1}>
 				<Stack spacing={1}>
 					<StatsBox user={props.user}/>
-					<TrophyBox />
+					<TrophyBox user={props.user}/>
 				</Stack>
 				<Stack spacing={1}>
 					<LeaderboardBox users={props.users}/>

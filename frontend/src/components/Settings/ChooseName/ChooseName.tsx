@@ -11,7 +11,7 @@ import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutli
 import {ModalChooseName} from '../../../styles/tsxStyles/Settings/Name'
 import {ButtonModalStyle, IconStyle} from '../../../styles/tsxStyles/AppBar/PongMenu'
 import {User} from 'interfaces'
-import {toastThatError} from '../../../routes/routes'
+import {toastThatError, toastIt} from '../../../routes/routes'
 
 function NameButton() {
 	return (
@@ -60,6 +60,11 @@ function NameInput(props: {username: string, setter: any, setOpen: any, setUser:
 		.catch(err => {
 			toastThatError('invalid username');
 		});
+
+		if (window.localStorage.getItem('TROPHY_NAME') === null) {
+			window.localStorage.setItem('TROPHY_NAME', "true");
+			toastIt('You have unlocked a trophy !')
+		}
 	}
 
 	return (
