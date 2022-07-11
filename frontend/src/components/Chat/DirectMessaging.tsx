@@ -14,6 +14,8 @@ import Games from '@mui/icons-material/Games';
 import { Backdrop, ButtonGroup, IconButton, Button, Stack, Alert, Tooltip } from '@mui/material';
 import {Link} from 'react-router-dom';
 import { toastThatError } from 'routes/routes';
+import axios from 'axios';
+
 
 interface CreateDMRoomDto {
     name: string;
@@ -155,6 +157,11 @@ export default function DirectMessaging(props: {user: User, users: User[], rooms
         }
 
         function    goToProfile(user: User | undefined) {
+            // axios.get("http://127.0.0.1:3001/users/"+user?.id.toString(),
+            // { withCredentials: true })
+            // .then((res) => { props.setOtherUser(res.data) })
+            // .catch(err => { console.log("Get user failed : ", err)})
+            // ;
             props.setOtherUser(user);
         }
 

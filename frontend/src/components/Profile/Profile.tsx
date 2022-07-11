@@ -67,6 +67,7 @@ function PlayerInfoBand(props: {level: number, user: User}) {
 
 export default function Profile(props: {user: User | undefined, users: User[]}) {
 
+	console.log('user = ', props.user);
     return (
 		<Box sx={OverallBoxStyle}>
 			{props.user?
