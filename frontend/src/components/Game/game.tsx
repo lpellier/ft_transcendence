@@ -5,6 +5,7 @@
 	import { audio_files } from "routes/Game"
 
 	// TODO ISSUES
+	// ? user exit on another page not registered anymore
 	// ? i think bounce angle is bigger when bounced on top of paddle than on bottom, weird stuff
 	// ? game doesnt update username if changed because getting the username once in setup, should check periodically if it's still the same
 
@@ -945,6 +946,7 @@
 	hover_spectator: boolean;
 
 	frame_count_shake: number;
+	ready : boolean;
 
 	constructor() {
 		this.players = [];
@@ -962,6 +964,7 @@
 		this.spectator = false;
 		this.hover_spectator = false;
 		this.frame_count_shake = 0;
+		this.ready = false;
 	}
 
 	reset() {
@@ -970,6 +973,7 @@
 		this.score_limit = 10;
 		this.timer = 3;
 		this.state = "in-menu";
+		console.log("alo");
 		this.room_id = "null";
 		this.publicity = "public";
 		this.local = false;
@@ -979,6 +983,7 @@
 		this.spectator = false;
 		this.hover_spectator = false;
 		this.frame_count_shake = 0;
+		this.ready = false;
 	}
 
 	over(): boolean {
@@ -1681,9 +1686,11 @@ class Vector {
 			else if (error === "already_in_game") errors.already_in_game = true;
 		});
 
-		socket.on("please send back", (data: any) => {
+		socket.on("please send back", (data : any) => {
+			console.log("please send back");
 			if (data.name === user_name) {
-			socket.emit("socket response", data);
+				console.log ("sending response")
+				socket.emit("socket response", data);
 			}
 		});
 
@@ -1697,13 +1704,12 @@ class Vector {
 			real_id_p1: number,
 			real_id_p2: number
 			) => {
-			console.log("waiting readiness");
 			if (game.players.length === 2) {
 				if (game.players[1].id === "null") game.players[1].id = id_p2;
 				if (game.players[1].username === "null")
-				game.players[1].username = name_p2;
+					game.players[1].username = name_p2;
 				if (game.players[1].real_id === 0)
-				game.players[1].real_id = real_id_p2;
+					game.players[1].real_id = real_id_p2;
 				game.setState("waiting-readiness");
 			}
 			if (game.players.length === 0) {
@@ -1716,7 +1722,10 @@ class Vector {
 				game.players.push(new Player(1, id_p1, name_p1, real_id_p1));
 				}
 				game.pong = new Pong();
+				console.log("CREATED PONG")
 			}
+			game.ready = true;
+			console.log("game :", game);
 			}
 		);
 
@@ -1932,8 +1941,13 @@ class Vector {
 		socket.emit("find_game", inputs.join.value(), game.spectator);
 	}
 	}
-
+	
 	p.draw = () => {
+		if (game.ready && game.state != "waiting-readiness") {
+		console.log("ready switch");
+		game.ready = false;
+		game.setState("waiting-readiness");
+	}
 	if (p.keyIsDown(32)) {
 		for (let player of game.players) {
 		player.moveName();
@@ -2068,6 +2082,8 @@ class Vector {
 			"white"
 		);
 	} else if (game.state === "waiting-player") {
+		if (!game)
+			game = new Game();
 		if (game.spectator) drawSpectate();
 		buttons.return.show();
 		p.image(

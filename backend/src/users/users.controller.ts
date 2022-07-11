@@ -32,7 +32,7 @@ export class UsersController {
   @Get('me')
   async findMe(@Req() req): Promise<ProfileWithSettings> {
     const user: any = await this.usersService.getProfileWithSettings(req.user.id);
-    console.log(user);
+    // console.log(user);
     return user;
   }
 

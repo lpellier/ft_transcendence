@@ -168,7 +168,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect
 		const allUsers =  await this.chatService.getAllUsers();
 		this.server.emit('new user', allUsers);
 		this.server.emit('new connection', newUserDto.userId);
-		console.log('socket user', socketUser);
+		// console.log('socket user', socketUser);
 		let online: number[] = [];
 		socketUser.forEach((value, key) => {
 			online.push(value);

@@ -106,7 +106,6 @@ export class GameGateway {
 
 	@SubscribeMessage("quit-ongoing-game") // ? triggers when player quits by going somewhere else on the website
 	handleQuitOngoing(@ConnectedSocket() client : Socket) {
-		console.log("quit ongoing game")
 		for (let game of this.games) {
 			for (let player of game.players) {
 				if (player.id === client.id) {
@@ -151,7 +150,6 @@ export class GameGateway {
 	getConnection(@MessageBody() data : [string, string, string]) {
 		this.clients.push(data[0]);
 		this.users.push([data[1], data[2]]);
-		console.log("my_id", data);
 	}
 
     //[ {
@@ -163,31 +161,31 @@ export class GameGateway {
 
 	@SubscribeMessage('socket response')
 	async handleSocketResponseInvitation(@ConnectedSocket() client : Socket, @MessageBody() data : any) {
-		for (let i = 0; i < this.games.length; i++) {
-			if (this.games[i].room_id === data.r_id) {
-				this.games[i].connected_sockets++;
-				client.join(this.games[i].room_id);
-				this.games[i].addPlayer(client.id, [data.id.toString(), data.name]);
-				this.server.to(this.games[i].room_id).emit("waiting-player", this.games[i].room_id, this.games[i].score_limit, this.games[i].map.name);
-				if (this.games[i].connected_sockets === 2) {
-					this.games[i].state = "waiting-readiness";
-					this.server.to(this.games[i].room_id).emit("waiting-readiness", this.games[i].players[0].id, this.games[i].players[1].id, this.games[i].players[0].real_name, this.games[i].players[1].real_name, this.games[i].players[0].real_id, this.games[i].players[1].real_id);			
-				}
+		console.log("socket response")
+		for (let game of this.games) {
+			if (game.room_id === data.r_id) {
+				client.join(game.room_id);
+				game.addPlayer(client.id, [data.id.toString(), data.name]);
+				console.log("found room", game.players)
+				this.server.to(game.room_id).emit("waiting-player", game.room_id, game.score_limit, game.map.name);
+				game.state = "waiting-readiness";
+				this.server.to(game.room_id).emit("waiting-readiness", game.players[0].id, game.players[1].id, game.players[0].real_name, game.players[1].real_name, game.players[0].real_id, game.players[1].real_id);
 			}
 		}
 	}
 
 	@SubscribeMessage('accepted game')
-	async handleInviteCreationGame(@MessageBody() data : [any, number]) {
+	async handleInviteCreationGame(@ConnectedSocket() client : Socket, @MessageBody() data : [any, number]) {
 		this.server.to(data[0].inviterId).emit("accepted game");
 		let user1 = await this.game_service.getUsername(data[0].userId);
 		let user2 = await this.game_service.getUsername(data[1]);
-		this.games.push(new Game(utils.randomRoomId()));
-		let game = this.games[this.games.length - 1];
+		let game = new Game(utils.randomRoomId());
+		this.games.push(game);
 
-		this.server.emit("please send back", {name : user1, id : data[0].userId, r_id : game.room_id});
-		this.server.emit("please send back", {name : user2, id : data[1], r_id : game.room_id});
-		// ? need to get sockets so sending an event to ids
+		client.join(game.room_id);
+		game.addPlayer(client.id, [data[1].toString(), user2]);
+		console.log("player ", game.players)
+		this.server.emit("please send back", {id : data[0].userId, name : user1, r_id : game.room_id});
 	}
 
 	@SubscribeMessage('matchmaking')
@@ -196,7 +194,6 @@ export class GameGateway {
 		@MessageBody() data : [string, boolean, number, string]
 	) {
 		let existing_game : Game = null;
-		console.log("test :", this.users[this.clients.indexOf(client.id)]);
 		if (data[0] === "public" && data[1])
 			existing_game = existingEmptyGame(this.games, this.users[this.clients.indexOf(client.id)][1]);
 		
