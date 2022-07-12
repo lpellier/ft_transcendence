@@ -75,7 +75,7 @@ export class Game {
 		this.spectators.push(id);
 	}
 
-	addPlayer(id: any, user : [string, string]) {
+	addPlayer(id: any, user : [string, string, boolean]) {
 		for (let player of this.players)
 			if (player.id === id)
 				return ;

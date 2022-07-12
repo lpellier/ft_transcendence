@@ -5,6 +5,7 @@
 	import { audio_files } from "routes/Game"
 
 	// TODO ISSUES
+	// ? when player leaves website during wait readiness phase, doesnt quite work all of the time
 	// ? i think bounce angle is bigger when bounced on top of paddle than on bottom, weird stuff
 	// ? game doesnt update username if changed because getting the username once in setup, should check periodically if it's still the same
 
@@ -13,6 +14,8 @@
 	// ? cute animation showing the roll of pong value in casino
 
 	export const Sketch = (p: any) => {
+	let sent_back : boolean = false;
+
 	let spritesheet: any;
 	let spritedata: any;
 
@@ -1682,8 +1685,14 @@ class Vector {
 		});
 
 		socket.on("please send back", (data : any) => {
-			if (data.name === user_name)
+			if (data.name === user_name && !sent_back) {
+				console.log("username", user_name)
 				socket.emit("socket response", data);
+				sent_back = true;
+				setTimeout(() => {
+					sent_back = false;
+				}, 2000);
+			}
 		});
 
 		socket.on(
@@ -1863,6 +1872,13 @@ class Vector {
 	};
 
 	p.setup = () => {
+	let user_dom = document.getElementById("user");
+	if (user_dom) {
+		user_name = user_dom.getAttribute("user_name");
+		user_id = user_dom.getAttribute("user_id"); 
+	}
+	
+	socket.emit("my_id", socket.id, user_id, user_name);
 	let frames = spritedata.frames;
 	for (let i = 0; i < frames.length; i++) {
 		let pos = frames[i].position;
@@ -1895,11 +1911,6 @@ class Vector {
 	errors = new Errors();
 	buttons = new Buttons();
 		
-	let user_dom = document.getElementById("user");
-	if (user_dom) {
-		user_name = user_dom.getAttribute("user_name");
-		user_id = user_dom.getAttribute("user_id"); 
-	}
 
 	canvas = p.createCanvas(consts.WIDTH, consts.HEIGHT);
 	canvas.parent(document.getElementById("canvas-parent"));
@@ -1907,13 +1918,15 @@ class Vector {
 	p.textFont(consts.FONT);
 	p.frameRate(60);
 
-	socket.emit("my_id", socket.id, user_id, user_name);
 
 	listenStartEvents();
 	listenStopEvents();
 	listenMoveEvents();	
 
 	resizeEverything();
+	// ? server keeps a boolean for each client to tell if they've loaded fully or not
+	// ? so that when they are, it can send them to matches for invitation
+	socket.emit("finished loading");
 	};
 
 	p.keyPressed = () => {
@@ -2310,11 +2323,10 @@ class Vector {
 	}
 
 	function opponentLeftMenu() {
-	if (!document.getElementById("canvas-parent"))
-		return;
 	game.setState("opponent-left-menu");
 	buttons.hide();
-	buttons.opponent_left_ok.parent().style["z-index"] = 2; // deal with buttons overlapping
+	if (buttons.opponent_left_ok.parent())
+		buttons.opponent_left_ok.parent().style["z-index"] = 2; // deal with buttons overlapping
 	buttons.opponent_left_ok.show();
 	}
 
