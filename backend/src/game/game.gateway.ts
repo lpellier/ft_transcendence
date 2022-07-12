@@ -92,7 +92,6 @@ export class GameGateway {
 								this.game_service.createMatch({ladder: 0, winnerId : game.players[0].real_id, loserId: game.players[1].real_id, score: game.score});
 							}
 							this.game_service.incrementLosses(player.real_id, game.score[game.players.indexOf(player)]);
-							this.usersService.addAchievement(player.real_id, 2);
 						}
 						game.state = "game-over"
 						this.server.emit("new disconnection", game.players[game.players.indexOf(player)].real_id);
@@ -123,6 +122,8 @@ export class GameGateway {
 							this.game_service.createMatch({ladder: 0, winnerId : game.players[0].real_id, loserId: game.players[1].real_id, score: game.score});
 						}
 						this.game_service.incrementLosses(player.real_id, game.score[game.players.indexOf(player)]);
+						console.log("REAL ID", player.real_id);
+						this.usersService.addAchievement(player.real_id, 2);
 					}
 					game.state = "game-over"
 					this.server.emit("quit-game", game.players[0].real_id)
