@@ -144,7 +144,8 @@ export default function AllRoutes()  {
     }, [user])
 
     useEffect(() => {
-		axios.get('http://127.0.0.1:3001/users/me',{
+		axios.get(process.env.REACT_APP_BACK_URL + '/users/me',
+        {
             withCredentials: true
         })
         .then(res => {

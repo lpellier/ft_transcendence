@@ -7,7 +7,6 @@ import {User} from 'interfaces'
 import {PlayerBarStyle, SkillBarContourStyle, TitleStyle} from "../../styles/tsxStyles/Home";
 import './../../styles/Other/SkillBar.css'
 import {PlayerAvatar} from	'../Avatars';
-import axios from 'axios'
 
 const OverallBoxStyle = {
 	paddingTop: '4vh',
@@ -49,7 +48,7 @@ function PlayerInfoBand(props: {level: number, user: User}) {
 			<Box sx={PlayerBarStyle}>
 				<Stack >
 					<Stack direction="row" spacing={35}>
-						<PlayerAvatar image={'http://127.0.0.1:3001/avatars/' + props.user.id + '.png'} onClick={ () => {} }/>
+						<PlayerAvatar image={process.env.REACT_APP_BACK_URL + '/avatars/' + props.user.id + '.png'} onClick={ () => {} }/>
 						<Stack spacing={1} >
 							<Typography variant="h5">
 							 	{props.user.username}

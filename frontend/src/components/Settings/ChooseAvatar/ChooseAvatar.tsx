@@ -1,6 +1,5 @@
 import Stack from '@mui/material/Stack';
 import Container from '@mui/material/Container';
-import DotsMobileStepper from './Stepper'
 import {User} from 'interfaces'
 import Box from '@mui/material/Box';
 import FaceIcon from '@mui/icons-material/Face'
@@ -59,7 +58,7 @@ function UploadButton(props: {setOpen: any}) {
 		const formData = new FormData();
 		formData.append('avatar', selectedFile)
 
-		axios.put("http://127.0.0.1:3001/users/upload-avatar",
+		axios.put(process.env.REACT_APP_BACK_URL + "/users/upload-avatar",
 		formData,
 		{
 			withCredentials: true,
@@ -203,7 +202,6 @@ export default function AvatarList(props: {user: User}){
         	  <Box sx={ModalChooseAvatar}>
         	    <Container>
         	      <Stack spacing={2} style={{justifyContent: 'center'}}>
-        	            {/* <DotsMobileStepper /> */}
         	            <ChooseAvatarButton user={props.user} setOpenOne={setOpen}/>
         	      </Stack>
         	    </Container>

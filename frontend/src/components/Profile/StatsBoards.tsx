@@ -11,7 +11,7 @@ import UpdateIcon from '@mui/icons-material/Update';
 import {StatTitle, StatBox, MatchHistoryBox} from "../../styles/tsxStyles/Home"
 import {Stats} from 'interfaces'
 import axios from 'axios'
-import { Table, TableHead, TableBody, TableRow, TableCell } from '@mui/material';
+import { Table, TableBody, TableRow, TableCell } from '@mui/material';
 
 const ButtonLeadStyle = {
 	backgroundColor: "rgb(170, 50, 190)",
@@ -83,7 +83,7 @@ function LeaderboardBox(props: {users: User[]}){
 	useEffect(() => {
 		
 		axios.get(
-			"http://127.0.0.1:3001/stats/lead",
+			process.env.REACT_APP_BACK_URL + "/stats/lead",
 			{
 				withCredentials: true
 			}
@@ -169,7 +169,7 @@ function MatchhistoryBox(props: {user: User}){
 					<Table>
 						<TableBody>
 							{props.user.matchHistory.map(match => (
-								<TableRow key={match.id} style={{backgroundColor: match.winnerId == props.user.id? successColor: failColor}}>
+								<TableRow key={match.id} style={{backgroundColor: match.winnerId === props.user.id? successColor: failColor}}>
 									<TableCell>
 										<Typography>{match.players[0].username}</Typography>
 									</TableCell>
