@@ -35,7 +35,7 @@ function PinField(props: {value: string, setPininput: any, setRedirect: any, set
 		if (hasSubmitted === true) {
 
 			axios.post(
-			'http://127.0.0.1:3001/auth/google-authenticator', 
+			process.env.REACT_APP_BACK_URL + '/auth/google-authenticator', 
 			props.value,
 			{
 				withCredentials: true, 

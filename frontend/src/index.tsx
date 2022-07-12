@@ -9,7 +9,7 @@ const phoneSize = 530;
 
 const root = createRoot(document.getElementById("root")!);
 
-const SERVER = "http://127.0.0.1:3001";
+const SERVER = process.env.REACT_APP_BACK_URL || "";
 export const socket = io(SERVER, {
   withCredentials: true,
 });
