@@ -231,8 +231,8 @@ export default function AllRoutes()  {
             />
             { navigate? <Navigate replace to="/game" /> : <div/> }
             <Routes>
-                <Route path="login" element={<LogIn user={user} auth={isAuth}/>} />
-                <Route path="tfauth" element={<TFAuth setAuth={setAuth}/>} />
+                <Route path="/login" element={<LogIn user={user} auth={isAuth}/>} />
+                <Route path="/tfauth" element={<TFAuth setAuth={setAuth}/>} />
                 <Route path="/" element={ <ProtectedRoute auth={isAuth}><App user={user} users={users} setOtherUser={setOtherUser} statusMap={statusMap} setStatusMap={setStatusMap}/></ProtectedRoute>}>
                     <Route path="profile" element={ < Profile user={otherUser} users={users}/>}/>
                     <Route path="chat" element={<Chat user={user} users={users} setOtherUser={setOtherUser} statusMap={statusMap}/>}/>
