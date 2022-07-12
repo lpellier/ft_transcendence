@@ -1,5 +1,4 @@
 import {
-    BrowserRouter,
     Routes,
     Route,
     Navigate,
@@ -21,7 +20,7 @@ import Snackbar from '@mui/material/Snackbar';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import Button from '@mui/material/Button';
-
+import NotFound from "./NotFound";
 
 
 export function toastThatError(message: string) {
@@ -50,15 +49,10 @@ export function toastIt(message: string) {
 
 function ProtectedRoute(props: {children: JSX.Element, auth: any}) {
 
-	if (props.auth === true) {
-		return (
-			<>{props.children}</>
-		)}
-    else {
-        return (
-        	console.log("Cannot login"),
-        	<Navigate replace to="/login" />
-		)}
+	if (props.auth === false) {
+        return <Navigate replace to="/login" />;
+    }
+    return props.children
 }
 
 export default function AllRoutes()  {
@@ -221,32 +215,27 @@ export default function AllRoutes()  {
     );
 
 	return (
-		<div>
-		     <ToastContainer />
-		<BrowserRouter>
+        <div>
+            <ToastContainer />
             <Snackbar
                 open={open}
                 onClose={handleClose}
                 message={`You have been invited to play a game with ${users.find(user => user?.id === invite?.userId)?.username}`}
                 action={action}
             />
-            {navigate?
-                <Navigate replace to="/game" />
-            :
-                <div/>
-            }
-	        <Routes>
-	            <Route path="/login" element={<LogIn user={user} auth={isAuth}/>} />
-				<Route path="tfauth" element={<TFAuth setAuth={setAuth}/>} />
-	            <Route path="/" element={ <ProtectedRoute auth={isAuth}><App user={user} users={users} setOtherUser={setOtherUser} statusMap={statusMap} setStatusMap={setStatusMap}/></ProtectedRoute>}>
-					<Route path="profile" element={ < Profile user={otherUser} users={users}/>}/>
-					<Route path="chat" element={<Chat user={user} users={users} setOtherUser={setOtherUser} statusMap={statusMap}/>}/>
-					<Route path="game" element={<Game user={user} navigate={navigate} setNavigate={setNavigate}/> }/>
-					<Route path="settings" element={<Settings user={user} setUser={setUser}/>}/>
-				</Route>
-			</Routes>
+            { navigate? <Navigate replace to="/game" /> : <div/> }
+            <Routes>
+                <Route path="/login" element={<LogIn user={user} auth={isAuth}/>} />
+                <Route path="/tfauth" element={<TFAuth setAuth={setAuth}/>} />
+                <Route path="/" element={ <ProtectedRoute auth={isAuth}><App user={user} users={users} setOtherUser={setOtherUser} statusMap={statusMap} setStatusMap={setStatusMap}/></ProtectedRoute>}>
+                    <Route path="profile" element={ <Profile user={otherUser} users={users}/>}/>
+                    <Route path="chat" element={<Chat user={user} users={users} setOtherUser={setOtherUser} statusMap={statusMap}/>}/>
+                    <Route path="game" element={<Game user={user} navigate={navigate} setNavigate={setNavigate}/> }/>
+                    <Route path="settings" element={<Settings user={user} setUser={setUser}/>}/>
+                </Route>
+                <Route path="*" element={<NotFound />} />
+            </Routes>
 
-	    </BrowserRouter>
 		</div>
 	)
 }

@@ -26,12 +26,11 @@ function NameButton() {
 }
 
 function NameInput(props: {username: string, setter: any, setOpen: any, setUser: React.Dispatch<React.SetStateAction<User | undefined>>}) {
-	const [isSubmitted, setIsSubmitted] = useState<boolean>(false)
 	const [value, setValue] = useState<string>("")
 
 	function closeModal() {props.setOpen(false)}
 
-	function handleSubmit(e: any) {setIsSubmitted(true)}
+	function handleSubmit(e: any) {PatchRequest()}
 
 	function PatchRequest() {
 
@@ -60,6 +59,7 @@ function NameInput(props: {username: string, setter: any, setOpen: any, setUser:
 		.catch(err => {
 			toastThatError('invalid username');
 		});
+
 	}
 
 	return (
@@ -92,11 +92,6 @@ function NameInput(props: {username: string, setter: any, setOpen: any, setUser:
 					</Stack>
 				</form>
 				</Stack>
-				{isSubmitted === true?
-					PatchRequest()
-					:
-					<div/>
-				}
 			</div>
 	);
 }
