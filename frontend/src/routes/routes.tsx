@@ -1,5 +1,4 @@
 import {
-    BrowserRouter,
     Routes,
     Route,
     Navigate,
@@ -50,15 +49,10 @@ export function toastIt(message: string) {
 
 function ProtectedRoute(props: {children: JSX.Element, auth: any}) {
 
-	if (props.auth === true) {
-		return (
-			<>{props.children}</>
-		)}
-    else {
-        return (
-        	console.log("Cannot login"),
-        	<Navigate replace to="/login" />
-		)}
+	if (props.auth === false) {
+        return <Navigate replace to="/login" />;
+    }
+    return props.children
 }
 
 export default function AllRoutes()  {
@@ -234,7 +228,7 @@ export default function AllRoutes()  {
                 <Route path="/login" element={<LogIn user={user} auth={isAuth}/>} />
                 <Route path="/tfauth" element={<TFAuth setAuth={setAuth}/>} />
                 <Route path="/" element={ <ProtectedRoute auth={isAuth}><App user={user} users={users} setOtherUser={setOtherUser} statusMap={statusMap} setStatusMap={setStatusMap}/></ProtectedRoute>}>
-                    <Route path="profile" element={ < Profile user={otherUser} users={users}/>}/>
+                    <Route path="profile" element={ <Profile user={otherUser} users={users}/>}/>
                     <Route path="chat" element={<Chat user={user} users={users} setOtherUser={setOtherUser} statusMap={statusMap}/>}/>
                     <Route path="game" element={<Game user={user} navigate={navigate} setNavigate={setNavigate}/> }/>
                     <Route path="settings" element={<Settings user={user} setUser={setUser}/>}/>
