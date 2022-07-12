@@ -5,13 +5,11 @@
 	import { audio_files } from "routes/Game"
 
 	// TODO ISSUES
-	// ? user exit on another page not registered anymore
 	// ? i think bounce angle is bigger when bounced on top of paddle than on bottom, weird stuff
 	// ? game doesnt update username if changed because getting the username once in setup, should check periodically if it's still the same
 
 	// TODO IMPROVEMENTS
 	// ? implement better ai
-
 	// ? cute animation showing the roll of pong value in casino
 
 	export const Sketch = (p: any) => {
@@ -1632,6 +1630,7 @@ class Vector {
 		socket.on(
 			"waiting-player",
 			(r_id: string, score_limit: number, map: string) => {
+			game = new Game();
 			game.room_id = r_id;
 			game.score_limit = score_limit;
 			errors.set_false();
@@ -1929,8 +1928,10 @@ class Vector {
 	}
 	
 	p.draw = () => {
-		if (!document.getElementById("canvas-parent"))
+		if (!document.getElementById("canvas-parent")) {
+			socket.emit("quit-ongoing-game");
 			p.remove();
+		}
 
 	audio_files.playAppropriateMusic(game.state, game.map.name);
 	p.push();
