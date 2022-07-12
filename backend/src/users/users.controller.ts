@@ -52,7 +52,9 @@ export class UsersController {
       },
     }),
   )
-  uploadAvatar(@UploadedFile() file: Express.Multer.File) {}
+  uploadAvatar(@Req() req, @UploadedFile() file: Express.Multer.File) {
+    this.usersService.addAchievement(req.user.id, 3);
+  }
 
   @Get(':id')
   async findOne(@Param() params: UserParams): Promise<Profile> {
