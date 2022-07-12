@@ -21,6 +21,50 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import Button from '@mui/material/Button';
 import NotFound from "./NotFound";
+import React from "react";
+
+
+interface AuthContextType {
+    id: number;
+    checkStatus: () => void;
+}
+
+let AuthContext = React.createContext<AuthContextType>(null!);
+
+function AuthProvider({ children }: { children: React.ReactNode}) {
+    let [id, setId] = React.useState<number>(0);
+
+    let checkStatus = () => {
+        axios.get(process.env.REACT_APP_BACK_URL + "/users/me",
+        {
+            withCredentials: true
+        }).then(res => {
+        setId(res.data.id);
+        console.log("THIS IS A TEST", res.data.id)
+        console.log("hiho", id)
+        })
+        .catch(err => console.log("THIS TOO IS A TEST", err))
+    }
+
+    let value = {id, checkStatus};
+
+    return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
+}
+
+function useAuth() {
+    return React.useContext(AuthContext);
+}
+
+function RequireAuth({ children }: {children: JSX.Element}) {
+    let auth = useAuth();
+
+    useEffect( () => auth.checkStatus());
+	if (!auth.id) {
+        console.log("PASSED BY HERE");
+        return <Navigate replace to="/login" />;
+    }
+    return children
+}
 
 
 export function toastThatError(message: string) {
@@ -47,13 +91,6 @@ export function toastIt(message: string) {
         });
 }
 
-function ProtectedRoute(props: {children: JSX.Element, auth: any}) {
-
-	if (props.auth === false) {
-        return <Navigate replace to="/login" />;
-    }
-    return props.children
-}
 
 export default function AllRoutes()  {
 
@@ -225,18 +262,19 @@ export default function AllRoutes()  {
                 action={action}
             />
             { navigate? <Navigate replace to="/game" /> : <div/> }
-            <Routes>
-                <Route path="/login" element={<LogIn user={user} auth={isAuth}/>} />
-                <Route path="/tfauth" element={<TFAuth setAuth={setAuth}/>} />
-                <Route path="/" element={ <ProtectedRoute auth={isAuth}><App user={user} users={users} setOtherUser={setOtherUser} statusMap={statusMap} setStatusMap={setStatusMap}/></ProtectedRoute>}>
-                    <Route path="profile" element={ <Profile user={otherUser} users={users}/>}/>
-                    <Route path="chat" element={<Chat user={user} users={users} setOtherUser={setOtherUser} statusMap={statusMap}/>}/>
-                    <Route path="game" element={<Game user={user} navigate={navigate} setNavigate={setNavigate}/> }/>
-                    <Route path="settings" element={<Settings user={user} setUser={setUser}/>}/>
-                </Route>
-                <Route path="*" element={<NotFound />} />
-            </Routes>
-
+            <AuthProvider>
+                <Routes>
+                    <Route path="/login" element={<LogIn user={user} auth={isAuth}/>} />
+                    <Route path="/tfauth" element={<TFAuth setAuth={setAuth}/>} />
+                    <Route path="/" element={ <RequireAuth><App user={user} users={users} setOtherUser={setOtherUser} statusMap={statusMap} setStatusMap={setStatusMap}/></RequireAuth>}>
+                        <Route path="profile" element={ <Profile user={otherUser} users={users}/>}/>
+                        <Route path="chat" element={<Chat user={user} users={users} setOtherUser={setOtherUser} statusMap={statusMap}/>}/>
+                        <Route path="game" element={<Game user={user} navigate={navigate} setNavigate={setNavigate}/> }/>
+                        <Route path="settings" element={<Settings user={user} setUser={setUser}/>}/>
+                    </Route>
+                    <Route path="*" element={<NotFound />} />
+                </Routes>
+            </AuthProvider>
 		</div>
 	)
 }
