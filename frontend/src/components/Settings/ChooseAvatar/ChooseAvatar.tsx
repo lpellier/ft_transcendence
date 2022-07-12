@@ -16,7 +16,7 @@ import {useState} from 'react'
 import Button from '@mui/material/Button';
 import axios from 'axios'
 import { ImageIdContext } from 'App';
-import {toastThatError} from '../../../routes/routes'
+import {toastThatError, toastIt} from '../../../routes/routes'
 
 const Input = styled('input')({
 	display: 'none',
@@ -74,7 +74,6 @@ function UploadButton(props: {setOpen: any}) {
 			toastThatError('Avatar upload failed')
 		})
 
-		props.setOpen(false)
 	};
 
 	function closeModal() {
