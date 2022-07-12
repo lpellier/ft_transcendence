@@ -42,7 +42,7 @@ function TFAButton(props: {user: User, setOpen: any}) {
 
 	useEffect(() => {
 		axios.get(
-		'http://127.0.0.1:3001/users/me',
+		process.env.REACT_APP_BACK_URL + '/users/me',
 		{
 				withCredentials: true,
 		})
@@ -57,7 +57,7 @@ function TFAButton(props: {user: User, setOpen: any}) {
 	function patchTfaTrue() {
 
 		axios.patch(
-			'http://127.0.0.1:3001/users/me', 
+			process.env.REACT_APP_BACK_URL + '/users/me',
 			{tfa:true},
 			{
 				withCredentials: true, 
@@ -74,7 +74,7 @@ function TFAButton(props: {user: User, setOpen: any}) {
 		function patchTfaFalse() {
 			
 		axios.patch(
-		'http://127.0.0.1:3001/users/me', 
+		process.env.REACT_APP_BACK_URL + '/users/me',
 		{tfa:false},
 		{
 			withCredentials: true, 

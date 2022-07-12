@@ -20,7 +20,7 @@ function LogOutLink() {
 
 	function logout() {
   
-	  axios.get('http://127.0.0.1:3001/auth/logout',
+	  axios.get(process.env.REACT_APP_BACK_URL + '/auth/logout',
 	  {
 		  withCredentials: true,
 	  })
@@ -101,7 +101,7 @@ export default function SearchAppBar(props: {user: User, users: User[], setOther
         <Toolbar style={ BarStyle }>
 			<nav>
 				<Link to="profile" style={{ textDecoration: 'none' }}>
-					<PlayerAvatar image={'http://127.0.0.1:3001/avatars/' + props.user.id + '.png'} onClick={() => props.setOtherUser(props.user)} />
+					<PlayerAvatar image={process.env.REACT_APP_BACK_URL + '/avatars/' + props.user.id + '.png'} onClick={() => props.setOtherUser(props.user)} />
 				</Link>
 			</nav>
 			<PlayerName name={props.user.username} />

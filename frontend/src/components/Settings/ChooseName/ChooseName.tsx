@@ -2,7 +2,6 @@ import { useState } from "react";
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button';
-import FormGroup from '@mui/material/FormGroup';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import { NameButtonStyle } from '../../../styles/tsxStyles/Settings/Name'
@@ -35,7 +34,7 @@ function NameInput(props: {username: string, setter: any, setOpen: any, setUser:
 	function PatchRequest() {
 
 		axios.patch(
-			'http://127.0.0.1:3001/users/me',
+			process.env.REACT_APP_BACK_URL + '/users/me',
 			{username : value},
 			{
 				withCredentials: true,
@@ -47,7 +46,8 @@ function NameInput(props: {username: string, setter: any, setOpen: any, setUser:
 		.then(async res => {
 			console.log("Changing name success : ", props.username)
 			props.setOpen(false)
-			await axios.get( 'http://127.0.0.1:3001/users/me',{ withCredentials: true,})
+			await axios.get(process.env.REACT_APP_BACK_URL + '/users/me',
+			{ withCredentials: true,})
 			.then(res => {
 				props.setUser(res.data)
 				console.log("User : ", res.data);

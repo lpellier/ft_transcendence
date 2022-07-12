@@ -2,7 +2,7 @@ import axios from 'axios';
 
 function getUser(setter: any) {
 
-	axios.get('http://127.0.0.1:3001/users/me',{
+	axios.get(process.env.REACT_APP_BACK_URL + '/users/me',{
 		withCredentials: true
 	})
 	.then(res => {
@@ -17,7 +17,7 @@ function getUser(setter: any) {
 
 function reqLogout() {
 
-	axios.get('http://127.0.0.1:3001/auth/logout',
+	axios.get(process.env.REACT_APP_BACK_URL + '/auth/logout',
 	{
 	    withCredentials: true,
 	})

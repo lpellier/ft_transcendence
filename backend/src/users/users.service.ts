@@ -182,16 +182,19 @@ export class UsersService {
   }
 
   async addAchievement(userId: number, achievementId: number) {
-    await this.prisma.user.update({
-      where: {
-        id: userId,
-      },
-      data: {
-        achievements: {
-          push: achievementId,
+    const user = await this.findOne(userId);
+    if (user.achievements.includes(achievementId) === false) {
+      await this.prisma.user.update({
+        where: {
+          id: userId,
         },
-      },
-    });
+        data: {
+          achievements: {
+            push: achievementId,
+          },
+        },
+      });
+    }
   }
 
   async getMock() {

@@ -12,7 +12,7 @@ import {User} from 'interfaces';
 import IconButton from '@mui/material/IconButton';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
 
-const UserAPI = "http://127.0.0.1:3001/users/me"
+const UserAPI = process.env.REACT_APP_BACK_URL + "/users/me"
 
 const Input = styled('input')({
 	display: 'none',
@@ -45,7 +45,7 @@ function ChooseFirstName(props: {setter: any, value: string}) {
 
 	useEffect(() => {
 		props.setter(firstName)
-	}, [firstName])
+	}, [firstName, props])
 
 	return (
 		<Box sx={LittleBoxForInput}>
@@ -80,7 +80,7 @@ export default function FirstLoginPrompt(props: {user: User | undefined}) {
 		const formData = new FormData();
 		formData.append('avatar', selectedFile)
 
-		axios.put("http://127.0.0.1:3001/users/upload-avatar",
+		axios.put(process.env.REACT_APP_BACK_URL + "/users/upload-avatar",
 		formData,
 		{
 			withCredentials: true,

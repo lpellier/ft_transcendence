@@ -2,11 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { CreateMatchDto } from './dto/create-match.dto';
 
 import { PrismaClient } from '@prisma/client';
+import { UsersService } from 'src/users/users.service';
 
 
 @Injectable()
 export class GameService {
-  constructor(private readonly prisma: PrismaClient) {}
+  constructor(private readonly prisma: PrismaClient, private usersService: UsersService) {}
 
     async createMatch(m_data: CreateMatchDto) {
         const match = await this.prisma.match.create({
@@ -31,7 +32,7 @@ export class GameService {
         })
         let current_xp : number = user_stats.xp + points_scored * 2;
         let current_level : number = +(0.2 * Math.sqrt(current_xp)).toFixed(2) + 1;
-        const victories = await this.prisma.stats.update({
+        await this.prisma.stats.update({
             where: {userId: user_id},
             data: {
                 victories: {increment: 1},
@@ -39,6 +40,13 @@ export class GameService {
                 level: current_level
             }
         });
+        if (user_stats.victories == 0) {
+            await this.usersService.addAchievement(user_id, 0);
+        }
+        else if (user_stats.victories == 2) {
+            await this.usersService.addAchievement(user_id, 1);
+        }
+
     }
 
     async incrementLosses(user_id : number, points_scored : number) {

@@ -1,15 +1,14 @@
-import {useEffect, useState} from 'react'
+import {useEffect} from 'react'
 import axios from 'axios'
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
-import { styled } from '@mui/material/styles';
 import LoginIcon from '@mui/icons-material/Login';
 import WebhookIcon from '@mui/icons-material/Webhook';
 import {User} from 'interfaces';
 import {Title, ButtonStyle, LinkStyle, IconStyle} from "../styles/tsxStyles/LogIn"
 
-const AuthAPI = "http://127.0.0.1:3001/auth"
-const MockAuthAPI = "http://127.0.0.1:3001/auth/mock"
+const AuthAPI = process.env.REACT_APP_BACK_URL + "/auth"
+const MockAuthAPI = process.env.REACT_APP_BACK_URL + "/auth/mock"
 
 function LogInButton()
 {
@@ -46,7 +45,7 @@ export default function LogIn(props: {user: User | undefined, auth: boolean}) {
 	
 	useEffect(() => {
 
-		axios.get("http://127.0.0.1:3001/users/me",
+		axios.get(process.env.REACT_APP_BACK_URL + '/users/me', 
 		{ withCredentials: true })
 		.then(res => { console.log("Get user success")})
 		.catch(err => { console.log("Get user failed : ", err)})
