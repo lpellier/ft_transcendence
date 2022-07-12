@@ -1,18 +1,24 @@
-import { createRoot } from 'react-dom/client';
-import AllRoutes from './routes/routes';
-import './styles/body.css';
-import io  from "socket.io-client";
+import { createRoot } from "react-dom/client";
+import AllRoutes from "./routes/routes";
+import "./styles/body.css";
+import io from "socket.io-client";
+import { BrowserRouter } from "react-router-dom";
 
 const tabletSize = 768;
 const phoneSize = 530;
 
-const root = createRoot(document.getElementById('root')!);
+const root = createRoot(document.getElementById("root")!);
+enum achievements {ONESTAR, THREESTARS, QUIT, CHANGEAVATAR}
 
-const SERVER = "http://127.0.0.1:3001";
+const SERVER = process.env.REACT_APP_BACK_URL || "";
 export const socket = io(SERVER, {
-	withCredentials:true,
+  withCredentials: true,
 });
 
-root.render(<AllRoutes />);
+root.render(
+  <BrowserRouter>
+    <AllRoutes />
+  </BrowserRouter>
+);
 
-export {tabletSize, phoneSize}
+export { tabletSize, phoneSize, achievements };

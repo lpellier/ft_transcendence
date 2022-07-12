@@ -57,16 +57,10 @@ function QuitTrophy() {
   	);
 }
 
-function ChangeNameTrophy() {
-	return (
-		<ATrophie image={Gandalf} label="Many are my names!" title="Changed name"/>
-  	);
-}
-
 function ChangeAvatarTrophy() {
 	return (
 		<ATrophie image={Frankencat} label="He has changed, for sure" title="Changed avatar"/>
   	);
 }
 
-export {ChangeAvatarTrophy, ChangeNameTrophy, QuitTrophy, OneWinTrophy, ThreeWinsTrophy}
+export {ChangeAvatarTrophy, QuitTrophy, OneWinTrophy, ThreeWinsTrophy}
