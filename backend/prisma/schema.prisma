@@ -45,8 +45,6 @@ model Match {
   score    Int[]
 }
 
-
-
 model Room {
   id         Int       @id @default(autoincrement())
   name       String
