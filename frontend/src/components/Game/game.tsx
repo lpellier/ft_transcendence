@@ -946,7 +946,6 @@
 	hover_spectator: boolean;
 
 	frame_count_shake: number;
-	ready : boolean;
 
 	constructor() {
 		this.players = [];
@@ -964,7 +963,6 @@
 		this.spectator = false;
 		this.hover_spectator = false;
 		this.frame_count_shake = 0;
-		this.ready = false;
 	}
 
 	reset() {
@@ -973,7 +971,6 @@
 		this.score_limit = 10;
 		this.timer = 3;
 		this.state = "in-menu";
-		console.log("alo");
 		this.room_id = "null";
 		this.publicity = "public";
 		this.local = false;
@@ -983,7 +980,6 @@
 		this.spectator = false;
 		this.hover_spectator = false;
 		this.frame_count_shake = 0;
-		this.ready = false;
 	}
 
 	over(): boolean {
@@ -1687,11 +1683,8 @@ class Vector {
 		});
 
 		socket.on("please send back", (data : any) => {
-			console.log("please send back");
-			if (data.name === user_name) {
-				console.log ("sending response")
+			if (data.name === user_name)
 				socket.emit("socket response", data);
-			}
 		});
 
 		socket.on(
@@ -1710,10 +1703,8 @@ class Vector {
 					game.players[1].username = name_p2;
 				if (game.players[1].real_id === 0)
 					game.players[1].real_id = real_id_p2;
-				game.setState("waiting-readiness");
 			}
 			if (game.players.length === 0) {
-				game.setState("waiting-readiness");
 				if (socket.id === id_p1) {
 				game.players.push(new Player(1, id_p1, name_p1, real_id_p1));
 				game.players.push(new Player(2, id_p2, name_p2, real_id_p2));
@@ -1722,10 +1713,8 @@ class Vector {
 				game.players.push(new Player(1, id_p1, name_p1, real_id_p1));
 				}
 				game.pong = new Pong();
-				console.log("CREATED PONG")
 			}
-			game.ready = true;
-			console.log("game :", game);
+			game.setState("waiting-readiness");
 			}
 		);
 
@@ -1756,19 +1745,18 @@ class Vector {
 	}
 
 	function listenMoveEvents() {
-	socket.on("switch_readiness-server", (id: string) => {
-		let count = 0;
-		for (let player of game.players) {
-		if (player.id === id) player.ready = !player.ready;
-		if (player.ready) count++;
+	socket.on("switch_readiness-server", (ready1: boolean, ready2 : boolean, id : string) => {
+		if (game.players[0].index === 1) {
+			game.players[0].ready = ready1;
+			game.players[1].ready = ready2;
 		}
-		if (count === game.players.length) {
+		else {
+			game.players[0].ready = ready2;
+			game.players[1].ready = ready1;	
+		}
+		
+		if (ready1 && ready2) {
 		game.setState("countdown");
-		console.log(
-			"game ids -> ",
-			game.players[0].real_id,
-			game.players[1].real_id
-		);
 		socket.emit("countdown_start", game.players[0].real_id);
 		audio_files.playBip(audio_files.BIP);
 		}
@@ -1902,8 +1890,8 @@ class Vector {
 		2
 		)
 	);
-
-	game = new Game();
+	if (!game)
+		game = new Game();
 	inputs = new Inputs();
 	errors = new Errors();
 	buttons = new Buttons();
@@ -1927,8 +1915,6 @@ class Vector {
 	listenMoveEvents();	
 
 	resizeEverything();
-	game.setState("in-menu");
-	game.frame_count_shake = 0;
 	};
 
 	p.keyPressed = () => {
@@ -1943,37 +1929,8 @@ class Vector {
 	}
 	
 	p.draw = () => {
-		if (game.ready && game.state != "waiting-readiness") {
-		console.log("ready switch");
-		game.ready = false;
-		game.setState("waiting-readiness");
-	}
-	if (p.keyIsDown(32)) {
-		for (let player of game.players) {
-		player.moveName();
-		if (player.moving_name.left) {
-			player.moving_name.pos = new Vector([
-			-consts.WIDTH * 2 +
-				player.moving_name.text.length * consts.std_font_size,
-			consts.HEIGHT * 0.35,
-			]);
-			player.moving_name.vel = new Vector([
-			player.moving_name.initial_speed,
-			0,
-			]);
-		} else {
-			player.moving_name.pos = new Vector([
-			consts.WIDTH * 2 -
-				player.moving_name.text.length * consts.std_font_size,
-			consts.HEIGHT * 0.65 + consts.std_font_size,
-			]);
-			player.moving_name.vel = new Vector([
-			player.moving_name.initial_speed,
-			0,
-			]);
-		}
-		}
-	}
+		if (!document.getElementById("canvas-parent"))
+			p.remove();
 
 	audio_files.playAppropriateMusic(game.state, game.map.name);
 	p.push();
@@ -2255,7 +2212,6 @@ class Vector {
 
 	for (const player of game.players) {
 		p.push();
-		p.textSize(32);
 		p.textAlign(p.CENTER);
 		p.fill("white");
 		p.push();
@@ -2353,6 +2309,8 @@ class Vector {
 	}
 
 	function opponentLeftMenu() {
+	if (!document.getElementById("canvas-parent"))
+		return;
 	game.setState("opponent-left-menu");
 	buttons.hide();
 	buttons.opponent_left_ok.parent().style["z-index"] = 2; // deal with buttons overlapping

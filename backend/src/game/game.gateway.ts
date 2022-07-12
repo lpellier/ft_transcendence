@@ -37,6 +37,15 @@ import { ConfigService } from "@nestjs/config";
 	return null;
 }
 
+function userInGame(games : Game[], username : string) : boolean {
+	for (const game of games) {
+		for (const player of game.players)
+			if (player.real_name === username)
+				return true;
+	}
+	return false;
+}
+
 /**
  * loops over every game and sends a signal to ask for players's readiness
  */
@@ -152,21 +161,12 @@ export class GameGateway {
 		this.users.push([data[1], data[2]]);
 	}
 
-    //[ {
-    //     userId: number,
-    //     inviterId: number,
-    //     inviteeId: number,
-    // }, userId
-	// ]
-
 	@SubscribeMessage('socket response')
 	async handleSocketResponseInvitation(@ConnectedSocket() client : Socket, @MessageBody() data : any) {
-		console.log("socket response")
 		for (let game of this.games) {
 			if (game.room_id === data.r_id) {
 				client.join(game.room_id);
 				game.addPlayer(client.id, [data.id.toString(), data.name]);
-				console.log("found room", game.players)
 				this.server.to(game.room_id).emit("waiting-player", game.room_id, game.score_limit, game.map.name);
 				game.state = "waiting-readiness";
 				this.server.to(game.room_id).emit("waiting-readiness", game.players[0].id, game.players[1].id, game.players[0].real_name, game.players[1].real_name, game.players[0].real_id, game.players[1].real_id);
@@ -184,7 +184,6 @@ export class GameGateway {
 
 		client.join(game.room_id);
 		game.addPlayer(client.id, [data[1].toString(), user2]);
-		console.log("player ", game.players)
 		this.server.emit("please send back", {id : data[0].userId, name : user1, r_id : game.room_id});
 	}
 
@@ -193,13 +192,15 @@ export class GameGateway {
 		@ConnectedSocket() client : Socket,
 		@MessageBody() data : [string, boolean, number, string]
 	) {
+		if (userInGame(this.games, this.users[this.clients.indexOf(client.id)][1]))
+			return;
 		let existing_game : Game = null;
 		if (data[0] === "public" && data[1])
 			existing_game = existingEmptyGame(this.games, this.users[this.clients.indexOf(client.id)][1]);
 		
 		if (existing_game === null) {
-			this.games.push(new Game(utils.randomRoomId()));
-			existing_game = this.games[this.games.length - 1];
+			existing_game = new Game(utils.randomRoomId());
+			this.games.push(existing_game);
 		}
 		existing_game.publicity = data[0];
 		if (existing_game.score_limit === 0)
@@ -335,9 +336,9 @@ export class GameGateway {
 	) {
 		for (const game of this.games) {
 			for (const player of game.players) {
-				if (player.id === client_id) {
+				if (player.id === client_id && game.players.length === 2) {
 					player.ready = !player.ready;
-					this.server.to(game.room_id).emit("switch_readiness-server", client_id);
+					this.server.to(game.room_id).emit("switch_readiness-server", game.players[0].ready, game.players[1].ready, client_id);
 					return ;
 				}
 			}

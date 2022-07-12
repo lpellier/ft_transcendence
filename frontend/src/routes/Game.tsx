@@ -5,7 +5,6 @@ import FirstLoginPrompt from '../components/Prompt'
 
 import "./../styles/Game/canvas.css"
 import "./../styles/Game/buttons.css"
-import "./../styles/Game/icons.css"
 import "./../styles/Game/inputs.css"
 import "socket.io-client"
 import { User } from "interfaces";
@@ -208,11 +207,12 @@ class AudioFiles {
 }
 
 export let audio_files : AudioFiles;
+let p : any = null;
 
 function GameComponent() {
 	useEffect(() => {
 		audio_files = new AudioFiles();
-		const p = new p5(Sketch);
+		p = new p5(Sketch);
 
 		return () => {
 			audio_files.deleteAudio();
