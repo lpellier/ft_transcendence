@@ -8,6 +8,8 @@ import {PlayerBarStyle, SkillBarContourStyle, TitleStyle} from "../../styles/tsx
 import './../../styles/Other/SkillBar.css'
 import {PlayerAvatar} from	'../Avatars';
 import { useAuth } from 'routes/routes'
+import { useParams } from 'react-router-dom'
+import axios from 'axios'
 
 const OverallBoxStyle = {
 	paddingTop: '4vh',
@@ -40,6 +42,7 @@ function PlayerInfoBand(props: {level: number, user: User}) {
 	const [xp, setXp] = useState<number>(Math.trunc(props.level * 100) % 100) 
 	const [level, setLevel] = useState<number>(Math.trunc(props.level)) 
 
+	console.log("came here")
 	useEffect(() => {
 		setLevel(Math.trunc(props.level))
 		setXp(Math.trunc(props.level * 100) % 100)
@@ -65,19 +68,28 @@ function PlayerInfoBand(props: {level: number, user: User}) {
 	);
 }
 
-export default function Profile(props: {user: User | undefined}) {
+export default function Profile(props: {self: boolean}) {
+	const [profile, setProfile] = useState<User>(null!)
 	let auth = useAuth();
-	let user = props.user;
+	let params = useParams()
 
-	if (user == undefined) {
-		user = auth.user;
-	}
+	if (props.self == true) {
+		setProfile(auth.user);
+	} 
+	useEffect( () => {
+		axios.get(process.env.REACT_APP_BACK_URL + "/users/" + params.id || "",
+		{withCredentials: true}).then(res => {
+		 setProfile(res.data);
+		})
+	});
 
     return (
 		<Box sx={OverallBoxStyle}>
 			<Stack spacing={1}>
-				<PlayerInfoBand level={user.level} user={user} />
-				<StatsBoards />
+			{profile? <div>
+				<PlayerInfoBand level={profile.level} user={profile} />
+				<StatsBoards /> </div> : <div />
+			}
 			</Stack>
 		</Box>
     );

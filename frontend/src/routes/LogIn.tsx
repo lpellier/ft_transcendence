@@ -7,7 +7,7 @@ import WebhookIcon from '@mui/icons-material/Webhook';
 import {User} from 'interfaces';
 import {Title, ButtonStyle, LinkStyle, IconStyle} from "../styles/tsxStyles/LogIn"
 import { useAuth } from './routes';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { Location, Navigate, useLocation, useNavigate } from 'react-router-dom';
 
 const AuthAPI = process.env.REACT_APP_BACK_URL + "/auth"
 const MockAuthAPI = process.env.REACT_APP_BACK_URL + "/auth/mock"
@@ -45,9 +45,16 @@ function MockLogInButton()
 }
 
 export default function LogIn() {
-	
+	type LocationProps = {
+		state: {
+		  from: Location;
+		};
+	  };
+
 	let auth = useAuth();
 	let navigate = useNavigate();
+	let location = useLocation() as unknown as LocationProps;
+	let from = location.state?.from?.pathname || "/";
 
 	useEffect(()=>{
 		axios.get(process.env.REACT_APP_BACK_URL + "/users/me",
@@ -55,8 +62,9 @@ export default function LogIn() {
             withCredentials: true
         }).then(res => {
         auth.signin(res.data, () => {
-			console.log("about to login", auth.user)
-			navigate("/game")});
+			console.log("about to login", from)
+			navigate(from, {replace: true});
+		});
 		        })
         .catch(err => console.log("THIS TOO IS A TEST", err))
 		;}, []);

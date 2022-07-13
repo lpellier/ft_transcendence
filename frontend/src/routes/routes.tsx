@@ -3,6 +3,7 @@ import {
     Route,
     Navigate,
     useNavigate,
+    useLocation,
 } from "react-router-dom";
 import axios from 'axios'
 import LogIn from './LogIn'
@@ -67,9 +68,10 @@ export function useAuth() {
 
 function RequireAuth({ children }: {children: JSX.Element}) {
     let auth = useAuth();
+    let location = useLocation();
     
     if (!auth.user) {
-        return <Navigate replace to="/login" />;
+        return <Navigate to="/login" state={{ from: location }} replace/>;
     }
     return children;
 }
@@ -188,7 +190,8 @@ export default function AllRoutes()  {
                     <Route path="/login" element={<LogIn />} />
                     <Route path="/tfauth" element={<TFAuth />} />
                     <Route path="/" element={ <RequireAuth><App users={users} setOtherUser={setOtherUser} statusMap={statusMap} setStatusMap={setStatusMap}/></RequireAuth>}>
-                        <Route path="profile" element={ <Profile user={undefined} />}/>
+                        <Route path="profile" element={ <Profile self={true} />}/>
+                        <Route path="profile/:id" element={ <Profile self={false} />}/>
                         <Route path="chat" element={<Chat users={users} setOtherUser={setOtherUser} statusMap={statusMap}/>}/>
                         <Route path="game" element={<Game /> }/>
                         <Route path="settings" element={<Settings />}/>
