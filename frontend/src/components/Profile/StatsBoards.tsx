@@ -12,9 +12,8 @@ import {StatTitle, StatBox, MatchHistoryBox} from "../../styles/tsxStyles/Home"
 import {Stats} from 'interfaces'
 import {ChangeAvatarTrophy, QuitTrophy, OneWinTrophy, ThreeWinsTrophy} from './Trophies'
 import axios from 'axios'
-
-import { Table, TableBody, TableRow, TableCell, useRadioGroup } from '@mui/material';
-import { useAuth } from 'routes/routes';
+import { useAuth } from "components/AuthProvider";
+import { Table, TableBody, TableRow, TableCell } from '@mui/material';
 
 enum achievements {ONESTAR, THREESTARS, QUIT, CHANGEAVATAR}
 

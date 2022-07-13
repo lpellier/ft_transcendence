@@ -7,7 +7,7 @@ import {User} from 'interfaces'
 import {PlayerBarStyle, SkillBarContourStyle, TitleStyle} from "../../styles/tsxStyles/Home";
 import './../../styles/Other/SkillBar.css'
 import {PlayerAvatar} from	'../Avatars';
-import { useAuth } from 'routes/routes'
+import { useAuth } from "components/AuthProvider";
 import { useParams } from 'react-router-dom'
 import axios from 'axios'
 

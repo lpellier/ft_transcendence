@@ -6,7 +6,7 @@ import Box from '@mui/material/Box';
 import '../../styles/Chat/Chat.css';
 import {User, Room} from 'interfaces';
 import {socket} from 'index';
-import { useAuth } from 'routes/routes';
+import { useAuth } from "components/AuthProvider";
 
 
 const ChatBoxComponentStyle = {	

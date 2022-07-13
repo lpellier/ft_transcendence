@@ -15,7 +15,7 @@ import WebhookIcon from '@mui/icons-material/Webhook'
 import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
 import axios from 'axios';
 import {BarStyle} from '../../styles/tsxStyles/AppBar/AppBar'
-import { useAuth } from 'routes/routes';
+import { useAuth } from "components/AuthProvider";
 
 function LogOutLink() {
 	let auth = useAuth();
@@ -30,7 +30,7 @@ function LogOutLink() {
 	  .catch(function (err) {
 		console.log("Get request failed : ", err)
 	  });
-	  auth.signout(() => navigate("/"));
+	  auth.signout(() => navigate("/login"));
 	}
 
 	return (

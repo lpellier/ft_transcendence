@@ -1,6 +1,5 @@
 import Stack from '@mui/material/Stack';
 import Container from '@mui/material/Container';
-import {User} from 'interfaces'
 import Box from '@mui/material/Box';
 import FaceIcon from '@mui/icons-material/Face'
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
@@ -16,7 +15,7 @@ import {useState} from 'react'
 import Button from '@mui/material/Button';
 import axios from 'axios'
 import { ImageIdContext } from 'App';
-import {toastThatError, toastIt} from '../../../routes/routes'
+import {toastThatError} from '../../../routes/routes'
 
 const Input = styled('input')({
 	display: 'none',

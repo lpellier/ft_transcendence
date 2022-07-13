@@ -10,7 +10,7 @@ import axios from 'axios'
 import VpnKeyIcon from '@mui/icons-material/VpnKey'
 import {ButtonModalStyle, IconStyle} from '../../../styles/tsxStyles/AppBar/PongMenu'
 import {ModalChooseAuth} from '../../../styles/tsxStyles/Settings/Auth'
-import { useAuth } from 'routes/routes';
+import { useAuth } from "components/AuthProvider";
 
 function GenerateQRCode(props: {url: string, setOpen: any}) {
 	
@@ -53,7 +53,7 @@ function TFAButton(props: { setOpen: any}) {
 		.catch(err => {
 			console.log("Appbar get request failed : ", err)
 		})
-	}, [props.setOpen])
+	}, [props.setOpen, auth])
 
 	function patchTfaTrue() {
 
