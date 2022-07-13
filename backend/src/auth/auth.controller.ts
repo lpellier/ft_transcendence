@@ -88,6 +88,4 @@ export class AuthController {
     }
     return { url: redirectUrl };
   }
-
-
 }
