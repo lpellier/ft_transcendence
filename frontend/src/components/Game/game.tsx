@@ -1417,13 +1417,23 @@ class Player {
 		return dist;
 	}
 
-	moveUp() {
+	moveUp(pos_diff : number) {
 		this.velocity[1] = -consts.PLAYER_SPEED;
+		if (game.local && game.ai && this.index === 2) {
+			this.velocity[1] = -pos_diff;
+			if (this.velocity[1] < -consts.PLAYER_SPEED)
+				this.velocity[1] = -consts.PLAYER_SPEED;
+		}
 		this.calculateNewPos();
 	}
 
-	moveDown() {
+	moveDown(pos_diff : number) {
 		this.velocity[1] = consts.PLAYER_SPEED;
+		if (game.local && game.ai && this.index === 2) {
+			this.velocity[1] = -pos_diff;
+			if (this.velocity[1] > consts.PLAYER_SPEED)
+				this.velocity[1] = consts.PLAYER_SPEED;
+		}
 		this.calculateNewPos();
 	}
 
@@ -2345,6 +2355,7 @@ class Vector {
 	buttons.opponent_left_ok.show();
 	}
 
+	let ai_diff : number = 0;
 	let ai_pos : number = 0; // ? random pos on the paddle of the ai
 	let reset_ai_pos : boolean = true; // ? when true, recalculate ai pos
 
@@ -2364,26 +2375,26 @@ class Vector {
 		} else socket.emit("move_null", game.players[0].id);
 		}
 	} else if (!game.spectator) {
-		if (p.keyIsDown(87)) game.players[0].moveUp();
-		else if (p.keyIsDown(83)) game.players[0].moveDown();
+		if (p.keyIsDown(87)) game.players[0].moveUp(0);
+		else if (p.keyIsDown(83)) game.players[0].moveDown(0);
 		else game.players[0].velocity[1] = 0;
 
 		if (game.ai) {
 		// ? chaser ai code
-		let ai_diff : number = 0;
 		if (reset_ai_pos) {
-			ai_diff = (Math.random() * (game.players[1].height));
+			ai_diff = (Math.random() * consts.PLAYER_HEIGHT);
 			reset_ai_pos = false;
 		}
+
 		ai_pos = game.players[1].pos[1] + ai_diff;
 		let pos_diff = ai_pos - game.pong.cY();
 
-		if (pos_diff > consts.HEIGHT / 150) game.players[1].moveUp();
-		else if (pos_diff < -consts.HEIGHT / 150) game.players[1].moveDown();
+		if (pos_diff > 0) game.players[1].moveUp(pos_diff);
+		else if (pos_diff < 0) game.players[1].moveDown(pos_diff);
 		else game.players[1].velocity[1] = 0;
 		} else {
-		if (p.keyIsDown(p.UP_ARROW)) game.players[1].moveUp();
-		else if (p.keyIsDown(p.DOWN_ARROW)) game.players[1].moveDown();
+		if (p.keyIsDown(p.UP_ARROW)) game.players[1].moveUp(0);
+		else if (p.keyIsDown(p.DOWN_ARROW)) game.players[1].moveDown(0);
 		else game.players[1].velocity[1] = 0;
 		}
 
