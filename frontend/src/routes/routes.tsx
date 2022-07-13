@@ -106,7 +106,7 @@ export default function AllRoutes()  {
                     <Route path="/tfauth" element={<TFAuth />} />
                     <Route path="/" element={ <RequireAuth><App users={users} statusMap={statusMap} setStatusMap={setStatusMap}/></RequireAuth>}>
                         <Route path="profile" element={ <Profile self={true} />}/>
-                        <Route path="users/:id" element={ <Profile self={false} />}/>
+                        <Route path="profile/:id" element={ <Profile self={false} />}/>
                         <Route path="chat" element={<Chat users={users} statusMap={statusMap}/>}/>
                         <Route path="game" element={<Game /> }/>
                         <Route path="settings" element={<Settings />}/>
