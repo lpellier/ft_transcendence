@@ -175,16 +175,15 @@ export class GameGateway {
 			if (game.room_id === data.r_id) {
 				client.join(game.room_id);
 				game.addPlayer(client.id, [data.id.toString(), data.name, false]);
-				console.log(test_count, "START POLL")
 				let inte = setInterval(() => {
-					console.log("polling", this.users[this.clients.indexOf(client.id)][2], this.users[this.clients.indexOf(data.other_id)][2])
 					if (this.clients.indexOf(client.id) != -1 && this.clients.indexOf(data.other_id) != -1 && this.users[this.clients.indexOf(client.id)][2] && this.users[this.clients.indexOf(data.other_id)][2]) {
 						this.server.to(game.room_id).emit("waiting-player", game.room_id, game.score_limit, game.map.name);
 						game.state = "waiting-readiness";
 						this.server.to(game.room_id).emit("waiting-readiness", game.players[0].id, game.players[1].id, game.players[0].real_name, game.players[1].real_name, game.players[0].real_id, game.players[1].real_id);
-						console.log("finished loading")
+						this.users[this.clients.indexOf(client.id)][2] = false;
+						this.users[this.clients.indexOf(data.other_id)][2] = false;
 						clearInterval(inte);
-						return ;
+						console.log(client.id, data.other_id);
 					}
 				}, 200);
 			}
