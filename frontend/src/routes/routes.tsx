@@ -2,68 +2,75 @@ import {
     Routes,
     Route,
     Navigate,
-    Link,
 } from "react-router-dom";
 import axios from 'axios'
 import LogIn from './LogIn'
 import TFAuth from './TFAuth'
 import App from '../App'
 import Profile from '../components/Profile/Profile'
-import {useState, useEffect} from 'react'
+import {useState, useEffect, } from 'react'
 import {User} from 'interfaces';
 import {socket} from 'index';
 import Chat from "../components/Chat/Chat";
 import Settings from "../components/Settings/Settings";
 import Game from "./Game";
-import { toast, ToastContainer } from 'react-toastify';
-import Snackbar from '@mui/material/Snackbar';
-import IconButton from '@mui/material/IconButton';
-import CloseIcon from '@mui/icons-material/Close';
-import Button from '@mui/material/Button';
+import { toast,  } from 'react-toastify';
 import NotFound from "./NotFound";
 import React from "react";
 
-
 interface AuthContextType {
-    id: number;
-    checkStatus: () => void;
+    user: User;
+    // checkStatus: () => void;
+    signin: (user: User, callback: VoidFunction) => void;
+    update: (user: User) => void;
+    signout: (callback: VoidFunction) => void;
 }
 
 let AuthContext = React.createContext<AuthContextType>(null!);
 
 function AuthProvider({ children }: { children: React.ReactNode}) {
-    let [id, setId] = React.useState<number>(0);
+    let [user, setUser] = React.useState<User>(null!);
 
-    let checkStatus = () => {
-        axios.get(process.env.REACT_APP_BACK_URL + "/users/me",
-        {
-            withCredentials: true
-        }).then(res => {
-        setId(res.data.id);
-        console.log("THIS IS A TEST", res.data.id)
-        console.log("hiho", id)
-        })
-        .catch(err => console.log("THIS TOO IS A TEST", err))
+    // let checkStatus = () => {
+    //     axios.get(process.env.REACT_APP_BACK_URL + "/users/me",
+    //     {
+    //         withCredentials: true
+    //     }).then(res => {
+    //     setUser(res.data);
+    //     console.log("THIS IS A TEST", user)
+    //     })
+    //     .catch(err => console.log("THIS TOO IS A TEST", err))    }
+    
+    let signin = (user: User, callback: VoidFunction) => {
+        setUser(user);
+        callback();
+    };
+
+    let update = (user: User) => {
+        setUser(user);
     }
 
-    let value = {id, checkStatus};
+    let signout = (callback: VoidFunction) => {
+        setUser(null!);
+        callback();
+    }
+
+    let value = {user, update, signin, signout};
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
 
-function useAuth() {
+export function useAuth() {
     return React.useContext(AuthContext);
 }
 
 function RequireAuth({ children }: {children: JSX.Element}) {
     let auth = useAuth();
-
-    useEffect( () => auth.checkStatus());
-	if (!auth.id) {
-        console.log("PASSED BY HERE");
+    
+    if (!auth.user) {
         return <Navigate replace to="/login" />;
     }
-    return children
+    return children;
 }
 
 
@@ -91,25 +98,14 @@ export function toastIt(message: string) {
         });
 }
 
-
 export default function AllRoutes()  {
 
-    interface inviteDto {
-        userId: number,
-        inviterId: number,
-        inviteeId: number,
-    }
-
-    
-    const [isAuth, setAuth] = useState(true);
-	const [user, setUser] = useState<User>();
     let [users, setUsers] = useState<User[]>([]);
 	let [otherUser, setOtherUser] = useState<User>();
-    const [open, setOpen] = useState(false);
-    const [invite, setInvite] = useState<inviteDto>();
     const [navigate, setNavigate] = useState(false);
     let [statusMap, setStatusMap] = useState<Map<number, string> >(new Map<number, string>());
 
+    
     useEffect(() => {
         const handler = (data: any) => {
             toastThatError(data.message);
@@ -167,18 +163,6 @@ export default function AllRoutes()  {
         }
     }, [statusMap]);
 
-    useEffect(() => {
-        const init = () => {
-            if (user)
-            {
-                socket.emit('new user', {userId: user.id, roomId: 1});
-            }
-        }
-            if (socket.connected)
-                init();
-            else
-                socket.on('connect', init)
-    }, [user])
 
     useEffect(() => {
 		axios.get(process.env.REACT_APP_BACK_URL + '/users/me',
@@ -187,42 +171,13 @@ export default function AllRoutes()  {
         })
         .then(res => {
 			console.log("Is Authenticated", res.data)
-			setAuth(true);
             
-            setUser(res.data);
-
 			setOtherUser(res.data);
         })
         .catch(function (err) {
 			console.log("Authentication has failed : ", err)
-			setAuth(false);
         });
-	}, [isAuth])
-	
-
-    useEffect(() => {
-        const handler = (data: any) => { 
-            setOpen(true)  
-            setInvite(data)
-        }
-        socket.on('invite for game', handler);
-        return () => {
-            socket.off('invite for game', handler);
-        }
-    }, [])
-
-    const handleClose = (event: React.SyntheticEvent | Event, reason?: string) => {
-        if (reason === 'clickaway') {
-          return;
-        }
-        setOpen(false);
-      };    
-
-
-    function acceptGame() {
-        socket.emit('accepted game', invite, user?.id)
-        setOpen(false);
-    }
+	}, [])
 
     useEffect(() => {
         const handler = () => { 
@@ -232,45 +187,20 @@ export default function AllRoutes()  {
         return () => {
             socket.off('accepted game', handler);
         }
-    }, [])
-    
-    const action = (
-        <div>
-            <Button color="secondary" size="small" onClick={acceptGame} >
-                <Link to='/game' style={{ textDecoration: 'none' }}>
-                    Accept
-                </Link>
-            </Button>
-            <IconButton
-            size="small"
-            aria-label="close"
-            color="inherit"
-            onClick={handleClose}
-            >
-                <CloseIcon fontSize="small" />
-            </IconButton>
-        </div>
-    );
+      }, [])
 
 	return (
         <div>
-            <ToastContainer />
-            <Snackbar
-                open={open}
-                onClose={handleClose}
-                message={`You have been invited to play a game with ${users.find(user => user?.id === invite?.userId)?.username}`}
-                action={action}
-            />
             { navigate? <Navigate replace to="/game" /> : <div/> }
             <AuthProvider>
                 <Routes>
-                    <Route path="/login" element={<LogIn user={user} auth={isAuth}/>} />
-                    <Route path="/tfauth" element={<TFAuth setAuth={setAuth}/>} />
-                    <Route path="/" element={ <RequireAuth><App user={user} users={users} setOtherUser={setOtherUser} statusMap={statusMap} setStatusMap={setStatusMap}/></RequireAuth>}>
+                    <Route path="/login" element={<LogIn />} />
+                    <Route path="/tfauth" element={<TFAuth />} />
+                    <Route path="/" element={ <RequireAuth><App users={users} setOtherUser={setOtherUser} statusMap={statusMap} setStatusMap={setStatusMap}/></RequireAuth>}>
                         <Route path="profile" element={ <Profile user={otherUser} users={users}/>}/>
-                        <Route path="chat" element={<Chat user={user} users={users} setOtherUser={setOtherUser} statusMap={statusMap}/>}/>
-                        <Route path="game" element={<Game user={user} navigate={navigate} setNavigate={setNavigate}/> }/>
-                        <Route path="settings" element={<Settings user={user} setUser={setUser}/>}/>
+                        <Route path="chat" element={<Chat users={users} setOtherUser={setOtherUser} statusMap={statusMap}/>}/>
+                        <Route path="game" element={<Game navigate={navigate} setNavigate={setNavigate}/> }/>
+                        <Route path="settings" element={<Settings />}/>
                     </Route>
                     <Route path="*" element={<NotFound />} />
                 </Routes>

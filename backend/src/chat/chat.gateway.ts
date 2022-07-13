@@ -14,6 +14,7 @@ import { InviteDto } from "./dto/invite.dto";
 import * as bcrypt from 'bcrypt';
 import { UseFilters, UsePipes, ValidationPipe } from "@nestjs/common";
 import { ValidationFilter } from "./filters/validation.filter";
+import { IsNumberOptions } from "class-validator";
 
 let socketUser = new Map<string, number>();
 let socketGame = new Map<string, number>();
@@ -162,12 +163,12 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect
 	}
 
 	@SubscribeMessage('new user')
-	async handleNewUser(@ConnectedSocket () client : Socket,@MessageBody() newUserDto: UserRoomDto) {
-		socketUser.set(client.id, newUserDto.userId);
-		await this.chatService.addUserToRoom(newUserDto.userId, 1);
+	async handleNewUser(@ConnectedSocket () client : Socket, @MessageBody() userId: number) {
+		socketUser.set(client.id, userId);
+		await this.chatService.addUserToRoom(userId, 1);
 		const allUsers =  await this.chatService.getAllUsers();
 		this.server.emit('new user', allUsers);
-		this.server.emit('new connection', newUserDto.userId);
+		this.server.emit('new connection', userId);
 		// console.log('socket user', socketUser);
 		let online: number[] = [];
 		socketUser.forEach((value, key) => {

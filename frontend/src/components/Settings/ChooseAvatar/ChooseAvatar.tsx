@@ -129,7 +129,7 @@ function CustomAvatar(props: {setOpen: any}) {
   );
 }
 
-function ChooseAvatarButton(props: {user: User, setOpenOne: any}) {
+function ChooseAvatarButton(props: {setOpenOne: any}) {
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => {
@@ -172,7 +172,7 @@ function ChooseAvatarButton(props: {user: User, setOpenOne: any}) {
   );
 }
 
-export default function AvatarList(props: {user: User}){
+export default function AvatarList(){
 	const [open, setOpen] = useState<boolean>(false)
 
 	const handleOpen = () => {
@@ -201,7 +201,7 @@ export default function AvatarList(props: {user: User}){
         	  <Box sx={ModalChooseAvatar}>
         	    <Container>
         	      <Stack spacing={2} style={{justifyContent: 'center'}}>
-        	            <ChooseAvatarButton user={props.user} setOpenOne={setOpen}/>
+        	            <ChooseAvatarButton setOpenOne={setOpen}/>
         	      </Stack>
         	    </Container>
 				</Box>

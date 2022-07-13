@@ -6,6 +6,8 @@ import LoginIcon from '@mui/icons-material/Login';
 import WebhookIcon from '@mui/icons-material/Webhook';
 import {User} from 'interfaces';
 import {Title, ButtonStyle, LinkStyle, IconStyle} from "../styles/tsxStyles/LogIn"
+import { useAuth } from './routes';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 const AuthAPI = process.env.REACT_APP_BACK_URL + "/auth"
 const MockAuthAPI = process.env.REACT_APP_BACK_URL + "/auth/mock"
@@ -41,15 +43,22 @@ function MockLogInButton()
       );
 }
 
-export default function LogIn(props: {user: User | undefined, auth: boolean}) {
+export default function LogIn() {
 	
-	useEffect(() => {
+	let auth = useAuth();
+	let navigate = useNavigate();
 
-		axios.get(process.env.REACT_APP_BACK_URL + '/users/me', 
-		{ withCredentials: true })
-		.then(res => { console.log("Get user success")})
-		.catch(err => { console.log("Get user failed : ", err)})
-	}, [])
+	useEffect(()=>{
+		axios.get(process.env.REACT_APP_BACK_URL + "/users/me",
+        {
+            withCredentials: true
+        }).then(res => {
+        auth.signin(res.data, () => {
+			console.log("about to login", auth.user)
+			navigate("/game")});
+		        })
+        .catch(err => console.log("THIS TOO IS A TEST", err))
+		;}, []);
 
     return (
         <Stack spacing={10} sx={Title}>

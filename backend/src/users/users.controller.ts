@@ -58,6 +58,6 @@ export class UsersController {
 
   @Get(':id')
   async findOne(@Param() params: UserParams): Promise<Profile> {
-    return this.usersService.getProfile(params.id);
+    return this.usersService.getProfile(+params.id);
   }
 }

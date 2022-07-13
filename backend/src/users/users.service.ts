@@ -197,6 +197,15 @@ export class UsersService {
     }
   }
 
+  async getUsername(id: number) {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id: id,
+      },
+    });
+    return user.username;
+  }
+
   async getMock() {
     const user = await this.prisma.user.findUnique({
       where: {

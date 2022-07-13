@@ -14,6 +14,7 @@ import {ChangeAvatarTrophy, QuitTrophy, OneWinTrophy, ThreeWinsTrophy} from './T
 import axios from 'axios'
 
 import { Table, TableBody, TableRow, TableCell, useRadioGroup } from '@mui/material';
+import { useAuth } from 'routes/routes';
 
 enum achievements {ONESTAR, THREESTARS, QUIT, CHANGEAVATAR}
 
@@ -69,14 +70,6 @@ function StatsBox(props: {user: User}){
 }
 	
 function TrophyBox(props: {user: User}) {
-	const [user, setUser] = useState<User>(props.user)
-
-	useEffect(() => {
-		axios.get(process.env.REACT_APP_BACK_URL + "/users/me",
-		{ withCredentials: true })
-		.then(res => { setUser(res.data) })
-		.catch(err => { console.log("Get user failed : ", err)})
-	}, [props.user.achievements])
 
 	return(
 		<Stack spacing={1}>
@@ -85,19 +78,19 @@ function TrophyBox(props: {user: User}) {
 				title="Trophy" />
 			<Box sx={StatBox}>
 				<Stack spacing={1}>
-				{user.achievements.find(val => val === achievements.ONESTAR) !== undefined?
+				{props.user.achievements.find(val => val === achievements.ONESTAR) !== undefined?
 					<OneWinTrophy /> 
 					:
 					<div />}
-				{user.achievements.find(val => val === achievements.THREESTARS) !== undefined?
+				{props.user.achievements.find(val => val === achievements.THREESTARS) !== undefined?
 					<ThreeWinsTrophy />
 						:
 					<div />}
-				{user.achievements.find(val => val === achievements.QUIT) !== undefined?
+				{props.user.achievements.find(val => val === achievements.QUIT) !== undefined?
 					<QuitTrophy /> 
 						:
 					<div />}
-				{user.achievements.find(val => val === achievements.CHANGEAVATAR) !== undefined?
+				{props.user.achievements.find(val => val === achievements.CHANGEAVATAR) !== undefined?
 					<ChangeAvatarTrophy />
 						:
 					<div />}
@@ -107,7 +100,7 @@ function TrophyBox(props: {user: User}) {
 	);
 }
 
-function LeaderboardBox(props: {users: User[]}){
+function LeaderboardBox(){
 	const [leaders, setLeaders] = useState<Stats[]>([])
 	
 	useEffect(() => {
@@ -127,23 +120,7 @@ function LeaderboardBox(props: {users: User[]}){
 		})
 	}, [])
 
-
-	function FindUserName(userId: number) {
-		let username;
-		
-		for (let i in props.users)
-		{
-			if (props.users[Number(i)].id === userId){
-				username = props.users[Number(i)].username;
-			}
-		}
-
-		return (
-			<div> {username} </div>
-		)
-	}
-	
-	function LeaderList(props: {users: User[]}) {
+	function LeaderList() {
 
 		return (
 			<Box sx={{ flexGrow: 1 }} >
@@ -156,7 +133,7 @@ function LeaderboardBox(props: {users: User[]}){
 					{leaders.map(item => (
 						<div  key={item.id}>
 							<Stack direction="row" spacing={2}>
-									<Button style={{width: '20%'}}> {FindUserName(item.userId)} </Button>
+									<Button style={{width: '20%'}}> {item.username} </Button>
 									<Button style={{width: '20%'}}> {item.victories} </Button>
 									<Button style={{width: '20%'}}> {item.losses} </Button>
 									<Button style={{width: '20%'}}> {Math.trunc(item.level)} </Button>
@@ -175,7 +152,7 @@ function LeaderboardBox(props: {users: User[]}){
 						icon={<MilitaryTechIcon />}
 						title="Leaderboard" />
 						<Box sx={StatBox}>
-							<LeaderList users={props.users}/>
+							<LeaderList />
 						</Box>
 				</Stack>
 					:
@@ -222,17 +199,18 @@ function MatchhistoryBox(props: {user: User}){
 }
 
 export default function StatsBoards(props: {user: User, users: User[]}) {
+	let auth = useAuth();
 
-	console.log("StatsBoards props : ", props.user);
+	console.log("StatsBoards props : ", auth.user);
 	return (
 		<Stack direction="row" spacing={1}>
 				<Stack spacing={1}>
-					<StatsBox user={props.user}/>
-					<TrophyBox user={props.user}/>
+					<StatsBox user={auth.user}/>
+					<TrophyBox user={auth.user}/>
 				</Stack>
 				<Stack spacing={1}>
-					<LeaderboardBox users={props.users}/>
-					<MatchhistoryBox user={props.user}/>
+					<LeaderboardBox />
+					<MatchhistoryBox user={auth.user} />
 				</Stack>
 			</Stack>
 	);

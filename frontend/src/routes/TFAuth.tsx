@@ -26,10 +26,11 @@ const TitleStyle = {
 	textShadow: '1px 1px 2px black',
 }
 
-function PinField(props: {value: string, setPininput: any, setRedirect: any, setAuth: any}) {
+function PinField(props: {value: string, setPininput: any, setRedirect: any,}) {
+
 	const [hasSubmitted, setHastSubmitted] = useState<boolean>(false)
 
-	const {setPininput, setRedirect, setAuth} = props;
+	const {setPininput, setRedirect} = props;
 
 	useEffect(() => {
 		if (hasSubmitted === true) {
@@ -43,7 +44,6 @@ function PinField(props: {value: string, setPininput: any, setRedirect: any, set
 			.then(res => {
 				console.log("Pin Post request success :")
 				setRedirect(res.data)
-				setAuth(res.data)
 			})
 			.catch(function (err) {
 				console.log("Pin Post request failed :", err)
@@ -51,7 +51,7 @@ function PinField(props: {value: string, setPininput: any, setRedirect: any, set
 			})
 			setHastSubmitted(false)
 		}
-	}, [hasSubmitted, setAuth, setRedirect, props.value])
+	}, [hasSubmitted,  setRedirect, props.value])
 
 	function handleSubmit(e: any)
 	{
@@ -74,7 +74,7 @@ function PinField(props: {value: string, setPininput: any, setRedirect: any, set
 	);
 }
 
-export default function TFAuth(props: {setAuth: any}) {
+export default function TFAuth() {
 	const [pinInput, setPininput] = useState<string>("");
 	const [redirect, setRedirect] = useState<boolean>(false);
 
@@ -88,7 +88,7 @@ export default function TFAuth(props: {setAuth: any}) {
 				<h1 style={TitleStyle} >
 					Hey, insert your Pin !
 				</h1>
-				<PinField value={pinInput} setPininput={setPininput} setRedirect={setRedirect} setAuth={props.setAuth}/>
+				<PinField value={pinInput} setPininput={setPininput} setRedirect={setRedirect}/>
 				{redirect === true ?
 					<Navigate to="/game" />
 						:

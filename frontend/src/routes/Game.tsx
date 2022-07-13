@@ -7,9 +7,9 @@ import "./../styles/Game/canvas.css"
 import "./../styles/Game/buttons.css"
 import "./../styles/Game/inputs.css"
 import "socket.io-client"
-import { User } from "interfaces";
 import { Sketch } from "../components/Game/game"
 import p5 from "p5";
+import { useAuth } from "./routes";
 
 class AudioFiles {
 	PADDLE_HIT_1: any;
@@ -251,15 +251,16 @@ function GameComponent() {
 	);
 }
 
-export default function Game( props: {user: User | undefined, navigate: boolean, setNavigate: React.Dispatch<React.SetStateAction<boolean>> }) {	
+export default function Game( props: { navigate: boolean, setNavigate: React.Dispatch<React.SetStateAction<boolean>> }) {	
+	let auth = useAuth();
+	
 	useEffect(() => {
 		let user = document.createElement("div");
-		const propsUser: any = props.user;
-		user.setAttribute("user_name", propsUser.username);
-		user.setAttribute("user_id", propsUser.id.toString());
+		user.setAttribute("user_name", auth.user.username);
+		user.setAttribute("user_id", auth.user.id.toString());
 		user.id = "user";
 		document.head.append(user);
-		}, [props.user?.id, props.user])
+		}, [auth.user?.id, auth.user])
 
 		useEffect(() => {
 			props.setNavigate(false);
@@ -273,8 +274,8 @@ export default function Game( props: {user: User | undefined, navigate: boolean,
 
 	return (
 		<Stack id="test_parent" spacing={1}>
-			{props.user && props.user.username === null ? 
-				<FirstLoginPrompt user={props.user}/>
+			{auth.user.username === null ? 
+				<FirstLoginPrompt user={auth.user}/>
 				:
 				<div />
 			}

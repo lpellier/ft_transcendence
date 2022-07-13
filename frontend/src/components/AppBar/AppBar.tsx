@@ -1,4 +1,4 @@
-import {Link} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 import {User} from 'interfaces';
 import {PlayerAvatar} from	'../Avatars';
 import FriendBar from 'components/FriendBar/FriendBar';
@@ -15,34 +15,33 @@ import WebhookIcon from '@mui/icons-material/Webhook'
 import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
 import axios from 'axios';
 import {BarStyle} from '../../styles/tsxStyles/AppBar/AppBar'
+import { useAuth } from 'routes/routes';
 
 function LogOutLink() {
+	let auth = useAuth();
+	let navigate = useNavigate();
 
 	function logout() {
-  
 	  axios.get(process.env.REACT_APP_BACK_URL + '/auth/logout',
-	  {
-		  withCredentials: true,
-	  })
+	  { withCredentials: true, })
 	  .then(res => {	
 		console.log("Logout ")
-	  })
+	})
 	  .catch(function (err) {
 		console.log("Get request failed : ", err)
 	  });
+	  auth.signout(() => navigate("/"));
 	}
 
 	return (
 	  <nav>
-		<Link to="/login" style={{ textDecoration: 'none' }}>
-		  <Button
-			  onClick={logout}
-			  variant="contained"
-			  startIcon={<MeetingRoomIcon />}
-			  color="secondary">
-			Log Out
-		  </Button>
-		</Link>
+		<Button
+			onClick={logout}
+			variant="contained"
+			startIcon={<MeetingRoomIcon />}
+			color="secondary">
+		Log Out
+		</Button>
 	  </nav>
 	);
 }

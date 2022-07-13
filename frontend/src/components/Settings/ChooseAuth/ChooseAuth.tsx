@@ -2,7 +2,6 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography'
 import Modal from '@mui/material/Modal';
 import { ButtonStackStyle, Title } from '../../../styles/tsxStyles/Settings/Auth'
-import { User } from 'interfaces'
 import {useState, useEffect} from 'react'
 import Button from '@mui/material/Button'
 import Box from '@mui/material/Box'
@@ -11,6 +10,7 @@ import axios from 'axios'
 import VpnKeyIcon from '@mui/icons-material/VpnKey'
 import {ButtonModalStyle, IconStyle} from '../../../styles/tsxStyles/AppBar/PongMenu'
 import {ModalChooseAuth} from '../../../styles/tsxStyles/Settings/Auth'
+import { useAuth } from 'routes/routes';
 
 function GenerateQRCode(props: {url: string, setOpen: any}) {
 	
@@ -35,11 +35,12 @@ function GenerateQRCode(props: {url: string, setOpen: any}) {
 	)
 }
 
-function TFAButton(props: {user: User, setOpen: any}) {
+function TFAButton(props: { setOpen: any}) {
 	const [input, showedInput] = useState(false);
 	const [url, setUrl] = useState("");
-	const [user, setUser] = useState(props.user)
 
+	let auth = useAuth();
+	
 	useEffect(() => {
 		axios.get(
 		process.env.REACT_APP_BACK_URL + '/users/me',
@@ -47,7 +48,7 @@ function TFAButton(props: {user: User, setOpen: any}) {
 				withCredentials: true,
 		})
 		.then(res => {
-			setUser(res.data)
+			auth.update(res.data)
 		})
 		.catch(err => {
 			console.log("Appbar get request failed : ", err)
@@ -99,7 +100,7 @@ function TFAButton(props: {user: User, setOpen: any}) {
 
 	return (
 		<Stack>
-			{user.tfa === false ?
+			{auth.user.tfa === false ?
 				<div>
     				< Button
 						onClick={showFlashcode}
@@ -121,7 +122,7 @@ function TFAButton(props: {user: User, setOpen: any}) {
 	)
 }
 
-export default function ChooseAuth(props: {user: User}) {
+export default function ChooseAuth() {
 	const [open, setOpen] = useState<boolean>(false)
 
 	const handleOpen = () => {
@@ -152,7 +153,7 @@ export default function ChooseAuth(props: {user: User}) {
             		        Change Authentication
             		    </Typography>
             		    <Stack spacing={4} sx={ButtonStackStyle}>
-            		        <TFAButton user={props.user} setOpen={setOpen}/>
+            		        <TFAButton setOpen={setOpen}/>
             		    </Stack>
             		</Stack>
 				</Box>
