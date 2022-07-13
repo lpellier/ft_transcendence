@@ -5,11 +5,11 @@ import { User } from "interfaces";
 import "react-toastify/dist/ReactToastify.css";
 import { Outlet, Navigate, useOutlet, Link, useNavigate } from "react-router-dom";
 import FirstLoginPrompt from "./components/Prompt";
-import { useAuth } from "routes/routes";
 import { socket } from "index";
 import { ToastContainer } from "react-toastify";
 import { Button, IconButton, Snackbar } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
+import { useAuth } from "components/AuthProvider";
 
 export const ImageIdContext = createContext({
   imageId: 1,

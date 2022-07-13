@@ -9,7 +9,7 @@ import "./../styles/Game/inputs.css"
 import "socket.io-client"
 import { Sketch } from "../components/Game/game"
 import p5 from "p5";
-import { useAuth } from "./routes";
+import { useAuth } from "components/AuthProvider";
 
 class AudioFiles {
 	PADDLE_HIT_1: any;

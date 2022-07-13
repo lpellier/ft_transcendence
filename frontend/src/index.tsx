@@ -3,12 +3,19 @@ import AllRoutes from "./routes/routes";
 import "./styles/body.css";
 import io from "socket.io-client";
 import { BrowserRouter } from "react-router-dom";
+import React from "react";
 
 const tabletSize = 768;
 const phoneSize = 530;
 
 const root = createRoot(document.getElementById("root")!);
-enum achievements {ONESTAR, THREESTARS, QUIT, CHANGEAVATAR}
+
+enum achievements {
+  ONESTAR,
+  THREESTARS,
+  QUIT,
+  CHANGEAVATAR,
+}
 
 const SERVER = process.env.REACT_APP_BACK_URL || "";
 export const socket = io(SERVER, {
@@ -16,9 +23,11 @@ export const socket = io(SERVER, {
 });
 
 root.render(
-  <BrowserRouter>
-    <AllRoutes />
-  </BrowserRouter>
+  // <React.StrictMode>
+    <BrowserRouter>
+      <AllRoutes />
+    </BrowserRouter>
+  // </React.StrictMode>
 );
 
 export { tabletSize, phoneSize, achievements };

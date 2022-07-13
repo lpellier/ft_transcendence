@@ -16,66 +16,20 @@ import Settings from "../components/Settings/Settings";
 import Game from "./Game";
 import { toast,  } from 'react-toastify';
 import NotFound from "./NotFound";
-import React from "react";
-
-interface AuthContextType {
-    user: User;
-    // checkStatus: () => void;
-    signin: (user: User, callback: VoidFunction) => void;
-    update: (user: User) => void;
-    signout: (callback: VoidFunction) => void;
-}
-
-let AuthContext = React.createContext<AuthContextType>(null!);
-
-function AuthProvider({ children }: { children: React.ReactNode}) {
-    let [user, setUser] = React.useState<User>(null!);
-
-    // let checkStatus = () => {
-    //     axios.get(process.env.REACT_APP_BACK_URL + "/users/me",
-    //     {
-    //         withCredentials: true
-    //     }).then(res => {
-    //     setUser(res.data);
-    //     console.log("THIS IS A TEST", user)
-    //     })
-    //     .catch(err => console.log("THIS TOO IS A TEST", err))    }
-    
-    let signin = (user: User, callback: VoidFunction) => {
-        console.log("auth.signin called")
-        setUser(user);
-        callback();
-    };
-
-    let update = (user: User) => {
-        console.log("auth.update called")
-        setUser(user);
-    }
-
-    let signout = (callback: VoidFunction) => {
-        setUser(null!);
-        callback();
-    }
-
-    let value = {user, update, signin, signout};
-
-    return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
-}
-
-export function useAuth() {
-    return React.useContext(AuthContext);
-}
+import AuthProvider, { useAuth } from "components/AuthProvider";
+import Auth from "components/Auth";
 
 function RequireAuth({ children }: {children: JSX.Element}) {
     let auth = useAuth();
     let location = useLocation();
     
+    console.log("passed by RequireAuth");
+    
     if (!auth.user) {
-        return <Navigate to="/login" state={{ from: location }} replace/>;
+        return <Navigate to="/auth" state={{ from: location }} replace/>;
     }
     return children;
 }
-
 
 export function toastThatError(message: string) {
     toast.error(message, {
@@ -148,6 +102,7 @@ export default function AllRoutes()  {
             <AuthProvider>
                 <Routes>
                     <Route path="/login" element={<LogIn />} />
+                    <Route path="/auth" element={<Auth />} />
                     <Route path="/tfauth" element={<TFAuth />} />
                     <Route path="/" element={ <RequireAuth><App users={users} statusMap={statusMap} setStatusMap={setStatusMap}/></RequireAuth>}>
                         <Route path="profile" element={ <Profile self={true} />}/>

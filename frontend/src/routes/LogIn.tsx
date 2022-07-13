@@ -5,8 +5,8 @@ import Stack from '@mui/material/Stack';
 import LoginIcon from '@mui/icons-material/Login';
 import WebhookIcon from '@mui/icons-material/Webhook';
 import {Title, ButtonStyle, LinkStyle, IconStyle} from "../styles/tsxStyles/LogIn"
-import { useAuth } from './routes';
 import { Location, useLocation, useNavigate } from 'react-router-dom';
+import { useAuth } from "components/AuthProvider";
 
 const AuthAPI = process.env.REACT_APP_BACK_URL + "/auth"
 const MockAuthAPI = process.env.REACT_APP_BACK_URL + "/auth/mock"
@@ -42,29 +42,29 @@ function MockLogInButton()
 }
 
 export default function LogIn() {
-	type LocationProps = {
-		state: {
-		  from: Location;
-		};
-	  };
+	// type LocationProps = {
+	// 	state: {
+	// 	  from: Location;
+	// 	};
+	//   };
 
-	let auth = useAuth();
-	let navigate = useNavigate();
-	let location = useLocation() as unknown as LocationProps;
-	let from = location.state?.from?.pathname || "/";
+	// let auth = useAuth();
+	// let navigate = useNavigate();
+	// let location = useLocation() as unknown as LocationProps;
+	// let from = location.state?.from?.pathname || "/";
 
-	useEffect(()=>{
-		axios.get(process.env.REACT_APP_BACK_URL + "/users/me",
-        {
-            withCredentials: true
-        }).then(res => {
-        auth.signin(res.data, () => {
-			console.log("about to login", from)
-			navigate(from, {replace: true});
-		});
-		        })
-        .catch(err => console.log("THIS TOO IS A TEST", err))
-		;}, []);
+	// useEffect(()=>{
+	// 	axios.get(process.env.REACT_APP_BACK_URL + "/users/me",
+    //     {
+    //         withCredentials: true
+    //     }).then(res => {
+    //     auth.signin(res.data, () => {
+	// 		console.log("about to login", from)
+	// 		navigate(from, {replace: true});
+	// 	});
+	// 	        })
+    //     .catch(err => console.log("THIS TOO IS A TEST", err))
+	// 	;}, [auth, from, navigate]);
 
     return (
         <Stack spacing={10} sx={Title}>
