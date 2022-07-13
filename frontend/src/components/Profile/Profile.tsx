@@ -42,7 +42,6 @@ function PlayerInfoBand(props: {level: number, user: User}) {
 	const [xp, setXp] = useState<number>(Math.trunc(props.level * 100) % 100) 
 	const [level, setLevel] = useState<number>(Math.trunc(props.level)) 
 
-	console.log("came here")
 	useEffect(() => {
 		setLevel(Math.trunc(props.level))
 		setXp(Math.trunc(props.level * 100) % 100)
