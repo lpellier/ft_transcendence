@@ -235,6 +235,8 @@ export class GameGateway {
 		@ConnectedSocket() client : Socket,
 		@MessageBody() data : [string, boolean, number, string]
 	) {
+		if (this.clients.indexOf(client.id) === -1)
+			return ;
 		if (userInGame(this.games, this.users[this.clients.indexOf(client.id)][1]))
 			return;
 		let existing_game : Game = null;

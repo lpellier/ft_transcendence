@@ -1719,6 +1719,10 @@ class Vector {
 				} else if (socket.id === id_p2) {
 				game.players.push(new Player(2, id_p2, name_p2, real_id_p2));
 				game.players.push(new Player(1, id_p1, name_p1, real_id_p1));
+				} else {
+					game.players.push(new Player(1, id_p1, name_p1, real_id_p1));
+					game.players.push(new Player(2, id_p2, name_p2, real_id_p2));
+					game.spectator = true;
 				}
 				game.pong = new Pong();
 			}
@@ -2251,6 +2255,7 @@ class Vector {
 			: (icon_p2 = consts.CROSS_ICON2);
 		p.pop();
 	}
+	console.log(game.players);
 	p.image(icon_p1, consts.WIDTH * 0.3, consts.HEIGHT * 0.58, consts.small_square_diameter * 1.5, consts.small_square_diameter * 1.5);
 	p.image(icon_p2, consts.WIDTH * 0.80, consts.HEIGHT * 0.58, consts.small_square_diameter * 1.5, consts.small_square_diameter * 1.5);
 	}
