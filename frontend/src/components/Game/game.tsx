@@ -10,7 +10,6 @@
 	// TODO IMPROVEMENTS
 	// ? implement better ai
 	// ? cute animation showing the roll of pong value in casino
-	// ? socket off for one time events
 
 	export const Sketch = (p: any) => {
 
