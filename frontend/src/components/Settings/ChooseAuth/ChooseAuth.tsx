@@ -5,7 +5,7 @@ import {
   ButtonStackStyle,
   Title,
 } from "../../../styles/tsxStyles/Settings/Auth";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import QRCode from "react-qr-code";
