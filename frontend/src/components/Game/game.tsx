@@ -5,7 +5,7 @@
 	import { audio_files } from "routes/Game"
 
 	// TODO ISSUES
-	// ? when player leaves website during wait readiness phase, doesnt quite work all of the time
+	// ? spectate a game that has less than 2 players
 	// ? i think bounce angle is bigger when bounced on top of paddle than on bottom, weird stuff
 	// ? game doesnt update username if changed because getting the username once in setup, should check periodically if it's still the same
 

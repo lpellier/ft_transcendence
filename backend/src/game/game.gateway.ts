@@ -182,19 +182,12 @@ export class GameGateway {
 
 	@SubscribeMessage('socket response')
 	handleSocketResponseInvitation(@ConnectedSocket() client : Socket, @MessageBody() data : any) {
-		console.log("in socket response")
 		for (let game of this.games) {
 			if (game.room_id === data.r_id && game.polling === false) {
 				game.polling = true;
-				console.log("\n\nStart poll")
 				client.join(game.room_id);
 				game.addPlayer(client.id, [data.id.toString(), data.name, false]);
 				let inte = setInterval(() => {
-					console.log("polling...")
-					if (this.clients.indexOf(client.id) != -1 && this.clients.indexOf(data.other_id) != -1) {
-						console.log(this.clients.indexOf(client.id), this.users[this.clients.indexOf(client.id)]);
-						console.log(this.clients.indexOf(data.other_id), this.users[this.clients.indexOf(data.other_id)]);
-					}
 					if (this.clients.indexOf(client.id) != -1 && this.clients.indexOf(data.other_id) != -1 && this.users[this.clients.indexOf(client.id)][2] === true && this.users[this.clients.indexOf(data.other_id)][2] === true) {
 						this.server.to(game.room_id).emit("waiting-player", game.room_id, game.score_limit, game.map.name);
 						game.state = "waiting-readiness";
@@ -206,11 +199,23 @@ export class GameGateway {
 				}, 500);
 				setTimeout(() => {
 					if (inte) {
-						console.log("polling timeout")
 						game.polling = false;
 						clearInterval(inte);
 					}
 				}, 10000)
+			}
+		}
+	}
+
+	@SubscribeMessage("spectate game") 
+	async handleSpectateGame(@ConnectedSocket() client : Socket, @MessageBody() name : string) {
+		for (let game of this.games) {
+			for (let player of game.players) {
+				if (player.real_name === name) {
+					client.join(game.room_id);
+					game.addSpectator(client.id);
+					this.server.to(client.id).emit("spectate", game.room_id, game.score_limit, game.map.name, game.state, game.players[0].id, (game.players.length > 1 ? game.players[1].id : "null"), game.players[0].real_name, (game.players.length > 1 ? game.players[1].real_name : "null"), game.players[0].real_id, (game.players.length > 1 ? game.players[1].real_id : 0));
+				}
 			}
 		}
 	}
@@ -225,7 +230,6 @@ export class GameGateway {
 
 		client.join(game.room_id);
 		game.addPlayer(client.id, [data[1].toString(), user2, false]);
-		console.log("IN ACCEPTED GAME")
 		this.server.emit("please send back", {id : data[0].userId, other_id : client.id, name : user1, r_id : game.room_id});
 	}
 
@@ -270,7 +274,7 @@ export class GameGateway {
 				if (data[1] === true) {
 					client.join(game.room_id);
 					game.addSpectator(client.id);
-					this.server.to(client.id).emit("spectate", game.room_id, game.score_limit, game.map.name, game.state, game.players[0].id, (game.players.length > 1 ? game.players[1].id : "null"), game.players[0].real_name, (game.players.length > 1 ? game.players[1].real_name : "null"), game.players[0].real_id, (game.players.length > 1 ? game.players[1].real_id : 0)); // need to handle case where only one user is connected
+					this.server.to(client.id).emit("spectate", game.room_id, game.score_limit, game.map.name, game.state, game.players[0].id, (game.players.length > 1 ? game.players[1].id : "null"), game.players[0].real_name, (game.players.length > 1 ? game.players[1].real_name : "null"), game.players[0].real_id, (game.players.length > 1 ? game.players[1].real_id : 0));
 				}
 				else if (game.players.length < 2 && game.spaceAvailable(this.users[this.clients.indexOf(client.id)][1])) {
 					client.join(game.room_id);
