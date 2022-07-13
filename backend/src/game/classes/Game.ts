@@ -23,6 +23,7 @@ export class Game {
 	frames_since_point : number;
 	publicity : string;
 	update_interval : any;
+	countdown_timeout : any;
 
 	invert : boolean;
 	polling : boolean;

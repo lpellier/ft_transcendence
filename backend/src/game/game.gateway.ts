@@ -91,8 +91,12 @@ export class GameGateway {
 			for (let game of this.games) {
 				for (const player of game.players) {
 					if (player.id === client.id) {
+						game.state = "game-over"
 						this.server.to(game.room_id).emit("player-disconnect", player.index);
-						clearInterval(game.update_interval);
+						if (game.update_interval)
+							clearInterval(game.update_interval);
+						if (game.countdown_timeout)
+							clearTimeout(game.countdown_timeout);
 						if (game.players.length === 2 && game.state === "in-game") {
 							if (game.players.indexOf(player) === 0) {
 								this.game_service.incrementVictories(game.players[1].real_id, game.score[1]);
@@ -104,7 +108,6 @@ export class GameGateway {
 							}
 							this.game_service.incrementLosses(player.real_id, game.score[game.players.indexOf(player)]);
 						}
-						game.state = "game-over"
 						this.server.emit("new disconnection", game.players[game.players.indexOf(player)].real_id);
 						if (game.players.length > 1)
 							this.server.emit("quit-game", game.players[(game.players.indexOf(player) + 1) % 2].real_id);
@@ -128,8 +131,12 @@ export class GameGateway {
 		for (let game of this.games) {
 			for (let player of game.players) {
 				if (player.id === client.id) {
+					game.state = "game-over"
 					this.server.to(game.room_id).emit("player-disconnect", player.index);
-					clearInterval(game.update_interval);
+					if (game.update_interval)
+						clearInterval(game.update_interval);
+					if (game.countdown_timeout)
+						clearTimeout(game.countdown_timeout);
 					if (game.players.length === 2 && game.state === "in-game") {
 						if (game.players.indexOf(player) === 0) {
 							this.game_service.incrementVictories(game.players[1].real_id, game.score[1]);
@@ -142,7 +149,6 @@ export class GameGateway {
 						this.game_service.incrementLosses(player.real_id, game.score[game.players.indexOf(player)]);
 						this.usersService.addAchievement(player.real_id, 2);
 					}
-					game.state = "game-over"
 					this.server.emit("quit-game", game.players[0].real_id)
 					if (game.players.length > 1)
 						this.server.emit("quit-game", game.players[1].real_id)
@@ -157,7 +163,10 @@ export class GameGateway {
 		for (let game of this.games) {
 			for (let player of game.players) {
 				if (player.id === client.id) {
-					clearInterval(game.update_interval);
+					if (game.update_interval)
+						clearInterval(game.update_interval);
+					if (game.countdown_timeout)
+						clearTimeout(game.countdown_timeout);
 					this.games.splice(this.games.indexOf(game), 1);
 					return ;
 				}
@@ -303,7 +312,7 @@ export class GameGateway {
 			[game.players[1].id, game.players[1].pos],
 			game.score, game.pong.value);
 		for (let i = 1; i < 5; i++)
-			setTimeout(() => {
+			game.countdown_timeout = setTimeout(() => {
 				if (game.state !== "game-over")
 					test.to(game.room_id).emit("countdown-server");
 				if (i === 4) {
