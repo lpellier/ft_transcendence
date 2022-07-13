@@ -79,6 +79,7 @@ export class UsersService {
     const profile: Profile = {
       id: user.id,
       username: user.username,
+      tfa: user.tfa,
       victories: user.stats.victories,
       losses: user.stats.losses,
       level: user.stats.level,
