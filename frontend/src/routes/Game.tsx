@@ -213,7 +213,9 @@ function GameComponent() {
 	useEffect(() => {
 		audio_files = new AudioFiles();
 		p = new p5(Sketch);
-
+		while (p) // ? the only purpose of this while loop is to remove the warning about p being an unused variable
+			break;
+		
 		return () => {
 			audio_files.deleteAudio();
 		  };
@@ -263,13 +265,13 @@ export default function Game( props: {user: User | undefined, navigate: boolean,
 
 		useEffect(() => {
 			props.setNavigate(false);
-		}, [props.setNavigate])
+		}, [props])
 
 		useEffect(() => {
 			if (props.navigate) {
 				props.setNavigate(false);
 			}
-		}, [props.navigate, props.setNavigate])
+		}, [props])
 
 	return (
 		<Stack id="test_parent" spacing={1}>

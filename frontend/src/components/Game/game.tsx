@@ -15,7 +15,6 @@
 	// ? socket off for one time events
 
 	export const Sketch = (p: any) => {
-	let sent_back : boolean = false;
 
 	let spritesheet: any;
 	let spritedata: any;
@@ -2998,13 +2997,14 @@ class Vector {
 		buttons.hide();
 		inputs.hide();
 		game.timer = 4;
+		let game_ref = game;
 		for (let i = 0; i < 5; i++) {
 		setTimeout(() => {
-			game.timer--;
-			if (game.timer === 0) audio_files.playBip(audio_files.BIP_FINAL);
-			else if (game.timer >= 0) audio_files.playBip(audio_files.BIP);
-			if (game.timer === -1 && game.state === "countdown") {
-			game.setState("in-game");
+			game_ref.timer--;
+			if (game_ref.timer === 0) audio_files.playBip(audio_files.BIP_FINAL);
+			else if (game_ref.timer >= 0) audio_files.playBip(audio_files.BIP);
+			if (game_ref.timer === -1 && game_ref.state === "countdown") {
+			game_ref.setState("in-game");
 			}
 		}, i * 1000);
 		}

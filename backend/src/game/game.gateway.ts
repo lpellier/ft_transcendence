@@ -88,7 +88,6 @@ export class GameGateway {
 		if ((index = this.clients.indexOf(client.id)) !== -1) {
 			this.users.splice(index, 1);
 			this.clients.splice(index, 1);
-			console.log(this.users);
 			for (let game of this.games) {
 				for (const player of game.players) {
 					if (player.id === client.id) {
@@ -124,7 +123,6 @@ export class GameGateway {
 			return ;
 		this.users.splice(index, 1);
 		this.clients.splice(index, 1);
-		console.log(this.users);
 		for (let game of this.games) {
 			for (let player of game.players) {
 				if (player.id === client.id) {
@@ -171,7 +169,6 @@ export class GameGateway {
 	getConnection(@MessageBody() data : [string, string, string]) {
 		this.clients.push(data[0]);
 		this.users.push([data[1], data[2], false]);
-		console.log(this.users);
 	}
 
 	@SubscribeMessage("finished loading")
