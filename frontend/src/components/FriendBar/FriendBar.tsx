@@ -27,17 +27,13 @@ function UserList(props: {
     <List className="user-list">
       {props.users.map((item) => (
         <div key={item.id}>
-          {props.friends.find((friend) => friend.id === item.id) ? (
+          {props.friends.find((friend) => friend.id === item.id) || props.currentUser.id === item.id ? (
             <div />
           ) : (
             <div>
-              {props.currentUser.id !== item.id ? (
-                <ListItem>
-                  <ListItemText primary={item.username} />
-                </ListItem>
-              ) : (
-                <div />
-              )}
+              <ListItem>
+                <ListItemText primary={item.username} />
+              </ListItem>
             </div>
           )}
         </div>

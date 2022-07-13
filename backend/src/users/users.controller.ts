@@ -23,6 +23,11 @@ import { UserParams } from './params/user.params';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  @Get()
+  async findAllUsers(): Promise<any> {
+    return this.usersService.getAllUsers();
+  }
+
   @Get('me')
   async findMe(@Req() req): Promise<Profile> {
     return this.usersService.getProfile(req.user.id);
