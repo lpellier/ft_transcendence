@@ -5,6 +5,7 @@ import * as consts from "./classes/Consts"
 import * as utils from "./utils"
 import { GameService } from "./game.service"
 import { ConfigService } from "@nestjs/config";
+import { UsersService } from "src/users/users.service";
 
 let test_count : number = 0;
 
@@ -70,7 +71,7 @@ function userInGame(games : Game[], username : string) : boolean {
 	  }
   })
 export class GameGateway {
-	constructor(private readonly game_service: GameService) {}
+	constructor(private readonly game_service: GameService, private usersService: UsersService) {}
 
 
 	@WebSocketServer()
@@ -132,6 +133,7 @@ export class GameGateway {
 							this.game_service.createMatch({ladder: 0, winnerId : game.players[0].real_id, loserId: game.players[1].real_id, score: game.score});
 						}
 						this.game_service.incrementLosses(player.real_id, game.score[game.players.indexOf(player)]);
+						this.usersService.addAchievement(player.real_id, 2);
 					}
 					game.state = "game-over"
 					this.server.emit("quit-game", game.players[0].real_id)

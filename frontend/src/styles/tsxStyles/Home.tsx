@@ -32,6 +32,7 @@ const StatBox = {
     overflow: 'auto',
 	paddingTop: '4%',
 	paddingLeft: '4%',
+	paddingRight: '4%',
 }
 
 const MatchHistoryBox = {

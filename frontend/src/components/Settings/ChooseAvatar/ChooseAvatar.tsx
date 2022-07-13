@@ -1,6 +1,5 @@
 import Stack from '@mui/material/Stack';
 import Container from '@mui/material/Container';
-import DotsMobileStepper from './Stepper'
 import {User} from 'interfaces'
 import Box from '@mui/material/Box';
 import FaceIcon from '@mui/icons-material/Face'
@@ -17,7 +16,7 @@ import {useState} from 'react'
 import Button from '@mui/material/Button';
 import axios from 'axios'
 import { ImageIdContext } from 'App';
-import {toastThatError} from '../../../routes/routes'
+import {toastThatError, toastIt} from '../../../routes/routes'
 
 const Input = styled('input')({
 	display: 'none',
@@ -59,7 +58,7 @@ function UploadButton(props: {setOpen: any}) {
 		const formData = new FormData();
 		formData.append('avatar', selectedFile)
 
-		axios.put("http://127.0.0.1:3001/users/upload-avatar",
+		axios.put(process.env.REACT_APP_BACK_URL + "/users/upload-avatar",
 		formData,
 		{
 			withCredentials: true,
@@ -75,7 +74,6 @@ function UploadButton(props: {setOpen: any}) {
 			toastThatError('Avatar upload failed')
 		})
 
-		props.setOpen(false)
 	};
 
 	function closeModal() {
@@ -203,7 +201,6 @@ export default function AvatarList(props: {user: User}){
         	  <Box sx={ModalChooseAvatar}>
         	    <Container>
         	      <Stack spacing={2} style={{justifyContent: 'center'}}>
-        	            {/* <DotsMobileStepper /> */}
         	            <ChooseAvatarButton user={props.user} setOpenOne={setOpen}/>
         	      </Stack>
         	    </Container>

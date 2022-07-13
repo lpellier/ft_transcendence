@@ -10,8 +10,12 @@ import MilitaryTechIcon from '@mui/icons-material/MilitaryTech';
 import UpdateIcon from '@mui/icons-material/Update';
 import {StatTitle, StatBox, MatchHistoryBox} from "../../styles/tsxStyles/Home"
 import {Stats} from 'interfaces'
+import {ChangeAvatarTrophy, QuitTrophy, OneWinTrophy, ThreeWinsTrophy} from './Trophies'
 import axios from 'axios'
-import { Table, TableHead, TableBody, TableRow, TableCell } from '@mui/material';
+
+import { Table, TableBody, TableRow, TableCell, useRadioGroup } from '@mui/material';
+
+enum achievements {ONESTAR, THREESTARS, QUIT, CHANGEAVATAR}
 
 const ButtonLeadStyle = {
 	backgroundColor: "rgb(170, 50, 190)",
@@ -64,17 +68,43 @@ function StatsBox(props: {user: User}){
 	);
 }
 	
-function TrophyBox(){
+function TrophyBox(props: {user: User}) {
+	const [user, setUser] = useState<User>(props.user)
 
-		return(
-			<Stack spacing={1}>
-				<BoardComponent 
-					icon={<EmojiEventsIcon />}
-					title="Trophy" />
-				<Box sx={StatBox}>
-				</Box>
-			</Stack>
-		);
+	useEffect(() => {
+		axios.get(process.env.REACT_APP_BACK_URL + "/users/me",
+		{ withCredentials: true })
+		.then(res => { setUser(res.data) })
+		.catch(err => { console.log("Get user failed : ", err)})
+	}, [props.user.achievements])
+
+	return(
+		<Stack spacing={1}>
+			<BoardComponent 
+				icon={<EmojiEventsIcon />}
+				title="Trophy" />
+			<Box sx={StatBox}>
+				<Stack spacing={1}>
+				{user.achievements.find(val => val === achievements.ONESTAR) !== undefined?
+					<OneWinTrophy /> 
+					:
+					<div />}
+				{user.achievements.find(val => val === achievements.THREESTARS) !== undefined?
+					<ThreeWinsTrophy />
+						:
+					<div />}
+				{user.achievements.find(val => val === achievements.QUIT) !== undefined?
+					<QuitTrophy /> 
+						:
+					<div />}
+				{user.achievements.find(val => val === achievements.CHANGEAVATAR) !== undefined?
+					<ChangeAvatarTrophy />
+						:
+					<div />}
+				</Stack>
+			</Box>
+		</Stack>
+	);
 }
 
 function LeaderboardBox(props: {users: User[]}){
@@ -83,7 +113,7 @@ function LeaderboardBox(props: {users: User[]}){
 	useEffect(() => {
 		
 		axios.get(
-			"http://127.0.0.1:3001/stats/lead",
+			process.env.REACT_APP_BACK_URL + "/stats/lead",
 			{
 				withCredentials: true
 			}
@@ -169,7 +199,7 @@ function MatchhistoryBox(props: {user: User}){
 					<Table>
 						<TableBody>
 							{props.user.matchHistory.map(match => (
-								<TableRow key={match.id} style={{backgroundColor: match.winnerId == props.user.id? successColor: failColor}}>
+								<TableRow key={match.id} style={{backgroundColor: match.winnerId === props.user.id? successColor: failColor}}>
 									<TableCell>
 										<Typography>{match.players[0].username}</Typography>
 									</TableCell>
@@ -198,7 +228,7 @@ export default function StatsBoards(props: {user: User, users: User[]}) {
 		<Stack direction="row" spacing={1}>
 				<Stack spacing={1}>
 					<StatsBox user={props.user}/>
-					<TrophyBox />
+					<TrophyBox user={props.user}/>
 				</Stack>
 				<Stack spacing={1}>
 					<LeaderboardBox users={props.users}/>
