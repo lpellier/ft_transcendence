@@ -42,11 +42,13 @@ function AuthProvider({ children }: { children: React.ReactNode}) {
     //     .catch(err => console.log("THIS TOO IS A TEST", err))    }
     
     let signin = (user: User, callback: VoidFunction) => {
+        console.log("auth.signin called")
         setUser(user);
         callback();
     };
 
     let update = (user: User) => {
+        console.log("auth.update called")
         setUser(user);
     }
 

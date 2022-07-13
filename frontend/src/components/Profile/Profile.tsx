@@ -78,10 +78,12 @@ export default function Profile(props: {self: boolean}) {
 	}
 
 	useEffect( () => {
-		axios.get(process.env.REACT_APP_BACK_URL + "/users/" + params.id || "",
-		{withCredentials: true}).then(res => {
-		setProfile(res.data);
-		})
+		if (props.self === false && !profile) {
+			axios.get(process.env.REACT_APP_BACK_URL + "/users/" + params.id || "",
+			{withCredentials: true}).then(res => {
+			setProfile(res.data);
+			})
+		}
 	}, []);
 
 
