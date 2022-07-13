@@ -64,7 +64,10 @@ export default function LogIn(props: {user: User | undefined, auth: boolean}) {
 				</a>
 			</nav>
 			<nav>
-				<a href={MockAuthAPI} style={LinkStyle}>
+				<a href={MockAuthAPI + "/1"} style={LinkStyle}>
+					<MockLogInButton />
+				</a>
+				<a href={MockAuthAPI + "/2"} style={LinkStyle}>
 					<MockLogInButton />
 				</a>
 			</nav>
