@@ -198,7 +198,7 @@ function MatchhistoryBox(props: {user: User}){
 	);
 }
 
-export default function StatsBoards(props: {user: User, users: User[]}) {
+export default function StatsBoards() {
 	let auth = useAuth();
 
 	console.log("StatsBoards props : ", auth.user);

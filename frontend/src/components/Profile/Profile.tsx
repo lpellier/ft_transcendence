@@ -7,6 +7,7 @@ import {User} from 'interfaces'
 import {PlayerBarStyle, SkillBarContourStyle, TitleStyle} from "../../styles/tsxStyles/Home";
 import './../../styles/Other/SkillBar.css'
 import {PlayerAvatar} from	'../Avatars';
+import { useAuth } from 'routes/routes'
 
 const OverallBoxStyle = {
 	paddingTop: '4vh',
@@ -48,7 +49,7 @@ function PlayerInfoBand(props: {level: number, user: User}) {
 			<Box sx={PlayerBarStyle}>
 				<Stack >
 					<Stack direction="row" spacing={35}>
-						<PlayerAvatar image={process.env.REACT_APP_BACK_URL + '/avatars/' + props.user.id + '.png'} onClick={ () => {} }/>
+						<PlayerAvatar image={process.env.REACT_APP_BACK_URL + '/avatars/' + props.user.id + '.png'} />
 						<Stack spacing={1} >
 							<Typography variant="h5">
 							 	{props.user.username}
@@ -64,18 +65,20 @@ function PlayerInfoBand(props: {level: number, user: User}) {
 	);
 }
 
-export default function Profile(props: {user: User | undefined, users: User[]}) {
+export default function Profile(props: {user: User | undefined}) {
+	let auth = useAuth();
+	let user = props.user;
+
+	if (user == undefined) {
+		user = auth.user;
+	}
 
     return (
 		<Box sx={OverallBoxStyle}>
-			{props.user?
-				<Stack spacing={1}>
-					<PlayerInfoBand level={props.user.level} user={props.user} />
-					<StatsBoards user={props.user} users={props.users} />
-				</Stack>
-					:
-				<div/>
-			}
+			<Stack spacing={1}>
+				<PlayerInfoBand level={user.level} user={user} />
+				<StatsBoards />
+			</Stack>
 		</Box>
     );
 }

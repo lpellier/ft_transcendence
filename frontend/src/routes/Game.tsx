@@ -251,7 +251,7 @@ function GameComponent() {
 	);
 }
 
-export default function Game( props: { navigate: boolean, setNavigate: React.Dispatch<React.SetStateAction<boolean>> }) {	
+export default function Game() {	
 	let auth = useAuth();
 	
 	useEffect(() => {
@@ -261,16 +261,6 @@ export default function Game( props: { navigate: boolean, setNavigate: React.Dis
 		user.id = "user";
 		document.head.append(user);
 		}, [auth.user?.id, auth.user])
-
-		useEffect(() => {
-			props.setNavigate(false);
-		}, [props.setNavigate])
-
-		useEffect(() => {
-			if (props.navigate) {
-				props.setNavigate(false);
-			}
-		}, [props.navigate, props.setNavigate])
 
 	return (
 		<Stack id="test_parent" spacing={1}>

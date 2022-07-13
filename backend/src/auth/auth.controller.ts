@@ -71,7 +71,7 @@ export class AuthController {
   @Get('mock')
   @Redirect()
   async mockLogin(@Res({ passthrough: true }) res: Response) {
-    const user = await this.authService.getMock();
+    const user = await this.authService.getMock(1);
     const isAuthenticated = !user.tfa;
     const token = await this.authService.login(user.id, isAuthenticated);
     res.cookie('jwt', token, cookieOptions);
@@ -81,4 +81,19 @@ export class AuthController {
     }
     return { url: redirectUrl };
   }
+
+  @Get('mock2')
+  @Redirect()
+  async mockLogi2(@Res({ passthrough: true }) res: Response) {
+    const user = await this.authService.getMock(2);
+    const isAuthenticated = !user.tfa;
+    const token = await this.authService.login(user.id, isAuthenticated);
+    res.cookie('jwt', token, cookieOptions);
+    let redirectUrl = this.configService.get('FRONT_URL');
+    if (isAuthenticated === false) {
+      redirectUrl += '/tfauth'
+    }
+    return { url: redirectUrl };
+  }
+
 }

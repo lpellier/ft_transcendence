@@ -55,7 +55,6 @@ export default function FriendBar(props: {
   let [open, setOpen] = useState<boolean>(false);
   let [addFriendClicked, setAddFriendClicked] = useState<boolean>(false);
   let [friends, setFriends] = useState<User[]>([]);
-  // let [statusMap, setStatusMap] = useState<Map<number, string> >(new Map<number, string>());
 
   const getFriends = (data: User[]) => {
     setFriends(data);

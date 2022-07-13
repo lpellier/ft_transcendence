@@ -37,7 +37,7 @@ export class AuthService {
     return validated;
   }
 
-  async getMock() {
-    return this.usersService.findOrCreateUser(1);
+  async getMock(id: number) {
+    return this.usersService.findOrCreateUser(id);
   }
 }

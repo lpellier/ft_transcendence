@@ -93,14 +93,14 @@ function ProjectName() {
 	);
 }
 
-export default function SearchAppBar(props: {user: User, users: User[], setOtherUser: React.Dispatch<React.SetStateAction<User | undefined>>, statusMap: Map<number, string>, setStatusMap: React.Dispatch<React.SetStateAction<Map<number, string>>>}) {
+export default function SearchAppBar(props: {user: User, users: User[], statusMap: Map<number, string>, setStatusMap: React.Dispatch<React.SetStateAction<Map<number, string>>>}) {
 
   return (
       <AppBar position="static">
         <Toolbar style={ BarStyle }>
 			<nav>
 				<Link to="profile" style={{ textDecoration: 'none' }}>
-					<PlayerAvatar image={process.env.REACT_APP_BACK_URL + '/avatars/' + props.user.id + '.png'} onClick={() => props.setOtherUser(props.user)} />
+					<PlayerAvatar image={process.env.REACT_APP_BACK_URL + '/avatars/' + props.user.id + '.png'} />
 				</Link>
 			</nav>
 			<PlayerName name={props.user.username} />

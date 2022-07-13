@@ -3,7 +3,7 @@ import Stack from "@mui/material/Stack";
 import SearchAppBar from "components/AppBar/AppBar";
 import { User } from "interfaces";
 import "react-toastify/dist/ReactToastify.css";
-import { Outlet, Navigate, useOutlet, Link } from "react-router-dom";
+import { Outlet, Navigate, useOutlet, Link, useNavigate } from "react-router-dom";
 import FirstLoginPrompt from "./components/Prompt";
 import { useAuth } from "routes/routes";
 import { socket } from "index";
@@ -33,6 +33,14 @@ export default function App(props: {
 }
 
   let auth = useAuth();
+  let navigate = useNavigate();
+
+  useEffect(() => {
+    socket.on('accepted game', () => navigate("/game"));
+    return () => {
+        socket.off('accepted game');
+    }
+  }, [])
   
   const outlet = useOutlet();
 
@@ -112,7 +120,6 @@ const action = (
             <SearchAppBar
               user={auth.user}
               users={props.users}
-              setOtherUser={props.setOtherUser}
               statusMap={props.statusMap}
               setStatusMap={props.setStatusMap}
             />

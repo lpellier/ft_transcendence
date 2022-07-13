@@ -2,6 +2,7 @@ import {
     Routes,
     Route,
     Navigate,
+    useNavigate,
 } from "react-router-dom";
 import axios from 'axios'
 import LogIn from './LogIn'
@@ -102,9 +103,8 @@ export default function AllRoutes()  {
 
     let [users, setUsers] = useState<User[]>([]);
 	let [otherUser, setOtherUser] = useState<User>();
-    const [navigate, setNavigate] = useState(false);
     let [statusMap, setStatusMap] = useState<Map<number, string> >(new Map<number, string>());
-
+    
     
     useEffect(() => {
         const handler = (data: any) => {
@@ -179,27 +179,18 @@ export default function AllRoutes()  {
         });
 	}, [])
 
-    useEffect(() => {
-        const handler = () => { 
-            setNavigate(true) 
-        }
-        socket.on('accepted game', handler);
-        return () => {
-            socket.off('accepted game', handler);
-        }
-      }, [])
+    
 
 	return (
         <div>
-            { navigate? <Navigate replace to="/game" /> : <div/> }
             <AuthProvider>
                 <Routes>
                     <Route path="/login" element={<LogIn />} />
                     <Route path="/tfauth" element={<TFAuth />} />
                     <Route path="/" element={ <RequireAuth><App users={users} setOtherUser={setOtherUser} statusMap={statusMap} setStatusMap={setStatusMap}/></RequireAuth>}>
-                        <Route path="profile" element={ <Profile user={otherUser} users={users}/>}/>
+                        <Route path="profile" element={ <Profile user={undefined} />}/>
                         <Route path="chat" element={<Chat users={users} setOtherUser={setOtherUser} statusMap={statusMap}/>}/>
-                        <Route path="game" element={<Game navigate={navigate} setNavigate={setNavigate}/> }/>
+                        <Route path="game" element={<Game /> }/>
                         <Route path="settings" element={<Settings />}/>
                     </Route>
                     <Route path="*" element={<NotFound />} />

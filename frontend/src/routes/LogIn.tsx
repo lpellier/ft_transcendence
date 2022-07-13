@@ -11,6 +11,7 @@ import { Navigate, useNavigate } from 'react-router-dom';
 
 const AuthAPI = process.env.REACT_APP_BACK_URL + "/auth"
 const MockAuthAPI = process.env.REACT_APP_BACK_URL + "/auth/mock"
+const MockAuthAPI2 = process.env.REACT_APP_BACK_URL + "/auth/mock2"
 
 function LogInButton()
 {
@@ -74,6 +75,9 @@ export default function LogIn() {
 			</nav>
 			<nav>
 				<a href={MockAuthAPI} style={LinkStyle}>
+					<MockLogInButton />
+				</a>
+				<a href={MockAuthAPI2} style={LinkStyle}>
 					<MockLogInButton />
 				</a>
 			</nav>
