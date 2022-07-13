@@ -299,7 +299,7 @@ function Channels(props : {user: User, users: User[], currentRoom: Room, setCurr
 				</div>
 			</Stack>
 			:
-			<DirectMessaging user={props.user} users={props.users} rooms={rooms} currentRoom={props.currentRoom} setCurrentRoom={props.setCurrentRoom} setOtherUser={props.setOtherUser} statusMap={props.statusMap}/>
+			<DirectMessaging user={props.user} users={props.users} rooms={rooms} currentRoom={props.currentRoom} setCurrentRoom={props.setCurrentRoom} statusMap={props.statusMap}/>
 			}
 		</Stack>
 		</div>

@@ -18,7 +18,6 @@ export const ImageIdContext = createContext({
 
 export default function App(props: {
   users: User[];
-  setOtherUser: React.Dispatch<React.SetStateAction<User | undefined>>;
   statusMap: Map<number, string>;
   setStatusMap: React.Dispatch<React.SetStateAction<Map<number, string>>>;
 }) {
