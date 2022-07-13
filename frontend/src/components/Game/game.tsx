@@ -8,10 +8,10 @@
 	// ? game doesnt update username if changed because getting the username once in setup, should check periodically if it's still the same
 
 	// TODO IMPROVEMENTS
-	// ? implement better ai
-	// ? cute animation showing the roll of pong value in casino
 
 	export const Sketch = (p: any) => {
+
+	p.disableFriendlyErrors = true;
 
 	let spritesheet: any;
 	let spritedata: any;
@@ -992,6 +992,7 @@
 	}
 
 	scorePoint(invert: boolean) {
+		reset_ai_pos = true;
 		this.frame_count_shake = 0;
 		audio_files.playScore();
 		this.pong.velocity = [0, 0];
@@ -2344,6 +2345,9 @@ class Vector {
 	buttons.opponent_left_ok.show();
 	}
 
+	let ai_pos : number = 0; // ? random pos on the paddle of the ai
+	let reset_ai_pos : boolean = true; // ? when true, recalculate ai pos
+
 	function movePlayers() {
 	if (!game.local && !game.spectator) {
 		if (game.players[0].index === 1) {
@@ -2366,8 +2370,13 @@ class Vector {
 
 		if (game.ai) {
 		// ? chaser ai code
-		let player_pos = game.players[1].pos[1] + game.players[0].height / 2;
-		let pos_diff = player_pos - game.pong.cY();
+		let ai_diff : number = 0;
+		if (reset_ai_pos) {
+			ai_diff = (Math.random() * (game.players[1].height));
+			reset_ai_pos = false;
+		}
+		ai_pos = game.players[1].pos[1] + ai_diff;
+		let pos_diff = ai_pos - game.pong.cY();
 
 		if (pos_diff > consts.HEIGHT / 150) game.players[1].moveUp();
 		else if (pos_diff < -consts.HEIGHT / 150) game.players[1].moveDown();
@@ -2749,6 +2758,7 @@ class Vector {
 			game.pong.speed *
 			-Math.sin(angle);
 		}
+		reset_ai_pos = true;
 		return;
 		}
 	}
