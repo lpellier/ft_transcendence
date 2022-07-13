@@ -86,8 +86,9 @@ export class GameGateway {
 	handleDisconnect(client : Socket) { // ? triggers when user disconnects from the website (either refresh or close tab)
 		let index = -1;
 		if ((index = this.clients.indexOf(client.id)) !== -1) {
-			this.clients.splice(index, 1);
 			this.users.splice(index, 1);
+			this.clients.splice(index, 1);
+			console.log(this.users);
 			for (let game of this.games) {
 				for (const player of game.players) {
 					if (player.id === client.id) {
@@ -118,6 +119,9 @@ export class GameGateway {
 
 	@SubscribeMessage("quit-ongoing-game") // ? triggers when player quits by going somewhere else on the website
 	handleQuitOngoing(@ConnectedSocket() client : Socket) {
+		this.users.splice(this.clients.indexOf(client.id), 1);
+		this.clients.splice(this.clients.indexOf(client.id), 1);
+		console.log(this.users);
 		for (let game of this.games) {
 			for (let player of game.players) {
 				if (player.id === client.id) {
@@ -158,11 +162,13 @@ export class GameGateway {
 		}
 	}
 
+
 	// ? acts as handleConnection because when calling handleConnection, multiple sockets seem to connect
 	@SubscribeMessage('my_id')
 	getConnection(@MessageBody() data : [string, string, string]) {
 		this.clients.push(data[0]);
 		this.users.push([data[1], data[2], false]);
+		console.log(this.users);
 	}
 
 	@SubscribeMessage("finished loading")
@@ -170,24 +176,38 @@ export class GameGateway {
 		this.users[this.clients.indexOf(client.id)][2] = true;
 	}
 
+
 	@SubscribeMessage('socket response')
-	async handleSocketResponseInvitation(@ConnectedSocket() client : Socket, @MessageBody() data : any) {
-		test_count++;
+	handleSocketResponseInvitation(@ConnectedSocket() client : Socket, @MessageBody() data : any) {
+		console.log("in socket response")
 		for (let game of this.games) {
-			if (game.room_id === data.r_id) {
+			if (game.room_id === data.r_id && game.polling === false) {
+				game.polling = true;
+				console.log("\n\nStart poll")
 				client.join(game.room_id);
 				game.addPlayer(client.id, [data.id.toString(), data.name, false]);
 				let inte = setInterval(() => {
-					if (this.clients.indexOf(client.id) != -1 && this.clients.indexOf(data.other_id) != -1 && this.users[this.clients.indexOf(client.id)][2] && this.users[this.clients.indexOf(data.other_id)][2]) {
+					console.log("polling...")
+					if (this.clients.indexOf(client.id) != -1 && this.clients.indexOf(data.other_id) != -1) {
+						console.log(this.clients.indexOf(client.id), this.users[this.clients.indexOf(client.id)]);
+						console.log(this.clients.indexOf(data.other_id), this.users[this.clients.indexOf(data.other_id)]);
+					}
+					if (this.clients.indexOf(client.id) != -1 && this.clients.indexOf(data.other_id) != -1 && this.users[this.clients.indexOf(client.id)][2] === true && this.users[this.clients.indexOf(data.other_id)][2] === true) {
 						this.server.to(game.room_id).emit("waiting-player", game.room_id, game.score_limit, game.map.name);
 						game.state = "waiting-readiness";
-						this.server.to(game.room_id).emit("waiting-readiness", game.players[0].id, game.players[1].id, game.players[0].real_name, game.players[1].real_name, game.players[0].real_id, game.players[1].real_id);
-						this.users[this.clients.indexOf(client.id)][2] = false;
-						this.users[this.clients.indexOf(data.other_id)][2] = false;
+						this.server.to(game.room_id).emit("waiting-readiness", game.players[0].id, game.players[1].id, game.players[0].real_name, game.players[1].real_name, game.players[0].real_id, game.players[1].real_id)
+						console.log("both players have loaded");
+						game.polling = false;
 						clearInterval(inte);
-						console.log(client.id, data.other_id);
 					}
-				}, 200);
+				}, 500);
+				setTimeout(() => {
+					if (inte) {
+						console.log("polling timeout")
+						game.polling = false;
+						clearInterval(inte);
+					}
+				}, 10000)
 			}
 		}
 	}

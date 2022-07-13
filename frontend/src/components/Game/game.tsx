@@ -12,6 +12,7 @@
 	// TODO IMPROVEMENTS
 	// ? implement better ai
 	// ? cute animation showing the roll of pong value in casino
+	// ? socket off for one time events
 
 	export const Sketch = (p: any) => {
 	let sent_back : boolean = false;
@@ -696,6 +697,8 @@
 	}
 
 	addParent() {
+		if (!document.getElementById("canvas-parent"))
+			return ;
 		this.create_game.parent(document.getElementById("button-create"));
 		this.join.parent(document.getElementById("button-join"));
 		this.matchmaking.parent(document.getElementById("button-matchmaking"));
@@ -1215,6 +1218,8 @@ class Inputs {
 	}
 
 	addParent() {
+		if (!document.getElementById("canvas-parent"))
+			return ;
 		this.join.parent(document.getElementById("input-join"));
 		this.score_limit.parent(document.getElementById("input-score_limit"));
 	}
@@ -1685,13 +1690,9 @@ class Vector {
 		});
 
 		socket.on("please send back", (data : any) => {
-			if (data.name === user_name && !sent_back) {
+			if (data.name === user_name) {
 				console.log("username", user_name)
 				socket.emit("socket response", data);
-				sent_back = true;
-				setTimeout(() => {
-					sent_back = false;
-				}, 2000);
 			}
 		});
 
@@ -1911,6 +1912,10 @@ class Vector {
 	errors = new Errors();
 	buttons = new Buttons();
 		
+	if (!document.getElementById("canvas-parent")) {
+		p.remove();
+		return ;
+	}
 
 	canvas = p.createCanvas(consts.WIDTH, consts.HEIGHT);
 	canvas.parent(document.getElementById("canvas-parent"));
@@ -1927,6 +1932,7 @@ class Vector {
 	// ? server keeps a boolean for each client to tell if they've loaded fully or not
 	// ? so that when they are, it can send them to matches for invitation
 	socket.emit("finished loading");
+	console.log("finished loading");
 	};
 
 	p.keyPressed = () => {

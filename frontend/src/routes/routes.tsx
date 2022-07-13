@@ -165,7 +165,7 @@ export default function AllRoutes()  {
 
     useEffect(() => {
         const handler = (data: any) => { 
-            setOpen(true)  
+            setOpen(!open)  
             setInvite(data)
         }
         socket.on('invite for game', handler);
@@ -189,7 +189,7 @@ export default function AllRoutes()  {
 
     useEffect(() => {
         const handler = () => { 
-            setNavigate(true) 
+            setNavigate(!navigate) 
         }
         socket.on('accepted game', handler);
         return () => {

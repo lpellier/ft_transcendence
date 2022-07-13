@@ -25,6 +25,7 @@ export class Game {
 	update_interval : any;
 
 	invert : boolean;
+	polling : boolean;
 
 	constructor(room_id: any) {
 		this.room_id = room_id;
@@ -38,6 +39,7 @@ export class Game {
 		this.frames_since_point = 0;
 		this.publicity = "public";
 		this.invert = false;
+		this.polling = false;
 	}
 
 	spaceAvailable(username : string) {
@@ -69,6 +71,7 @@ export class Game {
 		this.frames_since_point = 0;
 		this.publicity = "public";
 		this.invert = false;
+		this.polling = false;
 	}
 
 	addSpectator(id : any) {
