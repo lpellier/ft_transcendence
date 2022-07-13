@@ -104,7 +104,6 @@ export function toastIt(message: string) {
 export default function AllRoutes()  {
 
     let [users, setUsers] = useState<User[]>([]);
-	let [otherUser, setOtherUser] = useState<User>();
     let [statusMap, setStatusMap] = useState<Map<number, string> >(new Map<number, string>());
     
     
@@ -166,23 +165,6 @@ export default function AllRoutes()  {
     }, [statusMap]);
 
 
-    useEffect(() => {
-		axios.get(process.env.REACT_APP_BACK_URL + '/users/me',
-        {
-            withCredentials: true
-        })
-        .then(res => {
-			console.log("Is Authenticated", res.data)
-            
-			setOtherUser(res.data);
-        })
-        .catch(function (err) {
-			console.log("Authentication has failed : ", err)
-        });
-	}, [])
-
-    
-
 	return (
         <div>
             <AuthProvider>
@@ -192,7 +174,7 @@ export default function AllRoutes()  {
                     <Route path="/" element={ <RequireAuth><App users={users} statusMap={statusMap} setStatusMap={setStatusMap}/></RequireAuth>}>
                         <Route path="profile" element={ <Profile self={true} />}/>
                         <Route path="users/:id" element={ <Profile self={false} />}/>
-                        <Route path="chat" element={<Chat users={users} setOtherUser={setOtherUser} statusMap={statusMap}/>}/>
+                        <Route path="chat" element={<Chat users={users} statusMap={statusMap}/>}/>
                         <Route path="game" element={<Game /> }/>
                         <Route path="settings" element={<Settings />}/>
                     </Route>

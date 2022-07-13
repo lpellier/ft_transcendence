@@ -35,7 +35,7 @@ const OverallChatStyle = {
 	paddingTop: '5vh',
 }
 
-function Chat(props: { users: User[], setOtherUser: React.Dispatch<React.SetStateAction<User | undefined>>, statusMap: Map<number, string>}) {
+function Chat(props: { users: User[], statusMap: Map<number, string>}) {
 	
 	let [status, setStatus] = useState('waiting for connection');
 	let [currentRoom, setCurrentRoom] = useState<Room> ({id: 1, name: "general", ownerId: 60040, visibility: "public", password:""});
@@ -99,7 +99,7 @@ function Chat(props: { users: User[], setOtherUser: React.Dispatch<React.SetStat
 					<Stack direction='row' className='chmsg'>
 						<Stack>
 							{status}
-							<Channels user={auth.user} users={props.users} currentRoom={currentRoom} setCurrentRoom = {setCurrentRoom} setCanWrite = {setCanWrite} roomAdmins={roomAdmins} setOtherUser={props.setOtherUser} statusMap={props.statusMap}/>
+							<Channels user={auth.user} users={props.users} currentRoom={currentRoom} setCurrentRoom = {setCurrentRoom} setCanWrite = {setCanWrite} roomAdmins={roomAdmins} statusMap={props.statusMap}/>
 						</Stack>
 						<Messages user={auth.user} users={props.users} currentRoom={currentRoom} canWrite = {canWrite} />
 					</Stack>

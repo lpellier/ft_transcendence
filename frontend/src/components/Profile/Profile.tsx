@@ -72,16 +72,18 @@ export default function Profile(props: {self: boolean}) {
 	let auth = useAuth();
 	let params = useParams()
 
-	if (props.self == true) {
+	if (props.self === true && !profile) {
+		console.log(auth.user)
 		setProfile(auth.user);
-	} 
-	
+	}
+
 	useEffect( () => {
 		axios.get(process.env.REACT_APP_BACK_URL + "/users/" + params.id || "",
 		{withCredentials: true}).then(res => {
-		 setProfile(res.data);
+		setProfile(res.data);
 		})
 	}, []);
+
 
     return (
 		<Box sx={OverallBoxStyle}>
