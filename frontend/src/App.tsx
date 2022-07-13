@@ -33,29 +33,19 @@ export default function App(props: {
 
   let auth = useAuth();
   let navigate = useNavigate();
-
-  useEffect(() => {
-    socket.on('accepted game', () => navigate("/game"));
-    return () => {
-        socket.off('accepted game');
-    }
-  }, [])
-  
   const outlet = useOutlet();
 
   useEffect(() => {
-    const handler = (data: any) => { 
-        setOpen(true)  
-        setInvite(data)
-    }
-    socket.on('invite for game', handler);
+    socket.on('accepted game', () => navigate("/game"));
+    socket.on('invite for game', (data: any) => { 
+      setOpen(true)  
+      setInvite(data)})
     return () => {
-        socket.off('invite for game', handler);
+        socket.off('accepted game');
+        socket.off('invite for game');
     }
-}, [])
-
-
-
+  }, [])
+  
   useEffect(() => {
     const init = () => {
         if (auth.user) {
@@ -100,7 +90,7 @@ const action = (
 
   return (
     <ImageIdContext.Provider value={{ imageId, setImageId }}>
-            <ToastContainer />
+        <ToastContainer />
         <Snackbar
             open={open}
             onClose={handleClose}

@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Param,
   Post,
   Redirect,
   Req,
@@ -68,10 +69,10 @@ export class AuthController {
     res.cookie('jwt', '', { ...cookieOptions, expires: new Date() });
   }
 
-  @Get('mock')
+  @Get('mock/:id')
   @Redirect()
-  async mockLogin(@Res({ passthrough: true }) res: Response) {
-    const user = await this.authService.getMock(1);
+  async mockLogin(@Param("id") id: string, @Res({ passthrough: true }) res: Response) {
+    const user = await this.authService.getMock(+id);
     const isAuthenticated = !user.tfa;
     const token = await this.authService.login(user.id, isAuthenticated);
     res.cookie('jwt', token, cookieOptions);
@@ -82,18 +83,5 @@ export class AuthController {
     return { url: redirectUrl };
   }
 
-  @Get('mock2')
-  @Redirect()
-  async mockLogi2(@Res({ passthrough: true }) res: Response) {
-    const user = await this.authService.getMock(2);
-    const isAuthenticated = !user.tfa;
-    const token = await this.authService.login(user.id, isAuthenticated);
-    res.cookie('jwt', token, cookieOptions);
-    let redirectUrl = this.configService.get('FRONT_URL');
-    if (isAuthenticated === false) {
-      redirectUrl += '/tfauth'
-    }
-    return { url: redirectUrl };
-  }
 
 }

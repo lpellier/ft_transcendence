@@ -2,10 +2,8 @@ import {
     Routes,
     Route,
     Navigate,
-    useNavigate,
     useLocation,
 } from "react-router-dom";
-import axios from 'axios'
 import LogIn from './LogIn'
 import TFAuth from './TFAuth'
 import App from '../App'
@@ -102,54 +100,31 @@ export function toastIt(message: string) {
 }
 
 export default function AllRoutes()  {
-
     let [users, setUsers] = useState<User[]>([]);
     let [statusMap, setStatusMap] = useState<Map<number, string> >(new Map<number, string>());
     
-    
     useEffect(() => {
-        const handler = (data: any) => {
+		socket.on('exception', (data: any) => {
             toastThatError(data.message);
-        }
-		socket.on('exception', handler);
+        });
+        socket.on('new user', (usersData: User[]) => {
+            console.log("usersData = ",usersData);
+			setUsers(usersData);
+		});
         return () => {
-            socket.off('exception', handler);
+            socket.off('exception');
+            socket.off('new user');
         }
     }, []);
 
     useEffect(() => {
-        const handler = (userId: number) => {
-            setStatusMap(statusMap.set(userId, 'online'));
-        }
-        socket.on('new connection', handler)
-        return () => {
-            socket.off('new connection', handler)
-        }
-    }, [statusMap]);
-
-    useEffect(() => {
-        const handler = (userId: number) => {
-            setStatusMap(statusMap.set(userId, 'offline'));
-        }
-        socket.on('new disconnection', handler);
-        return () => {
-            socket.off('new disconnection', handler);
-        }
-    }, [statusMap]);
-
-    useEffect(() => {
-		const handler = (usersData: User[]) => {
-            console.log("usersData = ",usersData);
-			setUsers(usersData);
-		}
-		socket.on('new user', handler);
-		return (() => {
-			socket.off('new user', handler);
-		})
-	}, [])
-
-    useEffect(() => {
-        const handler = (maps: {online: number[], inGame: number[]}) => {
+        socket.on('new connection', (userId: number) => {
+            setStatusMap(statusMap.set(userId, 'online'))
+        });
+        socket.on('new disconnection', (userId: number) => {
+            setStatusMap(statusMap.set(userId, 'offline'))
+        });
+        socket.on('status map', (maps: {online: number[], inGame: number[]}) => {
             console.log('maps', maps);
             maps.online.forEach(userId => {
                 setStatusMap(statusMap.set(userId, 'online'));
@@ -157,13 +132,14 @@ export default function AllRoutes()  {
             maps.inGame.forEach(userId => {
                 setStatusMap(statusMap.set(userId, 'in game'));
             })
-        }
-        socket.on('status map', handler);
+        });
+
         return () => {
-            socket.off('status map', handler);
+            socket.off('new connection')
+            socket.off('new disconnection');
+            socket.off('status map');
         }
     }, [statusMap]);
-
 
 	return (
         <div>

@@ -68,38 +68,28 @@ export default function FriendBar(props: {
     socket.on("new connection", () =>
       socket.emit("get friends", props.user.id, getFriends)
     );
-    return () => {
-      socket.off("new connection");
-    };
-  }, [props.user.id]);
-
-  useEffect(() => {
     socket.on("new disconnection", () =>
       socket.emit("get friends", props.user.id, getFriends)
-    );
+  );
     return () => {
+      socket.off("new connection");
       socket.off("new disconnection");
     };
   }, [props.user.id]);
 
   useEffect(() => {
-    const handler = (userId: number) => {
+    socket.on("new gamer", (userId: number) => {
       props.setStatusMap(props.statusMap.set(userId, "in game"));
-    };
-    socket.on("new gamer", handler);
-    return () => {
-      socket.off("new gamer", handler);
-    };
-  }, [props.statusMap]);
+    });
 
-  useEffect(() => {
-    const handler = (userId: number) => {
+    socket.on("quit-game", (userId: number) => {
       props.setStatusMap(props.statusMap.set(userId, "online"));
       socket.emit("remove gamer", userId);
-    };
-    socket.on("quit-game", handler);
+    });
+    
     return () => {
-      socket.off("quit-game", handler);
+      socket.off("new gamer");
+      socket.off("quit-game");
     };
   }, [props.statusMap]);
 

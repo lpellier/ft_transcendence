@@ -14,7 +14,6 @@ const ChatBoxComponentStyle = {
     minWidth: '510px',
     height: '78vh',
 	
-
 	justifyContent: 'center',
 	display: 'flex',
 
@@ -27,7 +26,6 @@ const ChatBoxComponentStyle = {
 
 const OverallChatStyle = {
 	minheight: '812px',
-
 	width: '100%',
 	height: '100%',
 	justifyContent: 'center', 

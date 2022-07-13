@@ -4,18 +4,15 @@ import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import LoginIcon from '@mui/icons-material/Login';
 import WebhookIcon from '@mui/icons-material/Webhook';
-import {User} from 'interfaces';
 import {Title, ButtonStyle, LinkStyle, IconStyle} from "../styles/tsxStyles/LogIn"
 import { useAuth } from './routes';
-import { Location, Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { Location, useLocation, useNavigate } from 'react-router-dom';
 
 const AuthAPI = process.env.REACT_APP_BACK_URL + "/auth"
 const MockAuthAPI = process.env.REACT_APP_BACK_URL + "/auth/mock"
-const MockAuthAPI2 = process.env.REACT_APP_BACK_URL + "/auth/mock2"
 
 function LogInButton()
 {
-
 	return (
         	<Button
 				sx={ButtonStyle}
@@ -82,10 +79,10 @@ export default function LogIn() {
 				</a>
 			</nav>
 			<nav>
-				<a href={MockAuthAPI} style={LinkStyle}>
+				<a href={MockAuthAPI + "/1"} style={LinkStyle}>
 					<MockLogInButton />
 				</a>
-				<a href={MockAuthAPI2} style={LinkStyle}>
+				<a href={MockAuthAPI + "/2"} style={LinkStyle}>
 					<MockLogInButton />
 				</a>
 			</nav>
