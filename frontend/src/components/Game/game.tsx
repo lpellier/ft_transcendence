@@ -5,14 +5,12 @@
 	import { audio_files } from "routes/Game"
 
 	// TODO ISSUES
-	// ? when player quits during countdown either using p or by quitting the page, there is an issue
 	// ? game doesnt update username if changed because getting the username once in setup, should check periodically if it's still the same
 
 	// TODO IMPROVEMENTS
 	// ? implement better ai
 	// ? cute animation showing the roll of pong value in casino
 	// ? socket off for one time events
-	// ? tell players they can use "p" to quit a game
 
 	export const Sketch = (p: any) => {
 
@@ -2026,7 +2024,8 @@ class Vector {
 		consts.HEIGHT / 2,
 		"white"
 		);
-	if (game.state === "in-menu")
+	if (game.state === "in-menu") {
+		outputAnnouncement("You can press P during a game to quit it", consts.small_font_size * 0.35, consts.WIDTH * 0.25, consts.HEIGHT * 0.05, "white");
 		outputAnnouncement(
 		"CyberPong 1977",
 		consts.std_font_size * 1.5,
@@ -2034,6 +2033,7 @@ class Vector {
 		consts.HEIGHT / 4,
 		"white"
 		);
+	}
 	else if (game.state === "in-menu-input") {
 		drawSpectate();
 		outputAnnouncement(
