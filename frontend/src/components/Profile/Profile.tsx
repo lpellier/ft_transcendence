@@ -92,7 +92,7 @@ export default function Profile(props: {self: boolean}) {
 			<Stack spacing={1}>
 			{profile? <div>
 				<PlayerInfoBand level={profile.level} user={profile} />
-				<StatsBoards /> </div> : <div />
+				<StatsBoards user={profile}/> </div> : <div />
 			}
 			</Stack>
 		</Box>
