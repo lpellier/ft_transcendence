@@ -5,14 +5,14 @@
 	import { audio_files } from "routes/Game"
 
 	// TODO ISSUES
-	// ? spectate a game that has less than 2 players
-	// ? i think bounce angle is bigger when bounced on top of paddle than on bottom, weird stuff
+	// ? when player quits during countdown either using p or by quitting the page, there is an issue
 	// ? game doesnt update username if changed because getting the username once in setup, should check periodically if it's still the same
 
 	// TODO IMPROVEMENTS
 	// ? implement better ai
 	// ? cute animation showing the roll of pong value in casino
 	// ? socket off for one time events
+	// ? tell players they can use "p" to quit a game
 
 	export const Sketch = (p: any) => {
 
@@ -1690,7 +1690,6 @@ class Vector {
 
 		socket.on("please send back", (data : any) => {
 			if (data.name === user_name) {
-				console.log("username", user_name)
 				socket.emit("socket response", data);
 			}
 		});
@@ -1748,7 +1747,10 @@ class Vector {
 
 	function listenStopEvents() {
 	socket.on("player-disconnect", (index: number) => {
-		opponentLeftMenu();
+		if (game.players && game.players.length > 0 && index !== game.players[0].index)
+			opponentLeftMenu();
+		else
+			inMainMenu();
 	});
 
 	socket.on("game-over", () => {
@@ -1935,11 +1937,15 @@ class Vector {
 	// ? server keeps a boolean for each client to tell if they've loaded fully or not
 	// ? so that when they are, it can send them to matches for invitation
 	socket.emit("finished loading");
-	console.log("finished loading");
 	};
 
 	p.keyPressed = () => {
 	if (game === null) return;
+	if (game.local && p.key === "p")
+		inMainMenu();
+	else if (!game.local && p.key === "p" && (game.state === "waiting-readiness" || game.state === "in-game" || game.state === "countdown" || game.state === "relaunch-countdown")) {
+		socket.emit("quit-ongoing-game", true);
+	}
 	if (!game.spectator && game.state === "waiting-readiness" && p.key === " ")
 		socket.emit("switch_readiness", game.players[0].id);
 	if (game.state === "in-menu-input" && p.keyCode === p.ENTER) {
@@ -1951,7 +1957,7 @@ class Vector {
 	
 	p.draw = () => {
 		if (!document.getElementById("canvas-parent")) {
-			socket.emit("quit-ongoing-game");
+			socket.emit("quit-ongoing-game", false);
 			p.remove();
 		}
 
@@ -2255,7 +2261,6 @@ class Vector {
 			: (icon_p2 = consts.CROSS_ICON2);
 		p.pop();
 	}
-	console.log(game.players);
 	p.image(icon_p1, consts.WIDTH * 0.3, consts.HEIGHT * 0.58, consts.small_square_diameter * 1.5, consts.small_square_diameter * 1.5);
 	p.image(icon_p2, consts.WIDTH * 0.80, consts.HEIGHT * 0.58, consts.small_square_diameter * 1.5, consts.small_square_diameter * 1.5);
 	}

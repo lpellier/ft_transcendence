@@ -91,7 +91,7 @@ export class GameGateway {
 			for (let game of this.games) {
 				for (const player of game.players) {
 					if (player.id === client.id) {
-						this.server.to(game.room_id).emit("player-disconnect");
+						this.server.to(game.room_id).emit("player-disconnect", player.index);
 						clearInterval(game.update_interval);
 						if (game.players.length === 2 && game.state === "in-game") {
 							if (game.players.indexOf(player) === 0) {
@@ -117,16 +117,18 @@ export class GameGateway {
 	}
 
 	@SubscribeMessage("quit-ongoing-game") // ? triggers when player quits by going somewhere else on the website
-	handleQuitOngoing(@ConnectedSocket() client : Socket) {
+	handleQuitOngoing(@ConnectedSocket() client : Socket, @MessageBody() returnMenu : boolean) {
 		let index = this.clients.indexOf(client.id);
 		if (index === -1)
 			return ;
-		this.users.splice(index, 1);
-		this.clients.splice(index, 1);
+		if (!returnMenu) {
+			this.users.splice(index, 1);
+			this.clients.splice(index, 1);
+		}
 		for (let game of this.games) {
 			for (let player of game.players) {
 				if (player.id === client.id) {
-					this.server.to(game.room_id).emit("player-disconnect");
+					this.server.to(game.room_id).emit("player-disconnect", player.index);
 					clearInterval(game.update_interval);
 					if (game.players.length === 2 && game.state === "in-game") {
 						if (game.players.indexOf(player) === 0) {
