@@ -2,10 +2,9 @@
 	// ? Coding consistency : snake_case for variables | camelCase for functions | PascalCase for classes
 
 	import { socket } from "index";
-	import { audio_files } from "routes/Game"
+	import { audio_files, user_name, user_id } from "routes/Game"
 
 	// TODO ISSUES
-	// ? game doesnt update username if changed because getting the username once in setup, should check periodically if it's still the same
 
 	// TODO IMPROVEMENTS
 
@@ -27,9 +26,6 @@
 	let keys: Keys;
 
 	let canvas: any;
-
-	let user_name: string | null;
-	let user_id: string | null;
 
 	class Bumper {
 	animation: any;
@@ -1886,13 +1882,7 @@ class Vector {
 	};
 
 	p.setup = () => {
-	let user_dom = document.getElementById("user");
-	if (user_dom) {
-		user_name = user_dom.getAttribute("user_name");
-		user_id = user_dom.getAttribute("user_id"); 
-	}
-	
-	socket.emit("my_id", socket.id, user_id, user_name);
+	socket.emit("my_id", socket.id, user_id.toString(), user_name);
 	let frames = spritedata.frames;
 	for (let i = 0; i < frames.length; i++) {
 		let pos = frames[i].position;

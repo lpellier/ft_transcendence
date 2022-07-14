@@ -11,6 +11,9 @@ import { User } from "interfaces";
 import { Sketch } from "../components/Game/game"
 import p5 from "p5";
 
+export let user_name : string = "null";
+export let user_id : number = 0;
+
 class AudioFiles {
 	PADDLE_HIT_1: any;
 	PADDLE_HIT_2: any;
@@ -255,12 +258,9 @@ function GameComponent() {
 
 export default function Game( props: {user: User | undefined, navigate: boolean, setNavigate: React.Dispatch<React.SetStateAction<boolean>> }) {	
 	useEffect(() => {
-		let user = document.createElement("div");
 		const propsUser: any = props.user;
-		user.setAttribute("user_name", propsUser.username);
-		user.setAttribute("user_id", propsUser.id.toString());
-		user.id = "user";
-		document.head.append(user);
+		user_name = propsUser.username;
+		user_id = propsUser.id.toString();
 		}, [props.user?.id, props.user])
 
 		useEffect(() => {
