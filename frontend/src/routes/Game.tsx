@@ -7,7 +7,7 @@ import "./../styles/Game/canvas.css"
 import "./../styles/Game/buttons.css"
 import "./../styles/Game/inputs.css"
 import "socket.io-client"
-import { Sketch } from "../components/Game/game"
+import { Sketch } from "../components/Game/Sketch"
 import p5 from "p5";
 import { useAuth } from "components/AuthProvider";
 
