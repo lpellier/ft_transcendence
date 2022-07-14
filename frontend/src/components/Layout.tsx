@@ -5,7 +5,6 @@ import { User } from "interfaces";
 import "react-toastify/dist/ReactToastify.css";
 import { Outlet, Navigate, useOutlet, Link, useNavigate } from "react-router-dom";
 import { socket } from "index";
-import { ToastContainer } from "react-toastify";
 import { Button, IconButton, Snackbar } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
 import { useAuth } from "components/AuthProvider";
@@ -96,7 +95,6 @@ const action = (
 
   return (
     <div>
-      <ToastContainer />
       <Snackbar
           open={open}
           onClose={handleClose}

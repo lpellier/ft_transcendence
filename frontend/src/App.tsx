@@ -8,7 +8,7 @@ import { socket } from "index";
 import Chat from "./components/Chat/Chat";
 import Settings from "./components/Settings/Settings";
 import Game from "./routes/Game";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import NotFound from "./routes/NotFound";
 import AuthProvider, { useAuth } from "components/AuthProvider";
 import axios from "axios";
@@ -121,6 +121,7 @@ export default function App() {
   return (
     <div>
       <AuthProvider>
+        <ToastContainer />
         <Routes>
           <Route path="/login" element={<LogIn />} />
           <Route path="/tfauth" element={<TFAuth />} />
