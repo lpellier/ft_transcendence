@@ -1692,12 +1692,6 @@ class Vector {
 			else if (error === "already_in_game") errors.already_in_game = true;
 		});
 
-		// socket.on("please send back", (data : any) => {
-		// 	if (data.name === user_name) {
-		// 		socket.emit("socket response", data);
-		// 	}
-		// });
-
 		socket.on(
 			"waiting-readiness",
 			(
