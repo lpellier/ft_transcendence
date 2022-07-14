@@ -2356,6 +2356,7 @@ class Vector {
 	}
 
 	let ai_diff : number = 0;
+	let new_ai_diff : number = 0;
 	let ai_pos : number = 0; // ? random pos on the paddle of the ai
 	let reset_ai_pos : boolean = true; // ? when true, recalculate ai pos
 
@@ -2382,9 +2383,13 @@ class Vector {
 		if (game.ai) {
 		// ? chaser ai code
 		if (reset_ai_pos) {
-			ai_diff = (Math.random() * consts.PLAYER_HEIGHT);
+			new_ai_diff = (Math.random() * consts.PLAYER_HEIGHT);
 			reset_ai_pos = false;
 		}
+		if (ai_diff > new_ai_diff)
+			ai_diff -= consts.PLAYER_HEIGHT * 0.05;
+		if (ai_diff < new_ai_diff)
+			ai_diff += consts.PLAYER_HEIGHT * 0.05;
 
 		ai_pos = game.players[1].pos[1] + ai_diff;
 		let pos_diff = ai_pos - game.pong.cY();
@@ -2690,6 +2695,7 @@ class Vector {
 		if (bumper.checkCollision(game.pong)) {
 			bumper.resetAnimation();
 			audio_files.playRandomBumperSound();
+			reset_ai_pos = true;
 			return;
 		}
 		}
@@ -2701,25 +2707,17 @@ class Vector {
 		[number, number],
 		[number, number],
 		[number, number],
-		[number, number],
-		[number, number],
-		[number, number],
-		[number, number],
 		[number, number]
 	] = [
-		game.pong.leftUp(),
 		game.pong.up(),
-		game.pong.rightUp(),
 		game.pong.right(),
-		game.pong.rightDown(),
 		game.pong.down(),
-		game.pong.leftDown(),
 		game.pong.left(),
 	];
 	// debugCollisions(player);
 
 	// ? collision with paddles
-	for (let i = 0; i < 8; i++) {
+	for (let i = 0; i < 4; i++) {
 		let angle: number = 0;
 		let intersection_point: [number, number, string][] = [[-1, -1, "side"]]; // array of one element so that the variable is referenced in functions
 		angle = collisionPaddle(player, intersection_point, ball_points[i]);
@@ -2769,7 +2767,8 @@ class Vector {
 			game.pong.speed *
 			-Math.sin(angle);
 		}
-		reset_ai_pos = true;
+		if (player.index === 1)
+			reset_ai_pos = true;
 		return;
 		}
 	}

@@ -186,11 +186,11 @@ export class Game {
 		}
 		
 		let player = (this.pong.pos[0] < consts.MAP_WIDTH / 2 ? this.players[0] : this.players[1]);
-		let ball_points : [[number, number], [number, number], [number, number], [number, number], [number, number], [number, number], [number, number], [number, number]] = 
-		[this.pong.leftUp(), this.pong.up(), this.pong.rightUp(), this.pong.right(), this.pong.rightDown(), this.pong.down(), this.pong.leftDown(), this.pong.left()];
+		let ball_points : [[number, number], [number, number], [number, number], [number, number]] = 
+		[this.pong.up(), this.pong.right(), this.pong.down(), this.pong.left()];
 
 		// ? collision with paddles
-		for (let i = 0; i < 8; i++) {
+		for (let i = 0; i < 4; i++) {
 			let angle : number = 0;
 			let intersection_point : [number, number, string][] = [[-1, -1, "side"]]; // array of one element so that the variable is referenced in functions
 			angle = this.collisionPaddle(player, intersection_point, ball_points[i]);
