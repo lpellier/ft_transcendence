@@ -7,14 +7,13 @@ Redirection from 42 API, redirects to front homepage (/home) if authentication i
 
 ## Route /users
 
-### /users		GET (NOT READY)
+### /users		GET
 Returns list of objects of all users:
 ```js
 [
   {
     id: int,
     username:   string,
-    ...
   }
 ]
 ```
@@ -47,6 +46,7 @@ Returns object of specified user (username, avatar, stats and match_history, etc
 {
   id: number;
   username: string;
+  tfa: boolean;
   victories: number;
   losses: number;
   level: number;
