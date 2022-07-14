@@ -13,7 +13,7 @@ export class Player {
 	real_id : number;
 	real_name : string;
 
-	constructor(color: any, index : number, id : any, user : [string, string]) {
+	constructor(color: any, index : number, id : any, user : [string, string, boolean]) {
 		this.pos = [(index === 1 ? consts.MAP_WIDTH / 12 : consts.MAP_WIDTH * 11 / 12), consts.MAP_HEIGHT / 2 - consts.PLAYER_HEIGHT / 2];
 		this.velocity = [0, consts.PLAYER_SPEED];
 		this.width = consts.PLAYER_WIDTH;

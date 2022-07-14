@@ -162,6 +162,17 @@ export default function AllRoutes()  {
         });
 	}, [isAuth])
 	
+	useEffect(() => {
+		socket.on("please send back", (data : any) => {
+			if (data.name === user?.username) {
+				socket.emit("socket response", data);
+				console.log("alo")
+			}
+		});
+		return () => {
+			socket.off("please send back")
+        }
+	}, [user?.username])
 
     useEffect(() => {
         const handler = (data: any) => { 
@@ -169,8 +180,9 @@ export default function AllRoutes()  {
             setInvite(data)
         }
         socket.on('invite for game', handler);
+		
         return () => {
-            socket.off('invite for game', handler);
+            socket.off('invite for game');
         }
     }, [])
 
@@ -193,7 +205,7 @@ export default function AllRoutes()  {
         }
         socket.on('accepted game', handler);
         return () => {
-            socket.off('accepted game', handler);
+            socket.off('accepted game');
         }
     }, [])
     

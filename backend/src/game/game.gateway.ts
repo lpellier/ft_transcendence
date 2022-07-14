@@ -7,6 +7,8 @@ import { GameService } from "./game.service"
 import { ConfigService } from "@nestjs/config";
 import { UsersService } from "src/users/users.service";
 
+let test_count : number = 0;
+
 
 // ? How to create a game of pong
 // ? First, server sends page to which clients can connect
@@ -76,7 +78,7 @@ export class GameGateway {
 	server: Server;
 
 	clients : string[] = [];
-	users : [string, string][] = [];
+	users : [string, string, boolean][] = [];
 	games : Game[] = [];
 
 	timestep : number = 15; // ms
@@ -84,13 +86,17 @@ export class GameGateway {
 	handleDisconnect(client : Socket) { // ? triggers when user disconnects from the website (either refresh or close tab)
 		let index = -1;
 		if ((index = this.clients.indexOf(client.id)) !== -1) {
-			this.clients.splice(index, 1);
 			this.users.splice(index, 1);
+			this.clients.splice(index, 1);
 			for (let game of this.games) {
 				for (const player of game.players) {
 					if (player.id === client.id) {
-						this.server.to(game.room_id).emit("player-disconnect");
-						clearInterval(game.update_interval);
+						game.state = "game-over"
+						this.server.to(game.room_id).emit("player-disconnect", player.index);
+						if (game.update_interval)
+							clearInterval(game.update_interval);
+						if (game.countdown_timeout)
+							clearTimeout(game.countdown_timeout);
 						if (game.players.length === 2 && game.state === "in-game") {
 							if (game.players.indexOf(player) === 0) {
 								this.game_service.incrementVictories(game.players[1].real_id, game.score[1]);
@@ -102,7 +108,6 @@ export class GameGateway {
 							}
 							this.game_service.incrementLosses(player.real_id, game.score[game.players.indexOf(player)]);
 						}
-						game.state = "game-over"
 						this.server.emit("new disconnection", game.players[game.players.indexOf(player)].real_id);
 						if (game.players.length > 1)
 							this.server.emit("quit-game", game.players[(game.players.indexOf(player) + 1) % 2].real_id);
@@ -115,12 +120,23 @@ export class GameGateway {
 	}
 
 	@SubscribeMessage("quit-ongoing-game") // ? triggers when player quits by going somewhere else on the website
-	handleQuitOngoing(@ConnectedSocket() client : Socket) {
+	handleQuitOngoing(@ConnectedSocket() client : Socket, @MessageBody() returnMenu : boolean) {
+		let index = this.clients.indexOf(client.id);
+		if (index === -1)
+			return ;
+		if (!returnMenu) {
+			this.users.splice(index, 1);
+			this.clients.splice(index, 1);
+		}
 		for (let game of this.games) {
 			for (let player of game.players) {
 				if (player.id === client.id) {
-					this.server.to(game.room_id).emit("player-disconnect");
-					clearInterval(game.update_interval);
+					game.state = "game-over"
+					this.server.to(game.room_id).emit("player-disconnect", player.index);
+					if (game.update_interval)
+						clearInterval(game.update_interval);
+					if (game.countdown_timeout)
+						clearTimeout(game.countdown_timeout);
 					if (game.players.length === 2 && game.state === "in-game") {
 						if (game.players.indexOf(player) === 0) {
 							this.game_service.incrementVictories(game.players[1].real_id, game.score[1]);
@@ -133,7 +149,6 @@ export class GameGateway {
 						this.game_service.incrementLosses(player.real_id, game.score[game.players.indexOf(player)]);
 						this.usersService.addAchievement(player.real_id, 2);
 					}
-					game.state = "game-over"
 					this.server.emit("quit-game", game.players[0].real_id)
 					if (game.players.length > 1)
 						this.server.emit("quit-game", game.players[1].real_id)
@@ -148,7 +163,10 @@ export class GameGateway {
 		for (let game of this.games) {
 			for (let player of game.players) {
 				if (player.id === client.id) {
-					clearInterval(game.update_interval);
+					if (game.update_interval)
+						clearInterval(game.update_interval);
+					if (game.countdown_timeout)
+						clearTimeout(game.countdown_timeout);
 					this.games.splice(this.games.indexOf(game), 1);
 					return ;
 				}
@@ -156,24 +174,56 @@ export class GameGateway {
 		}
 	}
 
+
 	// ? acts as handleConnection because when calling handleConnection, multiple sockets seem to connect
 	@SubscribeMessage('my_id')
 	getConnection(@MessageBody() data : [string, string, string]) {
 		this.clients.push(data[0]);
-		this.users.push([data[1], data[2]]);
+		this.users.push([data[1], data[2], false]);
 	}
 
+	@SubscribeMessage("finished loading")
+	handleFinishedLoading(@ConnectedSocket() client : Socket) {
+		this.users[this.clients.indexOf(client.id)][2] = true;
+	}
+
+
 	@SubscribeMessage('socket response')
-	async handleSocketResponseInvitation(@ConnectedSocket() client : Socket, @MessageBody() data : any) {
+	handleSocketResponseInvitation(@ConnectedSocket() client : Socket, @MessageBody() data : any) {
 		for (let game of this.games) {
-			if (game.room_id === data.r_id) {
+			if (game.room_id === data.r_id && game.polling === false) {
+				game.polling = true;
 				client.join(game.room_id);
-				game.addPlayer(client.id, [data.id.toString(), data.name]);
+				game.addPlayer(client.id, [data.id.toString(), data.name, false]);
+				let inte = setInterval(() => {
+					if (this.clients.indexOf(client.id) != -1 && this.clients.indexOf(data.other_id) != -1 && this.users[this.clients.indexOf(client.id)][2] === true && this.users[this.clients.indexOf(data.other_id)][2] === true) {
+						this.server.to(game.room_id).emit("waiting-player", game.room_id, game.score_limit, game.map.name);
+						game.state = "waiting-readiness";
+						this.server.to(game.room_id).emit("waiting-readiness", game.players[0].id, game.players[1].id, game.players[0].real_name, game.players[1].real_name, game.players[0].real_id, game.players[1].real_id)
+						console.log("both players have loaded");
+						game.polling = false;
+						clearInterval(inte);
+					}
+				}, 500);
 				setTimeout(() => {
-					this.server.to(game.room_id).emit("waiting-player", game.room_id, game.score_limit, game.map.name);
-					game.state = "waiting-readiness";
-					this.server.to(game.room_id).emit("waiting-readiness", game.players[0].id, game.players[1].id, game.players[0].real_name, game.players[1].real_name, game.players[0].real_id, game.players[1].real_id);
-				}, 2000)
+					if (inte) {
+						game.polling = false;
+						clearInterval(inte);
+					}
+				}, 10000)
+			}
+		}
+	}
+
+	@SubscribeMessage("spectate game") 
+	async handleSpectateGame(@ConnectedSocket() client : Socket, @MessageBody() name : string) {
+		for (let game of this.games) {
+			for (let player of game.players) {
+				if (player.real_name === name) {
+					client.join(game.room_id);
+					game.addSpectator(client.id);
+					this.server.to(client.id).emit("spectate", game.room_id, game.score_limit, game.map.name, game.state, game.players[0].id, (game.players.length > 1 ? game.players[1].id : "null"), game.players[0].real_name, (game.players.length > 1 ? game.players[1].real_name : "null"), game.players[0].real_id, (game.players.length > 1 ? game.players[1].real_id : 0));
+				}
 			}
 		}
 	}
@@ -187,8 +237,8 @@ export class GameGateway {
 		this.games.push(game);
 
 		client.join(game.room_id);
-		game.addPlayer(client.id, [data[1].toString(), user2]);
-		this.server.emit("please send back", {id : data[0].userId, name : user1, r_id : game.room_id});
+		game.addPlayer(client.id, [data[1].toString(), user2, false]);
+		this.server.emit("please send back", {id : data[0].userId, other_id : client.id, name : user1, r_id : game.room_id});
 	}
 
 	@SubscribeMessage('matchmaking')
@@ -196,6 +246,8 @@ export class GameGateway {
 		@ConnectedSocket() client : Socket,
 		@MessageBody() data : [string, boolean, number, string]
 	) {
+		if (this.clients.indexOf(client.id) === -1)
+			return ;
 		if (userInGame(this.games, this.users[this.clients.indexOf(client.id)][1]))
 			return;
 		let existing_game : Game = null;
@@ -232,7 +284,7 @@ export class GameGateway {
 				if (data[1] === true) {
 					client.join(game.room_id);
 					game.addSpectator(client.id);
-					this.server.to(client.id).emit("spectate", game.room_id, game.score_limit, game.map.name, game.state, game.players[0].id, (game.players.length > 1 ? game.players[1].id : "null"), game.players[0].real_name, (game.players.length > 1 ? game.players[1].real_name : "null"), game.players[0].real_id, (game.players.length > 1 ? game.players[1].real_id : 0)); // need to handle case where only one user is connected
+					this.server.to(client.id).emit("spectate", game.room_id, game.score_limit, game.map.name, game.state, game.players[0].id, (game.players.length > 1 ? game.players[1].id : "null"), game.players[0].real_name, (game.players.length > 1 ? game.players[1].real_name : "null"), game.players[0].real_id, (game.players.length > 1 ? game.players[1].real_id : 0));
 				}
 				else if (game.players.length < 2 && game.spaceAvailable(this.users[this.clients.indexOf(client.id)][1])) {
 					client.join(game.room_id);
@@ -260,7 +312,7 @@ export class GameGateway {
 			[game.players[1].id, game.players[1].pos],
 			game.score, game.pong.value);
 		for (let i = 1; i < 5; i++)
-			setTimeout(() => {
+			game.countdown_timeout = setTimeout(() => {
 				if (game.state !== "game-over")
 					test.to(game.room_id).emit("countdown-server");
 				if (i === 4) {
