@@ -2,17 +2,16 @@
 	// ? Coding consistency : snake_case for variables | camelCase for functions | PascalCase for classes
 
 	import { socket } from "index";
-	import { audio_files } from "routes/Game"
+	import { audio_files, user_name, user_id } from "routes/Game"
 
 	// TODO ISSUES
-	// ? i think bounce angle is bigger when bounced on top of paddle than on bottom, weird stuff
-	// ? game doesnt update username if changed because getting the username once in setup, should check periodically if it's still the same
 
 	// TODO IMPROVEMENTS
-	// ? implement better ai
-	// ? cute animation showing the roll of pong value in casino
 
 	export const Sketch = (p: any) => {
+
+	p.disableFriendlyErrors = true;
+
 	let spritesheet: any;
 	let spritedata: any;
 
@@ -27,9 +26,6 @@
 	let keys: Keys;
 
 	let canvas: any;
-
-	let user_name: string | null;
-	let user_id: string | null;
 
 	class Bumper {
 	animation: any;
@@ -693,6 +689,8 @@
 	}
 
 	addParent() {
+		if (!document.getElementById("canvas-parent"))
+			return ;
 		this.create_game.parent(document.getElementById("button-create"));
 		this.join.parent(document.getElementById("button-join"));
 		this.matchmaking.parent(document.getElementById("button-matchmaking"));
@@ -990,6 +988,7 @@
 	}
 
 	scorePoint(invert: boolean) {
+		reset_ai_pos = true;
 		this.frame_count_shake = 0;
 		audio_files.playScore();
 		this.pong.velocity = [0, 0];
@@ -1212,6 +1211,8 @@ class Inputs {
 	}
 
 	addParent() {
+		if (!document.getElementById("canvas-parent"))
+			return ;
 		this.join.parent(document.getElementById("input-join"));
 		this.score_limit.parent(document.getElementById("input-score_limit"));
 	}
@@ -1412,13 +1413,23 @@ class Player {
 		return dist;
 	}
 
-	moveUp() {
+	moveUp(pos_diff : number) {
 		this.velocity[1] = -consts.PLAYER_SPEED;
+		if (game.local && game.ai && this.index === 2) {
+			this.velocity[1] = -pos_diff;
+			if (this.velocity[1] < -consts.PLAYER_SPEED)
+				this.velocity[1] = -consts.PLAYER_SPEED;
+		}
 		this.calculateNewPos();
 	}
 
-	moveDown() {
+	moveDown(pos_diff : number) {
 		this.velocity[1] = consts.PLAYER_SPEED;
+		if (game.local && game.ai && this.index === 2) {
+			this.velocity[1] = -pos_diff;
+			if (this.velocity[1] > consts.PLAYER_SPEED)
+				this.velocity[1] = consts.PLAYER_SPEED;
+		}
 		this.calculateNewPos();
 	}
 
@@ -1681,11 +1692,6 @@ class Vector {
 			else if (error === "already_in_game") errors.already_in_game = true;
 		});
 
-		socket.on("please send back", (data : any) => {
-			if (data.name === user_name)
-				socket.emit("socket response", data);
-		});
-
 		socket.on(
 			"waiting-readiness",
 			(
@@ -1710,6 +1716,10 @@ class Vector {
 				} else if (socket.id === id_p2) {
 				game.players.push(new Player(2, id_p2, name_p2, real_id_p2));
 				game.players.push(new Player(1, id_p1, name_p1, real_id_p1));
+				} else {
+					game.players.push(new Player(1, id_p1, name_p1, real_id_p1));
+					game.players.push(new Player(2, id_p2, name_p2, real_id_p2));
+					game.spectator = true;
 				}
 				game.pong = new Pong();
 			}
@@ -1735,7 +1745,10 @@ class Vector {
 
 	function listenStopEvents() {
 	socket.on("player-disconnect", (index: number) => {
-		opponentLeftMenu();
+		if (game.players && game.players.length > 0 && index !== game.players[0].index)
+			opponentLeftMenu();
+		else
+			inMainMenu();
 	});
 
 	socket.on("game-over", () => {
@@ -1863,6 +1876,7 @@ class Vector {
 	};
 
 	p.setup = () => {
+	socket.emit("my_id", socket.id, user_id.toString(), user_name);
 	let frames = spritedata.frames;
 	for (let i = 0; i < frames.length; i++) {
 		let pos = frames[i].position;
@@ -1895,10 +1909,9 @@ class Vector {
 	errors = new Errors();
 	buttons = new Buttons();
 		
-	let user_dom = document.getElementById("user");
-	if (user_dom) {
-		user_name = user_dom.getAttribute("user_name");
-		user_id = user_dom.getAttribute("user_id"); 
+	if (!document.getElementById("canvas-parent")) {
+		p.remove();
+		return ;
 	}
 
 	canvas = p.createCanvas(consts.WIDTH, consts.HEIGHT);
@@ -1907,17 +1920,24 @@ class Vector {
 	p.textFont(consts.FONT);
 	p.frameRate(60);
 
-	socket.emit("my_id", socket.id, user_id, user_name);
 
 	listenStartEvents();
 	listenStopEvents();
 	listenMoveEvents();	
 
 	resizeEverything();
+	// ? server keeps a boolean for each client to tell if they've loaded fully or not
+	// ? so that when they are, it can send them to matches for invitation
+	socket.emit("finished loading");
 	};
 
 	p.keyPressed = () => {
 	if (game === null) return;
+	if (game.local && p.key === "p")
+		inMainMenu();
+	else if (!game.local && p.key === "p" && (game.state === "waiting-readiness" || game.state === "in-game" || game.state === "countdown" || game.state === "relaunch-countdown")) {
+		socket.emit("quit-ongoing-game", true);
+	}
 	if (!game.spectator && game.state === "waiting-readiness" && p.key === " ")
 		socket.emit("switch_readiness", game.players[0].id);
 	if (game.state === "in-menu-input" && p.keyCode === p.ENTER) {
@@ -1929,7 +1949,7 @@ class Vector {
 	
 	p.draw = () => {
 		if (!document.getElementById("canvas-parent")) {
-			socket.emit("quit-ongoing-game");
+			socket.emit("quit-ongoing-game", false);
 			p.remove();
 		}
 
@@ -1998,7 +2018,8 @@ class Vector {
 		consts.HEIGHT / 2,
 		"white"
 		);
-	if (game.state === "in-menu")
+	if (game.state === "in-menu") {
+		outputAnnouncement("You can press P during a game to quit it", consts.small_font_size * 0.35, consts.WIDTH * 0.25, consts.HEIGHT * 0.05, "rgba(255, 255, 255, 0.6)");
 		outputAnnouncement(
 		"CyberPong 1977",
 		consts.std_font_size * 1.5,
@@ -2006,6 +2027,7 @@ class Vector {
 		consts.HEIGHT / 4,
 		"white"
 		);
+	}
 	else if (game.state === "in-menu-input") {
 		drawSpectate();
 		outputAnnouncement(
@@ -2310,13 +2332,17 @@ class Vector {
 	}
 
 	function opponentLeftMenu() {
-	if (!document.getElementById("canvas-parent"))
-		return;
 	game.setState("opponent-left-menu");
 	buttons.hide();
-	buttons.opponent_left_ok.parent().style["z-index"] = 2; // deal with buttons overlapping
+	if (buttons.opponent_left_ok.parent())
+		buttons.opponent_left_ok.parent().style["z-index"] = 2; // deal with buttons overlapping
 	buttons.opponent_left_ok.show();
 	}
+
+	let ai_diff : number = 0;
+	let new_ai_diff : number = 0;
+	let ai_pos : number = 0; // ? random pos on the paddle of the ai
+	let reset_ai_pos : boolean = true; // ? when true, recalculate ai pos
 
 	function movePlayers() {
 	if (!game.local && !game.spectator) {
@@ -2334,21 +2360,30 @@ class Vector {
 		} else socket.emit("move_null", game.players[0].id);
 		}
 	} else if (!game.spectator) {
-		if (p.keyIsDown(87)) game.players[0].moveUp();
-		else if (p.keyIsDown(83)) game.players[0].moveDown();
+		if (p.keyIsDown(87)) game.players[0].moveUp(0);
+		else if (p.keyIsDown(83)) game.players[0].moveDown(0);
 		else game.players[0].velocity[1] = 0;
 
 		if (game.ai) {
 		// ? chaser ai code
-		let player_pos = game.players[1].pos[1] + game.players[0].height / 2;
-		let pos_diff = player_pos - game.pong.cY();
+		if (reset_ai_pos) {
+			new_ai_diff = (Math.random() * consts.PLAYER_HEIGHT);
+			reset_ai_pos = false;
+		}
+		if (ai_diff > new_ai_diff)
+			ai_diff -= consts.PLAYER_HEIGHT * 0.05;
+		if (ai_diff < new_ai_diff)
+			ai_diff += consts.PLAYER_HEIGHT * 0.05;
 
-		if (pos_diff > consts.HEIGHT / 150) game.players[1].moveUp();
-		else if (pos_diff < -consts.HEIGHT / 150) game.players[1].moveDown();
+		ai_pos = game.players[1].pos[1] + ai_diff;
+		let pos_diff = ai_pos - game.pong.cY();
+
+		if (pos_diff > 0) game.players[1].moveUp(pos_diff);
+		else if (pos_diff < 0) game.players[1].moveDown(pos_diff);
 		else game.players[1].velocity[1] = 0;
 		} else {
-		if (p.keyIsDown(p.UP_ARROW)) game.players[1].moveUp();
-		else if (p.keyIsDown(p.DOWN_ARROW)) game.players[1].moveDown();
+		if (p.keyIsDown(p.UP_ARROW)) game.players[1].moveUp(0);
+		else if (p.keyIsDown(p.DOWN_ARROW)) game.players[1].moveDown(0);
 		else game.players[1].velocity[1] = 0;
 		}
 
@@ -2644,6 +2679,7 @@ class Vector {
 		if (bumper.checkCollision(game.pong)) {
 			bumper.resetAnimation();
 			audio_files.playRandomBumperSound();
+			reset_ai_pos = true;
 			return;
 		}
 		}
@@ -2655,25 +2691,17 @@ class Vector {
 		[number, number],
 		[number, number],
 		[number, number],
-		[number, number],
-		[number, number],
-		[number, number],
-		[number, number],
 		[number, number]
 	] = [
-		game.pong.leftUp(),
 		game.pong.up(),
-		game.pong.rightUp(),
 		game.pong.right(),
-		game.pong.rightDown(),
 		game.pong.down(),
-		game.pong.leftDown(),
 		game.pong.left(),
 	];
 	// debugCollisions(player);
 
 	// ? collision with paddles
-	for (let i = 0; i < 8; i++) {
+	for (let i = 0; i < 4; i++) {
 		let angle: number = 0;
 		let intersection_point: [number, number, string][] = [[-1, -1, "side"]]; // array of one element so that the variable is referenced in functions
 		angle = collisionPaddle(player, intersection_point, ball_points[i]);
@@ -2723,6 +2751,8 @@ class Vector {
 			game.pong.speed *
 			-Math.sin(angle);
 		}
+		if (player.index === 1)
+			reset_ai_pos = true;
 		return;
 		}
 	}
@@ -2980,13 +3010,14 @@ class Vector {
 		buttons.hide();
 		inputs.hide();
 		game.timer = 4;
+		let game_ref = game;
 		for (let i = 0; i < 5; i++) {
 		setTimeout(() => {
-			game.timer--;
-			if (game.timer === 0) audio_files.playBip(audio_files.BIP_FINAL);
-			else if (game.timer >= 0) audio_files.playBip(audio_files.BIP);
-			if (game.timer === -1 && game.state === "countdown") {
-			game.setState("in-game");
+			game_ref.timer--;
+			if (game_ref.timer === 0) audio_files.playBip(audio_files.BIP_FINAL);
+			else if (game_ref.timer >= 0) audio_files.playBip(audio_files.BIP);
+			if (game_ref.timer === -1 && game_ref.state === "countdown") {
+			game_ref.setState("in-game");
 			}
 		}, i * 1000);
 		}

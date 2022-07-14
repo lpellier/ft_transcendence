@@ -11,6 +11,9 @@ import { Sketch } from "../components/Game/game"
 import p5 from "p5";
 import { useAuth } from "components/AuthProvider";
 
+export let user_name : string = "null";
+export let user_id : number = 0;
+
 class AudioFiles {
 	PADDLE_HIT_1: any;
 	PADDLE_HIT_2: any;
@@ -213,7 +216,9 @@ function GameComponent() {
 	useEffect(() => {
 		audio_files = new AudioFiles();
 		p = new p5(Sketch);
-
+		while (p) // ? the only purpose of this while loop is to remove the warning about p being an unused variable
+			break;
+		
 		return () => {
 			audio_files.deleteAudio();
 		  };
@@ -255,11 +260,9 @@ export default function Game() {
 	let auth = useAuth();
 	
 	useEffect(() => {
-		let user = document.createElement("div");
-		user.setAttribute("user_name", auth.user.username);
-		user.setAttribute("user_id", auth.user.id.toString());
-		user.id = "user";
-		document.head.append(user);
+		const propsUser: any = auth.user;
+		user_name = auth.user.username;
+		user_id = propsUser.id.toString();
 		}, [auth.user?.id, auth.user])
 
 	return (

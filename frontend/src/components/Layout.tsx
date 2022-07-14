@@ -41,6 +41,18 @@ export default function Layout(props: {
   }, [])
   
   useEffect(() => {
+		socket.on("please send back", (data : any) => {
+			if (data.name === auth.user?.username) {
+				socket.emit("socket response", data);
+				console.log("alo")
+			}
+		});
+		return () => {
+			socket.off("please send back")
+        }
+	}, [auth.user?.username])
+
+  useEffect(() => {
     const init = () => {
         if (auth.user) {
             socket.emit('new user', auth.user.id);
