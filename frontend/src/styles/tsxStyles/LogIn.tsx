@@ -1,17 +1,7 @@
-const Title = {
-  fontWeight: "400",
-  fontSize: "10vw",
-
+const Title = {   
   color: "rgb(255, 69, 0)",
   filter: "drop-shadow(20px 15px 4px black)",
-
-  textAlign: "center",
-  display: "flex",
-  paddingTop: "36vh",
-};
-
-const IconStyle = {
-  fontSize: "5vw",
+  paddingTop: "24vh",
 };
 
 const ButtonStyle = {
@@ -19,10 +9,4 @@ const ButtonStyle = {
   textShadow: "1px 1px 2px black",
 };
 
-const LinkStyle = {
-  textDecoration: "none",
-  display: "flex",
-  justifyContent: "center",
-};
-
-export { Title, ButtonStyle, LinkStyle, IconStyle };
+export { Title, ButtonStyle };

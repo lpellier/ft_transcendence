@@ -2,7 +2,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import LogIn from "./routes/LogIn";
 import TFAuth from "./routes/TFAuth";
 import Profile from "./components/Profile/Profile";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { User } from "interfaces";
 import { socket } from "index";
 import Chat from "./components/Chat/Chat";
@@ -13,6 +13,8 @@ import NotFound from "./routes/NotFound";
 import AuthProvider, { useAuth } from "components/AuthProvider";
 import axios from "axios";
 import Layout from "./components/Layout";
+import { CssBaseline } from "@mui/material";
+import BaseLayout from "components/BaseLayout";
 
 function useAuthStatus() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(null!);
@@ -119,36 +121,39 @@ export default function App() {
   }, [statusMap]);
 
   return (
-    <div>
+    <React.Fragment>
       <AuthProvider>
+        <CssBaseline />
         <ToastContainer />
         <Routes>
-          <Route path="/login" element={<LogIn />} />
-          <Route path="/tfauth" element={<TFAuth />} />
-          <Route
-            path="/"
-            element={
-              <RequireAuth>
-                <Layout
-                  users={users}
-                  statusMap={statusMap}
-                  setStatusMap={setStatusMap}
-                />
-              </RequireAuth>
-            }
-          >
-            <Route path="profile" element={<Profile self={true} />} />
-            <Route path="profile/:id" element={<Profile self={false} />} />
+          <Route element={<BaseLayout />}>
+            <Route path="/login" element={<LogIn />} />
+            <Route path="/tfauth" element={<TFAuth />} />
             <Route
-              path="chat"
-              element={<Chat users={users} statusMap={statusMap} />}
-            />
-            <Route path="game" element={<Game />} />
-            <Route path="settings" element={<Settings />} />
+              path="/"
+              element={
+                <RequireAuth>
+                  <Layout
+                    users={users}
+                    statusMap={statusMap}
+                    setStatusMap={setStatusMap}
+                  />
+                </RequireAuth>
+              }
+            >
+              <Route path="profile" element={<Profile self={true} />} />
+              <Route path="profile/:id" element={<Profile self={false} />} />
+              <Route
+                path="chat"
+                element={<Chat users={users} statusMap={statusMap} />}
+              />
+              <Route path="game" element={<Game />} />
+              <Route path="settings" element={<Settings />} />
+            </Route>
+            <Route path="*" element={<NotFound />} />
           </Route>
-          <Route path="*" element={<NotFound />} />
         </Routes>
       </AuthProvider>
-    </div>
+    </React.Fragment>
   );
 }
