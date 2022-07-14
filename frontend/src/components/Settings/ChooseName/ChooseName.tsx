@@ -9,7 +9,7 @@ import axios from 'axios';
 import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline'
 import {ModalChooseName} from '../../../styles/tsxStyles/Settings/Name'
 import {ButtonModalStyle, IconStyle} from '../../../styles/tsxStyles/AppBar/PongMenu'
-import {toastThatError} from '../../../routes/routes'
+import {toastThatError} from '../../../App'
 import { useAuth } from "components/AuthProvider";
 
 function NameButton() {

@@ -5,7 +5,7 @@ import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import { IconButton, TextField, Tooltip } from "@mui/material";
 import { User } from "interfaces";
 import { socket } from "index";
-import { toastThatError, toastIt } from "../../routes/routes";
+import { toastThatError, toastIt } from "../../App";
 import "../../styles/Chat/Channels.css";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";

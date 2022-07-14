@@ -13,7 +13,7 @@ import BlockIcon from '@mui/icons-material/Block';
 import Games from '@mui/icons-material/Games';
 import { Backdrop, ButtonGroup, IconButton, Button, Stack, Alert, Tooltip } from '@mui/material';
 import {Link} from 'react-router-dom';
-import { toastThatError } from 'routes/routes';
+import { toastThatError } from 'App';
 
 interface CreateDMRoomDto {
     name: string;
