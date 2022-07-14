@@ -11,17 +11,11 @@ import { Button, IconButton, Snackbar } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
 import { useAuth } from "components/AuthProvider";
 
-export const ImageIdContext = createContext({
-  imageId: 1,
-  setImageId: (n: number) => {},
-});
-
 export default function App(props: {
   users: User[];
   statusMap: Map<number, string>;
   setStatusMap: React.Dispatch<React.SetStateAction<Map<number, string>>>;
 }) {
-  const [imageId, setImageId] = useState<number>(1);
   const [open, setOpen] = useState(false);
   const [invite, setInvite] = useState<inviteDto>();
 
@@ -89,7 +83,7 @@ const action = (
 );
 
   return (
-    <ImageIdContext.Provider value={{ imageId, setImageId }}>
+    <div>
         <ToastContainer />
         <Snackbar
             open={open}
@@ -118,6 +112,6 @@ const action = (
           <div />
         )}
       </Stack>
-    </ImageIdContext.Provider>
+    </div>
   );
 }

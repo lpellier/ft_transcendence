@@ -14,8 +14,8 @@ import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import {useState} from 'react'
 import Button from '@mui/material/Button';
 import axios from 'axios'
-import { ImageIdContext } from 'App';
 import {toastThatError} from '../../../routes/routes'
+import { useAuth } from 'components/AuthProvider';
 
 const Input = styled('input')({
 	display: 'none',
@@ -46,6 +46,7 @@ function YesButton(props: {onClick: any}) {
 function UploadButton(props: {setOpen: any}) {
 	const [selectedFile, setSelectedFile] = useState<any>();
 	const [isSelected, setisSelected] = useState(false);
+	let auth = useAuth();
 
 	const changeHandler = (event: any) => {
 		setSelectedFile(event.target.files[0]);
@@ -53,7 +54,7 @@ function UploadButton(props: {setOpen: any}) {
 	};
 
 	function handleSubmit() {
-
+		
 		const formData = new FormData();
 		formData.append('avatar', selectedFile)
 
@@ -102,18 +103,13 @@ function UploadButton(props: {setOpen: any}) {
 				:
 				<p>No file selected yet</p>
 			}
-			<ImageIdContext.Consumer>
-				{({imageId, setImageId}) => 
-					<Stack direction="row" spacing={3}>
-						<YesButton onClick={() => {
-							handleSubmit();
-							setImageId(imageId + 1)
-						}}/>
-						<NoButton onClick={closeModal}/>
-					</Stack>
-				}
-			</ ImageIdContext.Consumer>
-
+			<Stack direction="row" spacing={3}>
+				<YesButton onClick={() => {
+					handleSubmit();
+					auth.increment();
+				}}/>
+				<NoButton onClick={closeModal}/>
+			</Stack>
 		</div>
 	  );
 }
