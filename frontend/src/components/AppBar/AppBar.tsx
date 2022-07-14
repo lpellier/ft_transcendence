@@ -1,4 +1,4 @@
-import {Link} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 import {User} from 'interfaces';
 import {PlayerAvatar} from	'../Avatars';
 import FriendBar from 'components/FriendBar/FriendBar';
@@ -15,34 +15,33 @@ import WebhookIcon from '@mui/icons-material/Webhook'
 import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
 import axios from 'axios';
 import {BarStyle} from '../../styles/tsxStyles/AppBar/AppBar'
+import { useAuth } from "components/AuthProvider";
 
 function LogOutLink() {
+	let auth = useAuth();
+	let navigate = useNavigate();
 
 	function logout() {
-  
 	  axios.get(process.env.REACT_APP_BACK_URL + '/auth/logout',
-	  {
-		  withCredentials: true,
-	  })
+	  { withCredentials: true, })
 	  .then(res => {	
 		console.log("Logout ")
-	  })
+	})
 	  .catch(function (err) {
 		console.log("Get request failed : ", err)
 	  });
+	  auth.signout(() => navigate("/login"));
 	}
 
 	return (
 	  <nav>
-		<Link to="/login" style={{ textDecoration: 'none' }}>
-		  <Button
-			  onClick={logout}
-			  variant="contained"
-			  startIcon={<MeetingRoomIcon />}
-			  color="secondary">
-			Log Out
-		  </Button>
-		</Link>
+		<Button
+			onClick={logout}
+			variant="contained"
+			startIcon={<MeetingRoomIcon />}
+			color="secondary">
+		Log Out
+		</Button>
 	  </nav>
 	);
 }
@@ -94,14 +93,14 @@ function ProjectName() {
 	);
 }
 
-export default function SearchAppBar(props: {user: User, users: User[], setOtherUser: React.Dispatch<React.SetStateAction<User | undefined>>, statusMap: Map<number, string>, setStatusMap: React.Dispatch<React.SetStateAction<Map<number, string>>>}) {
+export default function SearchAppBar(props: {user: User, users: User[], statusMap: Map<number, string>, setStatusMap: React.Dispatch<React.SetStateAction<Map<number, string>>>}) {
 
   return (
       <AppBar position="static">
         <Toolbar style={ BarStyle }>
 			<nav>
 				<Link to="profile" style={{ textDecoration: 'none' }}>
-					<PlayerAvatar image={process.env.REACT_APP_BACK_URL + '/avatars/' + props.user.id + '.png'} onClick={() => props.setOtherUser(props.user)} />
+					<PlayerAvatar image={process.env.REACT_APP_BACK_URL + '/avatars/' + props.user.id + '.png'} />
 				</Link>
 			</nav>
 			<PlayerName name={props.user.username} />

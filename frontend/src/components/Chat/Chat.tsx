@@ -6,7 +6,7 @@ import Box from '@mui/material/Box';
 import '../../styles/Chat/Chat.css';
 import {User, Room} from 'interfaces';
 import {socket} from 'index';
-import { toastThatError } from 'routes/routes';
+import { useAuth } from "components/AuthProvider";
 
 
 const ChatBoxComponentStyle = {	
@@ -14,7 +14,6 @@ const ChatBoxComponentStyle = {
     minWidth: '510px',
     height: '78vh',
 	
-
 	justifyContent: 'center',
 	display: 'flex',
 
@@ -27,7 +26,6 @@ const ChatBoxComponentStyle = {
 
 const OverallChatStyle = {
 	minheight: '812px',
-
 	width: '100%',
 	height: '100%',
 	justifyContent: 'center', 
@@ -35,13 +33,15 @@ const OverallChatStyle = {
 	paddingTop: '5vh',
 }
 
-function Chat(props: {user: User | undefined, users: User[], setOtherUser: React.Dispatch<React.SetStateAction<User | undefined>>, statusMap: Map<number, string>}) {
+function Chat(props: { users: User[], statusMap: Map<number, string>}) {
 	
 	let [status, setStatus] = useState('waiting for connection');
 	let [currentRoom, setCurrentRoom] = useState<Room> ({id: 1, name: "general", ownerId: 60040, visibility: "public", password:""});
 	let [canWrite, setCanWrite] = useState<boolean>(true);
 	let [roomAdmins, setRoomAdmins] = useState<User[]>([]);
 
+	let auth = useAuth();
+	
 	useEffect (() => {
 		const handler = (data: User[]) => { 
 			setRoomAdmins(data);
@@ -75,11 +75,11 @@ function Chat(props: {user: User | undefined, users: User[], setOtherUser: React
 	useEffect(() => {
 	const init = () => {
 		setStatus('connected');
-		if (props.user)
+		if (auth.user)
 		{
-			socket.emit('get rooms', props.user.id);
-			socket.emit('get public rooms', props.user.id);
-			socket.emit('get all messages', props.user.id);
+			socket.emit('get rooms', auth.user.id);
+			socket.emit('get public rooms', auth.user.id);
+			socket.emit('get all messages', auth.user.id);
 		}
 		if (!socket.connected)
 			setStatus('disconnected');
@@ -88,18 +88,18 @@ function Chat(props: {user: User | undefined, users: User[], setOtherUser: React
 			init();
 		else
 			socket.on('connect', init)
-	}, [props.user])
+	}, [auth.user])
 
 	return (
 		<Box sx={OverallChatStyle}>
 			<Box sx={ChatBoxComponentStyle}>
-				{props.user?
+				{auth.user?
 					<Stack direction='row' className='chmsg'>
 						<Stack>
 							{status}
-							<Channels user={props.user} users={props.users} currentRoom={currentRoom} setCurrentRoom = {setCurrentRoom} setCanWrite = {setCanWrite} roomAdmins={roomAdmins} setOtherUser={props.setOtherUser} statusMap={props.statusMap}/>
+							<Channels user={auth.user} users={props.users} currentRoom={currentRoom} setCurrentRoom = {setCurrentRoom} setCanWrite = {setCanWrite} roomAdmins={roomAdmins} statusMap={props.statusMap}/>
 						</Stack>
-						<Messages user={props.user} users={props.users} currentRoom={currentRoom} canWrite = {canWrite} />
+						<Messages user={auth.user} users={props.users} currentRoom={currentRoom} canWrite = {canWrite} />
 					</Stack>
 					:
 					<div/>

@@ -7,9 +7,9 @@ import "./../styles/Game/canvas.css"
 import "./../styles/Game/buttons.css"
 import "./../styles/Game/inputs.css"
 import "socket.io-client"
-import { User } from "interfaces";
-import { Sketch } from "../components/Game/game"
+import { Sketch } from "../components/Game/Sketch"
 import p5 from "p5";
+import { useAuth } from "components/AuthProvider";
 
 export let user_name : string = "null";
 export let user_id : number = 0;
@@ -256,27 +256,19 @@ function GameComponent() {
 	);
 }
 
-export default function Game( props: {user: User | undefined, navigate: boolean, setNavigate: React.Dispatch<React.SetStateAction<boolean>> }) {	
+export default function Game() {	
+	let auth = useAuth();
+	
 	useEffect(() => {
-		const propsUser: any = props.user;
-		user_name = propsUser.username;
+		const propsUser: any = auth.user;
+		user_name = auth.user.username;
 		user_id = propsUser.id.toString();
-		}, [props.user?.id, props.user])
-
-		useEffect(() => {
-			props.setNavigate(false);
-		}, [props])
-
-		useEffect(() => {
-			if (props.navigate) {
-				props.setNavigate(false);
-			}
-		}, [props])
+		}, [auth.user?.id, auth.user])
 
 	return (
 		<Stack id="test_parent" spacing={1}>
-			{props.user && props.user.username === null ? 
-				<FirstLoginPrompt user={props.user}/>
+			{auth.user.username === null ? 
+				<FirstLoginPrompt user={auth.user}/>
 				:
 				<div />
 			}

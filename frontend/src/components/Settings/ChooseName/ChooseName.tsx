@@ -9,8 +9,8 @@ import axios from 'axios';
 import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline'
 import {ModalChooseName} from '../../../styles/tsxStyles/Settings/Name'
 import {ButtonModalStyle, IconStyle} from '../../../styles/tsxStyles/AppBar/PongMenu'
-import {User} from 'interfaces'
-import {toastThatError} from '../../../routes/routes'
+import {toastThatError} from '../../../App'
+import { useAuth } from "components/AuthProvider";
 
 function NameButton() {
 	return (
@@ -24,9 +24,11 @@ function NameButton() {
 	);
 }
 
-function NameInput(props: {username: string, setter: any, setOpen: any, setUser: React.Dispatch<React.SetStateAction<User | undefined>>}) {
+function NameInput(props: {username: string, setter: any, setOpen: any}) {
 	const [value, setValue] = useState<string>("")
 
+	let auth = useAuth();
+	
 	function closeModal() {props.setOpen(false)}
 
 	function handleSubmit(e: any) {PatchRequest()}
@@ -49,7 +51,7 @@ function NameInput(props: {username: string, setter: any, setOpen: any, setUser:
 			await axios.get(process.env.REACT_APP_BACK_URL + '/users/me',
 			{ withCredentials: true,})
 			.then(res => {
-				props.setUser(res.data)
+				auth.signin(res.data, () => null )
 				console.log("User : ", res.data);
 			})
 			.catch(err => {
@@ -96,8 +98,8 @@ function NameInput(props: {username: string, setter: any, setOpen: any, setUser:
 	);
 }
 
-export default function ChooseName(props: {user: User, setUser: React.Dispatch<React.SetStateAction<User | undefined>>}) {
-    const [new_username, setNewUsername] = useState(props.user.username);
+export default function ChooseName() {
+    const [new_username, setNewUsername] = useState("");
 	const [open, setOpen] = useState(false);
 
 	const handleOpen = () => {
@@ -128,8 +130,7 @@ export default function ChooseName(props: {user: User, setUser: React.Dispatch<R
 						<NameInput
 							username={new_username} 
 							setter={setNewUsername} 
-							setOpen={setOpen}
-							setUser={props.setUser}/>
+							setOpen={setOpen}/>
 					</Stack>
           		</Box>
         	</Modal>

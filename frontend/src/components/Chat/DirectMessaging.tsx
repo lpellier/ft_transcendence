@@ -13,7 +13,7 @@ import BlockIcon from '@mui/icons-material/Block';
 import Games from '@mui/icons-material/Games';
 import { Backdrop, ButtonGroup, IconButton, Button, Stack, Alert, Tooltip } from '@mui/material';
 import {Link} from 'react-router-dom';
-import { toastThatError } from 'routes/routes';
+import { toastThatError } from 'App';
 
 interface CreateDMRoomDto {
     name: string;
@@ -21,7 +21,7 @@ interface CreateDMRoomDto {
     user2Id: number;
 }
 
-export default function DirectMessaging(props: {user: User, users: User[], rooms: Room[], currentRoom: Room, setCurrentRoom: React.Dispatch<React.SetStateAction<Room>>, setOtherUser: React.Dispatch<React.SetStateAction<User | undefined>>, statusMap: Map<number, string>}) {
+export default function DirectMessaging(props: {user: User, users: User[], rooms: Room[], currentRoom: Room, setCurrentRoom: React.Dispatch<React.SetStateAction<Room>>, statusMap: Map<number, string>}) {
     
     let [showUserList, setShowUserList] = useState<boolean>(false);
     let [search, setSearch] = useState<string>("");
@@ -145,17 +145,13 @@ export default function DirectMessaging(props: {user: User, users: User[], rooms
 	}, [props.user.id])
     
     
-    function UserMod(props: {user: User, users: User[], room: Room, setOtherUser: React.Dispatch<React.SetStateAction<User | undefined>>, statusMap: Map<number, string>}) {
+    function UserMod(props: {user: User, users: User[], room: Room,  statusMap: Map<number, string>}) {
         
         let [showBackdrop, setShowBackdrop] = useState<boolean>(false);
         
         function    blockUser(blockedId: number | undefined) {
             socket.emit('add blocked', {userId: props.user.id, blockedId: blockedId} );
             setShowBackdrop(false);
-        }
-
-        function    goToProfile(user: User | undefined) {
-            props.setOtherUser(user);
         }
 
         function    inviteForGame(user: User| undefined) {
@@ -171,15 +167,15 @@ export default function DirectMessaging(props: {user: User, users: User[], rooms
             else
                 toastThatError('user is offline');
         }
-
+        
         return (
             <div>
                 <Stack justifyContent="space-between">
                     <ListItemText primary={parseUser(props.room.name)?.username}/>
                     <Stack direction="row" >
                         <Tooltip title="Go to profile">
-                            <IconButton onClick={() => goToProfile(parseUser(props.room.name))} size="small">
-                                <Link to="/profile"><PersonIcon/></Link>
+                            <IconButton size="small">
+                                <Link to={"/users/" + parseUser(props.room.name)?.id}><PersonIcon/></Link>
                             </IconButton>
                         </Tooltip>
                         <Tooltip title="Invite for a match">
@@ -240,11 +236,11 @@ export default function DirectMessaging(props: {user: User, users: User[], rooms
                                 { room.id !== props.currentRoom.id ?
 
                                     <ListItem button className="MenuItem" onClick={() => props.setCurrentRoom(room) } sx={{ alignContent:"center" }} >
-                                        <UserMod user={props.user} users={props.users} room={room} setOtherUser={props.setOtherUser} statusMap={props.statusMap}/>
+                                        <UserMod user={props.user} users={props.users} room={room}  statusMap={props.statusMap}/>
                                     </ListItem>
                                 :
                                     <ListItem className="MenuItem" selected  sx={{ alignContent:"center"}}>
-                                        <UserMod user={props.user} users={props.users} room={room} setOtherUser={props.setOtherUser} statusMap={props.statusMap}/>
+                                        <UserMod user={props.user} users={props.users} room={room}  statusMap={props.statusMap}/>
                                     </ListItem>
                                 }
                             </div>

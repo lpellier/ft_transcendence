@@ -79,6 +79,7 @@ export class UsersService {
     const profile: Profile = {
       id: user.id,
       username: user.username,
+      tfa: user.tfa,
       victories: user.stats.victories,
       losses: user.stats.losses,
       level: user.stats.level,
@@ -196,6 +197,25 @@ export class UsersService {
       });
     }
   }
+
+  async getAllUsers() {
+    const users = await this.prisma.user.findMany();
+    let list = []
+    for (const user of users) {
+      list.push({id: user.id, username: user.username})
+    }
+    console.log(list);
+  }
+
+  async getUsername(id: number) {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id: id,
+      },
+    });
+    return user.username;
+  }
+
 
   async getMock() {
     const user = await this.prisma.user.findUnique({

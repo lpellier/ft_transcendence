@@ -1,6 +1,5 @@
 import Stack from '@mui/material/Stack';
 import Container from '@mui/material/Container';
-import {User} from 'interfaces'
 import Box from '@mui/material/Box';
 import FaceIcon from '@mui/icons-material/Face'
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
@@ -15,8 +14,8 @@ import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import {useState} from 'react'
 import Button from '@mui/material/Button';
 import axios from 'axios'
-import { ImageIdContext } from 'App';
-import {toastThatError, toastIt} from '../../../routes/routes'
+import {toastThatError} from '../../../App'
+import { useAuth } from 'components/AuthProvider';
 
 const Input = styled('input')({
 	display: 'none',
@@ -47,6 +46,7 @@ function YesButton(props: {onClick: any}) {
 function UploadButton(props: {setOpen: any}) {
 	const [selectedFile, setSelectedFile] = useState<any>();
 	const [isSelected, setisSelected] = useState(false);
+	let auth = useAuth();
 
 	const changeHandler = (event: any) => {
 		setSelectedFile(event.target.files[0]);
@@ -54,7 +54,7 @@ function UploadButton(props: {setOpen: any}) {
 	};
 
 	function handleSubmit() {
-
+		
 		const formData = new FormData();
 		formData.append('avatar', selectedFile)
 
@@ -103,18 +103,13 @@ function UploadButton(props: {setOpen: any}) {
 				:
 				<p>No file selected yet</p>
 			}
-			<ImageIdContext.Consumer>
-				{({imageId, setImageId}) => 
-					<Stack direction="row" spacing={3}>
-						<YesButton onClick={() => {
-							handleSubmit();
-							setImageId(imageId + 1)
-						}}/>
-						<NoButton onClick={closeModal}/>
-					</Stack>
-				}
-			</ ImageIdContext.Consumer>
-
+			<Stack direction="row" spacing={3}>
+				<YesButton onClick={() => {
+					handleSubmit();
+					auth.updateAvatar();
+				}}/>
+				<NoButton onClick={closeModal}/>
+			</Stack>
 		</div>
 	  );
 }
@@ -129,7 +124,7 @@ function CustomAvatar(props: {setOpen: any}) {
   );
 }
 
-function ChooseAvatarButton(props: {user: User, setOpenOne: any}) {
+function ChooseAvatarButton(props: {setOpenOne: any}) {
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => {
@@ -172,7 +167,7 @@ function ChooseAvatarButton(props: {user: User, setOpenOne: any}) {
   );
 }
 
-export default function AvatarList(props: {user: User}){
+export default function AvatarList(){
 	const [open, setOpen] = useState<boolean>(false)
 
 	const handleOpen = () => {
@@ -201,7 +196,7 @@ export default function AvatarList(props: {user: User}){
         	  <Box sx={ModalChooseAvatar}>
         	    <Container>
         	      <Stack spacing={2} style={{justifyContent: 'center'}}>
-        	            <ChooseAvatarButton user={props.user} setOpenOne={setOpen}/>
+        	            <ChooseAvatarButton setOpenOne={setOpen}/>
         	      </Stack>
         	    </Container>
 				</Box>

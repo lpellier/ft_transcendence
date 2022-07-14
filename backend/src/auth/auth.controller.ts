@@ -86,6 +86,7 @@ export class AuthController {
     if (isAuthenticated === false) {
       redirectUrl += '/tfauth';
     }
+    console.log(redirectUrl)
     return { url: redirectUrl };
   }
 }

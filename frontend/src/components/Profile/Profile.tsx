@@ -7,6 +7,9 @@ import {User} from 'interfaces'
 import {PlayerBarStyle, SkillBarContourStyle, TitleStyle} from "../../styles/tsxStyles/Home";
 import './../../styles/Other/SkillBar.css'
 import {PlayerAvatar} from	'../Avatars';
+import { useAuth } from "components/AuthProvider";
+import { useParams } from 'react-router-dom'
+import axios from 'axios'
 
 const OverallBoxStyle = {
 	paddingTop: '4vh',
@@ -48,7 +51,7 @@ function PlayerInfoBand(props: {level: number, user: User}) {
 			<Box sx={PlayerBarStyle}>
 				<Stack >
 					<Stack direction="row" spacing={35}>
-						<PlayerAvatar image={process.env.REACT_APP_BACK_URL + '/avatars/' + props.user.id + '.png'} onClick={ () => {} }/>
+						<PlayerAvatar image={process.env.REACT_APP_BACK_URL + '/avatars/' + props.user.id + '.png'} />
 						<Stack spacing={1} >
 							<Typography variant="h5">
 							 	{props.user.username}
@@ -64,18 +67,34 @@ function PlayerInfoBand(props: {level: number, user: User}) {
 	);
 }
 
-export default function Profile(props: {user: User | undefined, users: User[]}) {
+export default function Profile(props: {self: boolean}) {
+	const [profile, setProfile] = useState<User>(null!)
+	let auth = useAuth();
+	let params = useParams()
+
+	if (props.self === true && !profile) {
+		console.log(auth.user)
+		setProfile(auth.user);
+	}
+
+	useEffect( () => {
+		if (props.self === false && !profile) {
+			axios.get(process.env.REACT_APP_BACK_URL + "/users/" + params.id || "",
+			{withCredentials: true}).then(res => {
+			setProfile(res.data);
+			})
+		}
+	}, []);
+
 
     return (
 		<Box sx={OverallBoxStyle}>
-			{props.user?
-				<Stack spacing={1}>
-					<PlayerInfoBand level={props.user.level} user={props.user} />
-					<StatsBoards user={props.user} users={props.users} />
-				</Stack>
-					:
-				<div/>
+			<Stack spacing={1}>
+			{profile? <div>
+				<PlayerInfoBand level={profile.level} user={profile} />
+				<StatsBoards user={profile}/> </div> : <div />
 			}
+			</Stack>
 		</Box>
     );
 }
