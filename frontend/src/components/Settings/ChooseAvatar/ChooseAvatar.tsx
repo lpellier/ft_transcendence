@@ -106,7 +106,7 @@ function UploadButton(props: {setOpen: any}) {
 			<Stack direction="row" spacing={3}>
 				<YesButton onClick={() => {
 					handleSubmit();
-					auth.increment();
+					auth.updateAvatar();
 				}}/>
 				<NoButton onClick={closeModal}/>
 			</Stack>

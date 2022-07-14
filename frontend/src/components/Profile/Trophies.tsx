@@ -1,6 +1,5 @@
 import Stack from "@mui/material/Stack"
 import Typography from "@mui/material/Typography"
-import Gandalf from "../../images/Trophies/gandalf.png"
 import Star from "../../images/Trophies/star.png"
 import ThreeStars from "../../images/Trophies/threestars.png"
 import TheQuitter from "../../images/Trophies/quitter.png"
@@ -26,7 +25,7 @@ const ATrophyStyle = {
 function ATrophie(props: {image: string, title: string, label: string}) {
   return (
 		<Stack direction="row" sx={ATrophyStyle} spacing={2}>
-			<img src={props.image} style={ImgStyle} />
+			<img src={props.image} alt="Trophy" style={ImgStyle} />
 			<Stack>
 				<Typography variant="subtitle2">
 					{props.title}

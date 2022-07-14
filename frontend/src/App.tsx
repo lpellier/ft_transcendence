@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import LogIn from "./routes/LogIn";
 import TFAuth from "./routes/TFAuth";
 import Profile from "./components/Profile/Profile";
@@ -11,34 +11,34 @@ import Game from "./routes/Game";
 import { toast } from "react-toastify";
 import NotFound from "./routes/NotFound";
 import AuthProvider, { useAuth } from "components/AuthProvider";
-import axios from 'axios'
+import axios from "axios";
 import Layout from "./components/Layout";
 
 function useAuthStatus() {
-    const [isAuthenticated, setIsAuthenticated] = useState<boolean>(null!);
-    let auth = useAuth();
-  
-    console.log("passed by useAuthStatus");
-    useEffect(() => {
-      axios
-        .get(process.env.REACT_APP_BACK_URL + "/users/me", {
-          withCredentials: true,
-        })
-        .then((res) => {
-          auth.signin(res.data, () => {
-            console.log("about to login");
-          });
-          setIsAuthenticated(true);
-        })
-        .catch((err) => {
-          console.log("not logged in");
-          setIsAuthenticated(false);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(null!);
+  let auth = useAuth();
+
+  console.log("passed by useAuthStatus");
+  useEffect(() => {
+    axios
+      .get(process.env.REACT_APP_BACK_URL + "/users/me", {
+        withCredentials: true,
+      })
+      .then((res) => {
+        auth.signin(res.data, () => {
+          console.log("about to login");
         });
-    }, []);
-  
-    return isAuthenticated;
-  }
-  
+        setIsAuthenticated(true);
+      })
+      .catch((err) => {
+        console.log("not logged in");
+        setIsAuthenticated(false);
+      });
+  }, []);
+
+  return isAuthenticated;
+}
+
 function RequireAuth({ children }: { children: JSX.Element }) {
   console.log("passed by RequireAuth");
   const isAuthenticated = useAuthStatus();

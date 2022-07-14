@@ -6,7 +6,6 @@ import { useAuth } from './AuthProvider'
 
 // Styles
 
-const BigAvatar = {border: 2, width: 150, height: 150}
 const SmallAvatar = {border: 2, width: 50, height: 50}
 
 export function PlayerAvatar(props: {image: string } ) {

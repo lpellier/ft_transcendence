@@ -1,7 +1,5 @@
 import { User } from "interfaces";
-import p5 from "p5";
 import React, { useState } from "react";
-import { Sketch } from "./Game/game";
 
 interface AuthContextType {
   user: User;
@@ -11,7 +9,7 @@ interface AuthContextType {
   signin: (user: User, callback: VoidFunction) => void;
   signout: (callback: VoidFunction) => void;
   // createSketch: () => void;
-  increment: () => void;
+  updateAvatar: () => void;
 }
 
 let AuthContext = React.createContext<AuthContextType>(null!);
@@ -27,7 +25,7 @@ export default function AuthProvider({
   // let [sketch, setSketch] = React.useState<p5>(null!);
 
   // let createSketch = () => setSketch(new p5(Sketch));
-  let increment = () => {
+  let updateAvatar = () => {
     setImageId(imageId + 1)
     console.log("image id is now", imageId);
   }
@@ -43,7 +41,7 @@ export default function AuthProvider({
     callback();
   };
 
-  let value = { user, imageId, signin, signout, increment };
+  let value = { user, imageId, signin, signout, updateAvatar };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

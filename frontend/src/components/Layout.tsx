@@ -1,4 +1,4 @@
-import { useState, createContext, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Stack from "@mui/material/Stack";
 import SearchAppBar from "components/AppBar/AppBar";
 import { User } from "interfaces";
