@@ -37,8 +37,6 @@ export class AuthController {
     let redirectUrl = this.configService.get('FRONT_URL');
     if (req.user.isAuthenticated === false) {
       redirectUrl += '/tfauth';
-    } else {
-      redirectUrl += '/auth';
     }
     return { url: redirectUrl };
   }
@@ -87,8 +85,6 @@ export class AuthController {
     let redirectUrl = this.configService.get('FRONT_URL');
     if (isAuthenticated === false) {
       redirectUrl += '/tfauth';
-    } else {
-      redirectUrl += '/auth';
     }
     console.log(redirectUrl)
     return { url: redirectUrl };
