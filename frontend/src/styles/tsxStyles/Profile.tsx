@@ -42,7 +42,8 @@ const MatchHistoryBox = {
     height: '30vh',
     overflowY: 'scroll',
     overflow: 'auto',
-	padding: '0%'
+	padding: '0%',
+	paddingBottom: '4%',
 }
 
 const SkillBarContourStyle = {

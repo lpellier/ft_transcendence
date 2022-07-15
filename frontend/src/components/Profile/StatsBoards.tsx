@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
+import Grid from '@mui/material/Grid';
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { User } from "interfaces";
@@ -12,7 +13,7 @@ import {
   StatTitle,
   StatBox,
   MatchHistoryBox,
-} from "../../styles/tsxStyles/Home";
+} from "../../styles/tsxStyles/Profile";
 import { Stats } from "interfaces";
 import {
   ChangeAvatarTrophy,
@@ -237,15 +238,21 @@ function MatchhistoryBox(props: { user: User }) {
 export default function StatsBoards(props: { user: User }) {
   console.log("Rendered statsboards", props.user);
   return (
-    <Stack direction="row" spacing={1}>
-      <Stack spacing={1}>
-        <StatsBox user={props.user} />
-        <TrophyBox user={props.user} />
-      </Stack>
-      <Stack spacing={1}>
-        <LeaderboardBox />
-        <MatchhistoryBox user={props.user} />
-      </Stack>
-    </Stack>
+	<Box>
+		<Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+			<Grid item xs={6}>
+        		<StatsBox user={props.user} />
+			</Grid>
+			<Grid item xs={6}>
+        		<TrophyBox user={props.user} />
+			</Grid>
+			<Grid item xs={6}>
+        		<LeaderboardBox />
+			</Grid>
+			<Grid item xs={6}>
+        		<MatchhistoryBox user={props.user} />
+			</Grid>
+		</Grid>
+	</Box>
   );
 }
