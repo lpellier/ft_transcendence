@@ -20,7 +20,7 @@ const ModalChooseAuth = {
     transform: 'translate(-50%, -50%)',
 
     bgcolor: 'rgb(128, 161, 212, 0.95)',
-    border: '3px solid black',
+    border: '2px solid black',
     boxShadow: 24,
     pt: 2,
     px: 4,
