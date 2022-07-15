@@ -16,6 +16,7 @@ import Button from '@mui/material/Button';
 import axios from 'axios'
 import {toastThatError} from '../../../App'
 import { useAuth } from 'components/AuthProvider';
+import React from 'react';
 
 const Input = styled('input')({
 	display: 'none',
@@ -124,49 +125,6 @@ function CustomAvatar(props: {setOpen: any}) {
   );
 }
 
-function ChooseAvatarButton(props: {setOpenOne: any}) {
-  const [open, setOpen] = useState(false);
-
-  const handleOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  const closeOne = () => {
-    props.setOpenOne(false);
-  };
-
-  return (
-    <Stack direction="row" spacing={2} style={{marginTop: '5%', justifyContent: 'center'}}>
-      <Button
-          onClick={handleOpen}
-          variant="contained"
-          startIcon={<AutoAwesomeIcon />}
-          color="secondary">
-        	Custom avatar
-      </Button>
-      <Modal
-		open={open}
-		onClose={handleClose}
-      >
-    	<Box sx={CustomAvatarStyle}>
-    		<CustomAvatar setOpen={setOpen}/>
-    	</Box>
-      </Modal>
-	  <Button
-          onClick={closeOne}
-          variant="contained"
-          startIcon={<KeyboardReturnIcon />}
-          color="secondary">
-        	I'm done !
-      </Button>
-    </Stack>
-  );
-}
-
 export default function AvatarList(){
 	const [open, setOpen] = useState<boolean>(false)
 
@@ -179,12 +137,12 @@ export default function AvatarList(){
 	};
 
     return (
-		<Stack direction="row" spacing={2} style={{justifyContent: 'center'}}>
+		<React.Fragment>
       		<Button
       		      onClick={handleOpen}
       		      variant="contained"
       		      color="secondary"
-      		      style={ButtonModalStyle}
+      		    //   style={ButtonModalStyle}
       		    >
       		    <FaceIcon sx={IconStyle}/>
       		    Choose avatar
@@ -194,13 +152,11 @@ export default function AvatarList(){
         	  onClose={handleClose}
         	>
         	  <Box sx={ModalChooseAvatar}>
-        	    <Container>
         	      <Stack spacing={2} style={{justifyContent: 'center'}}>
-        	            <ChooseAvatarButton setOpenOne={setOpen}/>
+				  	<CustomAvatar setOpen={setOpen}/>
         	      </Stack>
-        	    </Container>
 				</Box>
         	</Modal>
-        </Stack>
+		</React.Fragment>
     );
 }

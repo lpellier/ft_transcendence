@@ -16,6 +16,7 @@ import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
 import axios from 'axios';
 import {BarStyle} from '../../styles/tsxStyles/AppBar/AppBar'
 import { useAuth } from "components/AuthProvider";
+import { Box, Container } from '@mui/material';
 
 function LogOutLink() {
 	let auth = useAuth();
@@ -97,22 +98,22 @@ export default function SearchAppBar(props: {user: User, users: User[], statusMa
 
   return (
       <AppBar position="static">
-        <Toolbar style={ BarStyle }>
-			<nav>
-				<Link to="profile" style={{ textDecoration: 'none' }}>
+		<Container maxWidth="xl">
+			<Toolbar disableGutters>
+				<Link to="profile">
 					<PlayerAvatar image={process.env.REACT_APP_BACK_URL + '/avatars/' + props.user.id + '.png'} />
 				</Link>
-			</nav>
-			<PlayerName name={props.user.username} />
-			<ProjectName />
-			<Stack direction="row" spacing={2}>
-				<FriendBar user={props.user} users={props.users} statusMap={props.statusMap} setStatusMap={props.setStatusMap}/>
-				<AppBarButton link="../game" tooltip={"Game"} icon={<GamesIcon />}/>
-				<AppBarButton link="../chat" tooltip={"Forum"} icon={<ForumIcon />}/>
-				<AppBarButton link="../settings" tooltip={"Settings"} icon={<SettingsIcon />}/>
-				<LogOutLink />
-			</Stack>
-        </Toolbar>
-    	</AppBar>
+				<PlayerName name={props.user.username} />
+				<ProjectName />
+				<Stack direction="row" spacing={2}>
+					<FriendBar user={props.user} users={props.users} statusMap={props.statusMap} setStatusMap={props.setStatusMap}/>
+					<AppBarButton link="../game" tooltip={"Game"} icon={<GamesIcon />}/>
+					<AppBarButton link="../chat" tooltip={"Forum"} icon={<ForumIcon />}/>
+					<AppBarButton link="../settings" tooltip={"Settings"} icon={<SettingsIcon />}/>
+					<LogOutLink />
+				</Stack>
+			</Toolbar>
+		</Container>
+	</AppBar>
 	);
 }

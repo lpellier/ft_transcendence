@@ -123,7 +123,7 @@ export default function ChooseAuth() {
         onClick={handleOpen}
         variant="contained"
         color="secondary"
-        style={ButtonModalStyle}
+        // style={ButtonModalStyle}
       >
         <VpnKeyIcon sx={IconStyle} />
         Choose Authentication

@@ -11,6 +11,7 @@ import {ModalChooseName} from '../../../styles/tsxStyles/Settings/Name'
 import {ButtonModalStyle, IconStyle} from '../../../styles/tsxStyles/AppBar/PongMenu'
 import {toastThatError} from '../../../App'
 import { useAuth } from "components/AuthProvider";
+import React from "react";
 
 function NameButton() {
 	return (
@@ -111,15 +112,16 @@ export default function ChooseName() {
 	};
 
 	return (
-		<div>
+		<React.Fragment>
       		<Button
             	onClick={handleOpen}
             	variant="contained"
             	color="secondary"
-            	style={ButtonModalStyle}>
+            	// style={ButtonModalStyle}
+				>
           		<DriveFileRenameOutlineIcon sx={IconStyle}/>
           		Choose Name
-      		</Button>
+			</Button>
 			<Modal
 			  open={open}
 			  onClose={handleClose}
@@ -134,6 +136,6 @@ export default function ChooseName() {
 					</Stack>
           		</Box>
         	</Modal>
-        </div>
+		</React.Fragment>
     );
 }
