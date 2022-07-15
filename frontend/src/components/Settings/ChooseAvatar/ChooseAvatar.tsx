@@ -1,12 +1,9 @@
 import Stack from "@mui/material/Stack";
-import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import FaceIcon from "@mui/icons-material/Face";
 import Modal from "@mui/material/Modal";
 import { ModalChooseAvatar } from "../../../styles/tsxStyles/Settings/Avatar";
-import {
-  IconStyle,
-} from "../../../styles/tsxStyles/AppBar/PongMenu";
+import { IconStyle } from "../../../styles/tsxStyles/AppBar/PongMenu";
 import { styled } from "@mui/material/styles";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import { useState } from "react";
@@ -39,33 +36,36 @@ function YesButton(props: { onClick: any }) {
 
 function UploadButton(props: { setOpen: any }) {
   const [selectedFile, setSelectedFile] = useState<any>();
-  const [isSelected, setisSelected] = useState(false);
   let auth = useAuth();
 
   const changeHandler = (event: any) => {
     setSelectedFile(event.target.files[0]);
-    setisSelected(true);
   };
 
   function handleSubmit() {
     const formData = new FormData();
     formData.append("avatar", selectedFile);
 
-    axios
-      .put(process.env.REACT_APP_BACK_URL + "/users/upload-avatar", formData, {
-        withCredentials: true,
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
-      .then((res) => {
-        console.log("Put avatar request success");
-        props.setOpen(false);
-        auth.updateAvatar();
-      })
-      .catch((err) => {
-        toastThatError("Avatar upload failed");
-      });
+    if (selectedFile.size > 1048576) {
+      toastThatError("Avatar size too big! Maximum is 1024KB.");
+    } else {
+      axios
+        .put(
+          process.env.REACT_APP_BACK_URL + "/users/upload-avatar",
+          formData,
+          {
+            withCredentials: true,
+          }
+        )
+        .then(res => {
+          console.log("Put avatar request success");
+          props.setOpen(false);
+          auth.updateAvatar();
+        })
+        .catch(err => {
+          toastThatError("Avatar upload failed");
+        });
+    }
   }
 
   function closeModal() {
@@ -88,19 +88,18 @@ function UploadButton(props: { setOpen: any }) {
           onChange={changeHandler}
         />
       </label>
-		{isSelected ? (
+      {selectedFile ? (
         <Stack spacing={2} sx={{ margin: "20px" }}>
           <Typography variant="body2">Filename: {selectedFile.name}</Typography>
           <Typography variant="body2">Filetype: {selectedFile.type}</Typography>
           <Typography variant="body2">
-            Size in bytes: {selectedFile.size}
+            Size: {Math.round(selectedFile.size / 1024)}KB
           </Typography>
-		</Stack>
+        </Stack>
       ) : (
-		<Stack spacing={2} sx={{ margin: "20px" }}>
-	        <Typography variant="body2">No file selected yet</Typography>
-		</Stack>
-
+        <Stack spacing={2} sx={{ margin: "20px" }}>
+          <Typography variant="body2">No file selected yet</Typography>
+        </Stack>
       )}
 
       <Stack direction="row" spacing={3}>
