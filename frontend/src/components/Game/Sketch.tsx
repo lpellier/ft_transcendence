@@ -639,6 +639,7 @@
 		if (!parent)
 			return ;
 		while (parent?.firstChild) {
+			// @ts-ignore : next-line // don't know why an errors shows up on vs code
 		  parent.removeChild(parent.lastChild);
 		}
 	}
