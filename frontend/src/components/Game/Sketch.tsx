@@ -2050,12 +2050,19 @@ class Vector {
 	if (game.state === "in-menu") {
 		outputAnnouncement("You can press P during a game to quit it", consts.small_font_size * 0.35, consts.WIDTH * 0.25, consts.HEIGHT * 0.05, "rgba(255, 255, 255, 0.6)");
 		outputAnnouncement(
-		"CyberPong 1977",
-		consts.std_font_size * 1.5,
+		"The Ponger's Guide",
+		consts.std_font_size * 1.25,
 		consts.WIDTH / 2,
 		consts.HEIGHT / 4,
 		"white"
 		);
+		outputAnnouncement(
+			"to the Galaxy",
+			consts.std_font_size * 1.25,
+			consts.WIDTH / 2,
+			consts.HEIGHT * 0.35,
+			"white"
+			);
 	}
 	else if (game.state === "in-menu-input") {
 		drawSpectate();
