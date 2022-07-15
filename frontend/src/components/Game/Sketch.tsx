@@ -1,4 +1,4 @@
-	// ? P to quit local mode
+	// ? P to quit game
 	// ? Coding consistency : snake_case for variables | camelCase for functions | PascalCase for classes
 
 	import { socket } from "index";
@@ -184,6 +184,7 @@
 	}
 
 	createButtons() {
+		console.log("added create game");
 		this.create_game = createCustomButton(
 		"Create game",
 		createGameMenu,
@@ -612,6 +613,35 @@
 
 		if (this.spectate) this.spectate.remove();
 		this.spectate = null;
+
+		this.removeChildren("button-create");
+		this.removeChildren("button-join");
+		this.removeChildren("button-matchmaking");
+		this.removeChildren("button-anyone");
+		this.removeChildren("button-invitation");
+		this.removeChildren("button-local");
+		this.removeChildren("button-ai");
+		this.removeChildren("button-validate");
+		this.removeChildren("button-return");
+		this.removeChildren("button-sound");
+		this.removeChildren("button-map-original");
+		this.removeChildren("button-map-city");
+		this.removeChildren("button-map-casino");
+		this.removeChildren("button-spectate");
+		this.removeChildren("button-plus");
+		this.removeChildren("button-minus");
+		this.removeChildren("button-opp-left-ok");
+		
+		
+	}
+
+	removeChildren(button_id : string) {
+		const parent = document.getElementById(button_id);
+		if (!parent)
+			return ;
+		while (parent?.firstChild) {
+		  parent.removeChild(parent.lastChild);
+		}
 	}
 
 	reset() {
@@ -2062,8 +2092,6 @@ class Vector {
 			"white"
 		);
 	} else if (game.state === "waiting-player") {
-		if (!game)
-			game = new Game();
 		if (game.spectator) drawSpectate();
 		buttons.return.show();
 		p.image(

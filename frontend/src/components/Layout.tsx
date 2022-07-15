@@ -37,13 +37,12 @@ export default function Layout(props: {
         socket.off('accepted game');
         socket.off('invite for game');
     }
-  }, [])
+  }, [navigate])
   
   useEffect(() => {
 		socket.on("please send back", (data : any) => {
 			if (data.name === auth.user?.username) {
 				socket.emit("socket response", data);
-				console.log("alo")
 			}
 		});
 		return () => {

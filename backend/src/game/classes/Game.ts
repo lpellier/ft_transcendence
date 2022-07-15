@@ -4,7 +4,6 @@ import { Player } from "./Player";
 import { Pong } from "./Pong";
 import { GameMap } from "./GameMap";
 import * as utils from "./../utils";
-import { Socket } from "dgram";
 
 const top_bound : number = 10;
 const bot_bound : number = consts.MAP_HEIGHT - 10;

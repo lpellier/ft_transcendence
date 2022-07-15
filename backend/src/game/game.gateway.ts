@@ -167,7 +167,8 @@ export class GameGateway {
 						clearInterval(game.update_interval);
 					if (game.countdown_timeout)
 						clearTimeout(game.countdown_timeout);
-					this.games.splice(this.games.indexOf(game), 1);
+					if (this.games.indexOf(game) != -1)
+						this.games.splice(this.games.indexOf(game), 1);
 					return ;
 				}
 			}
@@ -200,7 +201,6 @@ export class GameGateway {
 						this.server.to(game.room_id).emit("waiting-player", game.room_id, game.score_limit, game.map.name);
 						game.state = "waiting-readiness";
 						this.server.to(game.room_id).emit("waiting-readiness", game.players[0].id, game.players[1].id, game.players[0].real_name, game.players[1].real_name, game.players[0].real_id, game.players[1].real_id)
-						console.log("both players have loaded");
 						game.polling = false;
 						clearInterval(inte);
 					}
