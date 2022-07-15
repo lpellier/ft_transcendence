@@ -1,7 +1,8 @@
 const Title = {   
+  fontWeight: "400",
+
   color: "rgb(255, 69, 0)",
-  filter: "drop-shadow(20px 15px 4px black)",
-  paddingTop: "24vh",
+  filter: "drop-shadow(20px 15px 4px black)",  paddingTop: "16vh",
 };
 
 const ButtonStyle = {

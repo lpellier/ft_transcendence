@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 import { Outlet } from "react-router-dom";
-import background from "../images/Background.jpg"
+import background from "../images/Background.png"
 
 export default function BaseLayout() {
   return (
