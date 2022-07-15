@@ -184,7 +184,6 @@
 	}
 
 	createButtons() {
-		console.log("added create game");
 		this.create_game = createCustomButton(
 		"Create game",
 		createGameMenu,
