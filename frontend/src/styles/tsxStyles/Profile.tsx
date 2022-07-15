@@ -20,6 +20,8 @@ const StatTitle = {
 	border: '3px solid black',
     paddingLeft: '10%',
 
+	paddingBottom: '1%',
+	paddingTop: '1%',
 	color: 'white',
 }
 
@@ -42,7 +44,8 @@ const MatchHistoryBox = {
     height: '30vh',
     overflowY: 'scroll',
     overflow: 'auto',
-	padding: '0%'
+	padding: '0%',
+	paddingBottom: '4%',
 }
 
 const SkillBarContourStyle = {

@@ -83,7 +83,7 @@ function ProjectName() {
 		  variant="h4"
 		  noWrap
 		  component="div"
-		  sx={{paddingRight: '15vw', paddingLeft: '25vw'}}
+		  sx={{paddingRight: '10%', paddingLeft: '10%'}}
 		>The Pongers Guide to the Galaxy</Typography>
 	);
 }

@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
+import Grid from '@mui/material/Grid';
 import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
 import { User } from "interfaces";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import TimelineIcon from "@mui/icons-material/Timeline";
@@ -12,7 +12,7 @@ import {
   StatTitle,
   StatBox,
   MatchHistoryBox,
-} from "../../styles/tsxStyles/Home";
+} from "../../styles/tsxStyles/Profile";
 import { Stats } from "interfaces";
 import {
   ChangeAvatarTrophy,
@@ -30,15 +30,44 @@ enum achievements {
   CHANGEAVATAR,
 }
 
-const ButtonLeadStyle = {
-  backgroundColor: "rgb(170, 50, 190)",
-  width: "20%",
-};
-
 const ButtonStatStyle = {
   backgroundColor: "rgb(170, 50, 190)",
   width: "29%",
 };
+
+const TitleBoxStyle = {
+	backgroundColor: "rgb(170, 50, 190)",
+	borderRadius: "4px",
+	border: "1px solid black",
+	padding: "5%",
+	boxShadow: '0px 2px 5px 1px gray',
+	width: '80%',
+	height: '100%',
+	textTransform: 'uppercase',
+	overflow: 'hidden',
+	
+	display: 'flex',
+	justifyContent: 'center',
+	textAlign: 'center',
+	verticalAlign: 'middle',
+}
+
+const TextBoxStyle = {
+	color: "rgb(30, 70, 200)",
+	padding: "1%",
+	width: '80%',
+	overflow: 'hidden',
+
+	textAlign: 'center',
+}
+
+function SpecialGridings(props: {sx: any, xs: number, label: string | number}) {
+	return (
+		<Grid item xs={props.xs}>
+			<Box sx={props.sx}> {props.label} </Box>
+		</Grid>
+	);
+}
 
 function BoardComponent(props: { icon: any; title: string }) {
   return (
@@ -62,24 +91,18 @@ function StatsBox(props: { user: User }) {
     <Stack spacing={1}>
       <BoardComponent icon={<TimelineIcon />} title="Stats" />
       <Box sx={StatBox}>
-        <Stack>
-          <Stack direction="row" spacing={2}>
-            <Button variant="contained" style={ButtonStatStyle}>
-              Victories
-            </Button>
-            <Button variant="contained" style={ButtonStatStyle}>
-              Games lost
-            </Button>
-            <Button variant="contained" style={ButtonStatStyle}>
-              Total games
-            </Button>
-          </Stack>
-          <Stack direction="row" spacing={2}>
-            <Button style={{ width: "29%" }}> {props.user.victories} </Button>
-            <Button style={{ width: "29%" }}> {props.user.losses} </Button>
-            <Button style={{ width: "29%" }}> {tot_games} </Button>
-          </Stack>
-        </Stack>
+		<Stack spacing={1}>
+	  		<Grid container rowSpacing={2}>
+				<SpecialGridings sx={TitleBoxStyle} xs={4} label={"victories"}/>
+				<SpecialGridings sx={TitleBoxStyle} xs={4} label={"Games lost"}/>
+				<SpecialGridings sx={TitleBoxStyle} xs={4} label={"total games"}/>
+			</Grid>
+	  		<Grid container rowSpacing={2}>
+				<SpecialGridings sx={TextBoxStyle} xs={4} label={props.user.victories}/>
+				<SpecialGridings sx={TextBoxStyle} xs={4} label={props.user.losses}/>
+				<SpecialGridings sx={TextBoxStyle} xs={4} label={tot_games}/>
+        	</Grid>
+			</Stack>
       </Box>
     </Stack>
   );
@@ -143,39 +166,24 @@ function LeaderboardBox() {
 
   function LeaderList() {
     return (
-      <Box sx={{ flexGrow: 1 }}>
-        <Stack direction="row" spacing={2}>
-          <Button variant="contained" style={ButtonLeadStyle}>
-            {" "}
-            Best Player{" "}
-          </Button>
-          <Button variant="contained" style={ButtonLeadStyle}>
-            {" "}
-            Wins{" "}
-          </Button>
-          <Button variant="contained" style={ButtonLeadStyle}>
-            {" "}
-            Losses{" "}
-          </Button>
-          <Button variant="contained" style={ButtonLeadStyle}>
-            {" "}
-            Level{" "}
-          </Button>
-        </Stack>
+		<Stack spacing={2}>
+			<Grid container rowSpacing={3}>
+				<SpecialGridings sx={TitleBoxStyle} xs={3} label={"Best Player"}/>
+				<SpecialGridings sx={TitleBoxStyle} xs={3} label={"wins"}/>
+				<SpecialGridings sx={TitleBoxStyle} xs={3} label={"losses"}/>
+				<SpecialGridings sx={TitleBoxStyle} xs={3} label={"level"}/>
+			</Grid>
         {leaders.map((item) => (
-          <div key={item.id}>
-            <Stack direction="row" spacing={2}>
-              <Button style={{ width: "20%" }}> {item.username} </Button>
-              <Button style={{ width: "20%" }}> {item.victories} </Button>
-              <Button style={{ width: "20%" }}> {item.losses} </Button>
-              <Button style={{ width: "20%" }}>
-                {" "}
-                {Math.trunc(item.level)}{" "}
-              </Button>
-            </Stack>
-          </div>
-        ))}
-      </Box>
+			<div key={item.id}>
+				<Grid container rowSpacing={3}>
+					<SpecialGridings sx={TextBoxStyle} xs={3} label={item.username}/>
+					<SpecialGridings sx={TextBoxStyle} xs={3} label={item.victories}/>
+					<SpecialGridings sx={TextBoxStyle} xs={3} label={item.losses}/>
+					<SpecialGridings sx={TextBoxStyle} xs={3} label={Math.trunc(item.level)}/>
+				</Grid>
+			</div>
+    	))}
+		</Stack>
     );
   }
 
@@ -237,15 +245,21 @@ function MatchhistoryBox(props: { user: User }) {
 export default function StatsBoards(props: { user: User }) {
   console.log("Rendered statsboards", props.user);
   return (
-    <Stack direction="row" spacing={1}>
-      <Stack spacing={1}>
-        <StatsBox user={props.user} />
-        <TrophyBox user={props.user} />
-      </Stack>
-      <Stack spacing={1}>
-        <LeaderboardBox />
-        <MatchhistoryBox user={props.user} />
-      </Stack>
-    </Stack>
+	<Box>
+		<Grid container rowSpacing={3} columnSpacing={{md: 3}}>
+			<Grid item xs={6}>
+        		<StatsBox user={props.user} />
+			</Grid>
+			<Grid item xs={6}>
+        		<TrophyBox user={props.user} />
+			</Grid>
+			<Grid item xs={6}>
+        		<LeaderboardBox />
+			</Grid>
+			<Grid item xs={6}>
+        		<MatchhistoryBox user={props.user} />
+			</Grid>
+		</Grid>
+	</Box>
   );
 }

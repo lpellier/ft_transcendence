@@ -4,7 +4,7 @@ import Box from '@mui/material/Box'
 import StatsBoards from './StatsBoards'
 import Typography from '@mui/material/Typography'
 import {User} from 'interfaces'
-import {PlayerBarStyle, SkillBarContourStyle, TitleStyle} from "../../styles/tsxStyles/Home";
+import {PlayerBarStyle, SkillBarContourStyle, TitleStyle} from "../../styles/tsxStyles/Profile";
 import './../../styles/Other/SkillBar.css'
 import {PlayerAvatar} from	'../Avatars';
 import { useAuth } from "components/AuthProvider";
@@ -84,12 +84,11 @@ export default function Profile(props: {self: boolean}) {
 
     return (
 		<Box sx={OverallBoxStyle}>
-			<Stack spacing={1}>
-			{profile? <div>
+			{profile? 
+			<Stack spacing={4}>
 				<PlayerInfoBand level={profile.level} user={profile} />
-				<StatsBoards user={profile}/> </div> : <div />
+				<StatsBoards user={profile}/> </Stack> : <div />
 			}
-			</Stack>
 		</Box>
     );
 }
