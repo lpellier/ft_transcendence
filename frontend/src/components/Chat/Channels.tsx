@@ -36,6 +36,7 @@ export interface UserRoomDto {
 const ButtonStyle = {
 	border: '1px solid black',
 	backgroundColor: 'rgb(235, 116, 30, 0.75)',
+	overflow: 'hidden',
 }
 
 function PasswordInput(props: {openPassword: boolean, setOpenPassword: React.Dispatch<React.SetStateAction<boolean>>, 

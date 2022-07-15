@@ -20,6 +20,8 @@ const StatTitle = {
 	border: '3px solid black',
     paddingLeft: '10%',
 
+	paddingBottom: '1%',
+	paddingTop: '1%',
 	color: 'white',
 }
 
