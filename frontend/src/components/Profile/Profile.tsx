@@ -25,7 +25,7 @@ function SkillBar(props: {progression: number}) {
 			  <LinearProgress sx={{ height: "20px", borderRadius: "20px"}} variant="determinate" value={props.progression} />
 			</Box>
 			<Box sx={{ minWidth: 35 }}>
-			  <Typography variant="body2" color="text.secondary">{`${Math.round(
+			  <Typography variant="body2" color="white">{`${Math.round(
 				props.progression,
 			  )}%`}</Typography>
 			</Box>
@@ -67,8 +67,8 @@ export default function Profile(props: {self: boolean}) {
 	let auth = useAuth();
 	let params = useParams()
 
-	if (props.self === true && !profile) {
-		console.log(auth.user)
+
+	if (props.self === true && (!profile || profile.id != auth.user.id)) {
 		setProfile(auth.user);
 	}
 

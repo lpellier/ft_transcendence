@@ -60,7 +60,7 @@ function NameInput(props: {username: string, setter: any, setOpen: any}) {
 			<Stack spacing={4}>
 				<TextField
 					type="text"
-					label="Your name" 
+					label="New username" 
 					variant="standard"
 					onChange={(e) => setValue(e.target.value) } 
 					style={{width: '85%', justifyContent: 'center'}}
@@ -121,7 +121,6 @@ export default function ChooseName() {
 			>
 				<Box sx={ModalChooseName}>
 					<Stack spacing={3}>
-						<Chip color="primary" label="Choose new name"/>
 						<NameInput
 							username={new_username} 
 							setter={setNewUsername} 

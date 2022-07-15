@@ -124,12 +124,7 @@ export default function ChooseAuth() {
       </Button>
       <Modal open={open} onClose={handleClose}>
         <Box sx={ModalChooseAuth}>
-          <Stack spacing={5}>
-            <Chip color="primary" label="Change Authentication" />
-            <Stack spacing={4} sx={ButtonStackStyle}>
-              <TFAButton setOpen={setOpen} />
-            </Stack>
-          </Stack>
+          <TFAButton setOpen={setOpen} />
         </Box>
       </Modal>
     </Stack>
