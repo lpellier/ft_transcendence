@@ -1,131 +1,122 @@
-import Stack from '@mui/material/Stack';
-import Container from '@mui/material/Container';
-import Box from '@mui/material/Box';
-import FaceIcon from '@mui/icons-material/Face'
-import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
-import Modal from '@mui/material/Modal';
-import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn';
-import { CustomAvatarStyle } from '../../../styles/tsxStyles/Settings/Avatar';
-import {ModalChooseAvatar} from '../../../styles/tsxStyles/Settings/Avatar'
-import {ButtonModalStyle, IconStyle} from '../../../styles/tsxStyles/AppBar/PongMenu'
-import { styled } from '@mui/material/styles';
-import IconButton from '@mui/material/IconButton';
-import PhotoCamera from '@mui/icons-material/PhotoCamera';
-import {useState} from 'react'
-import Button from '@mui/material/Button';
-import axios from 'axios'
-import {toastThatError} from '../../../App'
-import { useAuth } from 'components/AuthProvider';
+import Stack from "@mui/material/Stack";
+import Container from "@mui/material/Container";
+import Box from "@mui/material/Box";
+import FaceIcon from "@mui/icons-material/Face";
+import Modal from "@mui/material/Modal";
+import { ModalChooseAvatar } from "../../../styles/tsxStyles/Settings/Avatar";
+import {
+  IconStyle,
+} from "../../../styles/tsxStyles/AppBar/PongMenu";
+import { styled } from "@mui/material/styles";
+import PhotoCamera from "@mui/icons-material/PhotoCamera";
+import { useState } from "react";
+import Button from "@mui/material/Button";
+import axios from "axios";
+import { toastThatError } from "../../../App";
+import { useAuth } from "components/AuthProvider";
+import React from "react";
+import { Chip, Typography } from "@mui/material";
 
-const Input = styled('input')({
-	display: 'none',
-  });
+const Input = styled("input")({
+  display: "none",
+});
 
-function NoButton(props: {onClick: any}) {
-	return (
-		<Button 
-			variant="contained" 
-			style={{backgroundColor: 'rgb(200, 50, 50)',  border: '2px solid black', borderRadius: '20px'}}
-			onClick={props.onClick}>
-			Change my mind !
-		</Button>
-	);
-}
-
-function YesButton(props: {onClick: any}) {
-	return (
-		<Button 
-			variant="contained" 
-			onClick={props.onClick}
-			style={{backgroundColor: 'rgb(50, 200, 50)', border: '2px solid black', borderRadius: '20px'}}>
-			Let's go !
-		</Button>
-	);
-}
-
-function UploadButton(props: {setOpen: any}) {
-	const [selectedFile, setSelectedFile] = useState<any>();
-	const [isSelected, setisSelected] = useState(false);
-	let auth = useAuth();
-
-	const changeHandler = (event: any) => {
-		setSelectedFile(event.target.files[0]);
-		setisSelected(true);
-	};
-
-	function handleSubmit() {
-		
-		const formData = new FormData();
-		formData.append('avatar', selectedFile)
-
-		axios.put(process.env.REACT_APP_BACK_URL + "/users/upload-avatar",
-		formData,
-		{
-			withCredentials: true,
-			headers: {
-				"Content-Type": "multipart/form-data",
-			}
-		})
-		.then(res => {
-			console.log("Put avatar request success")
-			props.setOpen(false)
-		})
-		.catch(err => {
-			toastThatError('Avatar upload failed')
-		})
-
-	};
-
-	function closeModal() {
-		props.setOpen(false)
-	}
-	
-	return (
-		<div>
-			<label htmlFor="icon-button-file">
-				<Button 
-    	    		variant="contained"
-    	    		color="secondary"
-					>
-    				Choose file :
-    			</Button>
-				<Input type="file" id="icon-button-file" name="file" onChange={changeHandler} />
-				<IconButton color="primary" aria-label="upload picture" component="span">
-					<PhotoCamera />
-  				</IconButton>
-			</label>
-			{isSelected ? 
-			<div>
-				<p>Filename: {selectedFile.name}</p>
-				<p>Filetype: {selectedFile.type}</p>
-				<p>Size in bytes: {selectedFile.size}</p>
-			</div>
-				:
-				<p>No file selected yet</p>
-			}
-			<Stack direction="row" spacing={3}>
-				<YesButton onClick={() => {
-					handleSubmit();
-					auth.updateAvatar();
-				}}/>
-				<NoButton onClick={closeModal}/>
-			</Stack>
-		</div>
-	  );
-}
-		
-function CustomAvatar(props: {setOpen: any}) {
+function NoButton(props: { onClick: any }) {
   return (
-    <Stack spacing={2} style={{marginTop: '5%'}}>
-    	<Stack direction="row" spacing={2} style={{marginTop: '5%'}}>
-    		<UploadButton setOpen={props.setOpen}/>
-		</Stack>
-    </Stack>
+    <Button variant="contained" color="error" onClick={props.onClick}>
+      Change my mind!
+    </Button>
   );
 }
 
-function ChooseAvatarButton(props: {setOpenOne: any}) {
-  const [open, setOpen] = useState(false);
+function YesButton(props: { onClick: any }) {
+  return (
+    <Button variant="contained" onClick={props.onClick} color="success">
+      Let's go!
+    </Button>
+  );
+}
+
+function UploadButton(props: { setOpen: any }) {
+  const [selectedFile, setSelectedFile] = useState<any>();
+  const [isSelected, setisSelected] = useState(false);
+  let auth = useAuth();
+
+  const changeHandler = (event: any) => {
+    setSelectedFile(event.target.files[0]);
+    setisSelected(true);
+  };
+
+  function handleSubmit() {
+    const formData = new FormData();
+    formData.append("avatar", selectedFile);
+
+    axios
+      .put(process.env.REACT_APP_BACK_URL + "/users/upload-avatar", formData, {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((res) => {
+        console.log("Put avatar request success");
+        props.setOpen(false);
+        auth.updateAvatar();
+      })
+      .catch((err) => {
+        toastThatError("Avatar upload failed");
+      });
+  }
+
+  function closeModal() {
+    props.setOpen(false);
+  }
+
+  return (
+    <div>
+      <label htmlFor="icon-button-file">
+        <Chip
+          icon={<PhotoCamera />}
+          color="secondary"
+          label="Choose file"
+          clickable
+        />
+        <Input
+          type="file"
+          id="icon-button-file"
+          name="file"
+          onChange={changeHandler}
+        />
+      </label>
+		{isSelected ? (
+        <Stack spacing={2} sx={{ margin: "20px" }}>
+          <Typography variant="body2">Filename: {selectedFile.name}</Typography>
+          <Typography variant="body2">Filetype: {selectedFile.type}</Typography>
+          <Typography variant="body2">
+            Size in bytes: {selectedFile.size}
+          </Typography>
+		</Stack>
+      ) : (
+		<Stack spacing={2} sx={{ margin: "20px" }}>
+	        <Typography variant="body2">No file selected yet</Typography>
+		</Stack>
+
+      )}
+
+      <Stack direction="row" spacing={3}>
+        <YesButton
+          onClick={() => {
+            handleSubmit();
+          }}
+        />
+        <NoButton onClick={closeModal} />
+      </Stack>
+    </div>
+  );
+}
+
+export default function AvatarList() {
+  const [open, setOpen] = useState<boolean>(false);
 
   const handleOpen = () => {
     setOpen(true);
@@ -135,72 +126,22 @@ function ChooseAvatarButton(props: {setOpenOne: any}) {
     setOpen(false);
   };
 
-  const closeOne = () => {
-    props.setOpenOne(false);
-  };
-
   return (
-    <Stack direction="row" spacing={2} style={{marginTop: '5%', justifyContent: 'center'}}>
+    <React.Fragment>
       <Button
-          onClick={handleOpen}
-          variant="contained"
-          startIcon={<AutoAwesomeIcon />}
-          color="secondary">
-        	Custom avatar
-      </Button>
-      <Modal
-		open={open}
-		onClose={handleClose}
+        onClick={handleOpen}
+        variant="contained"
+        color="secondary"
+        //   style={ButtonModalStyle}
       >
-    	<Box sx={CustomAvatarStyle}>
-    		<CustomAvatar setOpen={setOpen}/>
-    	</Box>
-      </Modal>
-	  <Button
-          onClick={closeOne}
-          variant="contained"
-          startIcon={<KeyboardReturnIcon />}
-          color="secondary">
-        	I'm done !
+        <FaceIcon sx={IconStyle} />
+        Choose avatar
       </Button>
-    </Stack>
+      <Modal open={open} onClose={handleClose}>
+        <Box sx={ModalChooseAvatar}>
+          <UploadButton setOpen={setOpen} />
+        </Box>
+      </Modal>
+    </React.Fragment>
   );
-}
-
-export default function AvatarList(){
-	const [open, setOpen] = useState<boolean>(false)
-
-	const handleOpen = () => {
-		setOpen(true);
-	};
-	
-	const handleClose = () => {
-		setOpen(false);
-	};
-
-    return (
-		<Stack direction="row" spacing={2} style={{justifyContent: 'center'}}>
-      		<Button
-      		      onClick={handleOpen}
-      		      variant="contained"
-      		      color="secondary"
-      		      style={ButtonModalStyle}
-      		    >
-      		    <FaceIcon sx={IconStyle}/>
-      		    Choose avatar
-      		</Button>
-			  <Modal
-        	  open={open}
-        	  onClose={handleClose}
-        	>
-        	  <Box sx={ModalChooseAvatar}>
-        	    <Container>
-        	      <Stack spacing={2} style={{justifyContent: 'center'}}>
-        	            <ChooseAvatarButton setOpenOne={setOpen}/>
-        	      </Stack>
-        	    </Container>
-				</Box>
-        	</Modal>
-        </Stack>
-    );
 }

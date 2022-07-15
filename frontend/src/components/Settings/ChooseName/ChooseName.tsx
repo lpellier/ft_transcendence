@@ -11,18 +11,9 @@ import {ModalChooseName} from '../../../styles/tsxStyles/Settings/Name'
 import {ButtonModalStyle, IconStyle} from '../../../styles/tsxStyles/AppBar/PongMenu'
 import {toastThatError} from '../../../App'
 import { useAuth } from "components/AuthProvider";
+import React from "react";
+import { Chip } from "@mui/material";
 
-function NameButton() {
-	return (
-		<Button
-			style={{ backgroundColor: 'rgb(150, 100, 200)' }}
-			sx={NameButtonStyle}
-			variant="contained"
-			color="secondary">
-			Choose New name :
-		</Button>
-	);
-}
 
 function NameInput(props: {username: string, setter: any, setOpen: any}) {
 	const [value, setValue] = useState<string>("")
@@ -69,7 +60,7 @@ function NameInput(props: {username: string, setter: any, setOpen: any}) {
 			<Stack spacing={4}>
 				<TextField
 					type="text"
-					label="Your name" 
+					label="New username" 
 					variant="standard"
 					onChange={(e) => setValue(e.target.value) } 
 					style={{width: '85%', justifyContent: 'center'}}
@@ -80,16 +71,19 @@ function NameInput(props: {username: string, setter: any, setOpen: any}) {
 						<Button
 							onClick={handleSubmit}
 							variant="contained"
-							sx={{backgroundColor: 'rgb(70, 195, 150, 0.65)', width: '20vw'}}
+							color="success"
+							// sx={{backgroundColor: 'rgb(70, 195, 150, 0.65)', width: '20vw'}}
 							>
-							Ok I'm done !
+							Ok I'm done!
 						</Button>
 						<Button
 							onClick={closeModal}
 							variant="contained"
-							sx={{backgroundColor: 'rgb(195, 60, 40, 0.65)', width: '20vw'}}
+							color="error"
+
+							// sx={{backgroundColor: 'rgb(195, 60, 40, 0.65)', width: '20vw'}}
 							>
-							Nope !
+							Nope!
 						</Button>
 					</Stack>
 				</form>
@@ -111,22 +105,22 @@ export default function ChooseName() {
 	};
 
 	return (
-		<div>
+		<React.Fragment>
       		<Button
             	onClick={handleOpen}
             	variant="contained"
             	color="secondary"
-            	style={ButtonModalStyle}>
+            	// style={ButtonModalStyle}
+				>
           		<DriveFileRenameOutlineIcon sx={IconStyle}/>
           		Choose Name
-      		</Button>
+			</Button>
 			<Modal
 			  open={open}
 			  onClose={handleClose}
 			>
 				<Box sx={ModalChooseName}>
 					<Stack spacing={3}>
-            	    	<NameButton />
 						<NameInput
 							username={new_username} 
 							setter={setNewUsername} 
@@ -134,6 +128,6 @@ export default function ChooseName() {
 					</Stack>
           		</Box>
         	</Modal>
-        </div>
+		</React.Fragment>
     );
 }

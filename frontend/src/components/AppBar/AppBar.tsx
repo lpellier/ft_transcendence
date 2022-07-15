@@ -11,11 +11,10 @@ import ForumIcon from '@mui/icons-material/Forum'
 import GamesIcon from '@mui/icons-material/Games'
 import SettingsIcon from '@mui/icons-material/Settings';
 import Tooltip from '@mui/material/Tooltip'
-import WebhookIcon from '@mui/icons-material/Webhook'
 import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
 import axios from 'axios';
-import {BarStyle} from '../../styles/tsxStyles/AppBar/AppBar'
 import { useAuth } from "components/AuthProvider";
+import { Container } from '@mui/material';
 
 function LogOutLink() {
 	let auth = useAuth();
@@ -26,11 +25,11 @@ function LogOutLink() {
 	  { withCredentials: true, })
 	  .then(res => {	
 		console.log("Logout ")
+		auth.signout(() => navigate("/login"));
 	})
 	  .catch(function (err) {
 		console.log("Get request failed : ", err)
 	  });
-	  auth.signout(() => navigate("/login"));
 	}
 
 	return (
@@ -40,7 +39,7 @@ function LogOutLink() {
 			variant="contained"
 			startIcon={<MeetingRoomIcon />}
 			color="secondary">
-		Log Out
+		Logout
 		</Button>
 	  </nav>
 	);
@@ -85,11 +84,7 @@ function ProjectName() {
 		  noWrap
 		  component="div"
 		  sx={{paddingRight: '15vw', paddingLeft: '25vw'}}
-		>
-		  		GnaGna
-				<WebhookIcon />
-				Pong
-		</Typography>
+		>The Pongers Guide to the Galaxy</Typography>
 	);
 }
 
@@ -97,22 +92,22 @@ export default function SearchAppBar(props: {user: User, users: User[], statusMa
 
   return (
       <AppBar position="static">
-        <Toolbar style={ BarStyle }>
-			<nav>
-				<Link to="profile" style={{ textDecoration: 'none' }}>
+		<Container maxWidth="xl">
+			<Toolbar disableGutters>
+				<Link to="profile">
 					<PlayerAvatar image={process.env.REACT_APP_BACK_URL + '/avatars/' + props.user.id + '.png'} />
 				</Link>
-			</nav>
-			<PlayerName name={props.user.username} />
-			<ProjectName />
-			<Stack direction="row" spacing={2}>
-				<FriendBar user={props.user} users={props.users} statusMap={props.statusMap} setStatusMap={props.setStatusMap}/>
-				<AppBarButton link="../game" tooltip={"Game"} icon={<GamesIcon />}/>
-				<AppBarButton link="../chat" tooltip={"Forum"} icon={<ForumIcon />}/>
-				<AppBarButton link="../settings" tooltip={"Settings"} icon={<SettingsIcon />}/>
-				<LogOutLink />
-			</Stack>
-        </Toolbar>
-    	</AppBar>
+				<PlayerName name={props.user.username} />
+				<ProjectName />
+				<Stack direction="row" spacing={2}>
+					<FriendBar user={props.user} users={props.users} statusMap={props.statusMap} setStatusMap={props.setStatusMap}/>
+					<AppBarButton link="../game" tooltip={"Game"} icon={<GamesIcon />}/>
+					<AppBarButton link="../chat" tooltip={"Forum"} icon={<ForumIcon />}/>
+					<AppBarButton link="../settings" tooltip={"Settings"} icon={<SettingsIcon />}/>
+					<LogOutLink />
+				</Stack>
+			</Toolbar>
+		</Container>
+	</AppBar>
 	);
 }
