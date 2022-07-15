@@ -5,10 +5,9 @@ import ChooseName from "./ChooseName/ChooseName";
 import ChooseAuth from "./ChooseAuth/ChooseAuth";
 
 const SettingStyle = {
-  height: "100vh",
+  marginTop: "20vh",
   display: "flex",
   justifyContent: "center",
-  alignItems: "center",
 };
 
 export default function Settings() {

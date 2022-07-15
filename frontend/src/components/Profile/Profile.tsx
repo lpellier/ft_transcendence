@@ -10,6 +10,7 @@ import {PlayerAvatar} from	'../Avatars';
 import { useAuth } from "components/AuthProvider";
 import { useParams } from 'react-router-dom'
 import axios from 'axios'
+import { LinearProgress } from '@mui/material'
 
 const OverallBoxStyle = {
 	paddingTop: '4vh',
@@ -18,22 +19,16 @@ const OverallBoxStyle = {
 }
 
 function SkillBar(props: {progression: number}) {
-	const [length, setLength] = useState(0);
-	const totwidth = length + "px";
-	const SkillBox = useRef();
-
-	useEffect(() => {
-		//@ts-ignore: next-line
-		setLength((props.progression / 100) * SkillBox.current.offsetWidth);
-	}, [props.progression]);
-
 	return (
-		<Box ref={SkillBox} sx={SkillBarContourStyle} >
-			<div style={{width: totwidth}} className="SkillBar">
-					<Typography variant="subtitle2" sx={TitleStyle}>
-						{props.progression}%
-					</Typography>
-			</div>
+		<Box sx={{ display: 'flex', alignItems: 'center' }}>
+			<Box sx={{ width: '100%', mr: 1 }}>
+			  <LinearProgress sx={{ height: "20px", borderRadius: "20px"}} variant="determinate" value={props.progression} />
+			</Box>
+			<Box sx={{ minWidth: 35 }}>
+			  <Typography variant="body2" color="text.secondary">{`${Math.round(
+				props.progression,
+			  )}%`}</Typography>
+			</Box>
 		</Box>
 	);
 }

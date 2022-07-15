@@ -12,18 +12,8 @@ import {ButtonModalStyle, IconStyle} from '../../../styles/tsxStyles/AppBar/Pong
 import {toastThatError} from '../../../App'
 import { useAuth } from "components/AuthProvider";
 import React from "react";
+import { Chip } from "@mui/material";
 
-function NameButton() {
-	return (
-		<Button
-			style={{ backgroundColor: 'rgb(150, 100, 200)' }}
-			sx={NameButtonStyle}
-			variant="contained"
-			color="secondary">
-			Choose New name :
-		</Button>
-	);
-}
 
 function NameInput(props: {username: string, setter: any, setOpen: any}) {
 	const [value, setValue] = useState<string>("")
@@ -81,16 +71,19 @@ function NameInput(props: {username: string, setter: any, setOpen: any}) {
 						<Button
 							onClick={handleSubmit}
 							variant="contained"
-							sx={{backgroundColor: 'rgb(70, 195, 150, 0.65)', width: '20vw'}}
+							color="success"
+							// sx={{backgroundColor: 'rgb(70, 195, 150, 0.65)', width: '20vw'}}
 							>
-							Ok I'm done !
+							Ok I'm done!
 						</Button>
 						<Button
 							onClick={closeModal}
 							variant="contained"
-							sx={{backgroundColor: 'rgb(195, 60, 40, 0.65)', width: '20vw'}}
+							color="error"
+
+							// sx={{backgroundColor: 'rgb(195, 60, 40, 0.65)', width: '20vw'}}
 							>
-							Nope !
+							Nope!
 						</Button>
 					</Stack>
 				</form>
@@ -128,7 +121,7 @@ export default function ChooseName() {
 			>
 				<Box sx={ModalChooseName}>
 					<Stack spacing={3}>
-            	    	<NameButton />
+						<Chip color="primary" label="Choose new name"/>
 						<NameInput
 							username={new_username} 
 							setter={setNewUsername} 

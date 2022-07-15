@@ -1,9 +1,7 @@
 import Stack from "@mui/material/Stack";
-import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import {
   ButtonStackStyle,
-  Title,
 } from "../../../styles/tsxStyles/Settings/Auth";
 import { useState } from "react";
 import Button from "@mui/material/Button";
@@ -12,11 +10,11 @@ import QRCode from "react-qr-code";
 import axios from "axios";
 import VpnKeyIcon from "@mui/icons-material/VpnKey";
 import {
-  ButtonModalStyle,
   IconStyle,
 } from "../../../styles/tsxStyles/AppBar/PongMenu";
 import { ModalChooseAuth } from "../../../styles/tsxStyles/Settings/Auth";
 import { useAuth } from "components/AuthProvider";
+import { Chip } from "@mui/material";
 
 function GenerateQRCode(props: { url: string; setOpen: any }) {
   function handleClick() {
@@ -48,9 +46,7 @@ function TFAButton(props: { setOpen: any }) {
       .patch(
         process.env.REACT_APP_BACK_URL + "/users/me",
         { tfa: true },
-        {
-          withCredentials: true,
-        }
+        { withCredentials: true }
       )
       .then((res) => {
         console.log("TFA activated");
@@ -66,9 +62,7 @@ function TFAButton(props: { setOpen: any }) {
       .patch(
         process.env.REACT_APP_BACK_URL + "/users/me",
         { tfa: false },
-        {
-          withCredentials: true,
-        }
+        { withCredentials: true }
       )
       .then((res) => {
         console.log("TFA disabled");
@@ -131,7 +125,7 @@ export default function ChooseAuth() {
       <Modal open={open} onClose={handleClose}>
         <Box sx={ModalChooseAuth}>
           <Stack spacing={5}>
-            <Typography sx={Title}>Change Authentication</Typography>
+            <Chip color="primary" label="Change Authentication" />
             <Stack spacing={4} sx={ButtonStackStyle}>
               <TFAButton setOpen={setOpen} />
             </Stack>
