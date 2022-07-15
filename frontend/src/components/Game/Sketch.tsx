@@ -174,6 +174,7 @@
 	map_original: any;
 	map_city: any;
 	map_casino: any;
+	map_secret : any;
 
 	spectate: any;
 
@@ -405,6 +406,10 @@
 		this.map_city.position(consts.WIDTH * 0.3855, consts.HEIGHT * 0.56);
 		this.map_casino.position(consts.WIDTH * 0.6855, consts.HEIGHT * 0.56);
 
+		this.map_secret = createCustomButton("*", clickMapSecret, highlightButton, resetButton, consts.small_square_diameter, consts.small_square_diameter);
+		this.map_secret.style("border", "none");
+		this.map_secret.style("background", "none");
+
 		this.spectate = createCustomButton(
 		"",
 		clickSpectate,
@@ -425,6 +430,8 @@
 		this.matchmaking.show();
 		this.create_game.show();
 		this.join.show();
+
+		this.map_secret.show();
 	}
 
 	resize() {
@@ -546,6 +553,15 @@
 		"font-size",
 		consts.medium_font_size.toString() + "px"
 		);
+		this.map_secret.position(consts.WIDTH * 0.01, consts.HEIGHT * 0.93);
+		this.map_secret.size(
+		consts.small_square_diameter,
+		consts.small_square_diameter
+		);
+		this.map_secret.style(
+		"font-size",
+		consts.small_font_size.toString() + "px"
+		);
 
 		this.map_original.position(consts.WIDTH * 0.0855, consts.HEIGHT * 0.56);
 		this.map_original.style(
@@ -609,6 +625,8 @@
 		this.map_city = null;
 		if (this.map_casino) this.map_casino.remove();
 		this.map_casino = null;
+		if (this.map_secret) this.map_secret.remove();
+		this.map_secret = null;
 
 		if (this.spectate) this.spectate.remove();
 		this.spectate = null;
@@ -626,12 +644,11 @@
 		this.removeChildren("button-map-original");
 		this.removeChildren("button-map-city");
 		this.removeChildren("button-map-casino");
+		this.removeChildren("button-map-secret");
 		this.removeChildren("button-spectate");
 		this.removeChildren("button-plus");
 		this.removeChildren("button-minus");
 		this.removeChildren("button-opp-left-ok");
-		
-		
 	}
 
 	removeChildren(button_id : string) {
@@ -639,7 +656,7 @@
 		if (!parent)
 			return ;
 		while (parent?.firstChild) {
-			// @ts-ignore : next-line // don't know why an errors shows up on vs code
+			// @ts-ignore : next-line // don't know why an error shows up on vs code
 		  parent.removeChild(parent.lastChild);
 		}
 	}
@@ -671,6 +688,7 @@
 		this.map_original.hide();
 		this.map_city.hide();
 		this.map_casino.hide();
+		this.map_secret.hide();
 
 		this.spectate.hide();
 	}
@@ -740,6 +758,7 @@
 		this.map_original.parent(document.getElementById("button-map-original"));
 		this.map_city.parent(document.getElementById("button-map-city"));
 		this.map_casino.parent(document.getElementById("button-map-casino"));
+		this.map_secret.parent(document.getElementById("button-map-secret"));
 
 		this.spectate.parent(document.getElementById("button-spectate"));
 	}
@@ -756,6 +775,9 @@
 	PLAYER_WIDTH: number;
 	PLAYER_HEIGHT: number;
 	PLAYER_SPEED: number;
+
+	BREAKOUT_WIDTH: number;
+	BREAKOUT_HEIGHT: number;
 
 	PONG_DIAMETER: number;
 	PONG_BASE_SPEED: number;
@@ -784,6 +806,7 @@
 	original_map: GameMap;
 	city_map: GameMap;
 	casino_map: GameMap;
+	secret_map : GameMap;
 
 	FONT: any;
 	RETURN_ICON: any;
@@ -802,6 +825,7 @@
 		this.original_map = new GameMap(1, this.WIDTH, this.HEIGHT);
 		this.city_map = new GameMap(2, this.WIDTH, this.HEIGHT); 
 		this.casino_map = new GameMap(3, this.WIDTH, this.HEIGHT);
+		this.secret_map = new GameMap(4, this.WIDTH, this.HEIGHT);
 
 		this.OLD_WIDTH = this.WIDTH;
 		this.OLD_HEIGHT = this.HEIGHT;
@@ -820,6 +844,9 @@
 		this.PLAYER_WIDTH = this.WIDTH / 80;
 		this.PLAYER_HEIGHT = this.HEIGHT / 9;
 		this.PLAYER_SPEED = this.DIAGONAL / 125;
+
+		this.BREAKOUT_WIDTH = this.PLAYER_WIDTH * 0.8;
+		this.BREAKOUT_HEIGHT = this.PLAYER_HEIGHT * 0.8;
 
 		this.PONG_DIAMETER = this.DIAGONAL / 120;
 		this.PONG_BASE_SPEED = this.DIAGONAL / 150;
@@ -852,6 +879,7 @@
 		this.original_map.resize(this.WIDTH, this.HEIGHT);
 		this.city_map.resize(this.WIDTH, this.HEIGHT);
 		this.casino_map.resize(this.WIDTH, this.HEIGHT);
+		this.secret_map.resize(this.WIDTH, this.HEIGHT);
 
 		this.TOP_BOUND = this.original_map.wall_width * 2;
 		this.BOT_BOUND = this.HEIGHT - this.original_map.wall_width * 2;
@@ -897,6 +925,9 @@
 		this.PLAYER_HEIGHT = this.HEIGHT / 9;
 		this.PLAYER_SPEED = this.DIAGONAL / 125;
 
+		this.BREAKOUT_WIDTH = this.PLAYER_WIDTH * 0.8;
+		this.BREAKOUT_HEIGHT = this.PLAYER_HEIGHT * 0.8;
+
 		this.PONG_DIAMETER = this.DIAGONAL / 120;
 		this.PONG_BASE_SPEED = this.DIAGONAL / 150;
 		this.PONG_MAX_SPEED = this.PONG_BASE_SPEED * 2;
@@ -928,6 +959,7 @@
 		this.original_map.resize(this.WIDTH, this.HEIGHT);
 		this.city_map.resize(this.WIDTH, this.HEIGHT);
 		this.casino_map.resize(this.WIDTH, this.HEIGHT);
+		this.secret_map.resize(this.WIDTH, this.HEIGHT);
 
 		this.TOP_BOUND = this.original_map.wall_width * 2;
 		this.BOT_BOUND = this.HEIGHT - this.original_map.wall_width * 2;
@@ -956,6 +988,7 @@
 
 	class Game {
 	players: Player[];
+	breakouts : BreakOut[];
 	score: [number, number];
 	score_limit: number;
 	pong: any;
@@ -968,6 +1001,8 @@
 	frames_since_point: number;
 	map: GameMap;
 
+	timeout : any;
+
 	spectator: boolean;
 	hover_spectator: boolean;
 
@@ -975,6 +1010,7 @@
 
 	constructor() {
 		this.players = [];
+		this.breakouts = [];
 		this.pong = null;
 		this.score = [0, 0];
 		this.score_limit = 10;
@@ -993,6 +1029,7 @@
 
 	reset() {
 		this.players = [];
+		this.breakouts = [];
 		this.score = [0, 0];
 		this.score_limit = 10;
 		this.timer = 3;
@@ -1066,10 +1103,8 @@
 	class GameMap {
 	walls: [
 		[number, number],
-		[number, number],
-		[number, number],
 		[number, number]
-	][]; // [pos_x, pos_y], [width, height], outer1, outer2
+	][]; // [pos_x, pos_y], [width, height]
 	index: number;
 	width: number;
 	height: number;
@@ -1082,12 +1117,12 @@
 	constructor(index: number, w: number, h: number) {
 		this.index = index;
 		this.name = "original";
-		this.resize(w, h);
 		this.width = 0;
 		this.height = 0;
 		this.wall_width = 0;
 		this.object_color = ""
-		this.walls = [[[0,0],[0,0],[0,0],[0,0]]]
+		this.walls = [[[0,0],[0,0]]]
+		this.resize(w, h);
 	}
 
 	originalMap() {
@@ -1103,6 +1138,10 @@
 	casinoMap() {
 		this.object_color = "#ffffff";
 		if (consts) this.background = consts.TOKYO_BACKGROUND;
+	}
+	secretMap() {
+		this.object_color = "#ffffff";
+		this.background = null;
 	}
 
 	render(ratio: number) {
@@ -1158,6 +1197,8 @@
 		p.pop();
 		if (this.name === "city")
 		for (let bumper of bumpers) bumper.render(ratio);
+		if (this.name === "secret")
+		for (let breakout of game.breakouts) breakout.render();
 	}
 
 	resize(w: number, h: number) {
@@ -1167,16 +1208,12 @@
 		this.walls = [
 		[
 			[this.wall_width, this.wall_width],
-			[this.width - this.wall_width * 2, this.wall_width],
-			[this.wall_width, this.wall_width * 2],
-			[this.width - this.wall_width, this.wall_width * 2],
+			[this.width - this.wall_width * 2, this.wall_width]
 		],
 		[
 			[this.wall_width, this.height - this.wall_width * 2],
-			[this.width - this.wall_width * 2, this.wall_width],
-			[this.wall_width, this.height - this.wall_width * 2],
-			[this.width - this.wall_width, this.height - this.wall_width * 2],
-		],
+			[this.width - this.wall_width * 2, this.wall_width]
+		]
 		];
 		if (this.index === 1) this.originalMap();
 		else if (this.index === 2) {
@@ -1185,6 +1222,24 @@
 		} else if (this.index === 3) {
 		this.name = "casino";
 		this.casinoMap();
+		}
+		else if (this.index === 4) {
+			this.walls = [
+				[
+					[this.wall_width, this.wall_width],
+					[this.width - this.wall_width * 2, this.wall_width]
+				],
+				[
+					[this.wall_width, this.height - this.wall_width * 2],
+					[this.width - this.wall_width * 2, this.wall_width]
+				],
+				[
+					[this.width - this.wall_width * 2, this.wall_width],
+					[this.wall_width, this.height - this.wall_width * 2]
+				]
+			];
+			this.name = "secret";
+			this.secretMap();
 		}
 	}
 	}
@@ -1343,6 +1398,118 @@ class MovingText {
 		p.textSize(consts.std_font_size);
 		p.text(this.text, this.pos.x, this.pos.y);
 		p.pop();
+	}
+}
+
+class BreakOut {
+	pos: [number, number] = [0, 0];
+	width: number = consts.BREAKOUT_WIDTH;
+	height : number = consts.BREAKOUT_HEIGHT;
+	color: string = "white";
+
+	constructor(pos : [number, number], color : string) {
+		this.pos = pos;
+		this.color = color;
+	}
+
+	render() {
+		p.push();
+		p.fill(this.color);
+		p.strokeWeight(0);
+		p.rect(this.pos[0], this.pos[1], this.width, this.height);
+		p.pop();
+	}
+
+	resize() {
+		let proportionnal_pos_x: number = this.pos[0] / consts.OLD_WIDTH;
+		let proportionnal_pos_y: number = this.pos[1] / consts.OLD_HEIGHT;
+		this.width = consts.BREAKOUT_WIDTH;
+		this.height = consts.BREAKOUT_HEIGHT;
+		this.pos = [
+		consts.WIDTH * proportionnal_pos_x,
+		consts.HEIGHT * proportionnal_pos_y,
+		];
+	}
+
+	checkCollisions() : boolean {
+		let ball_points: [
+			[number, number],
+			[number, number],
+			[number, number],
+			[number, number]
+		] = [
+			game.pong.up(),
+			game.pong.right(),
+			game.pong.down(),
+			game.pong.left(),
+		];
+		for (let i = 0 ; i < 4 ; i++) {
+			let intersection_point: [number, number, string][] = [[-1, -1, "side"]]; // array of one element so that the variable is referenced in functions
+			let angle = collisionBreakOut(this, intersection_point, ball_points[i]);
+			if (intersection_point[0][0] !== -1) {
+				audio_files.playRandomPaddleSound();
+				let max_angle_percentage: number =
+					Math.abs(angle) / ((Math.PI * 3) / 12); // ? number that lets me add speed to acute angled shots
+				// ? for bot / top collisions
+				if (
+					intersection_point[0][2] === "top" ||
+					intersection_point[0][2] === "bot"
+				) {
+					if (intersection_point[0][2] === "top")
+					game.pong.velocity[1] =
+						(1 +
+						consts.PONG_ACCELERATION_ACUTE_ANGLE * max_angle_percentage) *
+						game.pong.speed *
+						-Math.cos(angle);
+					else if (intersection_point[0][2] === "bot")
+					game.pong.velocity[1] =
+						(1 +
+						consts.PONG_ACCELERATION_ACUTE_ANGLE * max_angle_percentage) *
+						game.pong.speed *
+						Math.cos(angle);
+					game.pong.velocity[0] =
+					(1 + consts.PONG_ACCELERATION_ACUTE_ANGLE * max_angle_percentage) *
+					game.pong.speed *
+					-Math.sin(angle);
+				}
+				// ? invert velocity indexes for left / right collisions
+				else if (intersection_point[0][2] === "right" || intersection_point[0][2] === "left") {
+					if (intersection_point[0][2] === "right") {
+						game.pong.velocity[0] =
+							(1 +
+							consts.PONG_ACCELERATION_ACUTE_ANGLE * max_angle_percentage) *
+							game.pong.speed *
+							Math.cos(angle);
+					}
+					else if (intersection_point[0][2] === "left") {
+						game.pong.velocity[0] =
+							(1 +
+							consts.PONG_ACCELERATION_ACUTE_ANGLE * max_angle_percentage) *
+							game.pong.speed *
+							-Math.cos(angle);
+					game.pong.velocity[1] = (1 + consts.PONG_ACCELERATION_ACUTE_ANGLE * max_angle_percentage) * game.pong.speed * -Math.sin(angle);
+					}
+				}
+				game.breakouts.splice(game.breakouts.indexOf(this), 1);
+				if (game.breakouts.length === 0)
+					game.setState("game-over");
+				return true;
+			}
+		}
+		return false;
+	}
+
+	leftDown(): [number, number] {
+		return [this.pos[0], this.pos[1] + this.height];
+	}
+	leftUp() : [number, number]{
+		return [this.pos[0], this.pos[1]];
+	}
+	rightDown() : [number, number]{
+		return [this.pos[0] + this.width, this.pos[1] + this.height];
+	}
+	rightUp() : [number, number]{
+		return [this.pos[0] + this.width, this.pos[1] + this.height];
 	}
 }
 
@@ -1527,6 +1694,8 @@ class Pong {
 	}
 
 	relaunchPong(loser_side: string) {
+		if (game.map.name === "secret")
+			loser_side = "left";
 		this.pos = [
 		consts.WIDTH / 2 - consts.PONG_DIAMETER / 2,
 		consts.HEIGHT / 2 - consts.PONG_DIAMETER / 2,
@@ -1887,6 +2056,7 @@ class Vector {
 	if (buttons) buttons.resize();
 	if (inputs) inputs.resize();
 	if (bumpers) for (let bumper of bumpers) bumper.resize();
+	if (game.breakouts) for (let breakout of game.breakouts) breakout.resize();
 	}
 
 	p.windowResized = () => {
@@ -1963,8 +2133,11 @@ class Vector {
 
 	p.keyPressed = () => {
 	if (game === null) return;
-	if (game.local && p.key === "p")
+	if (game.local && p.key === "p") {
+		if (game.timeout)
+			clearTimeout(game.timeout);
 		inMainMenu();
+	}
 	else if (!game.local && p.key === "p" && (game.state === "waiting-readiness" || game.state === "in-game" || game.state === "countdown" || game.state === "relaunch-countdown")) {
 		socket.emit("quit-ongoing-game", true);
 	}
@@ -2172,14 +2345,7 @@ class Vector {
 		);
 		outputPlayerNames();
 	} else if (game.state === "game-over") {
-		buttons.return.show();
-		p.image(
-		consts.RETURN_ICON,
-		consts.WIDTH * 0.9,
-		consts.HEIGHT * 0.01,
-		consts.medium_square_diameter,
-		consts.medium_square_diameter
-		);
+		buttons.opponent_left_ok.show();
 		if (game.players.length === 2)
 		outputAnnouncement(
 			(game.score[0] > game.score[1]
@@ -2190,6 +2356,12 @@ class Vector {
 			p.height / 2,
 			"white"
 		);
+		else if (game.map.name === "secret") {
+			if (game.score[1] < game.score_limit)
+				outputAnnouncement("You won!", consts.std_font_size, p.width / 2, p.height / 2, "white");
+			else 
+				outputAnnouncement("You lost.", consts.std_font_size, p.width / 2, p.height / 2, "white");
+		}
 		outputScore(consts.WIDTH, consts.HEIGHT);
 	}
 	if (
@@ -2202,6 +2374,31 @@ class Vector {
 	}
 	p.pop();
 	};
+
+	function addBreakouts() {
+		let length = 10;
+		let space = (consts.HEIGHT - consts.secret_map.wall_width * 2 - (consts.BREAKOUT_HEIGHT * length)) / (length + 2);
+		for (let i = 0; i < length; i++)
+			game.breakouts.push(new BreakOut([consts.WIDTH * 0.8, consts.secret_map.wall_width + space + (i) * (space + consts.BREAKOUT_HEIGHT)], "#6699ff"));
+		for (let i = 0; i < length; i++)
+			game.breakouts.push(new BreakOut([consts.WIDTH * 0.8 + consts.BREAKOUT_WIDTH * 1.5, consts.secret_map.wall_width + space + (i) * (space + consts.BREAKOUT_HEIGHT)], "#6699ff"));
+		for (let i = 0; i < length; i++)
+			game.breakouts.push(new BreakOut([consts.WIDTH * 0.8 + consts.BREAKOUT_WIDTH * 3, consts.secret_map.wall_width + space + (i) * (space + consts.BREAKOUT_HEIGHT)], "#00cc66"));
+		for (let i = 0; i < length; i++)
+			game.breakouts.push(new BreakOut([consts.WIDTH * 0.8 + consts.BREAKOUT_WIDTH * 4.5, consts.secret_map.wall_width + space + (i) * (space + consts.BREAKOUT_HEIGHT)], "#00cc66"));
+		for (let i = 0; i < length; i++)
+			game.breakouts.push(new BreakOut([consts.WIDTH * 0.8 + consts.BREAKOUT_WIDTH * 6, consts.secret_map.wall_width + space + (i) * (space + consts.BREAKOUT_HEIGHT)], "#ffff00"));
+		for (let i = 0; i < length; i++)
+			game.breakouts.push(new BreakOut([consts.WIDTH * 0.8 + consts.BREAKOUT_WIDTH * 7.5, consts.secret_map.wall_width + space + (i) * (space + consts.BREAKOUT_HEIGHT)], "#ffff00"));
+		for (let i = 0; i < length; i++)
+			game.breakouts.push(new BreakOut([consts.WIDTH * 0.8 + consts.BREAKOUT_WIDTH * 9, consts.secret_map.wall_width + space + (i) * (space + consts.BREAKOUT_HEIGHT)], "#ff9933"));
+		for (let i = 0; i < length; i++)
+			game.breakouts.push(new BreakOut([consts.WIDTH * 0.8 + consts.BREAKOUT_WIDTH * 10.5, consts.secret_map.wall_width + space + (i) * (space + consts.BREAKOUT_HEIGHT)], "#ff9933"));
+		for (let i = 0; i < length; i++)
+			game.breakouts.push(new BreakOut([consts.WIDTH * 0.8 + consts.BREAKOUT_WIDTH * 12, consts.secret_map.wall_width + space + (i) * (space + consts.BREAKOUT_HEIGHT)], "#ff0000"));
+		for (let i = 0; i < length; i++)
+			game.breakouts.push(new BreakOut([consts.WIDTH * 0.8 + consts.BREAKOUT_WIDTH * 13.5, consts.secret_map.wall_width + space + (i) * (space + consts.BREAKOUT_HEIGHT)], "#ff0000"));
+	}
 
 	function createCustomButton(
 	title: string,
@@ -2305,6 +2502,8 @@ class Vector {
 	}
 
 	function outputScore(map_width: number, map_height: number) {
+	if (game.map.name === "secret")
+		outputAnnouncement((game.score_limit - game.score[1]).toString() + " lives left", consts.std_font_size, consts.WIDTH / 2, consts.HEIGHT / 9, "white");
 	if (game.players.length !== 2) return;
 	if (game.players[0].index === 1) {
 		p.push();
@@ -2346,9 +2545,11 @@ class Vector {
 	p.textAlign(p.CENTER);
 	if (game.players[0].index === 1) {
 		p.text(game.players[0].username, consts.WIDTH * 0.1, consts.HEIGHT * 0.95);
-		p.text(game.players[1].username, consts.WIDTH * 0.9, consts.HEIGHT * 0.95);
+		if (game.players.length > 1)
+			p.text(game.players[1].username, consts.WIDTH * 0.9, consts.HEIGHT * 0.95);
 	} else {
-		p.text(game.players[1].username, consts.WIDTH * 0.1, consts.HEIGHT * 0.95);
+		if (game.players.length > 1)
+			p.text(game.players[1].username, consts.WIDTH * 0.1, consts.HEIGHT * 0.95);
 		p.text(game.players[0].username, consts.WIDTH * 0.9, consts.HEIGHT * 0.95);
 	}
 	p.pop();
@@ -2416,7 +2617,7 @@ class Vector {
 		if (pos_diff > 0) game.players[1].moveUp(pos_diff);
 		else if (pos_diff < 0) game.players[1].moveDown(pos_diff);
 		else game.players[1].velocity[1] = 0;
-		} else {
+		} else if (game.map.name != "secret") {
 		if (p.keyIsDown(p.UP_ARROW)) game.players[1].moveUp(0);
 		else if (p.keyIsDown(p.DOWN_ARROW)) game.players[1].moveDown(0);
 		else game.players[1].velocity[1] = 0;
@@ -2552,10 +2753,12 @@ class Vector {
 
 	function drawInput() {
 	if (game.local && !game.ai) {
-		p.image(keys.up, consts.WIDTH * 0.78 + consts.small_square_diameter * 1.5 / 2, consts.HEIGHT * 0.66 + consts.small_square_diameter * 1.5 / 2, consts.small_square_diameter * 1.5, consts.small_square_diameter * 1.5);
-		p.image(keys.left, consts.WIDTH * 0.71 + consts.small_square_diameter * 1.5 / 2, consts.HEIGHT * 0.75 + consts.small_square_diameter * 1.5 / 2, consts.small_square_diameter * 1.5, consts.small_square_diameter * 1.5);
-		p.image(keys.down, consts.WIDTH * 0.78 + consts.small_square_diameter * 1.5 / 2, consts.HEIGHT * 0.75 + consts.small_square_diameter * 1.5 / 2, consts.small_square_diameter * 1.5, consts.small_square_diameter * 1.5);
-		p.image(keys.right, consts.WIDTH * 0.85 + consts.small_square_diameter * 1.5 / 2, consts.HEIGHT * 0.75 + consts.small_square_diameter * 1.5 / 2, consts.small_square_diameter * 1.5, consts.small_square_diameter * 1.5);
+		if (game.map.name !== "secret") {
+			p.image(keys.up, consts.WIDTH * 0.78 + consts.small_square_diameter * 1.5 / 2, consts.HEIGHT * 0.66 + consts.small_square_diameter * 1.5 / 2, consts.small_square_diameter * 1.5, consts.small_square_diameter * 1.5);
+			p.image(keys.left, consts.WIDTH * 0.71 + consts.small_square_diameter * 1.5 / 2, consts.HEIGHT * 0.75 + consts.small_square_diameter * 1.5 / 2, consts.small_square_diameter * 1.5, consts.small_square_diameter * 1.5);
+			p.image(keys.down, consts.WIDTH * 0.78 + consts.small_square_diameter * 1.5 / 2, consts.HEIGHT * 0.75 + consts.small_square_diameter * 1.5 / 2, consts.small_square_diameter * 1.5, consts.small_square_diameter * 1.5);
+			p.image(keys.right, consts.WIDTH * 0.85 + consts.small_square_diameter * 1.5 / 2, consts.HEIGHT * 0.75 + consts.small_square_diameter * 1.5 / 2, consts.small_square_diameter * 1.5, consts.small_square_diameter * 1.5);
+		}
 		p.image(keys.w, consts.WIDTH * 0.21 - consts.small_square_diameter * 1.5 / 2, consts.HEIGHT * 0.16 - consts.small_square_diameter * 1.5 / 2, consts.small_square_diameter * 1.5, consts.small_square_diameter * 1.5);
 		p.image(keys.a, consts.WIDTH * 0.15 - consts.small_square_diameter * 1.5 / 2, consts.HEIGHT * 0.25 - consts.small_square_diameter * 1.5 / 2, consts.small_square_diameter * 1.5, consts.small_square_diameter * 1.5);
 		p.image(keys.s, consts.WIDTH * 0.22 - consts.small_square_diameter * 1.5 / 2, consts.HEIGHT * 0.25 - consts.small_square_diameter * 1.5 / 2, consts.small_square_diameter * 1.5, consts.small_square_diameter * 1.5);
@@ -2662,7 +2865,7 @@ class Vector {
 		p1[1] + (p2[1] - p1[1]) / 2 - intersection_point[1],
 	];
 
-	if (intersection_point[2] === "side")
+	if (intersection_point[2] === "side" || intersection_point[2] === "left" || intersection_point[2] === "right")
 		return (middle[1] / ((p2[1] - p1[1]) / 2)) * ((3 * Math.PI) / 12);
 	else return (middle[0] / ((p2[0] - p1[0]) / 2)) * ((3 * Math.PI) / 12);
 	}
@@ -2704,8 +2907,17 @@ class Vector {
 	if (
 		game.pong.velocity[0] > 0 &&
 		game.pong.pos[0] + game.pong.diameter > consts.RIGHT_BOUND
-	)
-		return game.scorePoint(true);
+	) {
+		if (game.map.name !== "secret")
+			return game.scorePoint(true);
+		else {
+			if (game.pong.pos[0] + game.pong.diameter > consts.RIGHT_BOUND - game.map.wall_width * 2)
+				game.pong.pos[0] = consts.RIGHT_BOUND - game.map.wall_width * 2 - game.pong.diameter - consts.WIDTH * 0.002;
+			game.pong.velocity[0] *= -1;
+			audio_files.playRandomWallSound();
+			return;
+		}
+	}
 	else if (game.pong.velocity[0] < 0 && game.pong.pos[0] < consts.LEFT_BOUND)
 		return game.scorePoint(false);
 
@@ -2720,8 +2932,14 @@ class Vector {
 		}
 	}
 
-	let player =
-		game.pong.pos[0] < consts.WIDTH / 2 ? game.players[0] : game.players[1];
+	if (game.map.name === "secret")
+		for (let breakout of game.breakouts) if (breakout.checkCollisions()) return;
+
+	let player;
+	if (game.map.name === "secret")
+		player = game.players[0];
+	else
+		player = game.pong.pos[0] < consts.WIDTH / 2 ? game.players[0] : game.players[1];
 	let ball_points: [
 		[number, number],
 		[number, number],
@@ -2734,6 +2952,7 @@ class Vector {
 		game.pong.left(),
 	];
 	// debugCollisions(player);
+
 
 	// ? collision with paddles
 	for (let i = 0; i < 4; i++) {
@@ -2793,6 +3012,81 @@ class Vector {
 	}
 	}
 
+	function collisionBreakOut(	
+		breakout: BreakOut,
+		intersection_point: [number, number, string][],
+		ball_point: [number, number]) {
+		
+		let breakout_left_hit: [[number, number], [number, number]] = [breakout.leftUp(), breakout.leftDown()];
+		let breakout_right_hit: [[number, number], [number, number]] = [breakout.rightUp(), breakout.rightDown()];
+		let breakout_bot_hit: [[number, number], [number, number]] = [
+			breakout.leftDown(),
+			breakout.rightDown(),
+		];
+		let breakout_top_hit: [[number, number], [number, number]] = [
+			breakout.leftUp(),
+			breakout.rightUp(),
+		];
+
+		intersection_point[0] = getLineIntersection(
+			ball_point,
+			game.pong.ballMoves(ball_point),
+			breakout_left_hit[0],
+			breakout_left_hit[1]
+		);
+		intersection_point[0][2] = "left";
+		if (intersection_point[0][0] !== -1)
+			return relativeIntersection(
+			intersection_point[0],
+			breakout_left_hit[0],
+			breakout_left_hit[1]
+			);
+		
+		intersection_point[0] = getLineIntersection(
+			ball_point,
+			game.pong.ballMoves(ball_point),
+			breakout_right_hit[0],
+			breakout_right_hit[1]
+		);
+		intersection_point[0][2] = "right";
+		if (intersection_point[0][0] !== -1)
+			return relativeIntersection(
+			intersection_point[0],
+			breakout_right_hit[0],
+			breakout_right_hit[1]
+			);
+	
+		intersection_point[0] = getLineIntersection(
+			ball_point,
+			game.pong.ballMoves(ball_point),
+			breakout_bot_hit[0],
+			breakout_bot_hit[1]
+		);
+		intersection_point[0][2] = "bot";
+		if (intersection_point[0][0] !== -1)
+			return relativeIntersection(
+			intersection_point[0],
+			breakout_bot_hit[0],
+			breakout_bot_hit[1]
+			);
+	
+		intersection_point[0] = getLineIntersection(
+			ball_point,
+			game.pong.ballMoves(ball_point),
+			breakout_top_hit[0],
+			breakout_top_hit[1]
+		);
+		intersection_point[0][2] = "top";
+		if (intersection_point[0][0] !== -1)
+			return relativeIntersection(
+			intersection_point[0],
+			breakout_top_hit[0],
+			breakout_top_hit[1]
+			);
+	
+		return 0;
+	}
+
 	function collisionPaddle(
 	player: Player,
 	intersection_point: [number, number, string][],
@@ -2825,7 +3119,6 @@ class Vector {
 		paddle_side_hit[1]
 		);
 
-	// ? Multiplying velocity vector by 3 for better precision in bot/top intersection
 	intersection_point[0] = getLineIntersection(
 		ball_point,
 		game.pong.ballMoves(ball_point),
@@ -2859,6 +3152,14 @@ class Vector {
 
 	function goToMainMenu() {
 	if (p.mouseButton === p.LEFT) inMainMenu();
+	}
+
+	function clickMapSecret() {
+		if (p.mouseButton === p.LEFT) {
+			game.map = consts.secret_map;
+			game.score_limit = 10;
+			startLocal();
+		}
 	}
 
 	function clickSound() {
@@ -3040,14 +3341,13 @@ class Vector {
 	}
 
 	function startLocal() {
-	if (p.mouseButton === p.LEFT) {
 		game.local = true;
 		buttons.hide();
 		inputs.hide();
 		game.timer = 4;
 		let game_ref = game;
 		for (let i = 0; i < 5; i++) {
-		setTimeout(() => {
+		game.timeout = setTimeout(() => {
 			game_ref.timer--;
 			if (game_ref.timer === 0) audio_files.playBip(audio_files.BIP_FINAL);
 			else if (game_ref.timer >= 0) audio_files.playBip(audio_files.BIP);
@@ -3057,12 +3357,13 @@ class Vector {
 		}, i * 1000);
 		}
 		game.setState("countdown");
-		if (user_name !== null) {
 		game.players.push(new Player(1, "first", user_name, 0));
+		if (game.map.name != "secret")
+			game.players.push(new Player(2, "second", "P2", 0));
+		else {
+			addBreakouts();
 		}
-		game.players.push(new Player(2, "second", "P2", 0));
 		game.pong = new Pong();
 		game.room_id = "Local";
-	}
 	}
 	};

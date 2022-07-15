@@ -241,6 +241,7 @@ function GameComponent() {
 			<div id="button-map-original"/>
 			<div id="button-map-city"/>
 			<div id="button-map-casino"/>
+			<div id="button-map-secret"/>
 			<div id="button-spectate"/>
 			<div id="buttons-plus-minus">	
 				<div id="button-plus"/>
