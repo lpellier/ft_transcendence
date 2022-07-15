@@ -204,8 +204,6 @@ class AudioFiles {
 		this.music_playing !== "menu"
 		)
 		this.switchMusic("menu");
-		// else if ((state === "game-over" || state === "opponent-left-menu") && this.music_playing !== "none")
-		// 	this.switchMusic("none");
 	}
 }
 
@@ -244,7 +242,6 @@ function GameComponent() {
 			<div id="button-map-city"/>
 			<div id="button-map-casino"/>
 			<div id="button-spectate"/>
-			<div id="icon-eye"/>
 			<div id="buttons-plus-minus">	
 				<div id="button-plus"/>
 				<div id="button-minus"/>

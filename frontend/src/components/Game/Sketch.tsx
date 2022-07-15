@@ -1,4 +1,4 @@
-	// ? P to quit local mode
+	// ? P to quit game
 	// ? Coding consistency : snake_case for variables | camelCase for functions | PascalCase for classes
 
 	import { socket } from "index";
@@ -612,6 +612,36 @@
 
 		if (this.spectate) this.spectate.remove();
 		this.spectate = null;
+
+		this.removeChildren("button-create");
+		this.removeChildren("button-join");
+		this.removeChildren("button-matchmaking");
+		this.removeChildren("button-anyone");
+		this.removeChildren("button-invitation");
+		this.removeChildren("button-local");
+		this.removeChildren("button-ai");
+		this.removeChildren("button-validate");
+		this.removeChildren("button-return");
+		this.removeChildren("button-sound");
+		this.removeChildren("button-map-original");
+		this.removeChildren("button-map-city");
+		this.removeChildren("button-map-casino");
+		this.removeChildren("button-spectate");
+		this.removeChildren("button-plus");
+		this.removeChildren("button-minus");
+		this.removeChildren("button-opp-left-ok");
+		
+		
+	}
+
+	removeChildren(button_id : string) {
+		const parent = document.getElementById(button_id);
+		if (!parent)
+			return ;
+		while (parent?.firstChild) {
+			// @ts-ignore : next-line // don't know why an errors shows up on vs code
+		  parent.removeChild(parent.lastChild);
+		}
 	}
 
 	reset() {
@@ -2021,12 +2051,19 @@ class Vector {
 	if (game.state === "in-menu") {
 		outputAnnouncement("You can press P during a game to quit it", consts.small_font_size * 0.35, consts.WIDTH * 0.25, consts.HEIGHT * 0.05, "rgba(255, 255, 255, 0.6)");
 		outputAnnouncement(
-		"CyberPong 1977",
-		consts.std_font_size * 1.5,
+		"The Ponger's Guide",
+		consts.std_font_size * 1.25,
 		consts.WIDTH / 2,
 		consts.HEIGHT / 4,
 		"white"
 		);
+		outputAnnouncement(
+			"to the Galaxy",
+			consts.std_font_size * 1.25,
+			consts.WIDTH / 2,
+			consts.HEIGHT * 0.35,
+			"white"
+			);
 	}
 	else if (game.state === "in-menu-input") {
 		drawSpectate();
@@ -2062,8 +2099,6 @@ class Vector {
 			"white"
 		);
 	} else if (game.state === "waiting-player") {
-		if (!game)
-			game = new Game();
 		if (game.spectator) drawSpectate();
 		buttons.return.show();
 		p.image(
