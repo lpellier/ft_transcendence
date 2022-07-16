@@ -1,12 +1,16 @@
-import {useEffect, useState, useRef} from 'react'
+import {useEffect, useState} from 'react'
 import Stack from '@mui/material/Stack'
 import Box from '@mui/material/Box'
 import StatsBoards from './StatsBoards'
 import Typography from '@mui/material/Typography'
 import {User} from 'interfaces'
-import {PlayerBarStyle, SkillBarContourStyle, TitleStyle} from "../../styles/tsxStyles/Home";
+import {PlayerBarStyle} from "../../styles/tsxStyles/Profile";
 import './../../styles/Other/SkillBar.css'
 import {PlayerAvatar} from	'../Avatars';
+import { useAuth } from "components/AuthProvider";
+import { useParams } from 'react-router-dom'
+import axios from 'axios'
+import { LinearProgress } from '@mui/material'
 
 const OverallBoxStyle = {
 	paddingTop: '4vh',
@@ -15,22 +19,16 @@ const OverallBoxStyle = {
 }
 
 function SkillBar(props: {progression: number}) {
-	const [length, setLength] = useState(0);
-	const totwidth = length + "px";
-	const SkillBox = useRef();
-
-	useEffect(() => {
-		//@ts-ignore: next-line
-		setLength((props.progression / 100) * SkillBox.current.offsetWidth);
-	}, [props.progression]);
-
 	return (
-		<Box ref={SkillBox} sx={SkillBarContourStyle} >
-			<div style={{width: totwidth}} className="SkillBar">
-					<Typography variant="subtitle2" sx={TitleStyle}>
-						{props.progression}%
-					</Typography>
-			</div>
+		<Box sx={{ display: 'flex', alignItems: 'center' }}>
+			<Box sx={{ width: '100%', mr: 1 }}>
+			  <LinearProgress sx={{ height: "20px", borderRadius: "20px"}} variant="determinate" value={props.progression} />
+			</Box>
+			<Box sx={{ minWidth: 35 }}>
+			  <Typography variant="body2" color="white">{`${Math.round(
+				props.progression,
+			  )}%`}</Typography>
+			</Box>
 		</Box>
 	);
 }
@@ -48,7 +46,7 @@ function PlayerInfoBand(props: {level: number, user: User}) {
 			<Box sx={PlayerBarStyle}>
 				<Stack >
 					<Stack direction="row" spacing={35}>
-						<PlayerAvatar image={process.env.REACT_APP_BACK_URL + '/avatars/' + props.user.id + '.png'} onClick={ () => {} }/>
+						<PlayerAvatar image={process.env.REACT_APP_BACK_URL + '/avatars/' + props.user.id + '.png'} />
 						<Stack spacing={1} >
 							<Typography variant="h5">
 							 	{props.user.username}
@@ -64,18 +62,33 @@ function PlayerInfoBand(props: {level: number, user: User}) {
 	);
 }
 
-export default function Profile(props: {user: User | undefined, users: User[]}) {
+export default function Profile(props: {self: boolean}) {
+	const [profile, setProfile] = useState<User>(null!)
+	let auth = useAuth();
+	let params = useParams()
+
+
+	if (props.self === true && (!profile || profile.id !== auth.user.id)) {
+		setProfile(auth.user);
+	}
+
+	useEffect( () => {
+		if (props.self === false && !profile) {
+			axios.get(process.env.REACT_APP_BACK_URL + "/users/" + params.id || "",
+			{withCredentials: true}).then(res => {
+			setProfile(res.data);
+			})
+		}
+	}, []);
+
 
 	console.log('user = ', props.user);
     return (
 		<Box sx={OverallBoxStyle}>
-			{props.user?
-				<Stack spacing={1}>
-					<PlayerInfoBand level={props.user.level} user={props.user} />
-					<StatsBoards user={props.user} users={props.users} />
-				</Stack>
-					:
-				<div/>
+			{profile? 
+			<Stack spacing={4}>
+				<PlayerInfoBand level={profile.level} user={profile} />
+				<StatsBoards user={profile}/> </Stack> : <div />
 			}
 		</Box>
     );

@@ -9,19 +9,26 @@ import {
   Put,
   UploadedFile,
   UseInterceptors,
+  UnsupportedMediaTypeException,
+  Post,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { Profile } from './interfaces/profile.interface';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
 import { UserParams } from './params/user.params';
+import { rename } from 'fs';
 
 @UseGuards(JwtAuthGuard)
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
+
+  @Get()
+  async findAllUsers(): Promise<any> {
+    return this.usersService.getAllUsers();
+  }
 
   @Get('me')
   async findMe(@Req() req): Promise<Profile> {
@@ -36,15 +43,12 @@ export class UsersController {
   @Put('upload-avatar')
   @UseInterceptors(
     FileInterceptor('avatar', {
-      storage: diskStorage({
-        destination: './public/avatars',
-        filename: (req: any, file, cb) => cb(null, req.user.id + '.png'),
-      }),
+      dest: 'tmp/',
       fileFilter: (req, file, cb) => {
         if (file.mimetype.match(/^image/)) {
           cb(null, true);
         } else {
-          cb(null, false);
+          cb(new UnsupportedMediaTypeException(), false);
         }
       },
       limits: {
@@ -53,11 +57,16 @@ export class UsersController {
     }),
   )
   uploadAvatar(@Req() req, @UploadedFile() file: Express.Multer.File) {
+    rename(file.path, 'public/avatars/' + req.user.id + '.png', (err) => {
+      if (err) throw err;
+      console.log('Image upload success.');
+    });
     this.usersService.addAchievement(req.user.id, 3);
+    return true;
   }
 
   @Get(':id')
   async findOne(@Param() params: UserParams): Promise<Profile> {
-    return this.usersService.getProfile(params.id);
+    return this.usersService.getProfile(+params.id);
   }
 }

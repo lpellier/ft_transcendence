@@ -1,18 +1,17 @@
-	// ? P to quit local mode
+	// ? P to quit game
 	// ? Coding consistency : snake_case for variables | camelCase for functions | PascalCase for classes
 
 	import { socket } from "index";
-	import { audio_files } from "routes/Game"
+	import { audio_files, user_name, user_id } from "routes/Game"
 
 	// TODO ISSUES
-	// ? i think bounce angle is bigger when bounced on top of paddle than on bottom, weird stuff
-	// ? game doesnt update username if changed because getting the username once in setup, should check periodically if it's still the same
 
 	// TODO IMPROVEMENTS
-	// ? implement better ai
-	// ? cute animation showing the roll of pong value in casino
 
 	export const Sketch = (p: any) => {
+
+	p.disableFriendlyErrors = true;
+
 	let spritesheet: any;
 	let spritedata: any;
 
@@ -27,9 +26,6 @@
 	let keys: Keys;
 
 	let canvas: any;
-
-	let user_name: string | null;
-	let user_id: string | null;
 
 	class Bumper {
 	animation: any;
@@ -178,6 +174,7 @@
 	map_original: any;
 	map_city: any;
 	map_casino: any;
+	map_secret : any;
 
 	spectate: any;
 
@@ -409,6 +406,10 @@
 		this.map_city.position(consts.WIDTH * 0.3855, consts.HEIGHT * 0.56);
 		this.map_casino.position(consts.WIDTH * 0.6855, consts.HEIGHT * 0.56);
 
+		this.map_secret = createCustomButton("*", clickMapSecret, highlightButton, resetButton, consts.small_square_diameter, consts.small_square_diameter);
+		this.map_secret.style("border", "none");
+		this.map_secret.style("background", "none");
+
 		this.spectate = createCustomButton(
 		"",
 		clickSpectate,
@@ -429,6 +430,8 @@
 		this.matchmaking.show();
 		this.create_game.show();
 		this.join.show();
+
+		this.map_secret.show();
 	}
 
 	resize() {
@@ -550,6 +553,15 @@
 		"font-size",
 		consts.medium_font_size.toString() + "px"
 		);
+		this.map_secret.position(consts.WIDTH * 0.01, consts.HEIGHT * 0.93);
+		this.map_secret.size(
+		consts.small_square_diameter,
+		consts.small_square_diameter
+		);
+		this.map_secret.style(
+		"font-size",
+		consts.small_font_size.toString() + "px"
+		);
 
 		this.map_original.position(consts.WIDTH * 0.0855, consts.HEIGHT * 0.56);
 		this.map_original.style(
@@ -613,9 +625,40 @@
 		this.map_city = null;
 		if (this.map_casino) this.map_casino.remove();
 		this.map_casino = null;
+		if (this.map_secret) this.map_secret.remove();
+		this.map_secret = null;
 
 		if (this.spectate) this.spectate.remove();
 		this.spectate = null;
+
+		this.removeChildren("button-create");
+		this.removeChildren("button-join");
+		this.removeChildren("button-matchmaking");
+		this.removeChildren("button-anyone");
+		this.removeChildren("button-invitation");
+		this.removeChildren("button-local");
+		this.removeChildren("button-ai");
+		this.removeChildren("button-validate");
+		this.removeChildren("button-return");
+		this.removeChildren("button-sound");
+		this.removeChildren("button-map-original");
+		this.removeChildren("button-map-city");
+		this.removeChildren("button-map-casino");
+		this.removeChildren("button-map-secret");
+		this.removeChildren("button-spectate");
+		this.removeChildren("button-plus");
+		this.removeChildren("button-minus");
+		this.removeChildren("button-opp-left-ok");
+	}
+
+	removeChildren(button_id : string) {
+		const parent = document.getElementById(button_id);
+		if (!parent)
+			return ;
+		while (parent?.firstChild) {
+			// @ts-ignore : next-line // don't know why an error shows up on vs code
+		  parent.removeChild(parent.lastChild);
+		}
 	}
 
 	reset() {
@@ -645,6 +688,7 @@
 		this.map_original.hide();
 		this.map_city.hide();
 		this.map_casino.hide();
+		this.map_secret.hide();
 
 		this.spectate.hide();
 	}
@@ -693,6 +737,8 @@
 	}
 
 	addParent() {
+		if (!document.getElementById("canvas-parent"))
+			return ;
 		this.create_game.parent(document.getElementById("button-create"));
 		this.join.parent(document.getElementById("button-join"));
 		this.matchmaking.parent(document.getElementById("button-matchmaking"));
@@ -712,6 +758,7 @@
 		this.map_original.parent(document.getElementById("button-map-original"));
 		this.map_city.parent(document.getElementById("button-map-city"));
 		this.map_casino.parent(document.getElementById("button-map-casino"));
+		this.map_secret.parent(document.getElementById("button-map-secret"));
 
 		this.spectate.parent(document.getElementById("button-spectate"));
 	}
@@ -728,6 +775,9 @@
 	PLAYER_WIDTH: number;
 	PLAYER_HEIGHT: number;
 	PLAYER_SPEED: number;
+
+	BREAKOUT_WIDTH: number;
+	BREAKOUT_HEIGHT: number;
 
 	PONG_DIAMETER: number;
 	PONG_BASE_SPEED: number;
@@ -756,6 +806,7 @@
 	original_map: GameMap;
 	city_map: GameMap;
 	casino_map: GameMap;
+	secret_map : GameMap;
 
 	FONT: any;
 	RETURN_ICON: any;
@@ -774,15 +825,18 @@
 		this.original_map = new GameMap(1, this.WIDTH, this.HEIGHT);
 		this.city_map = new GameMap(2, this.WIDTH, this.HEIGHT); 
 		this.casino_map = new GameMap(3, this.WIDTH, this.HEIGHT);
+		this.secret_map = new GameMap(4, this.WIDTH, this.HEIGHT);
 
 		this.OLD_WIDTH = this.WIDTH;
 		this.OLD_HEIGHT = this.HEIGHT;
 
-		this.WIDTH = p.windowWidth;
+		let width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+		let height = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+		this.WIDTH = width;
 		this.HEIGHT = this.WIDTH / 1.6;
 
-		if (this.HEIGHT > p.windowHeight * 5 / 6) {
-		this.HEIGHT = (p.windowHeight * 5) / 6;
+		if (this.HEIGHT > height * 5 / 6) {
+		this.HEIGHT = (height * 5) / 6;
 		this.WIDTH = this.HEIGHT * 1.6;
 		}
 		this.DIAGONAL = Math.sqrt(
@@ -792,6 +846,9 @@
 		this.PLAYER_WIDTH = this.WIDTH / 80;
 		this.PLAYER_HEIGHT = this.HEIGHT / 9;
 		this.PLAYER_SPEED = this.DIAGONAL / 125;
+
+		this.BREAKOUT_WIDTH = this.PLAYER_WIDTH * 0.8;
+		this.BREAKOUT_HEIGHT = this.PLAYER_HEIGHT * 0.8;
 
 		this.PONG_DIAMETER = this.DIAGONAL / 120;
 		this.PONG_BASE_SPEED = this.DIAGONAL / 150;
@@ -824,6 +881,7 @@
 		this.original_map.resize(this.WIDTH, this.HEIGHT);
 		this.city_map.resize(this.WIDTH, this.HEIGHT);
 		this.casino_map.resize(this.WIDTH, this.HEIGHT);
+		this.secret_map.resize(this.WIDTH, this.HEIGHT);
 
 		this.TOP_BOUND = this.original_map.wall_width * 2;
 		this.BOT_BOUND = this.HEIGHT - this.original_map.wall_width * 2;
@@ -847,14 +905,16 @@
 
 
 	setWindowSize() {
+		let width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+		let height = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
 		this.OLD_WIDTH = this.WIDTH;
 		this.OLD_HEIGHT = this.HEIGHT;
 
-		this.WIDTH = p.windowWidth;
+		this.WIDTH = width;
 		this.HEIGHT = this.WIDTH / 1.6;
 
-		if (this.HEIGHT > p.windowHeight * 5 / 6) {
-		this.HEIGHT = (p.windowHeight * 5) / 6;
+		if (this.HEIGHT > height * 5 / 6) {
+		this.HEIGHT = (height * 5) / 6;
 		this.WIDTH = this.HEIGHT * 1.6;
 		}
 		this.DIAGONAL = Math.sqrt(
@@ -868,6 +928,9 @@
 		this.PLAYER_WIDTH = this.WIDTH / 80;
 		this.PLAYER_HEIGHT = this.HEIGHT / 9;
 		this.PLAYER_SPEED = this.DIAGONAL / 125;
+
+		this.BREAKOUT_WIDTH = this.PLAYER_WIDTH * 0.8;
+		this.BREAKOUT_HEIGHT = this.PLAYER_HEIGHT * 0.8;
 
 		this.PONG_DIAMETER = this.DIAGONAL / 120;
 		this.PONG_BASE_SPEED = this.DIAGONAL / 150;
@@ -900,6 +963,7 @@
 		this.original_map.resize(this.WIDTH, this.HEIGHT);
 		this.city_map.resize(this.WIDTH, this.HEIGHT);
 		this.casino_map.resize(this.WIDTH, this.HEIGHT);
+		this.secret_map.resize(this.WIDTH, this.HEIGHT);
 
 		this.TOP_BOUND = this.original_map.wall_width * 2;
 		this.BOT_BOUND = this.HEIGHT - this.original_map.wall_width * 2;
@@ -928,6 +992,7 @@
 
 	class Game {
 	players: Player[];
+	breakouts : BreakOut[];
 	score: [number, number];
 	score_limit: number;
 	pong: any;
@@ -940,6 +1005,8 @@
 	frames_since_point: number;
 	map: GameMap;
 
+	timeout : any;
+
 	spectator: boolean;
 	hover_spectator: boolean;
 
@@ -947,6 +1014,7 @@
 
 	constructor() {
 		this.players = [];
+		this.breakouts = [];
 		this.pong = null;
 		this.score = [0, 0];
 		this.score_limit = 10;
@@ -965,6 +1033,7 @@
 
 	reset() {
 		this.players = [];
+		this.breakouts = [];
 		this.score = [0, 0];
 		this.score_limit = 10;
 		this.timer = 3;
@@ -990,6 +1059,7 @@
 	}
 
 	scorePoint(invert: boolean) {
+		reset_ai_pos = true;
 		this.frame_count_shake = 0;
 		audio_files.playScore();
 		this.pong.velocity = [0, 0];
@@ -1037,10 +1107,8 @@
 	class GameMap {
 	walls: [
 		[number, number],
-		[number, number],
-		[number, number],
 		[number, number]
-	][]; // [pos_x, pos_y], [width, height], outer1, outer2
+	][]; // [pos_x, pos_y], [width, height]
 	index: number;
 	width: number;
 	height: number;
@@ -1053,12 +1121,12 @@
 	constructor(index: number, w: number, h: number) {
 		this.index = index;
 		this.name = "original";
-		this.resize(w, h);
 		this.width = 0;
 		this.height = 0;
 		this.wall_width = 0;
 		this.object_color = ""
-		this.walls = [[[0,0],[0,0],[0,0],[0,0]]]
+		this.walls = [[[0,0],[0,0]]]
+		this.resize(w, h);
 	}
 
 	originalMap() {
@@ -1074,6 +1142,10 @@
 	casinoMap() {
 		this.object_color = "#ffffff";
 		if (consts) this.background = consts.TOKYO_BACKGROUND;
+	}
+	secretMap() {
+		this.object_color = "#ffffff";
+		this.background = null;
 	}
 
 	render(ratio: number) {
@@ -1129,6 +1201,8 @@
 		p.pop();
 		if (this.name === "city")
 		for (let bumper of bumpers) bumper.render(ratio);
+		if (this.name === "secret")
+		for (let breakout of game.breakouts) breakout.render();
 	}
 
 	resize(w: number, h: number) {
@@ -1138,16 +1212,12 @@
 		this.walls = [
 		[
 			[this.wall_width, this.wall_width],
-			[this.width - this.wall_width * 2, this.wall_width],
-			[this.wall_width, this.wall_width * 2],
-			[this.width - this.wall_width, this.wall_width * 2],
+			[this.width - this.wall_width * 2, this.wall_width]
 		],
 		[
 			[this.wall_width, this.height - this.wall_width * 2],
-			[this.width - this.wall_width * 2, this.wall_width],
-			[this.wall_width, this.height - this.wall_width * 2],
-			[this.width - this.wall_width, this.height - this.wall_width * 2],
-		],
+			[this.width - this.wall_width * 2, this.wall_width]
+		]
 		];
 		if (this.index === 1) this.originalMap();
 		else if (this.index === 2) {
@@ -1156,6 +1226,24 @@
 		} else if (this.index === 3) {
 		this.name = "casino";
 		this.casinoMap();
+		}
+		else if (this.index === 4) {
+			this.walls = [
+				[
+					[this.wall_width, this.wall_width],
+					[this.width - this.wall_width * 2, this.wall_width]
+				],
+				[
+					[this.wall_width, this.height - this.wall_width * 2],
+					[this.width - this.wall_width * 2, this.wall_width]
+				],
+				[
+					[this.width - this.wall_width * 2, this.wall_width],
+					[this.wall_width, this.height - this.wall_width * 2]
+				]
+			];
+			this.name = "secret";
+			this.secretMap();
 		}
 	}
 	}
@@ -1212,6 +1300,8 @@ class Inputs {
 	}
 
 	addParent() {
+		if (!document.getElementById("canvas-parent"))
+			return ;
 		this.join.parent(document.getElementById("input-join"));
 		this.score_limit.parent(document.getElementById("input-score_limit"));
 	}
@@ -1315,6 +1405,77 @@ class MovingText {
 	}
 }
 
+class BreakOut {
+	pos: [number, number] = [0, 0];
+	width: number = consts.BREAKOUT_WIDTH;
+	height : number = consts.BREAKOUT_HEIGHT;
+	color: string = "white";
+
+	constructor(pos : [number, number], color : string) {
+		this.pos = pos;
+		this.color = color;
+	}
+
+	render() {
+		p.push();
+		p.fill(this.color);
+		p.strokeWeight(0);
+		p.rect(this.pos[0], this.pos[1], this.width, this.height);
+		p.pop();
+	}
+
+	resize() {
+		let proportionnal_pos_x: number = this.pos[0] / consts.OLD_WIDTH;
+		let proportionnal_pos_y: number = this.pos[1] / consts.OLD_HEIGHT;
+		this.width = consts.BREAKOUT_WIDTH;
+		this.height = consts.BREAKOUT_HEIGHT;
+		this.pos = [
+		consts.WIDTH * proportionnal_pos_x,
+		consts.HEIGHT * proportionnal_pos_y,
+		];
+	}
+
+	checkCollisions() : boolean {
+		let ball_points: [
+			[number, number],
+			[number, number],
+			[number, number],
+			[number, number]
+		] = [
+			game.pong.up(),
+			game.pong.right(),
+			game.pong.down(),
+			game.pong.left(),
+		];
+		for (let i = 0 ; i < 4 ; i++) {
+			let intersection_point: [number, number, string][] = [[-1, -1, "side"]]; // array of one element so that the variable is referenced in functions
+			collisionBreakOut(this, intersection_point, ball_points[i]);
+			if (intersection_point[0][0] !== -1) {
+				audio_files.playRandomPaddleSound();
+				game.pong.velocity[0] *= -1;
+				game.breakouts.splice(game.breakouts.indexOf(this), 1);
+				if (game.breakouts.length === 0)
+					game.setState("game-over");
+				return true;
+			}
+		}
+		return false;
+	}
+
+	leftDown(): [number, number] {
+		return [this.pos[0], this.pos[1] + this.height];
+	}
+	leftUp() : [number, number]{
+		return [this.pos[0], this.pos[1]];
+	}
+	rightDown() : [number, number]{
+		return [this.pos[0] + this.width, this.pos[1] + this.height];
+	}
+	rightUp() : [number, number]{
+		return [this.pos[0] + this.width, this.pos[1] + this.height];
+	}
+}
+
 class Player {
 	pos: [number, number] = [0, 0];
 	velocity: [number, number] = [0, 0];
@@ -1412,13 +1573,23 @@ class Player {
 		return dist;
 	}
 
-	moveUp() {
+	moveUp(pos_diff : number) {
 		this.velocity[1] = -consts.PLAYER_SPEED;
+		if (game.local && game.ai && this.index === 2) {
+			this.velocity[1] = -pos_diff;
+			if (this.velocity[1] < -consts.PLAYER_SPEED)
+				this.velocity[1] = -consts.PLAYER_SPEED;
+		}
 		this.calculateNewPos();
 	}
 
-	moveDown() {
+	moveDown(pos_diff : number) {
 		this.velocity[1] = consts.PLAYER_SPEED;
+		if (game.local && game.ai && this.index === 2) {
+			this.velocity[1] = -pos_diff;
+			if (this.velocity[1] > consts.PLAYER_SPEED)
+				this.velocity[1] = consts.PLAYER_SPEED;
+		}
 		this.calculateNewPos();
 	}
 
@@ -1486,6 +1657,8 @@ class Pong {
 	}
 
 	relaunchPong(loser_side: string) {
+		if (game.map.name === "secret")
+			loser_side = "left";
 		this.pos = [
 		consts.WIDTH / 2 - consts.PONG_DIAMETER / 2,
 		consts.HEIGHT / 2 - consts.PONG_DIAMETER / 2,
@@ -1681,11 +1854,6 @@ class Vector {
 			else if (error === "already_in_game") errors.already_in_game = true;
 		});
 
-		socket.on("please send back", (data : any) => {
-			if (data.name === user_name)
-				socket.emit("socket response", data);
-		});
-
 		socket.on(
 			"waiting-readiness",
 			(
@@ -1710,6 +1878,10 @@ class Vector {
 				} else if (socket.id === id_p2) {
 				game.players.push(new Player(2, id_p2, name_p2, real_id_p2));
 				game.players.push(new Player(1, id_p1, name_p1, real_id_p1));
+				} else {
+					game.players.push(new Player(1, id_p1, name_p1, real_id_p1));
+					game.players.push(new Player(2, id_p2, name_p2, real_id_p2));
+					game.spectator = true;
 				}
 				game.pong = new Pong();
 			}
@@ -1735,7 +1907,10 @@ class Vector {
 
 	function listenStopEvents() {
 	socket.on("player-disconnect", (index: number) => {
-		opponentLeftMenu();
+		if (game.players && game.players.length > 0 && index !== game.players[0].index)
+			opponentLeftMenu();
+		else
+			inMainMenu();
 	});
 
 	socket.on("game-over", () => {
@@ -1844,6 +2019,7 @@ class Vector {
 	if (buttons) buttons.resize();
 	if (inputs) inputs.resize();
 	if (bumpers) for (let bumper of bumpers) bumper.resize();
+	if (game.breakouts) for (let breakout of game.breakouts) breakout.resize();
 	}
 
 	p.windowResized = () => {
@@ -1863,6 +2039,7 @@ class Vector {
 	};
 
 	p.setup = () => {
+	socket.emit("my_id", socket.id, user_id.toString(), user_name);
 	let frames = spritedata.frames;
 	for (let i = 0; i < frames.length; i++) {
 		let pos = frames[i].position;
@@ -1895,10 +2072,9 @@ class Vector {
 	errors = new Errors();
 	buttons = new Buttons();
 		
-	let user_dom = document.getElementById("user");
-	if (user_dom) {
-		user_name = user_dom.getAttribute("user_name");
-		user_id = user_dom.getAttribute("user_id"); 
+	if (!document.getElementById("canvas-parent")) {
+		p.remove();
+		return ;
 	}
 
 	canvas = p.createCanvas(consts.WIDTH, consts.HEIGHT);
@@ -1907,17 +2083,27 @@ class Vector {
 	p.textFont(consts.FONT);
 	p.frameRate(60);
 
-	socket.emit("my_id", socket.id, user_id, user_name);
 
 	listenStartEvents();
 	listenStopEvents();
 	listenMoveEvents();	
 
 	resizeEverything();
+	// ? server keeps a boolean for each client to tell if they've loaded fully or not
+	// ? so that when they are, it can send them to matches for invitation
+	socket.emit("finished loading");
 	};
 
 	p.keyPressed = () => {
 	if (game === null) return;
+	if (game.local && p.key === "p") {
+		if (game.timeout)
+			clearTimeout(game.timeout);
+		inMainMenu();
+	}
+	else if (!game.local && p.key === "p" && (game.state === "waiting-readiness" || game.state === "in-game" || game.state === "countdown" || game.state === "relaunch-countdown")) {
+		socket.emit("quit-ongoing-game", true);
+	}
 	if (!game.spectator && game.state === "waiting-readiness" && p.key === " ")
 		socket.emit("switch_readiness", game.players[0].id);
 	if (game.state === "in-menu-input" && p.keyCode === p.ENTER) {
@@ -1929,7 +2115,7 @@ class Vector {
 	
 	p.draw = () => {
 		if (!document.getElementById("canvas-parent")) {
-			socket.emit("quit-ongoing-game");
+			socket.emit("quit-ongoing-game", false);
 			p.remove();
 		}
 
@@ -1998,14 +2184,23 @@ class Vector {
 		consts.HEIGHT / 2,
 		"white"
 		);
-	if (game.state === "in-menu")
+	if (game.state === "in-menu") {
+		outputAnnouncement("You can press P during a game to quit it", consts.small_font_size * 0.35, consts.WIDTH * 0.25, consts.HEIGHT * 0.05, "rgba(255, 255, 255, 0.6)");
 		outputAnnouncement(
-		"CyberPong 1977",
-		consts.std_font_size * 1.5,
+		"The Ponger's Guide",
+		consts.std_font_size * 1.25,
 		consts.WIDTH / 2,
 		consts.HEIGHT / 4,
 		"white"
 		);
+		outputAnnouncement(
+			"to the Galaxy",
+			consts.std_font_size * 1.25,
+			consts.WIDTH / 2,
+			consts.HEIGHT * 0.35,
+			"white"
+			);
+	}
 	else if (game.state === "in-menu-input") {
 		drawSpectate();
 		outputAnnouncement(
@@ -2040,8 +2235,6 @@ class Vector {
 			"white"
 		);
 	} else if (game.state === "waiting-player") {
-		if (!game)
-			game = new Game();
 		if (game.spectator) drawSpectate();
 		buttons.return.show();
 		p.image(
@@ -2115,14 +2308,7 @@ class Vector {
 		);
 		outputPlayerNames();
 	} else if (game.state === "game-over") {
-		buttons.return.show();
-		p.image(
-		consts.RETURN_ICON,
-		consts.WIDTH * 0.9,
-		consts.HEIGHT * 0.01,
-		consts.medium_square_diameter,
-		consts.medium_square_diameter
-		);
+		buttons.opponent_left_ok.show();
 		if (game.players.length === 2)
 		outputAnnouncement(
 			(game.score[0] > game.score[1]
@@ -2133,6 +2319,12 @@ class Vector {
 			p.height / 2,
 			"white"
 		);
+		else if (game.map.name === "secret") {
+			if (game.score[1] < game.score_limit)
+				outputAnnouncement("You won!", consts.std_font_size, p.width / 2, p.height / 2, "white");
+			else 
+				outputAnnouncement("You lost.", consts.std_font_size, p.width / 2, p.height / 2, "white");
+		}
 		outputScore(consts.WIDTH, consts.HEIGHT);
 	}
 	if (
@@ -2145,6 +2337,31 @@ class Vector {
 	}
 	p.pop();
 	};
+
+	function addBreakouts() {
+		let length = 10;
+		let space = (consts.HEIGHT - consts.secret_map.wall_width * 2 - (consts.BREAKOUT_HEIGHT * length)) / (length + 2);
+		for (let i = 0; i < length; i++)
+			game.breakouts.push(new BreakOut([consts.WIDTH * 0.8, consts.secret_map.wall_width + space + (i) * (space + consts.BREAKOUT_HEIGHT)], "#6699ff"));
+		for (let i = 0; i < length; i++)
+			game.breakouts.push(new BreakOut([consts.WIDTH * 0.8 + consts.BREAKOUT_WIDTH * 1.5, consts.secret_map.wall_width + space + (i) * (space + consts.BREAKOUT_HEIGHT)], "#6699ff"));
+		for (let i = 0; i < length; i++)
+			game.breakouts.push(new BreakOut([consts.WIDTH * 0.8 + consts.BREAKOUT_WIDTH * 3, consts.secret_map.wall_width + space + (i) * (space + consts.BREAKOUT_HEIGHT)], "#00cc66"));
+		for (let i = 0; i < length; i++)
+			game.breakouts.push(new BreakOut([consts.WIDTH * 0.8 + consts.BREAKOUT_WIDTH * 4.5, consts.secret_map.wall_width + space + (i) * (space + consts.BREAKOUT_HEIGHT)], "#00cc66"));
+		for (let i = 0; i < length; i++)
+			game.breakouts.push(new BreakOut([consts.WIDTH * 0.8 + consts.BREAKOUT_WIDTH * 6, consts.secret_map.wall_width + space + (i) * (space + consts.BREAKOUT_HEIGHT)], "#ffff00"));
+		for (let i = 0; i < length; i++)
+			game.breakouts.push(new BreakOut([consts.WIDTH * 0.8 + consts.BREAKOUT_WIDTH * 7.5, consts.secret_map.wall_width + space + (i) * (space + consts.BREAKOUT_HEIGHT)], "#ffff00"));
+		for (let i = 0; i < length; i++)
+			game.breakouts.push(new BreakOut([consts.WIDTH * 0.8 + consts.BREAKOUT_WIDTH * 9, consts.secret_map.wall_width + space + (i) * (space + consts.BREAKOUT_HEIGHT)], "#ff9933"));
+		for (let i = 0; i < length; i++)
+			game.breakouts.push(new BreakOut([consts.WIDTH * 0.8 + consts.BREAKOUT_WIDTH * 10.5, consts.secret_map.wall_width + space + (i) * (space + consts.BREAKOUT_HEIGHT)], "#ff9933"));
+		for (let i = 0; i < length; i++)
+			game.breakouts.push(new BreakOut([consts.WIDTH * 0.8 + consts.BREAKOUT_WIDTH * 12, consts.secret_map.wall_width + space + (i) * (space + consts.BREAKOUT_HEIGHT)], "#ff0000"));
+		for (let i = 0; i < length; i++)
+			game.breakouts.push(new BreakOut([consts.WIDTH * 0.8 + consts.BREAKOUT_WIDTH * 13.5, consts.secret_map.wall_width + space + (i) * (space + consts.BREAKOUT_HEIGHT)], "#ff0000"));
+	}
 
 	function createCustomButton(
 	title: string,
@@ -2248,6 +2465,10 @@ class Vector {
 	}
 
 	function outputScore(map_width: number, map_height: number) {
+	if (game.map.name === "secret" && (game.score_limit - game.score[1]) > 1)
+		outputAnnouncement((game.score_limit - game.score[1]).toString() + " lives left", consts.std_font_size, consts.WIDTH / 2, consts.HEIGHT / 9, "white");
+	else if (game.map.name === "secret")
+		outputAnnouncement("1 life left", consts.std_font_size, consts.WIDTH / 2, consts.HEIGHT / 9, "white");
 	if (game.players.length !== 2) return;
 	if (game.players[0].index === 1) {
 		p.push();
@@ -2289,9 +2510,11 @@ class Vector {
 	p.textAlign(p.CENTER);
 	if (game.players[0].index === 1) {
 		p.text(game.players[0].username, consts.WIDTH * 0.1, consts.HEIGHT * 0.95);
-		p.text(game.players[1].username, consts.WIDTH * 0.9, consts.HEIGHT * 0.95);
+		if (game.players.length > 1)
+			p.text(game.players[1].username, consts.WIDTH * 0.9, consts.HEIGHT * 0.95);
 	} else {
-		p.text(game.players[1].username, consts.WIDTH * 0.1, consts.HEIGHT * 0.95);
+		if (game.players.length > 1)
+			p.text(game.players[1].username, consts.WIDTH * 0.1, consts.HEIGHT * 0.95);
 		p.text(game.players[0].username, consts.WIDTH * 0.9, consts.HEIGHT * 0.95);
 	}
 	p.pop();
@@ -2310,13 +2533,17 @@ class Vector {
 	}
 
 	function opponentLeftMenu() {
-	if (!document.getElementById("canvas-parent"))
-		return;
 	game.setState("opponent-left-menu");
 	buttons.hide();
-	buttons.opponent_left_ok.parent().style["z-index"] = 2; // deal with buttons overlapping
+	if (buttons.opponent_left_ok.parent())
+		buttons.opponent_left_ok.parent().style["z-index"] = 2; // deal with buttons overlapping
 	buttons.opponent_left_ok.show();
 	}
+
+	let ai_diff : number = 0;
+	let new_ai_diff : number = 0;
+	let ai_pos : number = 0; // ? random pos on the paddle of the ai
+	let reset_ai_pos : boolean = true; // ? when true, recalculate ai pos
 
 	function movePlayers() {
 	if (!game.local && !game.spectator) {
@@ -2334,21 +2561,30 @@ class Vector {
 		} else socket.emit("move_null", game.players[0].id);
 		}
 	} else if (!game.spectator) {
-		if (p.keyIsDown(87)) game.players[0].moveUp();
-		else if (p.keyIsDown(83)) game.players[0].moveDown();
+		if (p.keyIsDown(87)) game.players[0].moveUp(0);
+		else if (p.keyIsDown(83)) game.players[0].moveDown(0);
 		else game.players[0].velocity[1] = 0;
 
 		if (game.ai) {
 		// ? chaser ai code
-		let player_pos = game.players[1].pos[1] + game.players[0].height / 2;
-		let pos_diff = player_pos - game.pong.cY();
+		if (reset_ai_pos) {
+			new_ai_diff = (Math.random() * consts.PLAYER_HEIGHT);
+			reset_ai_pos = false;
+		}
+		if (ai_diff > new_ai_diff)
+			ai_diff -= consts.PLAYER_HEIGHT * 0.05;
+		if (ai_diff < new_ai_diff)
+			ai_diff += consts.PLAYER_HEIGHT * 0.05;
 
-		if (pos_diff > consts.HEIGHT / 150) game.players[1].moveUp();
-		else if (pos_diff < -consts.HEIGHT / 150) game.players[1].moveDown();
+		ai_pos = game.players[1].pos[1] + ai_diff;
+		let pos_diff = ai_pos - game.pong.cY();
+
+		if (pos_diff > 0) game.players[1].moveUp(pos_diff);
+		else if (pos_diff < 0) game.players[1].moveDown(pos_diff);
 		else game.players[1].velocity[1] = 0;
-		} else {
-		if (p.keyIsDown(p.UP_ARROW)) game.players[1].moveUp();
-		else if (p.keyIsDown(p.DOWN_ARROW)) game.players[1].moveDown();
+		} else if (game.map.name != "secret") {
+		if (p.keyIsDown(p.UP_ARROW)) game.players[1].moveUp(0);
+		else if (p.keyIsDown(p.DOWN_ARROW)) game.players[1].moveDown(0);
 		else game.players[1].velocity[1] = 0;
 		}
 
@@ -2482,10 +2718,12 @@ class Vector {
 
 	function drawInput() {
 	if (game.local && !game.ai) {
-		p.image(keys.up, consts.WIDTH * 0.78 + consts.small_square_diameter * 1.5 / 2, consts.HEIGHT * 0.66 + consts.small_square_diameter * 1.5 / 2, consts.small_square_diameter * 1.5, consts.small_square_diameter * 1.5);
-		p.image(keys.left, consts.WIDTH * 0.71 + consts.small_square_diameter * 1.5 / 2, consts.HEIGHT * 0.75 + consts.small_square_diameter * 1.5 / 2, consts.small_square_diameter * 1.5, consts.small_square_diameter * 1.5);
-		p.image(keys.down, consts.WIDTH * 0.78 + consts.small_square_diameter * 1.5 / 2, consts.HEIGHT * 0.75 + consts.small_square_diameter * 1.5 / 2, consts.small_square_diameter * 1.5, consts.small_square_diameter * 1.5);
-		p.image(keys.right, consts.WIDTH * 0.85 + consts.small_square_diameter * 1.5 / 2, consts.HEIGHT * 0.75 + consts.small_square_diameter * 1.5 / 2, consts.small_square_diameter * 1.5, consts.small_square_diameter * 1.5);
+		if (game.map.name !== "secret") {
+			p.image(keys.up, consts.WIDTH * 0.78 + consts.small_square_diameter * 1.5 / 2, consts.HEIGHT * 0.66 + consts.small_square_diameter * 1.5 / 2, consts.small_square_diameter * 1.5, consts.small_square_diameter * 1.5);
+			p.image(keys.left, consts.WIDTH * 0.71 + consts.small_square_diameter * 1.5 / 2, consts.HEIGHT * 0.75 + consts.small_square_diameter * 1.5 / 2, consts.small_square_diameter * 1.5, consts.small_square_diameter * 1.5);
+			p.image(keys.down, consts.WIDTH * 0.78 + consts.small_square_diameter * 1.5 / 2, consts.HEIGHT * 0.75 + consts.small_square_diameter * 1.5 / 2, consts.small_square_diameter * 1.5, consts.small_square_diameter * 1.5);
+			p.image(keys.right, consts.WIDTH * 0.85 + consts.small_square_diameter * 1.5 / 2, consts.HEIGHT * 0.75 + consts.small_square_diameter * 1.5 / 2, consts.small_square_diameter * 1.5, consts.small_square_diameter * 1.5);
+		}
 		p.image(keys.w, consts.WIDTH * 0.21 - consts.small_square_diameter * 1.5 / 2, consts.HEIGHT * 0.16 - consts.small_square_diameter * 1.5 / 2, consts.small_square_diameter * 1.5, consts.small_square_diameter * 1.5);
 		p.image(keys.a, consts.WIDTH * 0.15 - consts.small_square_diameter * 1.5 / 2, consts.HEIGHT * 0.25 - consts.small_square_diameter * 1.5 / 2, consts.small_square_diameter * 1.5, consts.small_square_diameter * 1.5);
 		p.image(keys.s, consts.WIDTH * 0.22 - consts.small_square_diameter * 1.5 / 2, consts.HEIGHT * 0.25 - consts.small_square_diameter * 1.5 / 2, consts.small_square_diameter * 1.5, consts.small_square_diameter * 1.5);
@@ -2592,7 +2830,7 @@ class Vector {
 		p1[1] + (p2[1] - p1[1]) / 2 - intersection_point[1],
 	];
 
-	if (intersection_point[2] === "side")
+	if (intersection_point[2] === "side" || intersection_point[2] === "left" || intersection_point[2] === "right")
 		return (middle[1] / ((p2[1] - p1[1]) / 2)) * ((3 * Math.PI) / 12);
 	else return (middle[0] / ((p2[0] - p1[0]) / 2)) * ((3 * Math.PI) / 12);
 	}
@@ -2634,8 +2872,17 @@ class Vector {
 	if (
 		game.pong.velocity[0] > 0 &&
 		game.pong.pos[0] + game.pong.diameter > consts.RIGHT_BOUND
-	)
-		return game.scorePoint(true);
+	) {
+		if (game.map.name !== "secret")
+			return game.scorePoint(true);
+		else {
+			if (game.pong.pos[0] + game.pong.diameter > consts.RIGHT_BOUND - game.map.wall_width * 2)
+				game.pong.pos[0] = consts.RIGHT_BOUND - game.map.wall_width * 2 - game.pong.diameter - consts.WIDTH * 0.002;
+			game.pong.velocity[0] *= -1;
+			audio_files.playRandomWallSound();
+			return;
+		}
+	}
 	else if (game.pong.velocity[0] < 0 && game.pong.pos[0] < consts.LEFT_BOUND)
 		return game.scorePoint(false);
 
@@ -2644,36 +2891,36 @@ class Vector {
 		if (bumper.checkCollision(game.pong)) {
 			bumper.resetAnimation();
 			audio_files.playRandomBumperSound();
+			reset_ai_pos = true;
 			return;
 		}
 		}
 	}
 
-	let player =
-		game.pong.pos[0] < consts.WIDTH / 2 ? game.players[0] : game.players[1];
+	if (game.map.name === "secret")
+		for (let breakout of game.breakouts) if (breakout.checkCollisions()) return;
+
+	let player;
+	if (game.map.name === "secret")
+		player = game.players[0];
+	else
+		player = game.pong.pos[0] < consts.WIDTH / 2 ? game.players[0] : game.players[1];
 	let ball_points: [
-		[number, number],
-		[number, number],
-		[number, number],
-		[number, number],
 		[number, number],
 		[number, number],
 		[number, number],
 		[number, number]
 	] = [
-		game.pong.leftUp(),
 		game.pong.up(),
-		game.pong.rightUp(),
 		game.pong.right(),
-		game.pong.rightDown(),
 		game.pong.down(),
-		game.pong.leftDown(),
 		game.pong.left(),
 	];
 	// debugCollisions(player);
 
+
 	// ? collision with paddles
-	for (let i = 0; i < 8; i++) {
+	for (let i = 0; i < 4; i++) {
 		let angle: number = 0;
 		let intersection_point: [number, number, string][] = [[-1, -1, "side"]]; // array of one element so that the variable is referenced in functions
 		angle = collisionPaddle(player, intersection_point, ball_points[i]);
@@ -2723,9 +2970,66 @@ class Vector {
 			game.pong.speed *
 			-Math.sin(angle);
 		}
+		if (player.index === 1)
+			reset_ai_pos = true;
 		return;
 		}
 	}
+	}
+
+	function collisionBreakOut(	
+		breakout: BreakOut,
+		intersection_point: [number, number, string][],
+		ball_point: [number, number]) {
+		
+		let breakout_left_hit: [[number, number], [number, number]] = [breakout.leftUp(), breakout.leftDown()];
+		let breakout_right_hit: [[number, number], [number, number]] = [breakout.rightUp(), breakout.rightDown()];
+		let breakout_bot_hit: [[number, number], [number, number]] = [
+			breakout.leftDown(),
+			breakout.rightDown(),
+		];
+		let breakout_top_hit: [[number, number], [number, number]] = [
+			breakout.leftUp(),
+			breakout.rightUp(),
+		];
+
+		intersection_point[0] = getLineIntersection(
+			ball_point,
+			game.pong.ballMoves(ball_point),
+			breakout_left_hit[0],
+			breakout_left_hit[1]
+		);
+		if (intersection_point[0][0] !== -1)
+			return ;
+		
+		intersection_point[0] = getLineIntersection(
+			ball_point,
+			game.pong.ballMoves(ball_point),
+			breakout_right_hit[0],
+			breakout_right_hit[1]
+		);
+		if (intersection_point[0][0] !== -1)
+			return ;
+	
+		intersection_point[0] = getLineIntersection(
+			ball_point,
+			game.pong.ballMoves(ball_point),
+			breakout_bot_hit[0],
+			breakout_bot_hit[1]
+		);
+		if (intersection_point[0][0] !== -1)
+			return ;
+	
+		intersection_point[0] = getLineIntersection(
+			ball_point,
+			game.pong.ballMoves(ball_point),
+			breakout_top_hit[0],
+			breakout_top_hit[1]
+		);
+		if (intersection_point[0][0] !== -1)
+			return ;
+	
+		return ;
 	}
 
 	function collisionPaddle(
@@ -2760,7 +3064,6 @@ class Vector {
 		paddle_side_hit[1]
 		);
 
-	// ? Multiplying velocity vector by 3 for better precision in bot/top intersection
 	intersection_point[0] = getLineIntersection(
 		ball_point,
 		game.pong.ballMoves(ball_point),
@@ -2794,6 +3097,14 @@ class Vector {
 
 	function goToMainMenu() {
 	if (p.mouseButton === p.LEFT) inMainMenu();
+	}
+
+	function clickMapSecret() {
+		if (p.mouseButton === p.LEFT) {
+			game.map = consts.secret_map;
+			game.score_limit = 10;
+			startLocal();
+		}
 	}
 
 	function clickSound() {
@@ -2975,28 +3286,29 @@ class Vector {
 	}
 
 	function startLocal() {
-	if (p.mouseButton === p.LEFT) {
 		game.local = true;
 		buttons.hide();
 		inputs.hide();
 		game.timer = 4;
+		let game_ref = game;
 		for (let i = 0; i < 5; i++) {
-		setTimeout(() => {
-			game.timer--;
-			if (game.timer === 0) audio_files.playBip(audio_files.BIP_FINAL);
-			else if (game.timer >= 0) audio_files.playBip(audio_files.BIP);
-			if (game.timer === -1 && game.state === "countdown") {
-			game.setState("in-game");
+		game.timeout = setTimeout(() => {
+			game_ref.timer--;
+			if (game_ref.timer === 0) audio_files.playBip(audio_files.BIP_FINAL);
+			else if (game_ref.timer >= 0) audio_files.playBip(audio_files.BIP);
+			if (game_ref.timer === -1 && game_ref.state === "countdown") {
+			game_ref.setState("in-game");
 			}
 		}, i * 1000);
 		}
 		game.setState("countdown");
-		if (user_name !== null) {
 		game.players.push(new Player(1, "first", user_name, 0));
+		if (game.map.name != "secret")
+			game.players.push(new Player(2, "second", "P2", 0));
+		else {
+			addBreakouts();
 		}
-		game.players.push(new Player(2, "second", "P2", 0));
 		game.pong = new Pong();
 		game.room_id = "Local";
-	}
 	}
 	};

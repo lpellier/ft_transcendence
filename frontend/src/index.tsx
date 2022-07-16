@@ -1,11 +1,7 @@
 import { createRoot } from "react-dom/client";
-import AllRoutes from "./routes/routes";
-import "./styles/body.css";
 import io from "socket.io-client";
 import { BrowserRouter } from "react-router-dom";
-
-const tabletSize = 768;
-const phoneSize = 530;
+import App from "./App";
 
 const root = createRoot(document.getElementById("root")!);
 
@@ -15,9 +11,9 @@ export const socket = io(SERVER, {
 });
 
 root.render(
-  <BrowserRouter>
-    <AllRoutes />
-  </BrowserRouter>
+  // <React.StrictMode>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  // </React.StrictMode>
 );
-
-export { tabletSize, phoneSize };

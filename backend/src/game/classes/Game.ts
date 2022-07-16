@@ -4,7 +4,6 @@ import { Player } from "./Player";
 import { Pong } from "./Pong";
 import { GameMap } from "./GameMap";
 import * as utils from "./../utils";
-import { Socket } from "dgram";
 
 const top_bound : number = 10;
 const bot_bound : number = consts.MAP_HEIGHT - 10;
@@ -23,8 +22,10 @@ export class Game {
 	frames_since_point : number;
 	publicity : string;
 	update_interval : any;
+	countdown_timeout : any;
 
 	invert : boolean;
+	polling : boolean;
 
 	constructor(room_id: any) {
 		this.room_id = room_id;
@@ -38,6 +39,7 @@ export class Game {
 		this.frames_since_point = 0;
 		this.publicity = "public";
 		this.invert = false;
+		this.polling = false;
 	}
 
 	spaceAvailable(username : string) {
@@ -69,13 +71,14 @@ export class Game {
 		this.frames_since_point = 0;
 		this.publicity = "public";
 		this.invert = false;
+		this.polling = false;
 	}
 
 	addSpectator(id : any) {
 		this.spectators.push(id);
 	}
 
-	addPlayer(id: any, user : [string, string]) {
+	addPlayer(id: any, user : [string, string, boolean]) {
 		for (let player of this.players)
 			if (player.id === id)
 				return ;
@@ -182,11 +185,11 @@ export class Game {
 		}
 		
 		let player = (this.pong.pos[0] < consts.MAP_WIDTH / 2 ? this.players[0] : this.players[1]);
-		let ball_points : [[number, number], [number, number], [number, number], [number, number], [number, number], [number, number], [number, number], [number, number]] = 
-		[this.pong.leftUp(), this.pong.up(), this.pong.rightUp(), this.pong.right(), this.pong.rightDown(), this.pong.down(), this.pong.leftDown(), this.pong.left()];
+		let ball_points : [[number, number], [number, number], [number, number], [number, number]] = 
+		[this.pong.up(), this.pong.right(), this.pong.down(), this.pong.left()];
 
 		// ? collision with paddles
-		for (let i = 0; i < 8; i++) {
+		for (let i = 0; i < 4; i++) {
 			let angle : number = 0;
 			let intersection_point : [number, number, string][] = [[-1, -1, "side"]]; // array of one element so that the variable is referenced in functions
 			angle = this.collisionPaddle(player, intersection_point, ball_points[i]);

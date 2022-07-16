@@ -9,24 +9,17 @@ import axios from 'axios';
 import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline'
 import {ModalChooseName} from '../../../styles/tsxStyles/Settings/Name'
 import {ButtonModalStyle, IconStyle} from '../../../styles/tsxStyles/AppBar/PongMenu'
-import {User} from 'interfaces'
-import {toastThatError} from '../../../routes/routes'
+import {toastThatError} from '../../../App'
+import { useAuth } from "components/AuthProvider";
+import React from "react";
+import { Chip } from "@mui/material";
 
-function NameButton() {
-	return (
-		<Button
-			style={{ backgroundColor: 'rgb(150, 100, 200)' }}
-			sx={NameButtonStyle}
-			variant="contained"
-			color="secondary">
-			Choose New name :
-		</Button>
-	);
-}
 
-function NameInput(props: {username: string, setter: any, setOpen: any, setUser: React.Dispatch<React.SetStateAction<User | undefined>>}) {
+function NameInput(props: {username: string, setter: any, setOpen: any}) {
 	const [value, setValue] = useState<string>("")
 
+	let auth = useAuth();
+	
 	function closeModal() {props.setOpen(false)}
 
 	function handleSubmit(e: any) {PatchRequest()}
@@ -49,7 +42,7 @@ function NameInput(props: {username: string, setter: any, setOpen: any, setUser:
 			await axios.get(process.env.REACT_APP_BACK_URL + '/users/me',
 			{ withCredentials: true,})
 			.then(res => {
-				props.setUser(res.data)
+				auth.signin(res.data, () => null )
 				console.log("User : ", res.data);
 			})
 			.catch(err => {
@@ -67,7 +60,7 @@ function NameInput(props: {username: string, setter: any, setOpen: any, setUser:
 			<Stack spacing={4}>
 				<TextField
 					type="text"
-					label="Your name" 
+					label="New username" 
 					variant="standard"
 					onChange={(e) => setValue(e.target.value) } 
 					style={{width: '85%', justifyContent: 'center'}}
@@ -78,16 +71,19 @@ function NameInput(props: {username: string, setter: any, setOpen: any, setUser:
 						<Button
 							onClick={handleSubmit}
 							variant="contained"
-							sx={{backgroundColor: 'rgb(70, 195, 150, 0.65)', width: '20vw'}}
+							color="success"
+							// sx={{backgroundColor: 'rgb(70, 195, 150, 0.65)', width: '20vw'}}
 							>
-							Ok I'm done !
+							Ok I'm done!
 						</Button>
 						<Button
 							onClick={closeModal}
 							variant="contained"
-							sx={{backgroundColor: 'rgb(195, 60, 40, 0.65)', width: '20vw'}}
+							color="error"
+
+							// sx={{backgroundColor: 'rgb(195, 60, 40, 0.65)', width: '20vw'}}
 							>
-							Nope !
+							Nope!
 						</Button>
 					</Stack>
 				</form>
@@ -96,8 +92,8 @@ function NameInput(props: {username: string, setter: any, setOpen: any, setUser:
 	);
 }
 
-export default function ChooseName(props: {user: User, setUser: React.Dispatch<React.SetStateAction<User | undefined>>}) {
-    const [new_username, setNewUsername] = useState(props.user.username);
+export default function ChooseName() {
+    const [new_username, setNewUsername] = useState("");
 	const [open, setOpen] = useState(false);
 
 	const handleOpen = () => {
@@ -109,30 +105,29 @@ export default function ChooseName(props: {user: User, setUser: React.Dispatch<R
 	};
 
 	return (
-		<div>
+		<React.Fragment>
       		<Button
             	onClick={handleOpen}
             	variant="contained"
             	color="secondary"
-            	style={ButtonModalStyle}>
+            	// style={ButtonModalStyle}
+				>
           		<DriveFileRenameOutlineIcon sx={IconStyle}/>
           		Choose Name
-      		</Button>
+			</Button>
 			<Modal
 			  open={open}
 			  onClose={handleClose}
 			>
 				<Box sx={ModalChooseName}>
 					<Stack spacing={3}>
-            	    	<NameButton />
 						<NameInput
 							username={new_username} 
 							setter={setNewUsername} 
-							setOpen={setOpen}
-							setUser={props.setUser}/>
+							setOpen={setOpen}/>
 					</Stack>
           		</Box>
         	</Modal>
-        </div>
+		</React.Fragment>
     );
 }

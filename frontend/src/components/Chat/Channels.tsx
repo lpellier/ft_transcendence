@@ -12,7 +12,7 @@ import KeyIcon from '@mui/icons-material/Key';
 import KeyOffIcon from '@mui/icons-material/KeyOff';
 import ToggleButton from '@mui/material/ToggleButton';
 import Dialog from '@mui/material/Dialog';
-import { toastThatError } from '../../routes/routes';
+import { toastThatError } from '../../App';
 import {useState, useEffect} from 'react'
 import {Room, User} from 'interfaces'
 import {socket} from 'index'
@@ -36,6 +36,7 @@ export interface UserRoomDto {
 const ButtonStyle = {
 	border: '1px solid black',
 	backgroundColor: 'rgb(235, 116, 30, 0.75)',
+	overflow: 'hidden',
 }
 
 function PasswordInput(props: {openPassword: boolean, setOpenPassword: React.Dispatch<React.SetStateAction<boolean>>, 
@@ -128,7 +129,7 @@ function RoomList(props: {rooms: Room[], currentRoom: Room, setCurrentRoom: Reac
 	)
 }
 
-function Channels(props : {user: User, users: User[], currentRoom: Room, setCurrentRoom: React.Dispatch<React.SetStateAction<Room>>, setCanWrite: React.Dispatch<React.SetStateAction<boolean>>, roomAdmins:User[], setOtherUser: React.Dispatch<React.SetStateAction<User | undefined>>,statusMap: Map<number, string>}) {
+function Channels(props : {user: User, users: User[], currentRoom: Room, setCurrentRoom: React.Dispatch<React.SetStateAction<Room>>, setCanWrite: React.Dispatch<React.SetStateAction<boolean>>, roomAdmins:User[], statusMap: Map<number, string>}) {
 
 	let [addRoomClicked, setAddRoomClicked] = useState<number>(0);
 	let [rooms, setRooms] = useState<Room[]>([]);
@@ -299,7 +300,7 @@ function Channels(props : {user: User, users: User[], currentRoom: Room, setCurr
 				</div>
 			</Stack>
 			:
-			<DirectMessaging user={props.user} users={props.users} rooms={rooms} currentRoom={props.currentRoom} setCurrentRoom={props.setCurrentRoom} setOtherUser={props.setOtherUser} statusMap={props.statusMap}/>
+			<DirectMessaging user={props.user} users={props.users} rooms={rooms} currentRoom={props.currentRoom} setCurrentRoom={props.setCurrentRoom} statusMap={props.statusMap}/>
 			}
 		</Stack>
 		</div>

@@ -15,7 +15,8 @@ interface User {
 	victories: number;
 	losses: number;
 	level: number;
-	matchHistory: Match[]
+	matchHistory: Match[];
+	achievements: number[];
 }
 
 const init_user = {} as User
@@ -38,6 +39,7 @@ interface Message {
 
 interface Stats {
 	id: number;
+	username: string;
 	victories: number;
 	losses: number;
 	level: number;

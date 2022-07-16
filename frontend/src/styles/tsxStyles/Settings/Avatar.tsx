@@ -31,7 +31,7 @@ const CustomAvatarStyle = {
     transform: 'translate(-50%, -50%)',
 
     width: '30vw',
-    height: '30vh',
+	paddingBottom: '2%',
 
     bgcolor: 'rgb(160, 130, 170, 0.95)',
     border: '2px solid #000',

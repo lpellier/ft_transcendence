@@ -5,7 +5,7 @@ import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import { IconButton, TextField, Tooltip } from "@mui/material";
 import { User } from "interfaces";
 import { socket } from "index";
-import { toastThatError, toastIt } from "../../routes/routes";
+import { toastThatError, toastIt } from "../../App";
 import "../../styles/Chat/Channels.css";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
@@ -68,17 +68,13 @@ function UserList(props: {
     <List className="user-list">
       {props.users.map((item) => (
         <div key={item.id}>
-          {props.friends.find((friend) => friend.id === item.id) ? (
+          {props.friends.find((friend) => friend.id === item.id) || props.currentUser.id === item.id ? (
             <div />
           ) : (
             <div>
-              {props.currentUser.id !== item.id ? (
-                <ListItem>
-                  <ListItemText primary={item.username} />
-                </ListItem>
-              ) : (
-                <div />
-              )}
+              <ListItem>
+                <ListItemText primary={item.username} />
+              </ListItem>
             </div>
           )}
         </div>
@@ -96,7 +92,6 @@ export default function FriendBar(props: {
   let [open, setOpen] = useState<boolean>(false);
   let [addFriendClicked, setAddFriendClicked] = useState<boolean>(false);
   let [friends, setFriends] = useState<User[]>([]);
-  // let [statusMap, setStatusMap] = useState<Map<number, string> >(new Map<number, string>());
 
   const getFriends = (data: User[]) => {
     setFriends(data);
@@ -114,38 +109,28 @@ export default function FriendBar(props: {
     socket.on("new connection", () =>
       socket.emit("get friends", props.user.id, getFriends)
     );
-    return () => {
-      socket.off("new connection");
-    };
-  }, [props.user.id]);
-
-  useEffect(() => {
     socket.on("new disconnection", () =>
       socket.emit("get friends", props.user.id, getFriends)
-    );
+  );
     return () => {
+      socket.off("new connection");
       socket.off("new disconnection");
     };
   }, [props.user.id]);
 
   useEffect(() => {
-    const handler = (userId: number) => {
+    socket.on("new gamer", (userId: number) => {
       props.setStatusMap(props.statusMap.set(userId, "in game"));
-    };
-    socket.on("new gamer", handler);
-    return () => {
-      socket.off("new gamer", handler);
-    };
-  }, [props.statusMap]);
+    });
 
-  useEffect(() => {
-    const handler = (userId: number) => {
+    socket.on("quit-game", (userId: number) => {
       props.setStatusMap(props.statusMap.set(userId, "online"));
       socket.emit("remove gamer", userId);
-    };
-    socket.on("quit-game", handler);
+    });
+    
     return () => {
-      socket.off("quit-game", handler);
+      socket.off("new gamer");
+      socket.off("quit-game");
     };
   }, [props.statusMap]);
 
@@ -205,7 +190,8 @@ export default function FriendBar(props: {
         PaperProps={{
           sx: {
             width: "15vw",
-            paddingLeft: "2%",
+            paddingLeft: "1%",
+            paddingRight: "2%",
             paddingTop: "1.5%",
             backgroundColor: "rgb(172, 180, 235)",
           },

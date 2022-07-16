@@ -7,9 +7,12 @@ import "./../styles/Game/canvas.css"
 import "./../styles/Game/buttons.css"
 import "./../styles/Game/inputs.css"
 import "socket.io-client"
-import { User } from "interfaces";
-import { Sketch } from "../components/Game/game"
+import { Sketch } from "../components/Game/Sketch"
 import p5 from "p5";
+import { useAuth } from "components/AuthProvider";
+
+export let user_name : string = "null";
+export let user_id : number = 0;
 
 class AudioFiles {
 	PADDLE_HIT_1: any;
@@ -201,8 +204,6 @@ class AudioFiles {
 		this.music_playing !== "menu"
 		)
 		this.switchMusic("menu");
-		// else if ((state === "game-over" || state === "opponent-left-menu") && this.music_playing !== "none")
-		// 	this.switchMusic("none");
 	}
 }
 
@@ -213,7 +214,9 @@ function GameComponent() {
 	useEffect(() => {
 		audio_files = new AudioFiles();
 		p = new p5(Sketch);
-
+		while (p) // ? the only purpose of this while loop is to remove the warning about p being an unused variable
+			break;
+		
 		return () => {
 			audio_files.deleteAudio();
 		  };
@@ -238,8 +241,8 @@ function GameComponent() {
 			<div id="button-map-original"/>
 			<div id="button-map-city"/>
 			<div id="button-map-casino"/>
+			<div id="button-map-secret"/>
 			<div id="button-spectate"/>
-			<div id="icon-eye"/>
 			<div id="buttons-plus-minus">	
 				<div id="button-plus"/>
 				<div id="button-minus"/>
@@ -251,30 +254,19 @@ function GameComponent() {
 	);
 }
 
-export default function Game( props: {user: User | undefined, navigate: boolean, setNavigate: React.Dispatch<React.SetStateAction<boolean>> }) {	
+export default function Game() {	
+	let auth = useAuth();
+	
 	useEffect(() => {
-		let user = document.createElement("div");
-		const propsUser: any = props.user;
-		user.setAttribute("user_name", propsUser.username);
-		user.setAttribute("user_id", propsUser.id.toString());
-		user.id = "user";
-		document.head.append(user);
-		}, [props.user?.id, props.user])
-
-		useEffect(() => {
-			props.setNavigate(false);
-		}, [props.setNavigate])
-
-		useEffect(() => {
-			if (props.navigate) {
-				props.setNavigate(false);
-			}
-		}, [props.navigate, props.setNavigate])
+		const propsUser: any = auth.user;
+		user_name = auth.user.username;
+		user_id = propsUser.id.toString();
+		}, [auth.user?.id, auth.user])
 
 	return (
 		<Stack id="test_parent" spacing={1}>
-			{props.user && props.user.username === null ? 
-				<FirstLoginPrompt user={props.user}/>
+			{auth.user.username === null ? 
+				<FirstLoginPrompt user={auth.user}/>
 				:
 				<div />
 			}

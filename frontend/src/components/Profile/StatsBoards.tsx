@@ -1,209 +1,226 @@
-import {useState, useEffect} from 'react'
-import Stack from '@mui/material/Stack';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import {User} from 'interfaces';
-import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
-import TimelineIcon from '@mui/icons-material/Timeline';
-import MilitaryTechIcon from '@mui/icons-material/MilitaryTech';
-import UpdateIcon from '@mui/icons-material/Update';
-import {StatTitle, StatBox, MatchHistoryBox} from "../../styles/tsxStyles/Home"
-import {Stats} from 'interfaces'
-import axios from 'axios'
-import { Table, TableBody, TableRow, TableCell } from '@mui/material';
+import { useState, useEffect } from "react";
+import {
+  Stack,
+  Box,
+  Grid,
+  Typography,
+  Table,
+  TableBody,
+  TableRow,
+  TableCell,
+  TableHead,
+  TableContainer,
+} from "@mui/material";
+import { User } from "interfaces";
+import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
+import TimelineIcon from "@mui/icons-material/Timeline";
+import MilitaryTechIcon from "@mui/icons-material/MilitaryTech";
+import UpdateIcon from "@mui/icons-material/Update";
+import {
+  StatTitle,
+  StatBox,
+  MatchHistoryBox,
+} from "../../styles/tsxStyles/Profile";
+import { Stats } from "interfaces";
+import {
+  ChangeAvatarTrophy,
+  QuitTrophy,
+  OneWinTrophy,
+  ThreeWinsTrophy,
+  achievements,
+} from "./Trophies";
+import axios from "axios";
 
-const ButtonLeadStyle = {
-	backgroundColor: "rgb(170, 50, 190)",
-	width: '20%',
+function BoardComponent(props: { icon: any; title: string }) {
+  return (
+    <Stack direction="row" sx={StatTitle} spacing={2}>
+      {props.icon}
+      <Typography>{props.title}</Typography>
+    </Stack>
+  );
 }
 
-const ButtonStatStyle = {
-	backgroundColor: "rgb(170, 50, 190)",
-	width: '29%',
+function StatsBox(props: { user: User }) {
+  const [tot_games, setTotgame] = useState<number>(
+    props.user.victories + props.user.losses
+  );
+
+  useEffect(() => {
+    setTotgame(props.user.victories + props.user.losses);
+  }, [props.user]);
+
+  return (
+    <Stack spacing={1}>
+      <BoardComponent icon={<TimelineIcon />} title="Stats" />
+      <TableContainer sx={StatBox}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell align="center">Wins</TableCell>
+              <TableCell align="center">Losses</TableCell>
+              <TableCell align="center">Total games</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            <TableRow>
+              <TableCell align="center">{props.user.victories}</TableCell>
+              <TableCell align="center">{props.user.losses}</TableCell>
+              <TableCell align="center">{tot_games}</TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Stack>
+  );
 }
 
-function BoardComponent(props: {icon: any, title: string}) {
-	return(
-		<Stack direction="row" sx={StatTitle} spacing={2}>
-				{props.icon}
-				<Typography>
-					{props.title}
-				</Typography>
-		</Stack>
-	);
+function TrophyBox(props: { user: User }) {
+  return (
+    <Stack spacing={1}>
+      <BoardComponent icon={<EmojiEventsIcon />} title="Trophy" />
+      <Stack spacing={1} sx={StatBox}>
+        {props.user.achievements.find(
+          (val) => val === achievements.ONESTAR
+        ) !== undefined ? (
+          <OneWinTrophy />
+        ) : (
+          null
+        )}
+        {props.user.achievements.find(
+          (val) => val === achievements.THREESTARS
+        ) !== undefined ? (
+          <ThreeWinsTrophy />
+        ) : (
+          null
+        )}
+        {props.user.achievements.find((val) => val === achievements.QUIT) !==
+        undefined ? (
+          <QuitTrophy />
+        ) : (
+          null
+        )}
+        {props.user.achievements.find(
+          (val) => val === achievements.CHANGEAVATAR
+        ) !== undefined ? (
+          <ChangeAvatarTrophy />
+        ) : (
+          null
+        )}
+      </Stack>
+    </Stack>
+  );
 }
 
-function StatsBox(props: {user: User}){
-	const [tot_games, setTotgame] = useState<number>(props.user.victories + props.user.losses)
+function LeaderboardBox() {
+  const [leaders, setLeaders] = useState<Stats[]>([]);
 
-	useEffect(() => {
-		setTotgame(props.user.victories + props.user.losses)
-	}, [props.user])
+  useEffect(() => {
+    axios
+      .get(process.env.REACT_APP_BACK_URL + "/stats/lead", {
+        withCredentials: true,
+      })
+      .then((res) => {
+        console.log("Get leader success");
+        setLeaders(res.data);
+      })
+      .catch((err) => {
+        console.log("Get leader failed : ", err);
+      });
+  }, []);
 
-	return (
-		<Stack spacing={1}>
-			<BoardComponent
-				icon={<TimelineIcon />} 
-				title="Stats" />
-				<Box sx={StatBox}>
-					<Stack>
-						<Stack direction="row" spacing={2}>
-							<Button variant="contained" style={ButtonStatStyle}>Victories</Button>
-							<Button variant="contained" style={ButtonStatStyle}>Games lost</Button>
-							<Button variant="contained" style={ButtonStatStyle}>Total games</Button>
-						</Stack>
-						<Stack direction="row" spacing={2}>
-							<Button style={{width: '29%'}}> {props.user.victories} </Button>
-							<Button style={{width: '29%'}}> {props.user.losses} </Button>
-							<Button style={{width: '29%'}}> {tot_games} </Button>
-						</Stack>
-					</Stack>
-				</Box>
-		</Stack>
-	);
-}
-	
-function TrophyBox(){
+  function LeaderList() {
+    return (
+      <TableContainer sx={StatBox}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell align="left">Best Player</TableCell>
+              <TableCell align="center">Wins</TableCell>
+              <TableCell align="center">Losses</TableCell>
+              <TableCell align="center">Level</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {leaders.map((item) => {
+              return (
+                <TableRow key={item.id}>
+                  <TableCell align="left">{item.username}</TableCell>
+                  <TableCell align="center">{item.victories}</TableCell>
+                  <TableCell align="center">{item.losses}</TableCell>
+                  <TableCell align="center">{Math.trunc(item.level)}</TableCell>
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    );
+  }
 
-		return(
-			<Stack spacing={1}>
-				<BoardComponent 
-					icon={<EmojiEventsIcon />}
-					title="Trophy" />
-				<Box sx={StatBox}>
-				</Box>
-			</Stack>
-		);
-}
-
-function LeaderboardBox(props: {users: User[]}){
-	const [leaders, setLeaders] = useState<Stats[]>([])
-	
-	useEffect(() => {
-		
-		axios.get(
-			process.env.REACT_APP_BACK_URL + "/stats/lead",
-			{
-				withCredentials: true
-			}
-		)
-		.then(res => {
-			console.log("Get leader success")
-			setLeaders(res.data)
-		})
-		.catch(err => {
-			console.log("Get leader failed : ", err)
-		})
-	}, [])
-
-
-	function FindUserName(userId: number) {
-		let username;
-		
-		for (let i in props.users)
-		{
-			if (props.users[Number(i)].id === userId){
-				username = props.users[Number(i)].username;
-			}
-		}
-
-		return (
-			<div> {username} </div>
-		)
-	}
-	
-	function LeaderList(props: {users: User[]}) {
-
-		return (
-			<Box sx={{ flexGrow: 1 }} >
-				<Stack direction="row" spacing={2}>
-						<Button variant="contained" style={ButtonLeadStyle}> Best Player </Button>
-						<Button variant="contained" style={ButtonLeadStyle}> Wins </Button>
-						<Button variant="contained" style={ButtonLeadStyle}> Losses </Button>
-						<Button variant="contained" style={ButtonLeadStyle}> Level </Button>
-				</Stack>
-					{leaders.map(item => (
-						<div  key={item.id}>
-							<Stack direction="row" spacing={2}>
-									<Button style={{width: '20%'}}> {FindUserName(item.userId)} </Button>
-									<Button style={{width: '20%'}}> {item.victories} </Button>
-									<Button style={{width: '20%'}}> {item.losses} </Button>
-									<Button style={{width: '20%'}}> {Math.trunc(item.level)} </Button>
-							</Stack>
-					</div>
-					))}
-			</Box>
-		)
-	}
-
-	return(
-		<div>
-			{leaders?
-				<Stack spacing={1}>
-					<BoardComponent 
-						icon={<MilitaryTechIcon />}
-						title="Leaderboard" />
-						<Box sx={StatBox}>
-							<LeaderList users={props.users}/>
-						</Box>
-				</Stack>
-					:
-				<div/>
-			}
-		</div>
-	);
+  return (
+    <div>
+      {leaders ? (
+        <Stack spacing={1}>
+          <BoardComponent icon={<MilitaryTechIcon />} title="Leaderboard" />
+          <LeaderList />
+        </Stack>
+      ) : (
+        <div />
+      )}
+    </div>
+  );
 }
 
-function MatchhistoryBox(props: {user: User}){
-	
-	const successColor: string = 'rgb(70, 195, 150)';
-	const failColor: string = 'rgb(195, 60, 40)';
+function MatchhistoryBox(props: { user: User }) {
+  const successColor: string = "rgb(70, 195, 150)";
+  const failColor: string = "rgb(195, 60, 40)";
 
-	return(
-		<Stack spacing={1}>
-			<BoardComponent 
-				icon={<UpdateIcon />}
-				title="Match history" />
-				<Box sx={MatchHistoryBox}>
-					<Table>
-						<TableBody>
-							{props.user.matchHistory.map(match => (
-								<TableRow key={match.id} style={{backgroundColor: match.winnerId === props.user.id? successColor: failColor}}>
-									<TableCell>
-										<Typography>{match.players[0].username}</Typography>
-									</TableCell>
-									<TableCell>
-										<Typography>{match.score[0]}</Typography>
-									</TableCell>
-									<TableCell>
-										<Typography>{match.score[1]}</Typography>
-									</TableCell>
-									<TableCell>
-										<Typography>{match.players[1].username}</Typography>
-									</TableCell>
-								</TableRow>
-							))}
-						</TableBody>
-					</Table>
-				</Box>
-		</Stack>
-	);
+  return (
+    <Stack spacing={1}>
+      <BoardComponent icon={<UpdateIcon />} title="Match history" />
+      <Box sx={MatchHistoryBox}>
+        <Table>
+          <TableBody>
+            {props.user.matchHistory.map((match) => (
+              <TableRow
+                key={match.id}
+                style={{
+                  backgroundColor:
+                    match.winnerId === props.user.id ? successColor : failColor,
+                }}
+              >
+                <TableCell align="left">{match.players[0].username}</TableCell>
+                <TableCell align="left">{match.score[0]}</TableCell>
+                <TableCell align="right">{match.score[1]}</TableCell>
+                <TableCell align="right">{match.players[1].username}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </Box>
+    </Stack>
+  );
 }
 
-export default function StatsBoards(props: {user: User, users: User[]}) {
-
-	console.log("StatsBoards props : ", props.user);
-	return (
-		<Stack direction="row" spacing={1}>
-				<Stack spacing={1}>
-					<StatsBox user={props.user}/>
-					<TrophyBox />
-				</Stack>
-				<Stack spacing={1}>
-					<LeaderboardBox users={props.users}/>
-					<MatchhistoryBox user={props.user}/>
-				</Stack>
-			</Stack>
-	);
+export default function StatsBoards(props: { user: User }) {
+  console.log("Rendered statsboards", props.user);
+  return (
+    <Box>
+      <Grid container rowSpacing={3} columnSpacing={{ md: 3 }}>
+        <Grid item xs={6}>
+          <StatsBox user={props.user} />
+        </Grid>
+        <Grid item xs={6}>
+          <TrophyBox user={props.user} />
+        </Grid>
+        <Grid item xs={6}>
+          <LeaderboardBox />
+        </Grid>
+        <Grid item xs={6}>
+          <MatchhistoryBox user={props.user} />
+        </Grid>
+      </Grid>
+    </Box>
+  );
 }
+

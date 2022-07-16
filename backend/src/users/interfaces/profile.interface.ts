@@ -3,6 +3,7 @@ import { Match } from '@prisma/client';
 export interface Profile {
   id: number;
   username: string;
+  tfa: boolean;
   victories: number;
   losses: number;
   level: number;

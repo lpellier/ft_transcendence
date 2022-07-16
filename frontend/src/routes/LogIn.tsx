@@ -1,73 +1,38 @@
-import {useEffect} from 'react'
-import axios from 'axios'
-import Button from '@mui/material/Button';
-import Stack from '@mui/material/Stack';
-import LoginIcon from '@mui/icons-material/Login';
-import WebhookIcon from '@mui/icons-material/Webhook';
-import {User} from 'interfaces';
-import {Title, ButtonStyle, LinkStyle, IconStyle} from "../styles/tsxStyles/LogIn"
+import Button from "@mui/material/Button";
+import Stack from "@mui/material/Stack";
+import LoginIcon from "@mui/icons-material/Login";
+import { Title, ButtonStyle } from "../styles/tsxStyles/LogIn";
+import { Box, Typography } from "@mui/material";
 
-const AuthAPI = process.env.REACT_APP_BACK_URL + "/auth"
-const MockAuthAPI = process.env.REACT_APP_BACK_URL + "/auth/mock"
+const AuthAPI = process.env.REACT_APP_BACK_URL + "/auth";
+const MockAuthAPI = process.env.REACT_APP_BACK_URL + "/auth/mock";
 
-function LogInButton()
-{
-
-	return (
-        	<Button
-				sx={ButtonStyle}
-        	    variant="contained"
-        	    startIcon={<LoginIcon />}
-        	    size="large"
-        	    color="primary"
-			>
-        	  Log in
-        	</Button>
-	);
+function LoginButton(props: { href: string; text: string }) {
+  return (
+    <Button
+      // sx={ButtonStyle}
+      variant="contained"
+      startIcon={<LoginIcon />}
+      size="large"
+      color="secondary"
+      href={props.href}
+    >
+      {props.text}
+    </Button>
+  );
 }
 
-function MockLogInButton()
- {
-	return (
-        <Button 
-			sx={ButtonStyle}
-            variant="contained"
-            startIcon={<LoginIcon />}
-            size="large"
-            color="primary"
-			>
-          Mock Login
-        </Button>
-      );
-}
-
-export default function LogIn(props: {user: User | undefined, auth: boolean}) {
-	
-	useEffect(() => {
-
-		axios.get(process.env.REACT_APP_BACK_URL + '/users/me', 
-		{ withCredentials: true })
-		.then(res => { console.log("Get user success")})
-		.catch(err => { console.log("Get user failed : ", err)})
-	}, [])
-
-    return (
-        <Stack spacing={10} sx={Title}>
-			<div>
-				GnaGna
-				<WebhookIcon sx={IconStyle}/>
-				Pong
-			</div>
-			<nav>
-				<a href={AuthAPI} style={LinkStyle}>
-					<LogInButton />
-				</a>
-			</nav>
-			<nav>
-				<a href={MockAuthAPI} style={LinkStyle}>
-					<MockLogInButton />
-				</a>
-			</nav>
-        </Stack>
-	);
+export default function LogIn() {
+  return (
+    <Box display="flex" alignItems="center" flexDirection="column">
+      <Typography variant="h1" sx={Title} align="center" gutterBottom>
+        The Pongers Guide to the Galaxy
+      </Typography>
+      <Stack spacing={3} sx={{ marginTop: "3vw", maxWidth: "30vw" }}>
+        <LoginButton href={AuthAPI} text="Login" />
+        <LoginButton href={MockAuthAPI + "/1"} text="Mock Login 1" />
+        <LoginButton href={MockAuthAPI + "/2"} text="Mock Login 2" />
+      </Stack>
+    </Box>
+  );
 }
