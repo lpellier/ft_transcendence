@@ -25,6 +25,7 @@ const StatBox = {
   backgroundColor: "rgb(211, 172, 223)",
   border: "3px solid black",
   height: "30vh",
+  overflow: 'auto',
 };
 
 const MatchHistoryBox = {
