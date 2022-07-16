@@ -9,10 +9,6 @@ const PlayerBarStyle = {
     border: '3px solid black',
     backgroundColor: 'rgb(122, 40, 203)',
 }
-					
-const SkillBarStyle = {
-    paddingTop: '1%'
-}
 
 const StatTitle = {
     backgroundColor: 'rgb(122, 40, 203)',
@@ -48,16 +44,11 @@ const MatchHistoryBox = {
 	paddingBottom: '4%',
 }
 
-const SkillBarContourStyle = {
-	backgroundColor: 'rgb(180, 150, 250)',
-	borderRadius: '20px',
-}
-
 const TitleStyle = {
 	textAlign: 'end',
 	marginRight: '10px',
 }
 
-export {PlayerBarStyle, SkillBarStyle,
-        StatTitle, StatBox, MatchHistoryBox, SkillBarContourStyle,
-        TitleStyle}
+export {PlayerBarStyle,
+        StatTitle, StatBox, MatchHistoryBox,
+        TitleStyle};

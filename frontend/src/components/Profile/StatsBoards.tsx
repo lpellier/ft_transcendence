@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
-import Stack from "@mui/material/Stack";
-import Box from "@mui/material/Box";
-import Grid from '@mui/material/Grid';
-import Typography from "@mui/material/Typography";
+import { Stack, Box, Grid, Typography,
+			Table, TableBody, TableRow, TableCell, TableHead
+} from "@mui/material";
 import { User } from "interfaces";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import TimelineIcon from "@mui/icons-material/Timeline";
@@ -11,7 +10,7 @@ import UpdateIcon from "@mui/icons-material/Update";
 import {
   StatTitle,
   StatBox,
-  MatchHistoryBox,
+  MatchHistoryBox
 } from "../../styles/tsxStyles/Profile";
 import { Stats } from "interfaces";
 import {
@@ -19,46 +18,18 @@ import {
   QuitTrophy,
   OneWinTrophy,
   ThreeWinsTrophy,
+  achievements
 } from "./Trophies";
 import axios from "axios";
-import { Table, TableBody, TableRow, TableCell } from "@mui/material";
 
-enum achievements {
-  ONESTAR,
-  THREESTARS,
-  QUIT,
-  CHANGEAVATAR,
-}
-
-const ButtonStatStyle = {
-  backgroundColor: "rgb(170, 50, 190)",
-  width: "29%",
-};
-
-const TitleBoxStyle = {
-	backgroundColor: "rgb(170, 50, 190)",
-	borderRadius: "4px",
-	border: "1px solid black",
-	padding: "5%",
-	boxShadow: '0px 2px 5px 1px gray',
-	width: '80%',
-	height: '100%',
-	textTransform: 'uppercase',
-	overflow: 'hidden',
-	
-	display: 'flex',
-	justifyContent: 'center',
-	textAlign: 'center',
-	verticalAlign: 'middle',
-}
-
-const TextBoxStyle = {
-	color: "rgb(30, 70, 200)",
-	padding: "1%",
-	width: '80%',
-	overflow: 'hidden',
-
-	textAlign: 'center',
+function Typocell(props: {label: string | number, align: "left" | "center" | "right" | "justify" | "inherit" | undefined}) {
+	return (
+		<TableCell align={props.align}>
+			<Typography>
+				{props.label}
+			</Typography>
+		</TableCell>
+  );
 }
 
 function SpecialGridings(props: {sx: any, xs: number, label: string | number}) {
@@ -91,18 +62,22 @@ function StatsBox(props: { user: User }) {
     <Stack spacing={1}>
       <BoardComponent icon={<TimelineIcon />} title="Stats" />
       <Box sx={StatBox}>
-		<Stack spacing={1}>
-	  		<Grid container rowSpacing={2}>
-				<SpecialGridings sx={TitleBoxStyle} xs={4} label={"victories"}/>
-				<SpecialGridings sx={TitleBoxStyle} xs={4} label={"Games lost"}/>
-				<SpecialGridings sx={TitleBoxStyle} xs={4} label={"total games"}/>
-			</Grid>
-	  		<Grid container rowSpacing={2}>
-				<SpecialGridings sx={TextBoxStyle} xs={4} label={props.user.victories}/>
-				<SpecialGridings sx={TextBoxStyle} xs={4} label={props.user.losses}/>
-				<SpecialGridings sx={TextBoxStyle} xs={4} label={tot_games}/>
-        	</Grid>
-			</Stack>
+		<Table>
+			<TableHead>
+				<TableRow>
+					<Typocell align="center" label={"victories"}/>
+					<Typocell align="center" label={"Games lost"}/>
+					<Typocell align="center" label={"total games"}/>
+				</TableRow>
+			</TableHead>
+			<TableBody>
+			<TableRow>
+				<Typocell align="center" label={props.user.victories}/>
+				<Typocell align="center" label={props.user.losses}/>
+				<Typocell align="center" label={tot_games}/>
+			</TableRow>
+			</TableBody>
+		</Table>
       </Box>
     </Stack>
   );
@@ -164,26 +139,30 @@ function LeaderboardBox() {
       });
   }, []);
 
+
   function LeaderList() {
     return (
-		<Stack spacing={2}>
-			<Grid container rowSpacing={3}>
-				<SpecialGridings sx={TitleBoxStyle} xs={3} label={"Best Player"}/>
-				<SpecialGridings sx={TitleBoxStyle} xs={3} label={"wins"}/>
-				<SpecialGridings sx={TitleBoxStyle} xs={3} label={"losses"}/>
-				<SpecialGridings sx={TitleBoxStyle} xs={3} label={"level"}/>
-			</Grid>
-        {leaders.map((item) => (
-			<div key={item.id}>
-				<Grid container rowSpacing={3}>
-					<SpecialGridings sx={TextBoxStyle} xs={3} label={item.username}/>
-					<SpecialGridings sx={TextBoxStyle} xs={3} label={item.victories}/>
-					<SpecialGridings sx={TextBoxStyle} xs={3} label={item.losses}/>
-					<SpecialGridings sx={TextBoxStyle} xs={3} label={Math.trunc(item.level)}/>
-				</Grid>
-			</div>
-    	))}
-		</Stack>
+		<Table>
+				<TableHead>
+					<TableRow>
+						<Typocell align="left" label={"Best Player"}/>
+						<Typocell align="center" label={"wins"}/>
+						<Typocell align="center" label={"losses"}/>
+						<Typocell align="center" label={"level"}/>
+					</TableRow>
+				</TableHead>
+				<TableBody>
+				{leaders.map((item) => {
+					return (
+						<TableRow>
+							<Typocell align="left" label={item.username}/>
+							<Typocell align="center" label={item.victories}/>
+							<Typocell align="center" label={item.losses}/>
+							<Typocell align="center" label={Math.trunc(item.level)}/>
+						</TableRow>)
+				})}
+		</TableBody>
+		</Table>
     );
   }
 
@@ -221,18 +200,10 @@ function MatchhistoryBox(props: { user: User }) {
                     match.winnerId === props.user.id ? successColor : failColor,
                 }}
               >
-                <TableCell>
-                  <Typography>{match.players[0].username}</Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography>{match.score[0]}</Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography>{match.score[1]}</Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography>{match.players[1].username}</Typography>
-                </TableCell>
+				<Typocell align="left" label={match.players[0].username}/>
+				<Typocell align="left" label={match.score[0]}/>
+				<Typocell align="right" label={match.score[1]}/>
+				<Typocell align="right" label={match.players[1].username}/>
               </TableRow>
             ))}
           </TableBody>
