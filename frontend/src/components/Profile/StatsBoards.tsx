@@ -145,7 +145,7 @@ function LeaderboardBox() {
           <TableBody>
             {leaders.map((item) => {
               return (
-                <TableRow>
+                <TableRow key={item.id}>
                   <TableCell align="left">{item.username}</TableCell>
                   <TableCell align="center">{item.victories}</TableCell>
                   <TableCell align="center">{item.losses}</TableCell>
