@@ -15,7 +15,7 @@ const ImgStyle = {
   width: "4vw",
   minHeight: "4vw",
 
-  padding: 1,
+  padding: '1%'
 };
 
 const ATrophyStyle = {
