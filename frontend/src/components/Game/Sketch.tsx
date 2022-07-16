@@ -1449,51 +1449,10 @@ class BreakOut {
 		];
 		for (let i = 0 ; i < 4 ; i++) {
 			let intersection_point: [number, number, string][] = [[-1, -1, "side"]]; // array of one element so that the variable is referenced in functions
-			let angle = collisionBreakOut(this, intersection_point, ball_points[i]);
+			collisionBreakOut(this, intersection_point, ball_points[i]);
 			if (intersection_point[0][0] !== -1) {
 				audio_files.playRandomPaddleSound();
-				let max_angle_percentage: number =
-					Math.abs(angle) / ((Math.PI * 3) / 12); // ? number that lets me add speed to acute angled shots
-				// ? for bot / top collisions
-				if (
-					intersection_point[0][2] === "top" ||
-					intersection_point[0][2] === "bot"
-				) {
-					if (intersection_point[0][2] === "top")
-					game.pong.velocity[1] =
-						(1 +
-						consts.PONG_ACCELERATION_ACUTE_ANGLE * max_angle_percentage) *
-						game.pong.speed *
-						-Math.cos(angle);
-					else if (intersection_point[0][2] === "bot")
-					game.pong.velocity[1] =
-						(1 +
-						consts.PONG_ACCELERATION_ACUTE_ANGLE * max_angle_percentage) *
-						game.pong.speed *
-						Math.cos(angle);
-					game.pong.velocity[0] =
-					(1 + consts.PONG_ACCELERATION_ACUTE_ANGLE * max_angle_percentage) *
-					game.pong.speed *
-					-Math.sin(angle);
-				}
-				// ? invert velocity indexes for left / right collisions
-				else if (intersection_point[0][2] === "right" || intersection_point[0][2] === "left") {
-					if (intersection_point[0][2] === "right") {
-						game.pong.velocity[0] =
-							(1 +
-							consts.PONG_ACCELERATION_ACUTE_ANGLE * max_angle_percentage) *
-							game.pong.speed *
-							Math.cos(angle);
-					}
-					else if (intersection_point[0][2] === "left") {
-						game.pong.velocity[0] =
-							(1 +
-							consts.PONG_ACCELERATION_ACUTE_ANGLE * max_angle_percentage) *
-							game.pong.speed *
-							-Math.cos(angle);
-					game.pong.velocity[1] = (1 + consts.PONG_ACCELERATION_ACUTE_ANGLE * max_angle_percentage) * game.pong.speed * -Math.sin(angle);
-					}
-				}
+				game.pong.velocity[0] *= -1;
 				game.breakouts.splice(game.breakouts.indexOf(this), 1);
 				if (game.breakouts.length === 0)
 					game.setState("game-over");
@@ -2506,8 +2465,10 @@ class Vector {
 	}
 
 	function outputScore(map_width: number, map_height: number) {
-	if (game.map.name === "secret")
+	if (game.map.name === "secret" && (game.score_limit - game.score[1]) > 1)
 		outputAnnouncement((game.score_limit - game.score[1]).toString() + " lives left", consts.std_font_size, consts.WIDTH / 2, consts.HEIGHT / 9, "white");
+	else if (game.map.name === "secret")
+		outputAnnouncement("1 life left", consts.std_font_size, consts.WIDTH / 2, consts.HEIGHT / 9, "white");
 	if (game.players.length !== 2) return;
 	if (game.players[0].index === 1) {
 		p.push();
@@ -3038,13 +2999,8 @@ class Vector {
 			breakout_left_hit[0],
 			breakout_left_hit[1]
 		);
-		intersection_point[0][2] = "left";
 		if (intersection_point[0][0] !== -1)
-			return relativeIntersection(
-			intersection_point[0],
-			breakout_left_hit[0],
-			breakout_left_hit[1]
-			);
+			return ;
 		
 		intersection_point[0] = getLineIntersection(
 			ball_point,
@@ -3052,13 +3008,8 @@ class Vector {
 			breakout_right_hit[0],
 			breakout_right_hit[1]
 		);
-		intersection_point[0][2] = "right";
 		if (intersection_point[0][0] !== -1)
-			return relativeIntersection(
-			intersection_point[0],
-			breakout_right_hit[0],
-			breakout_right_hit[1]
-			);
+			return ;
 	
 		intersection_point[0] = getLineIntersection(
 			ball_point,
@@ -3066,13 +3017,8 @@ class Vector {
 			breakout_bot_hit[0],
 			breakout_bot_hit[1]
 		);
-		intersection_point[0][2] = "bot";
 		if (intersection_point[0][0] !== -1)
-			return relativeIntersection(
-			intersection_point[0],
-			breakout_bot_hit[0],
-			breakout_bot_hit[1]
-			);
+			return ;
 	
 		intersection_point[0] = getLineIntersection(
 			ball_point,
@@ -3080,15 +3026,10 @@ class Vector {
 			breakout_top_hit[0],
 			breakout_top_hit[1]
 		);
-		intersection_point[0][2] = "top";
 		if (intersection_point[0][0] !== -1)
-			return relativeIntersection(
-			intersection_point[0],
-			breakout_top_hit[0],
-			breakout_top_hit[1]
-			);
+			return ;
 	
-		return 0;
+		return ;
 	}
 
 	function collisionPaddle(
