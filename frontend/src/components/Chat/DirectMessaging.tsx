@@ -15,6 +15,8 @@ import { Backdrop, ButtonGroup, IconButton, Button, Stack, Alert, Tooltip } from
 import {Link} from 'react-router-dom';
 import { toastThatError } from 'App';
 
+import { GameInviteButton } from '../FriendBar/FriendBar';
+
 interface CreateDMRoomDto {
     name: string;
     user1Id: number;
@@ -153,20 +155,6 @@ export default function DirectMessaging(props: {user: User, users: User[], rooms
             socket.emit('add blocked', {userId: props.user.id, blockedId: blockedId} );
             setShowBackdrop(false);
         }
-
-        function    inviteForGame(user: User| undefined) {
-            if (user)
-            {
-                if (user && props.statusMap.get(user?.id) === 'online')
-                    socket.emit('invite for game', {userId: props.user.id, otherUserId: user?.id});
-                else if (props.statusMap.get(user?.id) === 'in game')
-                    toastThatError('user is already in game');
-                else
-                    toastThatError('user is offline');
-            }
-            else
-                toastThatError('user is offline');
-        }
         
         return (
             <div>
@@ -178,11 +166,7 @@ export default function DirectMessaging(props: {user: User, users: User[], rooms
                                 <Link to={"/users/" + parseUser(props.room.name)?.id}><PersonIcon/></Link>
                             </IconButton>
                         </Tooltip>
-                        <Tooltip title="Invite for a match">
-                            <IconButton size="small" onClick={() => inviteForGame(parseUser(props.room.name))}>
-                                <Games/>
-                            </IconButton>   
-                        </Tooltip>
+                        <GameInviteButton user={props.user} otherUser={parseUser(props.room.name)} statusMap={props.statusMap}/>
                         <Tooltip title="Block user">
                             <IconButton color='error' onClick={() => setShowBackdrop(true)} size="small">
                                 <BlockIcon/>

@@ -82,6 +82,7 @@ export default function Profile(props: {self: boolean}) {
 	}, []);
 
 
+	console.log('user = ', props.user);
     return (
 		<Box sx={OverallBoxStyle}>
 			{profile? 
