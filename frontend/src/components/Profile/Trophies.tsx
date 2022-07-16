@@ -8,11 +8,10 @@ import TheQuitter from "../../images/Trophies/quitter.png"
 import Frankencat from "../../images/Trophies/frankencat.png"
 
 const ImgStyle = {
-	width: "100%",
-	minWidth: "4vw",
+	width: "4vw",
 	minHeight: "4vw",
 
-	padding: 3,
+	padding: 1,
 }
 
 const ATrophyStyle = {
@@ -21,17 +20,13 @@ const ATrophyStyle = {
 	alignItems: 'center',
 }
 
-const ImgBoxStyle = {
-	width: "4vw",
-}
-
 function ATrophie(props: {image: string, title: string, label: string}) {
   return (
 		<Grid container rowSpacing={1} sx={ATrophyStyle}>
-			<Grid xs={2} sx={ImgBoxStyle}>
+			<Grid xs={2}>
 				<img src={props.image} alt="Trophy" style={ImgStyle} />
 			</Grid>
-			<Stack sx={{paddingLeft: '5%'}}>
+			<Stack>
 				<Typography variant="subtitle2">
 					{props.title}
 				</Typography>

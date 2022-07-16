@@ -55,34 +55,7 @@ enum achievements {
 	QUIT,
 	CHANGEAVATAR,
   }
-  
-  const TitleBoxStyle = {
-	  backgroundColor: "rgb(170, 50, 190)",
-	  borderRadius: "4px",
-	  border: "1px solid black",
-	  padding: "5%",
-	  boxShadow: '0px 2px 5px 1px gray',
-	  width: '80%',
-	  height: '100%',
-	  textTransform: 'uppercase',
-	  overflow: 'hidden',
-	  
-	fontSize: '1em',
-	  display: 'flex',
-	  justifyContent: 'center',
-	  textAlign: 'center',
-	  verticalAlign: 'middle',
-  }
-  
-  const TextBoxStyle = {
-	  color: "rgb(30, 70, 200)",
-	  padding: "1%",
-	  width: '80%',
-	  overflow: 'hidden',
-  
-	  textAlign: 'center',
-  }
 
 export {PlayerBarStyle,
         StatTitle, StatBox, MatchHistoryBox,
-        TitleStyle, TitleBoxStyle, TextBoxStyle, achievements};
+        TitleStyle, achievements};
