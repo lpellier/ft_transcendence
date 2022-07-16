@@ -12,8 +12,8 @@ enum achievements {
 }
 
 const ImgStyle = {
-  width: "4vw",
-  minHeight: "4vw",
+  width: "70px",
+  minHeight: "70px",
 
   padding: '1%'
 };
