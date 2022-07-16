@@ -1,54 +1,47 @@
-const PlayerBarStyle = {	
-    textAlign: 'center',
-    verticalAlign: 'baseline',
-    padding: '1%',
-    paddingRight: '3%',
-    paddingLeft: '3%',
+const PlayerBarStyle = {
+  textAlign: "center",
+  verticalAlign: "baseline",
+  padding: "1%",
+  paddingRight: "3%",
+  paddingLeft: "3%",
 
-    color: 'white',
-    border: '3px solid black',
-    backgroundColor: 'rgb(122, 40, 203)',
-}
+  color: "white",
+  border: "3px solid black",
+  backgroundColor: "rgb(122, 40, 203)",
+};
 
 const StatTitle = {
-    backgroundColor: 'rgb(122, 40, 203)',
-	textAlign: 'center',
-	border: '3px solid black',
-    paddingLeft: '10%',
+  backgroundColor: "rgb(122, 40, 203)",
+  textAlign: "center",
+  border: "3px solid black",
+  paddingLeft: "10%",
 
-	paddingBottom: '1%',
-	paddingTop: '1%',
-	color: 'white',
-}
+  paddingBottom: "1%",
+  paddingTop: "1%",
+  color: "white",
+};
 
 const StatBox = {
-    backgroundColor: 'rgb(211, 172, 223)',
-	color: 'white',
-	border: '3px solid black',
-    height: '30vh',
-    overflowY: 'scroll',
-    overflow: 'auto',
-	paddingTop: '4%',
-	paddingLeft: '4%',
-	paddingRight: '4%',
-}
+  backgroundColor: "rgb(211, 172, 223)",
+  border: "3px solid black",
+  height: "30vh",
+};
 
 const MatchHistoryBox = {
-    backgroundColor: 'rgb(211, 172, 223)',
-	color: 'white',
-	border: '3px solid black',
-    height: '30vh',
-    overflowY: 'scroll',
-    overflow: 'auto',
-	padding: '0%',
-	paddingBottom: '4%',
-}
+  backgroundColor: "rgb(211, 172, 223)",
+  color: "white",
+  border: "3px solid black",
+  height: "30vh",
+  overflowY: "scroll",
+  overflow: "auto",
+  padding: "0%",
+  paddingBottom: "4%",
+};
 
 const TitleStyle = {
-	textAlign: 'end',
-	marginRight: '10px',
-}
+  textAlign: "end",
+  marginRight: "10px",
+};
 
-export {PlayerBarStyle,
-        StatTitle, StatBox, MatchHistoryBox,
-        TitleStyle};
+export { PlayerBarStyle, StatTitle, StatBox, MatchHistoryBox, TitleStyle };
+
