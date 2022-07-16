@@ -1,6 +1,5 @@
 import {	Stack,
 			Typography,
-			Grid
 } from "@mui/material"
 import Star from "../../images/Trophies/star.png"
 import ThreeStars from "../../images/Trophies/threestars.png"
@@ -29,10 +28,8 @@ const ATrophyStyle = {
 
 function ATrophie(props: {image: string, title: string, label: string}) {
   return (
-		<Grid container rowSpacing={1} sx={ATrophyStyle}>
-			<Grid xs={2}>
-				<img src={props.image} alt="Trophy" style={ImgStyle} />
-			</Grid>
+		<Stack direction="row" spacing={2} sx={ATrophyStyle}>
+			<img src={props.image} alt="Trophy" style={ImgStyle} />
 			<Stack>
 				<Typography variant="subtitle2">
 					{props.title}
@@ -41,7 +38,7 @@ function ATrophie(props: {image: string, title: string, label: string}) {
 					{props.label}
 				</Typography>
 			</Stack>
-		</Grid>
+		</Stack>
   );
 }
 
