@@ -19,7 +19,6 @@ const ImgStyle = {
 };
 
 const ATrophyStyle = {
-  border: "2px solid black",
   backgroundColor: "rgb(100, 100, 200, 0.2)",
   alignItems: "center",
 };

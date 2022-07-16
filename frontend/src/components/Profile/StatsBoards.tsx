@@ -78,37 +78,35 @@ function TrophyBox(props: { user: User }) {
   return (
     <Stack spacing={1}>
       <BoardComponent icon={<EmojiEventsIcon />} title="Trophy" />
-      <Box sx={StatBox}>
-        <Stack spacing={1}>
-          {props.user.achievements.find(
-            (val) => val === achievements.ONESTAR
-          ) !== undefined ? (
-            <OneWinTrophy />
-          ) : (
-            <div />
-          )}
-          {props.user.achievements.find(
-            (val) => val === achievements.THREESTARS
-          ) !== undefined ? (
-            <ThreeWinsTrophy />
-          ) : (
-            <div />
-          )}
-          {props.user.achievements.find((val) => val === achievements.QUIT) !==
-          undefined ? (
-            <QuitTrophy />
-          ) : (
-            <div />
-          )}
-          {props.user.achievements.find(
-            (val) => val === achievements.CHANGEAVATAR
-          ) !== undefined ? (
-            <ChangeAvatarTrophy />
-          ) : (
-            <div />
-          )}
-        </Stack>
-      </Box>
+      <Stack spacing={1} sx={StatBox}>
+        {props.user.achievements.find(
+          (val) => val === achievements.ONESTAR
+        ) !== undefined ? (
+          <OneWinTrophy />
+        ) : (
+          null
+        )}
+        {props.user.achievements.find(
+          (val) => val === achievements.THREESTARS
+        ) !== undefined ? (
+          <ThreeWinsTrophy />
+        ) : (
+          null
+        )}
+        {props.user.achievements.find((val) => val === achievements.QUIT) !==
+        undefined ? (
+          <QuitTrophy />
+        ) : (
+          null
+        )}
+        {props.user.achievements.find(
+          (val) => val === achievements.CHANGEAVATAR
+        ) !== undefined ? (
+          <ChangeAvatarTrophy />
+        ) : (
+          null
+        )}
+      </Stack>
     </Stack>
   );
 }
