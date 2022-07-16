@@ -15,7 +15,7 @@ import { Backdrop, ButtonGroup, IconButton, Button, Stack, Alert, Tooltip } from
 import {Link} from 'react-router-dom';
 import { toastThatError } from 'routes/routes';
 
-import { GameInviteButton } from '@component/FriendBar/FriendBar';
+import { GameInviteButton } from '../FriendBar/FriendBar';
 
 interface CreateDMRoomDto {
     name: string;
