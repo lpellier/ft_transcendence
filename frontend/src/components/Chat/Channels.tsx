@@ -176,7 +176,7 @@ function Channels(props : {user: User, users: User[], currentRoom: Room, setCurr
 		const handler = (removeUserDto: UserRoomDto) => {
 			if(removeUserDto.userId === props.user.id)
 			{
-				socket.emit('leave room', removeUserDto.roomId);
+				socket.emit('disconnect from room', removeUserDto.roomId);
 				socket.emit('get rooms', props.user.id)
 				socket.emit('get public rooms');
 			};

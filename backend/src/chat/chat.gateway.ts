@@ -108,10 +108,16 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect
 
 	}
 
-	@SubscribeMessage('leave room')
-	handleLeaveRoom(@ConnectedSocket() client : Socket, @MessageBody() room_id: string ) {
+	@SubscribeMessage('disconnect from room')
+	handleDisconnectFromRoom(@ConnectedSocket() client : Socket, @MessageBody() room_id: string ) {
 		client.leave(room_id);
-		//console.log('leave room called', room_id);
+	}
+
+	@SubscribeMessage('leave room')
+	async handleLeaveRoom(@ConnectedSocket() client : Socket, @MessageBody() userRoomDto: UserRoomDto) {
+		await this.chatService.removeUserFromRoom(userRoomDto.userId, userRoomDto.roomId);
+		client.leave(userRoomDto.roomId.toString());
+		client.emit('add user to room');
 	}
 
 	@SubscribeMessage('chat message')
