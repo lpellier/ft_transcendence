@@ -23,7 +23,7 @@ function LogOutLink() {
 	function logout() {
 	  axios.get(process.env.REACT_APP_BACK_URL + '/auth/logout',
 	  { withCredentials: true, })
-	  .then(res => {	
+	  .then(res => {
 		console.log("Logout ")
 		auth.signout(() => navigate("/login"));
 	})
@@ -34,13 +34,15 @@ function LogOutLink() {
 
 	return (
 	  <nav>
+		<Tooltip title={"Logout"} placement="bottom">
 		<Button
 			onClick={logout}
 			variant="contained"
 			startIcon={<MeetingRoomIcon />}
-			color="secondary">
-		Logout
-		</Button>
+			color="secondary"
+			sx={{height: "100%"}}
+			/>
+		</Tooltip>
 	  </nav>
 	);
 }
@@ -83,7 +85,7 @@ function ProjectName() {
 		  variant="h4"
 		  noWrap
 		  component="div"
-		  sx={{paddingRight: '10%', paddingLeft: '10%'}}
+		  sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' }, paddingLeft: '10%', overflow: 'hidden', textOverflow: 'ellipsis'}}
 		>The Pongers Guide to the Galaxy</Typography>
 	);
 }

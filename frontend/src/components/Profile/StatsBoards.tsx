@@ -12,6 +12,10 @@ import {
   StatTitle,
   StatBox,
   MatchHistoryBox,
+  TitleBoxStyle,
+  TextBoxStyle,
+  achievements,
+
 } from "../../styles/tsxStyles/Profile";
 import { Stats } from "interfaces";
 import {
@@ -23,43 +27,6 @@ import {
 import axios from "axios";
 import { Table, TableBody, TableRow, TableCell } from "@mui/material";
 
-enum achievements {
-  ONESTAR,
-  THREESTARS,
-  QUIT,
-  CHANGEAVATAR,
-}
-
-const ButtonStatStyle = {
-  backgroundColor: "rgb(170, 50, 190)",
-  width: "29%",
-};
-
-const TitleBoxStyle = {
-	backgroundColor: "rgb(170, 50, 190)",
-	borderRadius: "4px",
-	border: "1px solid black",
-	padding: "5%",
-	boxShadow: '0px 2px 5px 1px gray',
-	width: '80%',
-	height: '100%',
-	textTransform: 'uppercase',
-	overflow: 'hidden',
-	
-	display: 'flex',
-	justifyContent: 'center',
-	textAlign: 'center',
-	verticalAlign: 'middle',
-}
-
-const TextBoxStyle = {
-	color: "rgb(30, 70, 200)",
-	padding: "1%",
-	width: '80%',
-	overflow: 'hidden',
-
-	textAlign: 'center',
-}
 
 function SpecialGridings(props: {sx: any, xs: number, label: string | number}) {
 	return (

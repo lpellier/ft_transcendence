@@ -1,10 +1,10 @@
-import {useEffect, useState, useRef} from 'react'
+import {useEffect, useState} from 'react'
 import Stack from '@mui/material/Stack'
 import Box from '@mui/material/Box'
 import StatsBoards from './StatsBoards'
 import Typography from '@mui/material/Typography'
 import {User} from 'interfaces'
-import {PlayerBarStyle, SkillBarContourStyle, TitleStyle} from "../../styles/tsxStyles/Profile";
+import {PlayerBarStyle} from "../../styles/tsxStyles/Profile";
 import './../../styles/Other/SkillBar.css'
 import {PlayerAvatar} from	'../Avatars';
 import { useAuth } from "components/AuthProvider";
@@ -68,7 +68,7 @@ export default function Profile(props: {self: boolean}) {
 	let params = useParams()
 
 
-	if (props.self === true && (!profile || profile.id != auth.user.id)) {
+	if (props.self === true && (!profile || profile.id !== auth.user.id)) {
 		setProfile(auth.user);
 	}
 

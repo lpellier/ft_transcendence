@@ -160,7 +160,8 @@ export default function FriendBar(props: {
         PaperProps={{
           sx: {
             width: "15vw",
-            paddingLeft: "2%",
+            paddingLeft: "1%",
+            paddingRight: "2%",
             paddingTop: "1.5%",
             backgroundColor: "rgb(172, 180, 235)",
           },

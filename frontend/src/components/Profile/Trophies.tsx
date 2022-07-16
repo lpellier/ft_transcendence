@@ -1,32 +1,37 @@
-import Stack from "@mui/material/Stack"
-import Typography from "@mui/material/Typography"
+import {	Stack,
+			Typography,
+			Grid
+} from "@mui/material"
 import Star from "../../images/Trophies/star.png"
 import ThreeStars from "../../images/Trophies/threestars.png"
 import TheQuitter from "../../images/Trophies/quitter.png"
 import Frankencat from "../../images/Trophies/frankencat.png"
 
-
 const ImgStyle = {
-	width: "4vw",
-	height: "4vw",
-	border: "2px solid black",
+	width: "100%",
+	minWidth: "4vw",
+	minHeight: "4vw",
 
 	padding: 3,
-	backgroundColor: "rgb(50, 50, 100)"
-
 }
 
 const ATrophyStyle = {
 	border: "2px solid black",
 	backgroundColor: "rgb(100, 100, 200, 0.2)",
-	alignItems: 'center'
+	alignItems: 'center',
+}
+
+const ImgBoxStyle = {
+	width: "4vw",
 }
 
 function ATrophie(props: {image: string, title: string, label: string}) {
   return (
-		<Stack direction="row" sx={ATrophyStyle} spacing={2}>
-			<img src={props.image} alt="Trophy" style={ImgStyle} />
-			<Stack>
+		<Grid container rowSpacing={1} sx={ATrophyStyle}>
+			<Grid xs={2} sx={ImgBoxStyle}>
+				<img src={props.image} alt="Trophy" style={ImgStyle} />
+			</Grid>
+			<Stack sx={{paddingLeft: '5%'}}>
 				<Typography variant="subtitle2">
 					{props.title}
 				</Typography>
@@ -34,7 +39,7 @@ function ATrophie(props: {image: string, title: string, label: string}) {
 					{props.label}
 				</Typography>
 			</Stack>
-		</Stack>
+		</Grid>
   );
 }
 
@@ -62,4 +67,5 @@ function ChangeAvatarTrophy() {
   	);
 }
 
-export {ChangeAvatarTrophy, QuitTrophy, OneWinTrophy, ThreeWinsTrophy}
+export {ChangeAvatarTrophy, QuitTrophy, OneWinTrophy, 
+		ThreeWinsTrophy}

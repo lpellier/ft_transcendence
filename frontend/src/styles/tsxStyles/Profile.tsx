@@ -9,10 +9,6 @@ const PlayerBarStyle = {
     border: '3px solid black',
     backgroundColor: 'rgb(122, 40, 203)',
 }
-					
-const SkillBarStyle = {
-    paddingTop: '1%'
-}
 
 const StatTitle = {
     backgroundColor: 'rgb(122, 40, 203)',
@@ -48,16 +44,45 @@ const MatchHistoryBox = {
 	paddingBottom: '4%',
 }
 
-const SkillBarContourStyle = {
-	backgroundColor: 'rgb(180, 150, 250)',
-	borderRadius: '20px',
-}
-
 const TitleStyle = {
 	textAlign: 'end',
 	marginRight: '10px',
 }
 
-export {PlayerBarStyle, SkillBarStyle,
-        StatTitle, StatBox, MatchHistoryBox, SkillBarContourStyle,
-        TitleStyle}
+enum achievements {
+	ONESTAR,
+	THREESTARS,
+	QUIT,
+	CHANGEAVATAR,
+  }
+  
+  const TitleBoxStyle = {
+	  backgroundColor: "rgb(170, 50, 190)",
+	  borderRadius: "4px",
+	  border: "1px solid black",
+	  padding: "5%",
+	  boxShadow: '0px 2px 5px 1px gray',
+	  width: '80%',
+	  height: '100%',
+	  textTransform: 'uppercase',
+	  overflow: 'hidden',
+	  
+	fontSize: '1em',
+	  display: 'flex',
+	  justifyContent: 'center',
+	  textAlign: 'center',
+	  verticalAlign: 'middle',
+  }
+  
+  const TextBoxStyle = {
+	  color: "rgb(30, 70, 200)",
+	  padding: "1%",
+	  width: '80%',
+	  overflow: 'hidden',
+  
+	  textAlign: 'center',
+  }
+
+export {PlayerBarStyle,
+        StatTitle, StatBox, MatchHistoryBox,
+        TitleStyle, TitleBoxStyle, TextBoxStyle, achievements};
