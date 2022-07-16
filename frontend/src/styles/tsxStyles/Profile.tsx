@@ -26,6 +26,7 @@ const StatBox = {
   border: "3px solid black",
   height: "30vh",
   overflow: 'auto',
+  padding: "2%",
 };
 
 const MatchHistoryBox = {
