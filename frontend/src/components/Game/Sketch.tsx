@@ -830,11 +830,13 @@
 		this.OLD_WIDTH = this.WIDTH;
 		this.OLD_HEIGHT = this.HEIGHT;
 
-		this.WIDTH = p.windowWidth;
+		let width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+		let height = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+		this.WIDTH = width;
 		this.HEIGHT = this.WIDTH / 1.6;
 
-		if (this.HEIGHT > p.windowHeight * 5 / 6) {
-		this.HEIGHT = (p.windowHeight * 5) / 6;
+		if (this.HEIGHT > height * 5 / 6) {
+		this.HEIGHT = (height * 5) / 6;
 		this.WIDTH = this.HEIGHT * 1.6;
 		}
 		this.DIAGONAL = Math.sqrt(
@@ -903,14 +905,16 @@
 
 
 	setWindowSize() {
+		let width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+		let height = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
 		this.OLD_WIDTH = this.WIDTH;
 		this.OLD_HEIGHT = this.HEIGHT;
 
-		this.WIDTH = p.windowWidth;
+		this.WIDTH = width;
 		this.HEIGHT = this.WIDTH / 1.6;
 
-		if (this.HEIGHT > p.windowHeight * 5 / 6) {
-		this.HEIGHT = (p.windowHeight * 5) / 6;
+		if (this.HEIGHT > height * 5 / 6) {
+		this.HEIGHT = (height * 5) / 6;
 		this.WIDTH = this.HEIGHT * 1.6;
 		}
 		this.DIAGONAL = Math.sqrt(
