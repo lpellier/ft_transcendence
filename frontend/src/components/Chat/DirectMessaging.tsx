@@ -14,8 +14,8 @@ import Games from '@mui/icons-material/Games';
 import { Backdrop, ButtonGroup, IconButton, Button, Stack, Alert, Tooltip } from '@mui/material';
 import {Link} from 'react-router-dom';
 import { toastThatError } from 'routes/routes';
-import axios from 'axios';
 
+import { GameInviteButton } from '@component/FriendBar/FriendBar';
 
 interface CreateDMRoomDto {
     name: string;
@@ -189,11 +189,11 @@ export default function DirectMessaging(props: {user: User, users: User[], rooms
                                 <Link to="/profile"><PersonIcon/></Link>
                             </IconButton>
                         </Tooltip>
-                        <Tooltip title="Invite for a match">
-                            <IconButton size="small" onClick={() => inviteForGame(parseUser(props.room.name))}>
-                                <Games/>
-                            </IconButton>   
-                        </Tooltip>
+                        {/* {parseUser(props.room.name)? */}
+                        <GameInviteButton user={props.user} otherUser={parseUser(props.room.name)} statusMap={props.statusMap}/>
+                            {/* : */}
+                            {/* <div/> */}
+                        {/* } */}
                         <Tooltip title="Block user">
                             <IconButton color='error' onClick={() => setShowBackdrop(true)} size="small">
                                 <BlockIcon/>

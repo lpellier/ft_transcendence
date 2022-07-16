@@ -12,10 +12,51 @@ import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import Stack from "@mui/material/Stack";
 import Games from "@mui/icons-material/Games";
+import VisibilityIcon from '@mui/icons-material/Visibility';
 
 interface FriendUserDto {
   userId: number;
   friendId: number;
+}
+export function GameInviteButton(props: {user: User, otherUser: User | undefined, statusMap: Map<number, string>}) {
+  function inviteForGame(user: User | undefined) {
+        socket.emit("invite for game", {
+          userId: props.user.id,
+          otherUserId: user?.id,
+        });
+  }
+  function spectate(user: User | undefined) {
+    socket.emit("spectate game", user?.username);
+  }
+
+  if (props.otherUser === undefined) {
+    return null;
+  }
+  else
+  {
+    if (props.statusMap.get(props.otherUser.id) === "online")
+    {
+      return (
+        <Tooltip title="Invite for a match">
+          <IconButton size="small" onClick={() => inviteForGame(props.otherUser)}>
+            <Games />
+          </IconButton>
+        </Tooltip>
+      );  
+    }
+    else if (props.statusMap.get(props.otherUser.id) === "in game")
+    {
+      return (
+        <Tooltip title="Spectate">
+          <IconButton size="small" onClick={() => spectate(props.otherUser)}>
+            <VisibilityIcon />
+          </IconButton>
+        </Tooltip>
+      );
+    }
+    else return null;
+  }
+
 }
 
 function UserList(props: {
@@ -148,18 +189,7 @@ export default function FriendBar(props: {
     );
   }
 
-  function inviteForGame(user: User | undefined) {
-    if (user) {
-      if (user && props.statusMap.get(user?.id) === "online")
-        socket.emit("invite for game", {
-          userId: props.user.id,
-          otherUserId: user?.id,
-        });
-      else if (props.statusMap.get(user?.id) === "in game")
-        toastThatError("user is already in game");
-      else toastThatError("user is offline");
-    } else toastThatError("user is offline");
-  }
+
 
   return (
     <div>
@@ -250,11 +280,7 @@ export default function FriendBar(props: {
                     )}
                   </div>
                 )}
-                <Tooltip title="Invite for a match">
-                  <IconButton size="small" onClick={() => inviteForGame(item)}>
-                    <Games />
-                  </IconButton>
-                </Tooltip>
+                <GameInviteButton user={props.user} otherUser={item} statusMap={props.statusMap} />
                 <Button
                   variant="contained"
                   color="error"
