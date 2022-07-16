@@ -49,13 +49,6 @@ const TitleStyle = {
 	marginRight: '10px',
 }
 
-enum achievements {
-	ONESTAR,
-	THREESTARS,
-	QUIT,
-	CHANGEAVATAR,
-  }
-
 export {PlayerBarStyle,
         StatTitle, StatBox, MatchHistoryBox,
-        TitleStyle, achievements};
+        TitleStyle};

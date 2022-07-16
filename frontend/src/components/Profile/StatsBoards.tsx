@@ -10,8 +10,7 @@ import UpdateIcon from "@mui/icons-material/Update";
 import {
   StatTitle,
   StatBox,
-  MatchHistoryBox,
-  achievements,
+  MatchHistoryBox
 } from "../../styles/tsxStyles/Profile";
 import { Stats } from "interfaces";
 import {
@@ -19,6 +18,7 @@ import {
   QuitTrophy,
   OneWinTrophy,
   ThreeWinsTrophy,
+  achievements
 } from "./Trophies";
 import axios from "axios";
 

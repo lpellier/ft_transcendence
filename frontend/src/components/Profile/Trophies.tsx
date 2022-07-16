@@ -7,6 +7,13 @@ import ThreeStars from "../../images/Trophies/threestars.png"
 import TheQuitter from "../../images/Trophies/quitter.png"
 import Frankencat from "../../images/Trophies/frankencat.png"
 
+enum achievements {
+	ONESTAR,
+	THREESTARS,
+	QUIT,
+	CHANGEAVATAR,
+}
+
 const ImgStyle = {
 	width: "4vw",
 	minHeight: "4vw",
@@ -63,4 +70,4 @@ function ChangeAvatarTrophy() {
 }
 
 export {ChangeAvatarTrophy, QuitTrophy, OneWinTrophy, 
-		ThreeWinsTrophy}
+		ThreeWinsTrophy, achievements}
