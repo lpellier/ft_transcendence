@@ -200,11 +200,11 @@ export class UsersService {
 
   async getAllUsers() {
     const users = await this.prisma.user.findMany();
-    let list = []
+    let list = [];
     for (const user of users) {
-      list.push({id: user.id, username: user.username})
+      list.push({ id: user.id, username: user.username });
     }
-    console.log(list);
+    return list;
   }
 
   async getUsername(id: number) {
@@ -215,7 +215,6 @@ export class UsersService {
     });
     return user.username;
   }
-
 
   async getMock() {
     const user = await this.prisma.user.findUnique({

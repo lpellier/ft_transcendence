@@ -5,11 +5,14 @@ import {
   OnGatewayConnection,
   OnGatewayDisconnect,
   ConnectedSocket,
+  WebSocketServer,
 } from '@nestjs/websockets';
 import { ConfigService } from '@nestjs/config';
 import { FriendUserDto } from './dto/friend-user.dto';
-import { Socket } from 'socket.io';
+import { Socket, Server } from 'socket.io';
 import { UsersService } from './users.service';
+import { ChatService } from 'src/chat/chat.service';
+import { InviteDto } from './dto/invite.dto';
 
 @WebSocketGateway({
   cors: {
@@ -17,10 +20,14 @@ import { UsersService } from './users.service';
     credentials: true,
   },
 })
-export class FriendsGateway
-  implements OnGatewayConnection, OnGatewayDisconnect
-{
-  constructor(private readonly usersService: UsersService) {}
+export class UsersGateway implements OnGatewayConnection, OnGatewayDisconnect {
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly chatService: ChatService,
+  ) {}
+
+  @WebSocketServer()
+  server: Server;
 
   @SubscribeMessage('add friend')
   async add(
@@ -56,20 +63,67 @@ export class FriendsGateway
     return friends;
   }
 
+  @SubscribeMessage('new user')
+  async handleNewUser(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() userId: number,
+  ) {
+    client.data.userId = userId;
+    await this.chatService.addUserToRoom(userId, 1);
+    const allUsers = await this.usersService.getAllUsers();
+    this.server.emit('new user', allUsers);
+    this.server.emit('new connection', userId);
+    const socks = await this.server.fetchSockets();
+    const online = socks.map((c) => c.data.userId);
+    const inGame = socks.filter((c) => c.data.inGame === true);
+    client.emit('status map', { online: online, inGame: inGame });
+  }
+
+  @SubscribeMessage('countdown_start')
+  countdown_start(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() userId: number,
+  ) {
+    client.data.inGame = true;
+    this.server.emit('new gamer', userId);
+  }
+
+  @SubscribeMessage('remove gamer')
+  handleRemoveGamer(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() userId: number,
+  ) {
+    client.data.inGame = false;
+  }
+
+  @SubscribeMessage('invite for game')
+  async inviteForGame(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() inviteDto: InviteDto,
+  ) {
+    const sockets = await this.server.fetchSockets();
+    for (const socket of sockets) {
+      if (socket.data.userId === inviteDto.otherUserId) {
+        const user = await this.usersService.findOne(inviteDto.userId);
+        this.server
+          .to(socket.id)
+          .emit('invite for game', {
+            userId: inviteDto.userId,
+            inviterId: client.id,
+            inviterUsername: user.username,
+            inviteeId: socket.id,
+          });
+      }
+    }
+  }
+
   handleConnection(@ConnectedSocket() client: Socket) {
     console.log('client connected');
   }
 
   handleDisconnect(@ConnectedSocket() client: Socket) {
+    this.server.emit('new disconnection', client.data.userId);
     console.log('client disconnected');
   }
 
-  // @SubscribeMessage('countdown_start')
-  //   handleInGame(@ConnectedSocket() client: Socket, @MessageBody() data: any) {
-  //     console.log('data = ', data);
-  // }
-  // @SubscribeMessage('updateFriend')
-  // update(@MessageBody() updateFriendDto: UpdateFriendDto) {
-  //   return this.friendsService.update(updateFriendDto.id, updateFriendDto);
-  // }
 }
