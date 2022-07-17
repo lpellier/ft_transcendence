@@ -20,6 +20,7 @@ export default function Layout(props: {
 
   interface inviteDto {
     userId: number,
+    inviterUsername: string,
     inviterId: number,
     inviteeId: number,
 }
@@ -97,7 +98,7 @@ const action = (
       <Snackbar
           open={open}
           onClose={handleClose}
-          message={`You have been invited to play a game with ${props.users.find(user=> user?.id === invite?.userId)?.username}`}
+          message={`You have been invited to play a game with ${invite?.inviterUsername}`}
           action={action}
       />
 
