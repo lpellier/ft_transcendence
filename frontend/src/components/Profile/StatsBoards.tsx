@@ -41,14 +41,6 @@ function BoardComponent(props: { icon: any; title: string }) {
 }
 
 function StatsBox(props: { user: User }) {
-  const [tot_games, setTotgame] = useState<number>(
-    props.user.victories + props.user.losses
-  );
-
-  useEffect(() => {
-    setTotgame(props.user.victories + props.user.losses);
-  }, [props.user]);
-
   return (
     <Stack spacing={1}>
       <BoardComponent icon={<TimelineIcon />} title="Stats" />
@@ -65,7 +57,9 @@ function StatsBox(props: { user: User }) {
             <TableRow>
               <TableCell align="center">{props.user.victories}</TableCell>
               <TableCell align="center">{props.user.losses}</TableCell>
-              <TableCell align="center">{tot_games}</TableCell>
+              <TableCell align="center">
+                {props.user.victories + props.user.losses}
+              </TableCell>
             </TableRow>
           </TableBody>
         </Table>
@@ -79,33 +73,24 @@ function TrophyBox(props: { user: User }) {
     <Stack spacing={1}>
       <BoardComponent icon={<EmojiEventsIcon />} title="Trophy" />
       <Stack spacing={1} sx={StatBox}>
-        {props.user.achievements.find(
-          (val) => val === achievements.ONESTAR
-        ) !== undefined ? (
+        {props.user.achievements.find((val) => val === achievements.ONESTAR) !==
+        undefined ? (
           <OneWinTrophy />
-        ) : (
-          null
-        )}
+        ) : null}
         {props.user.achievements.find(
           (val) => val === achievements.THREESTARS
         ) !== undefined ? (
           <ThreeWinsTrophy />
-        ) : (
-          null
-        )}
+        ) : null}
         {props.user.achievements.find((val) => val === achievements.QUIT) !==
         undefined ? (
           <QuitTrophy />
-        ) : (
-          null
-        )}
+        ) : null}
         {props.user.achievements.find(
           (val) => val === achievements.CHANGEAVATAR
         ) !== undefined ? (
           <ChangeAvatarTrophy />
-        ) : (
-          null
-        )}
+        ) : null}
       </Stack>
     </Stack>
   );
@@ -223,4 +208,3 @@ export default function StatsBoards(props: { user: User }) {
     </Box>
   );
 }
-
