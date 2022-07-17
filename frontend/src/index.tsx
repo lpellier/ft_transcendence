@@ -7,6 +7,7 @@ const root = createRoot(document.getElementById("root")!);
 
 const SERVER = process.env.REACT_APP_BACK_URL || "";
 export const socket = io(SERVER, {
+  autoConnect: false, 
   withCredentials: true,
 });
 
