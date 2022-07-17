@@ -51,18 +51,6 @@ export default function Layout(props: {
         }
 	}, [auth.user?.username])
 
-  useEffect(() => {
-    const init = () => {
-        if (auth.user) {
-            socket.emit('new user', auth.user.id);
-        }
-    }
-    if (socket.connected)
-        init();
-    else
-        socket.on('connect', init)
-}, [auth.user])
-
 const handleClose = (event: React.SyntheticEvent | Event, reason?: string) => {
   if (reason === 'clickaway') {
     return;

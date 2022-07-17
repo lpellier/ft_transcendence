@@ -42,7 +42,7 @@ function NameInput(props: {username: string, setter: any, setOpen: any}) {
 			await axios.get(process.env.REACT_APP_BACK_URL + '/users/me',
 			{ withCredentials: true,})
 			.then(res => {
-				auth.signin(res.data, () => null )
+				auth.update(res.data)
 				console.log("User : ", res.data);
 			})
 			.catch(err => {
