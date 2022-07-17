@@ -34,11 +34,12 @@ export interface UserRoomDto {
     roomId: number;
 };
 
-const ButtonStyle = {
+export const ButtonStyle = {
 	border: '1px solid black',
 	backgroundColor: 'rgb(235, 116, 30, 0.75)',
 	overflow: 'hidden',
 	width: '100%',
+	minWidth: '72px',
 }
 
 function PasswordInput(props: {openPassword: boolean, setOpenPassword: React.Dispatch<React.SetStateAction<boolean>>, 
@@ -110,10 +111,10 @@ function LeaveRoomButton(props: {room: Room, user: User})
 						Are you sure you want to leave this room ({props.room.name})?
 					</Alert>
 					<ButtonGroup>
-						<Button variant="contained" color="success" onClick={leaveRoom}>
+						<Button variant="contained" sx={{backgroundColor:"rgb(70, 195, 150)"}} onClick={leaveRoom}>
 							Yes
 						</Button>
-						<Button variant="contained" color="error" onClick={() => setOpen(false)}>
+						<Button variant="contained" sx={{background:"rgb(195, 60, 40)"}} onClick={() => setOpen(false)}>
 							No
 						</Button>
 					</ButtonGroup>
@@ -150,13 +151,13 @@ function RoomList(props: {rooms: Room[], currentRoom: Room, setCurrentRoom: Reac
 						{item.visibility === props.visibility  && item.ownerId !== 0?
 							<div>
 								{ item.id !== props.currentRoom.id ?
-								<ListItem className="channel-list-content" sx={channelListItem} button onClick={() => handleRoomClick(item)}>
-									<ListItemText primary={item.name}/>
+								<ListItem title={item.name} className="channel-list-content" sx={channelListItem} button onClick={() => handleRoomClick(item)}>
+										<ListItemText primary={item.name}/>
 									<PasswordInput openPassword={openPassword} setOpenPassword={setOpenPassword} room={item} setCurrentRoom={props.setCurrentRoom}/>
 								</ListItem>
 								:
 								<Stack direction="row">
-									<ListItem button selected className="channel-list-content" sx={channelListItem}>
+									<ListItem title={item.name} button selected className="channel-list-content" sx={channelListItem}>
 										<ListItemText primary={item.name} sx={{overflow: "hidden"}} />
 										<RoomUserPopper currentUser={props.user} users={props.users} room={props.currentRoom} roomAdmins={props.roomAdmins}/>
 										<LeaveRoomButton room={item} user={props.user}/>
