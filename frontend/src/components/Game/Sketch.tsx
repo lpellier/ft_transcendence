@@ -631,34 +631,24 @@
 		if (this.spectate) this.spectate.remove();
 		this.spectate = null;
 
-		this.removeChildren("button-create");
-		this.removeChildren("button-join");
-		this.removeChildren("button-matchmaking");
-		this.removeChildren("button-anyone");
-		this.removeChildren("button-invitation");
-		this.removeChildren("button-local");
-		this.removeChildren("button-ai");
-		this.removeChildren("button-validate");
-		this.removeChildren("button-return");
-		this.removeChildren("button-sound");
-		this.removeChildren("button-map-original");
-		this.removeChildren("button-map-city");
-		this.removeChildren("button-map-casino");
-		this.removeChildren("button-map-secret");
-		this.removeChildren("button-spectate");
-		this.removeChildren("button-plus");
-		this.removeChildren("button-minus");
-		this.removeChildren("button-opp-left-ok");
-	}
-
-	removeChildren(button_id : string) {
-		const parent = document.getElementById(button_id);
-		if (!parent)
-			return ;
-		while (parent?.firstChild) {
-			// @ts-ignore : next-line // don't know why an error shows up on vs code
-		  parent.removeChild(parent.lastChild);
-		}
+		removeChildren("button-create");
+		removeChildren("button-join");
+		removeChildren("button-matchmaking");
+		removeChildren("button-anyone");
+		removeChildren("button-invitation");
+		removeChildren("button-local");
+		removeChildren("button-ai");
+		removeChildren("button-validate");
+		removeChildren("button-return");
+		removeChildren("button-sound");
+		removeChildren("button-map-original");
+		removeChildren("button-map-city");
+		removeChildren("button-map-casino");
+		removeChildren("button-map-secret");
+		removeChildren("button-spectate");
+		removeChildren("button-plus");
+		removeChildren("button-minus");
+		removeChildren("button-opp-left-ok");
 	}
 
 	reset() {
@@ -1748,6 +1738,16 @@ class Pong {
 	}
 }
 
+function removeChildren(id : string) {
+	const parent = document.getElementById(id);
+	if (!parent)
+		return ;
+	while (parent?.firstChild) {
+		// @ts-ignore : next-line // don't know why an error shows up on vs code
+	  parent.removeChild(parent.lastChild);
+	}
+}
+
 function sub_vec(v1: Vector, v2: Vector): Vector {
 	let ret: Vector = new Vector([v1.x, v1.y]);
 	ret.x -= v2.x;
@@ -1907,6 +1907,8 @@ class Vector {
 
 	function listenStopEvents() {
 	socket.on("player-disconnect", (index: number) => {
+		if (!document.getElementById("canvas-parent"))
+			return ;
 		if (game.players && game.players.length > 0 && index !== game.players[0].index)
 			opponentLeftMenu();
 		else
@@ -2009,17 +2011,43 @@ class Vector {
 	);
 	}
 
+	function deleteEverything() {
+		removeChildren("button-create");
+		removeChildren("button-join");
+		removeChildren("button-matchmaking");
+		
+		removeChildren("button-anyone");
+		removeChildren("button-invitation");
+		removeChildren("button-local");
+		
+		removeChildren("button-ai");
+		removeChildren("button-validate");
+		removeChildren("button-return");
+		removeChildren("button-sound");
+		removeChildren("button-map-original");
+		removeChildren("button-map-city");
+		removeChildren("button-map-casino");
+		removeChildren("button-map-secret");
+		removeChildren("button-spectate");
+		removeChildren("button-plus");
+		removeChildren("button-minus");
+		
+		removeChildren("input-join");
+		removeChildren("input-score_limit");
+		removeChildren("button-opp-left-ok");
+	}
+
 	function resizeEverything() {
 	if (consts) consts.resize();
 	if (game) {
 		for (let player of game.players) if (player) player.resize();
 		if (game.pong) game.pong.resize();
 		if (game.map) game.map.resize(consts.WIDTH, consts.HEIGHT);
+		if (game.breakouts) for (let breakout of game.breakouts) breakout.resize();
 	}
 	if (buttons) buttons.resize();
 	if (inputs) inputs.resize();
 	if (bumpers) for (let bumper of bumpers) bumper.resize();
-	if (game.breakouts) for (let breakout of game.breakouts) breakout.resize();
 	}
 
 	p.windowResized = () => {
@@ -2073,6 +2101,7 @@ class Vector {
 	buttons = new Buttons();
 		
 	if (!document.getElementById("canvas-parent")) {
+		deleteEverything();
 		p.remove();
 		return ;
 	}
@@ -2116,7 +2145,9 @@ class Vector {
 	p.draw = () => {
 		if (!document.getElementById("canvas-parent")) {
 			socket.emit("quit-ongoing-game", false);
+			deleteEverything();
 			p.remove();
+			return ;
 		}
 
 	audio_files.playAppropriateMusic(game.state, game.map.name);
@@ -2467,8 +2498,10 @@ class Vector {
 	function outputScore(map_width: number, map_height: number) {
 	if (game.map.name === "secret" && (game.score_limit - game.score[1]) > 1)
 		outputAnnouncement((game.score_limit - game.score[1]).toString() + " lives left", consts.std_font_size, consts.WIDTH / 2, consts.HEIGHT / 9, "white");
-	else if (game.map.name === "secret")
+	else if (game.map.name === "secret" && (game.score_limit - game.score[1]) === 1)
 		outputAnnouncement("1 life left", consts.std_font_size, consts.WIDTH / 2, consts.HEIGHT / 9, "white");
+		else if (game.map.name === "secret" && (game.score_limit - game.score[1]) === 0)
+		outputAnnouncement("DEAD", consts.std_font_size, consts.WIDTH / 2, consts.HEIGHT / 9, "white");
 	if (game.players.length !== 2) return;
 	if (game.players[0].index === 1) {
 		p.push();
