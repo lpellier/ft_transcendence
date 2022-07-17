@@ -24,7 +24,6 @@ model User {
   adminRooms   Room[]    @relation("roomAdmins")
   messages     Message[]
   blockedIds   Int[]
-
 }
 
 model Stats {

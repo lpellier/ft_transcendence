@@ -128,6 +128,7 @@ export class UsersService {
         },
         data: {
           username: newUsername,
+          firstLogin: false,
         },
       });
       return user.username;
