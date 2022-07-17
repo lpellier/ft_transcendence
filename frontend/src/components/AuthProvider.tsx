@@ -35,6 +35,7 @@ export default function AuthProvider({
   let signin = (user: User, callback: VoidFunction) => {
     console.log("auth.signin called");
     socket.connect();
+    socket.emit('new user', user.id)
     setUser(user);
     callback();
   };
