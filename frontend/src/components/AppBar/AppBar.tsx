@@ -39,7 +39,6 @@ function LogOutLink() {
 				variant="contained"
 				startIcon={<MeetingRoomIcon />}
 				color="secondary"
-				sx={{height: "100%"}}
 			/>
 		</Tooltip>
 	);
