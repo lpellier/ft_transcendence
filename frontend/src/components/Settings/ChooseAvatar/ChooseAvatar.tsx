@@ -4,7 +4,6 @@ import FaceIcon from "@mui/icons-material/Face";
 import Modal from "@mui/material/Modal";
 import { ModalChooseAvatar } from "../../../styles/tsxStyles/Settings/Avatar";
 import { IconStyle } from "../../../styles/tsxStyles/AppBar/PongMenu";
-import { styled } from "@mui/material/styles";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import { useState } from "react";
 import Button from "@mui/material/Button";
@@ -13,10 +12,6 @@ import { toastThatError } from "../../../App";
 import { useAuth } from "components/AuthProvider";
 import React from "react";
 import { Typography } from "@mui/material";
-
-const Input = styled("input")({
-  display: "none",
-});
 
 function UploadButton(props: { setOpen: any }) {
   const [selectedFile, setSelectedFile] = useState<any>();
