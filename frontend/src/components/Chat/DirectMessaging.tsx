@@ -223,7 +223,7 @@ export default function DirectMessaging(props: {user: User, users: User[], rooms
                                         <UserMod user={props.user} users={props.users} room={room}  statusMap={props.statusMap}/>
                                     </ListItem>
                                 :
-                                    <ListItem className="MenuItem" selected  sx={{ alignContent:"center"}}>
+                                    <ListItem className="MenuItem" button selected  sx={{ alignContent:"center"}}>
                                         <UserMod user={props.user} users={props.users} room={room}  statusMap={props.statusMap}/>
                                     </ListItem>
                                 }

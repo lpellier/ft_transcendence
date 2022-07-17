@@ -18,8 +18,9 @@ import {Room, User} from 'interfaces'
 import {socket} from 'index'
 import RoomUserPopper from './RoomUserMod'
 import FormControl from '@mui/material/FormControl'
-import Button from '@mui/material/Button'
 import DirectMessaging from './DirectMessaging';
+import {Tooltip, IconButton, Backdrop, Alert, ButtonGroup, Button} from '@mui/material';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 
 interface CreateRoomDto {
 	name: string;
@@ -37,6 +38,7 @@ const ButtonStyle = {
 	border: '1px solid black',
 	backgroundColor: 'rgb(235, 116, 30, 0.75)',
 	overflow: 'hidden',
+	width: '100%',
 }
 
 function PasswordInput(props: {openPassword: boolean, setOpenPassword: React.Dispatch<React.SetStateAction<boolean>>, 
@@ -86,6 +88,41 @@ function PasswordInput(props: {openPassword: boolean, setOpenPassword: React.Dis
 	)
 }
 
+function LeaveRoomButton(props: {room: Room, user: User})
+{
+	let [open, setOpen] = useState<boolean>(false);
+
+	function leaveRoom() {
+		socket.emit('leave room', {userId:props.user.id, roomId: props.room.id});
+		setOpen(false);
+	}
+
+	return (
+		<div>
+			<Tooltip title="leave room" placement="bottom">
+				<IconButton  size="small" onClick={() => setOpen(true)}>
+					<ExitToAppIcon/>
+				</IconButton>
+			</Tooltip>
+			<Backdrop open={open}>
+				<Stack alignItems="center">
+					<Alert severity="warning">
+						Are you sure you want to leave this room ({props.room.name})?
+					</Alert>
+					<ButtonGroup>
+						<Button variant="contained" color="success" onClick={leaveRoom}>
+							Yes
+						</Button>
+						<Button variant="contained" color="error" onClick={() => setOpen(false)}>
+							No
+						</Button>
+					</ButtonGroup>
+				</Stack>
+			</Backdrop>
+		</div>
+	)
+}
+
 function RoomList(props: {rooms: Room[], currentRoom: Room, setCurrentRoom: React.Dispatch<React.SetStateAction<Room>>, users: User[], user: User, visibility: string, roomAdmins:User[]}) {
 	let [openPassword, setOpenPassword] = useState<boolean>(false);
 
@@ -99,23 +136,31 @@ function RoomList(props: {rooms: Room[], currentRoom: Room, setCurrentRoom: Reac
 			setOpenPassword(true);
 	}
 
+	let channelListItem = {
+		paddingLeft:"0px",
+		paddingRight:"0px",
+		paddingTop:"4px",
+		paddingBottom:"4px",
+	}
+
 	return (
-		<List>
+		<List className="channel-list">
 				{props.rooms.map(item => (
 					<div key={item.id}>
 						{item.visibility === props.visibility  && item.ownerId !== 0?
 							<div>
 								{ item.id !== props.currentRoom.id ?
-								<ListItem className="MenuItem" button onClick={() => handleRoomClick(item)}>
+								<ListItem className="channel-list-content" sx={channelListItem} button onClick={() => handleRoomClick(item)}>
 									<ListItemText primary={item.name}/>
 									<PasswordInput openPassword={openPassword} setOpenPassword={setOpenPassword} room={item} setCurrentRoom={props.setCurrentRoom}/>
 								</ListItem>
 								:
 								<Stack direction="row">
-									<ListItem button selected className="MenuItem">
-										<ListItemText primary={item.name}  />
+									<ListItem button selected className="channel-list-content" sx={channelListItem}>
+										<ListItemText primary={item.name} sx={{overflow: "hidden"}} />
+										<RoomUserPopper currentUser={props.user} users={props.users} room={props.currentRoom} roomAdmins={props.roomAdmins}/>
+										<LeaveRoomButton room={item} user={props.user}/>
 									</ListItem>
-									<RoomUserPopper currentUser={props.user} users={props.users} room={props.currentRoom} roomAdmins={props.roomAdmins}/>
 								</Stack>
 								}
 								<Divider/>
@@ -246,10 +291,10 @@ function Channels(props : {user: User, users: User[], currentRoom: Room, setCurr
 	return (
 		<div>
 		<Stack className='channels' spacing={1} >
-			<Stack spacing={0.5} direction="row">
+			<ButtonGroup>
 				<Button variant="contained" size="small" style={ButtonStyle} onClick={() => setTab('channels')}>Channels</Button>
 				<Button variant="contained" size="small" style={ButtonStyle} onClick={() => setTab('dms')}>DMs</Button>
-			</Stack>
+			</ButtonGroup>
 			{tab === 'channels'?
 			<Stack justifyContent='space-between'>
 				<Box>

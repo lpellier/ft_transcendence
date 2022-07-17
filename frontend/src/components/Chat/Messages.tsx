@@ -7,8 +7,6 @@ import Avatar from '@mui/material/Avatar'
 import '../../styles/Chat/Messages.css';
 
 import {User, Message, Room} from 'interfaces'
-import Button from '@mui/material/Button';
-import { Backdrop, Alert, ButtonGroup } from '@mui/material';
 
 interface CreateMessageDto {
     content: string;
@@ -20,7 +18,6 @@ interface CreateMessageDto {
 function Messages(props : {user: User, users: User[], currentRoom: Room, canWrite: boolean}) {
 	
 	let [messages, setMessages] = useState<Message[]>([]);
-	let [open, setOpen] = useState<boolean>(false);
 
 	const addMessage = (newMessage: Message) => setMessages(state => [...state, {id: newMessage.id, content: newMessage.content, userId: newMessage.userId, roomId: newMessage.roomId ,type: newMessage.type}]);
 
@@ -54,33 +51,10 @@ function Messages(props : {user: User, users: User[], currentRoom: Room, canWrit
 		}
 	}, [])
 
-	function leaveRoom() {
-		socket.emit('leave room', {userId:props.user.id, roomId: props.currentRoom.id});
-		setOpen(false);
-	}
+
 
     return (
 	<Box sx={{width:'100%'}}>
-		<Button color='error' onClick={() => setOpen(true)}>
-			leave
-		</Button>
-		<Backdrop
-			open={open}
-		>
-			<Stack alignItems="center">
-				<Alert severity="warning">
-					Are you sure you want to leave this room?
-				</Alert>
-				<ButtonGroup>
-					<Button variant="contained" color="success" onClick={leaveRoom}>
-						Yes
-					</Button>
-					<Button variant="contained" color="error" onClick={() => setOpen(false)}>
-						No
-					</Button>
-				</ButtonGroup>
-			</Stack>
-		</Backdrop>
         <Stack className='chat' spacing={2} justifyContent='space-between'>
 			<ul className='messages' id='messagebox'>
 				{messages.map(item=> (
@@ -91,7 +65,7 @@ function Messages(props : {user: User, users: User[], currentRoom: Room, canWrit
 									<div className='message current flex'>
 										<Stack direction="row" className='user' spacing={1}>
 											<li className=''>{item.content}</li>
-											<Avatar src={process.env.REACT_APP_BACK_URL + "/avatars/"+item.userId.toString()+".png"} sx={{width: '3vw', height: '3vh', border: 1}}/>
+											<Avatar src={process.env.REACT_APP_BACK_URL + "/avatars/"+item.userId.toString()+".png"} sx={{ width: 35, height: 35 }}/>
 										</Stack>
 											<div className='user'>
 												{props.users.find(user => user.id === item.userId)?.username}
@@ -100,7 +74,7 @@ function Messages(props : {user: User, users: User[], currentRoom: Room, canWrit
 									:
 									<div className='message other flex'>
 										<Stack direction="row" className='user' spacing={1}>
-											<Avatar src={process.env.REACT_APP_BACK_URL + "/avatars/"+item.userId.toString()+".png"} sx={{width: '3vw', height: '3vh', border: 1}}/>
+											<Avatar src={process.env.REACT_APP_BACK_URL + "/avatars/"+item.userId.toString()+".png"} sx={{ width: 35, height: 35 }}/>
 											<li className=''>{item.content}</li>
 										</Stack>
 												<div className='user' >

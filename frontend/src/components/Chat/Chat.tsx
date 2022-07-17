@@ -22,6 +22,7 @@ const ChatBoxComponentStyle = {
     backgroundPosition: 'bottom left',
 	backgroundRepeat: 'no-repeat',
     filter: 'drop-shadow(20px 20px 1px black)',
+	// padding: '0px',
 }
 
 const OverallChatStyle = {

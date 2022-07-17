@@ -13,6 +13,7 @@ import ListItemText from "@mui/material/ListItemText";
 import Stack from "@mui/material/Stack";
 import Games from "@mui/icons-material/Games";
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import Avatar from '@mui/material/Avatar'
 
 interface FriendUserDto {
   userId: number;
@@ -249,6 +250,7 @@ export default function FriendBar(props: {
           {friends.map((item) => (
             <div key={item.id}>
               <ListItem>
+				<Avatar   sx={{ width: 35, height: 35 }} src={process.env.REACT_APP_BACK_URL + "/avatars/"+item.id.toString()+".png"}/>
                 {props.statusMap.get(item.id) === "online" ? (
                   <ListItemText primary={item.username} secondary="online" />
                 ) : (
