@@ -7,7 +7,7 @@ import { User } from "interfaces";
 import { PlayerBarStyle } from "../../styles/tsxStyles/Profile";
 import "./../../styles/Other/SkillBar.css";
 import { PlayerAvatar } from "../Avatars";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { LinearProgress } from "@mui/material";
 
@@ -65,6 +65,7 @@ function PlayerInfoBand(props: { user: User }) {
 export default function Profile(props: { self: boolean }) {
   const [profile, setProfile] = useState<User>(null!);
   let params = useParams();
+  let navigate = useNavigate();
 
   useEffect(() => {
     if (props.self === true && !profile) {
@@ -74,6 +75,9 @@ export default function Profile(props: { self: boolean }) {
         })
         .then((res) => {
           setProfile(res.data);
+        })
+        .catch((err) => {
+          navigate("/login");
         });
     } else if (props.self === false && !profile) {
       axios
@@ -82,6 +86,9 @@ export default function Profile(props: { self: boolean }) {
         })
         .then((res) => {
           setProfile(res.data);
+        })
+        .catch((err) => {
+          navigate("/login");
         });
     }
   }, []);
