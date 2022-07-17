@@ -2,7 +2,7 @@ import { IsBoolean, IsOptional, Matches } from 'class-validator';
 
 export class UpdateUserDto {
   @IsOptional()
-  @Matches(/^[a-zA-Z_-]{3,10}$/)
+  @Matches(/^[\w]{2,16}$/)
   username: string;
 
   @IsOptional()

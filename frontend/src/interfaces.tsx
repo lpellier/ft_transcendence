@@ -12,6 +12,7 @@ interface User {
 	id: number;
 	username: string;
 	tfa: boolean;
+	firstLogin: boolean;
 	victories: number;
 	losses: number;
 	level: number;

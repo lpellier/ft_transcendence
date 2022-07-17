@@ -81,6 +81,10 @@ const action = (
   </div>
 );
 
+  if (auth.user.firstLogin === true) {
+    return <FirstLoginPrompt user={auth.user} />
+  }
+
   return (
     <div>
       <Snackbar
@@ -89,13 +93,7 @@ const action = (
           message={`You have been invited to play a game with ${invite?.inviterUsername}`}
           action={action}
       />
-
       <Stack>
-        {auth.user.username === null ? (
-          <FirstLoginPrompt user={auth.user} />
-        ) : (
-          <div />
-        )}
         {auth.user.username !== null ? (
           <div>
             <SearchAppBar
