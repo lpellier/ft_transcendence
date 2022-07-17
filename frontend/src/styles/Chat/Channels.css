@@ -13,39 +13,33 @@
 	scrollbar-width: none;
 }
 
-.room-list {
+.room-list {	
 	overflow-y: scroll;
 	-ms-overflow-style: none;
 	scrollbar-width: none;
 	height: 63vh;
 }
 
-.current-channel {
-	max-width: 10vw;
-	border: none;
-	width: 100%;
-	text-align: left;
-	background-color: gray;
-}
-
 .channel-list {
 	width: 100%;
-	max-width: 10vw;
+	/* max-width: 10vw; */
 	margin: 0;
 	padding: 0;
 }
 
 .channel-list-content {
 	width: 100%;
-	max-width: 10vw;
+	/* max-width: 10vw; */
 	text-align: left;
 	border: none;
-
+	overflow-x: hidden;
+	margin: 0;
+	padding: 0;
 }
 
 .add-user {
 	width: fit-content;
-	max-width: 10vw;
+	/* max-width: 10vw; */
 	text-align: left;
 	margin: 0;
 
@@ -62,7 +56,7 @@
 
 .add-user-list-content {
 	width: fit-content;
-	max-width: 10vw;
+	/* max-width: 10vw; */
 	margin: 0;
 	padding-left: 0.5em;
 	padding-right: 0.5em;
@@ -86,11 +80,11 @@
 	flex-direction: column;
 }
 
-.MenuItem.Mui {
+.channel-list-content.Mui {
 	color: black;
   }
   
   /* Increase the specificity */
-  .MenuItem.Mui-selected {
+  .channel-list-content.Mui-selected {
 	color: white;
   }
