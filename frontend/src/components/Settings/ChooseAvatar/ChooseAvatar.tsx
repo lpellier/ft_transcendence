@@ -18,22 +18,6 @@ const Input = styled("input")({
   display: "none",
 });
 
-function NoButton(props: { onClick: any }) {
-  return (
-    <Button variant="contained" color="error" onClick={props.onClick}>
-      Change my mind!
-    </Button>
-  );
-}
-
-function YesButton(props: { onClick: any }) {
-  return (
-    <Button variant="contained" onClick={props.onClick} color="success">
-      Let's go!
-    </Button>
-  );
-}
-
 function UploadButton(props: { setOpen: any }) {
   const [selectedFile, setSelectedFile] = useState<any>();
   let auth = useAuth();
@@ -103,12 +87,17 @@ function UploadButton(props: { setOpen: any }) {
       )}
 
       <Stack direction="row" spacing={3}>
-        <YesButton
-          onClick={() => {
-            handleSubmit();
-          }}
-        />
-        <NoButton onClick={closeModal} />
+        <Button
+          onClick={() => { handleSubmit();}}
+		  variant="contained" 
+		  color="success"
+		  disabled={!selectedFile}
+        > Let's go </Button>
+        <Button 
+			variant="contained" 
+			color="error"
+			onClick={closeModal}
+		> Change my mind! </Button>
       </Stack>
     </div>
   );
@@ -131,7 +120,6 @@ export default function AvatarList() {
         onClick={handleOpen}
         variant="contained"
         color="secondary"
-        //   style={ButtonModalStyle}
       >
         <FaceIcon sx={IconStyle} />
         Choose avatar
