@@ -33,49 +33,41 @@ function LogOutLink() {
 	}
 
 	return (
-	  <nav>
 		<Tooltip title={"Logout"} placement="bottom">
-		<Button
-			onClick={logout}
-			variant="contained"
-			startIcon={<MeetingRoomIcon />}
-			color="secondary"
-			sx={{height: "100%"}}
+			<Button
+				onClick={logout}
+				variant="contained"
+				startIcon={<MeetingRoomIcon />}
+				color="secondary"
 			/>
 		</Tooltip>
-	  </nav>
 	);
 }
 
 function AppBarButton(props: {icon: any, link: string, tooltip: any}) {
 	return (
-		<nav>
-		  <Link to={props.link} style={{ textDecoration: 'none' }}>
-		  <Tooltip title={props.tooltip} placement="bottom">
+		<Tooltip title={props.tooltip} placement="bottom">
 			<Button
 				variant="contained"
-				color="secondary">
+				color="secondary"
+				component={Link}
+				to={props.link}>
 				{props.icon}
 			</Button>
-			</Tooltip>
-		  </Link>
-		</nav>
+		</Tooltip>
 	);
 }
 
 function PlayerName(props: {name: string}) {
-	
 	return (
-		<div>
-			<Typography
-			  variant="h6"
-			  noWrap
-			  component="div"
-			  sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
-			  >
-				{props.name}
-			</Typography>
-		</div>
+		<Typography
+			variant="h6"
+			noWrap
+			component="div"
+			sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
+			>
+			{props.name}
+		</Typography>
 	);
 }
 
@@ -86,7 +78,7 @@ function ProjectName() {
 		  noWrap
 		  component="div"
 		  sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' }, paddingLeft: '10%', overflow: 'hidden', textOverflow: 'ellipsis'}}
-		>The Pongers Guide to the Galaxy</Typography>
+		>The Ponger's Guide to the Galaxy</Typography>
 	);
 }
 

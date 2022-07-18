@@ -4,7 +4,6 @@ import FaceIcon from "@mui/icons-material/Face";
 import Modal from "@mui/material/Modal";
 import { ModalChooseAvatar } from "../../../styles/tsxStyles/Settings/Avatar";
 import { IconStyle } from "../../../styles/tsxStyles/AppBar/PongMenu";
-import { styled } from "@mui/material/styles";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import { useState } from "react";
 import Button from "@mui/material/Button";
@@ -12,11 +11,7 @@ import axios from "axios";
 import { toastThatError } from "../../../App";
 import { useAuth } from "components/AuthProvider";
 import React from "react";
-import { Chip, Typography } from "@mui/material";
-
-const Input = styled("input")({
-  display: "none",
-});
+import { Typography } from "@mui/material";
 
 function UploadButton(props: { setOpen: any }) {
   const [selectedFile, setSelectedFile] = useState<any>();
@@ -41,12 +36,12 @@ function UploadButton(props: { setOpen: any }) {
             withCredentials: true,
           }
         )
-        .then(res => {
+        .then((res) => {
           console.log("Put avatar request success");
           props.setOpen(false);
           auth.updateAvatar();
         })
-        .catch(err => {
+        .catch((err) => {
           toastThatError("Avatar upload failed");
         });
     }
@@ -58,20 +53,15 @@ function UploadButton(props: { setOpen: any }) {
 
   return (
     <div>
-      <label htmlFor="icon-button-file">
-        <Chip
-          icon={<PhotoCamera />}
-          color="secondary"
-          label="Choose file"
-          clickable
-        />
-        <Input
-          type="file"
-          id="icon-button-file"
-          name="file"
-          onChange={changeHandler}
-        />
-      </label>
+      <Button
+        component="label"
+        variant="contained"
+        startIcon={<PhotoCamera />}
+        color="secondary"
+      >
+        Choose file
+        <input hidden accept="image/*" type="file" onChange={changeHandler} />
+      </Button>
       {selectedFile ? (
         <Stack spacing={2} sx={{ margin: "20px" }}>
           <Typography variant="body2">Filename: {selectedFile.name}</Typography>
@@ -88,16 +78,18 @@ function UploadButton(props: { setOpen: any }) {
 
       <Stack direction="row" spacing={3}>
         <Button
-          onClick={() => { handleSubmit();}}
-		  variant="contained" 
-		  color="success"
-		  disabled={!selectedFile}
-        > Let's go </Button>
-        <Button 
-			variant="contained" 
-			color="error"
-			onClick={closeModal}
-		> Change my mind! </Button>
+          onClick={() => {
+            handleSubmit();
+          }}
+          variant="contained"
+          color="success"
+          disabled={!selectedFile}
+        >
+          Let's go
+        </Button>
+        <Button variant="contained" color="error" onClick={closeModal}>
+          Change my mind!
+        </Button>
       </Stack>
     </div>
   );
@@ -116,11 +108,7 @@ export default function AvatarList() {
 
   return (
     <React.Fragment>
-      <Button
-        onClick={handleOpen}
-        variant="contained"
-        color="secondary"
-      >
+      <Button onClick={handleOpen} variant="contained" color="secondary">
         <FaceIcon sx={IconStyle} />
         Choose avatar
       </Button>
