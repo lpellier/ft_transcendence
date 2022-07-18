@@ -25,7 +25,6 @@ const TitleStyle = {
 
 const LittleBoxForInput = {
 	width: '50vw',
-	
 	padding: 2,
 	border: '4px solid black',
 	backgroundColor: 'rgb(120, 100, 220, 0.95)',
@@ -55,12 +54,14 @@ function ChooseFirstName(props: {setter: any, value: string}) {
 						color='rgb(200, 100, 30)'
 						sx={TitleStyle}
 					>
-						Choose your nickname :
+						Choose your username:
 					</Typography>
 					<TextField
 						color="warning"
-						label="No space, no digit por favor !" 
 						variant="standard"
+						error={/^[\w]{2,16}$/.test(firstName) === false}
+						helperText={"Your username may only contain letters, digits or underscore, and must be at least 2 characters long."}
+						inputProps={{maxLength: 16}}
 						onChange={(e) => setFirstName(e.target.value)}
 						style={{width: '50%', justifyContent: 'center'}}
 					/>
@@ -119,7 +120,7 @@ export default function FirstLoginPrompt(props: {user: User | undefined}) {
 	
 		return (
 			<Box sx={LittleBoxForInput}>
-			<Stack sx={{paddingLeft: '1vw', paddingTop: '1vh'}} spacing={10} direction="row">
+			<Stack spacing={5} direction="row">
 				<label htmlFor="icon-button-file">
 					<Button 
 						variant="contained"
