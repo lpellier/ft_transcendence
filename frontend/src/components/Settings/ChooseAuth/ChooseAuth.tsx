@@ -1,8 +1,5 @@
 import Stack from "@mui/material/Stack";
 import Modal from "@mui/material/Modal";
-import {
-  ButtonStackStyle,
-} from "../../../styles/tsxStyles/Settings/Auth";
 import { useState } from "react";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
