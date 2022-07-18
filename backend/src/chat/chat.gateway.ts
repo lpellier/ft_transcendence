@@ -10,9 +10,10 @@ import { UpdatePasswordDto } from "./dto/update-password.dto"
 import { BlockedUserDto } from "./dto/blocked-user.dto"
 import { CheckPasswordDto } from "./dto/check-password.dto";
 import { InviteDto } from "./dto/invite.dto";
+import { AddMuteDto } from "./dto/add-mute.dto";
 	
 import * as bcrypt from 'bcrypt';
-import { UseFilters, UsePipes, ValidationPipe } from "@nestjs/common";
+import { ConsoleLogger, UseFilters, UsePipes, ValidationPipe } from "@nestjs/common";
 import { ValidationFilter } from "./filters/validation.filter";
 import { IsNumberOptions } from "class-validator";
 
@@ -85,6 +86,19 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect
 		await this.chatService.addAdminToRoom(addAdminDto.userId, addAdminDto.roomId);
 		//console.log('add admin to room called', addAdminDto)
 		this.server.to(addAdminDto.roomId.toString()).emit('admin added to room');
+	}
+
+	@SubscribeMessage('add mute to room')
+	async handleAddMuteToRoom(@MessageBody() addMuteDto: AddMuteDto) {
+		console.log('add mute to room called', addMuteDto);
+		await this.chatService.addMuteToRoom(addMuteDto.userId, addMuteDto.roomId, addMuteDto.date);
+	}
+
+	@SubscribeMessage('get muted users')
+	async handleGetMutedUsers(@MessageBody() roomId: number) {
+		let users = await this.chatService.getMutedUsers(roomId);
+		console.log('get muted users called', users);
+		this.server.emit('get muted users', users);
 	}
 
 	@SubscribeMessage('remove admin from room')
@@ -167,6 +181,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect
 		//console.log('get all messages called', id)
 
 	}
+
 
 	@SubscribeMessage('new user')
 	async handleNewUser(@ConnectedSocket () client : Socket, @MessageBody() userId: number) {

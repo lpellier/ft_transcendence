@@ -23,7 +23,7 @@ model User {
   adminRooms   Room[]    @relation("roomAdmins")
   messages     Message[]
   blockedIds   Int[]
-  muted        _mutedRoomtoUser[]
+  muted        MutedRoomtoUser[]
 }
 
 model Stats {
@@ -45,12 +45,12 @@ model Match {
   score    Int[]
 }
 
-model _mutedRoomtoUser {
+model MutedRoomtoUser {
   id     Int @id @default(autoincrement())
   roomId Int
   room   Room @relation(fields: [roomId], references: [id])
   userId Int
-  date DateTime
+  date DateTime 
   user  User @relation(fields: [userId], references: [id])
 }
 
@@ -63,7 +63,7 @@ model Room {
   admins     User[]    @relation("roomAdmins")
   visibility String
   password   String
-  muted      _mutedRoomtoUser[]
+  muted      MutedRoomtoUser[]
 }
 
 

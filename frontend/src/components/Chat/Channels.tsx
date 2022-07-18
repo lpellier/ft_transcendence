@@ -132,6 +132,7 @@ function RoomList(props: {rooms: Room[], currentRoom: Room, setCurrentRoom: Reac
 		{
 			props.setCurrentRoom(room)
 			socket.emit('get admins', room.id);
+			socket.emit('get muted users', room.id);
 		}
 		else
 			setOpenPassword(true);
