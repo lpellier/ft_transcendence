@@ -29,9 +29,11 @@ export class UsersService {
   }
 
   async createUser(id: number): Promise<User> {
+    const username = await this.generateRandomAvailableUsername();
     const user = await this.prisma.user.create({
       data: {
         id: id,
+        username: username,
         stats: {
           create: {},
         },
@@ -52,6 +54,22 @@ export class UsersService {
       },
     });
     return user;
+  }
+
+  async generateRandomAvailableUsername() {
+    let randomNumber: number;
+    let username: string;
+    let isNotAvailable: User;
+    do {
+      randomNumber = Math.floor(Math.random() * (100000 - 16) + 16);
+      username = randomNumber.toString(16);
+      isNotAvailable = await this.prisma.user.findUnique({
+        where: {
+          username: username,
+        },
+      });
+    } while (isNotAvailable);
+    return username;
   }
 
   async getUserWithStatsAndMatchHistory(id: number): Promise<any> {
@@ -79,6 +97,7 @@ export class UsersService {
     const profile: Profile = {
       id: user.id,
       username: user.username,
+      firstLogin: user.firstLogin,
       tfa: user.tfa,
       victories: user.stats.victories,
       losses: user.stats.losses,
@@ -109,6 +128,7 @@ export class UsersService {
         },
         data: {
           username: newUsername,
+          firstLogin: false,
         },
       });
       return user.username;
@@ -200,11 +220,11 @@ export class UsersService {
 
   async getAllUsers() {
     const users = await this.prisma.user.findMany();
-    let list = []
+    let list = [];
     for (const user of users) {
-      list.push({id: user.id, username: user.username})
+      list.push({ id: user.id, username: user.username });
     }
-    console.log(list);
+    return list;
   }
 
   async getUsername(id: number) {
@@ -215,7 +235,6 @@ export class UsersService {
     });
     return user.username;
   }
-
 
   async getMock() {
     const user = await this.prisma.user.findUnique({

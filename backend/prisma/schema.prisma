@@ -12,7 +12,8 @@ datasource db {
 
 model User {
   id           Int       @id
-  username     String?   @unique
+  username     String    @unique
+  firstLogin   Boolean   @default(true)
   tfa          Boolean   @default(false)
   otpSecret    String    @default("")
   stats        Stats?

@@ -1,8 +1,6 @@
 import { useEffect } from "react";
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
-import FirstLoginPrompt from '../components/Prompt'
-
 import "./../styles/Game/canvas.css"
 import "./../styles/Game/buttons.css"
 import "./../styles/Game/inputs.css"
@@ -262,14 +260,9 @@ export default function Game() {
 		user_name = auth.user.username;
 		user_id = propsUser.id.toString();
 		}, [auth.user?.id, auth.user])
-
+		
 	return (
 		<Stack id="test_parent" spacing={1}>
-			{auth.user.username === null ? 
-				<FirstLoginPrompt user={auth.user}/>
-				:
-				<div />
-			}
 			<Box sx={{paddingTop: '2%', }} >
 				<GameComponent />
 			</Box>

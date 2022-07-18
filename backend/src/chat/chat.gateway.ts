@@ -1,6 +1,6 @@
 import { ConfigService } from "@nestjs/config";
-import { MessageBody, ConnectedSocket, SubscribeMessage, WebSocketGateway, WebSocketServer, OnGatewayConnection, OnGatewayDisconnect, WsException } from "@nestjs/websockets";
-import { Socket } from "socket.io";
+import { MessageBody, ConnectedSocket, SubscribeMessage, WebSocketGateway, WebSocketServer, OnGatewayConnection, OnGatewayDisconnect } from "@nestjs/websockets";
+import { Socket, Server } from "socket.io";
 import { ChatService } from './chat.service';
 import { UserRoomDto } from "./dto/user-room.dto";
 import { CreateRoomDto } from './dto/create-room.dto';
@@ -9,16 +9,11 @@ import { CreateDMRoomDto } from "./dto/create-dm-room.dto"
 import { UpdatePasswordDto } from "./dto/update-password.dto"
 import { BlockedUserDto } from "./dto/blocked-user.dto"
 import { CheckPasswordDto } from "./dto/check-password.dto";
-import { InviteDto } from "./dto/invite.dto";
 import { AddMuteDto } from "./dto/add-mute.dto";
 	
 import * as bcrypt from 'bcrypt';
 import { ConsoleLogger, UseFilters, UsePipes, ValidationPipe } from "@nestjs/common";
 import { ValidationFilter } from "./filters/validation.filter";
-import { IsNumberOptions } from "class-validator";
-
-let socketUser = new Map<string, number>();
-let socketGame = new Map<string, number>();
 
 @UseFilters(new ValidationFilter())
 @UsePipes(new ValidationPipe())
@@ -28,12 +23,11 @@ let socketGame = new Map<string, number>();
 	  credentials: true
 	}
 })
-export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect
-{
+export class ChatGateway {
 	constructor(private readonly chatService: ChatService) {}
 
 	@WebSocketServer()
-	server: Socket;
+	server: Server;
 
 	@SubscribeMessage('create room') 
 	async handleCreateRoom(@ConnectedSocket () client : Socket, @MessageBody()  createRoomDto: CreateRoomDto) {		
@@ -183,26 +177,6 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect
 	}
 
 
-	@SubscribeMessage('new user')
-	async handleNewUser(@ConnectedSocket () client : Socket, @MessageBody() userId: number) {
-		socketUser.set(client.id, userId);
-		await this.chatService.addUserToRoom(userId, 1);
-		const allUsers =  await this.chatService.getAllUsers();
-		this.server.emit('new user', allUsers);
-		this.server.emit('new connection', userId);
-		// console.log('socket user', socketUser);
-		let online: number[] = [];
-		socketUser.forEach((value, key) => {
-			online.push(value);
-		})
-		let inGame: number[] = [];
-		socketGame.forEach((value, key) => {
-			inGame.push(value);
-		})
-		client.emit('status map', {online: online, inGame: inGame});
-		// console.log('new user called', newUserDto)
-	}
-
 	@SubscribeMessage('update password')
 	async handeUpdstePassword(@MessageBody() updatePasswordDto: UpdatePasswordDto) {
 		if (updatePasswordDto.password != "") {
@@ -220,17 +194,6 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect
 		this.server.emit('create room');
 	}
 
-	handleDisconnect(@ConnectedSocket() client:Socket) {
-		// console.log('client disconnected');
-		this.server.emit('new disconnection', socketUser.get(client.id))
-		socketUser.delete(client.id);
-		socketGame.delete(client.id);
-	}
-
-
-	handleConnection(@ConnectedSocket() client:Socket) {
-		// console.log('client connected');
-	}
 
 	@SubscribeMessage('add blocked')
 	add(@ConnectedSocket() client:Socket, @MessageBody() blockedUserDto: BlockedUserDto) {
@@ -262,28 +225,6 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect
 		});
 	}
 
-	@SubscribeMessage('countdown_start')
-	countdown_start(@ConnectedSocket() client:Socket ,@MessageBody() userId: number) {
-		socketGame.set(client.id, userId);
-		this.server.emit('new gamer', userId);
-	}
-
-	@SubscribeMessage('remove gamer')
-	handleRemoveGamer(@ConnectedSocket() client:Socket ,@MessageBody() userId: number) {
-		for (let [key, value] of socketGame) {
-			if (value == userId) {
-				socketGame.delete(key);
-			}
-		}
-	}
-
-	@SubscribeMessage('invite for game')
-	inviteForGame(@ConnectedSocket() client:Socket ,@MessageBody() inviteDto: InviteDto) {
-	for (let [key, value] of socketUser.entries()) {
-		if (value === inviteDto.otherUserId)
-			this.server.to(key).emit('invite for game', {userId: inviteDto.userId, inviterId: client.id, inviteeId: key});
-	}
-	}
 }
 
 

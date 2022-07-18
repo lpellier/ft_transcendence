@@ -20,6 +20,7 @@ export default function Layout(props: {
 
   interface inviteDto {
     userId: number,
+    inviterUsername: string,
     inviterId: number,
     inviteeId: number,
 }
@@ -49,18 +50,6 @@ export default function Layout(props: {
 			socket.off("please send back")
         }
 	}, [auth.user?.username])
-
-  useEffect(() => {
-    const init = () => {
-        if (auth.user) {
-            socket.emit('new user', auth.user.id);
-        }
-    }
-    if (socket.connected)
-        init();
-    else
-        socket.on('connect', init)
-}, [auth.user])
 
 const handleClose = (event: React.SyntheticEvent | Event, reason?: string) => {
   if (reason === 'clickaway') {
@@ -92,21 +81,19 @@ const action = (
   </div>
 );
 
+  if (auth.user.firstLogin === true) {
+    return <FirstLoginPrompt user={auth.user} />
+  }
+
   return (
     <div>
       <Snackbar
           open={open}
           onClose={handleClose}
-          message={`You have been invited to play a game with ${props.users.find(user=> user?.id === invite?.userId)?.username}`}
+          message={`You have been invited to play a game with ${invite?.inviterUsername}`}
           action={action}
       />
-
       <Stack>
-        {auth.user.username === null ? (
-          <FirstLoginPrompt user={auth.user} />
-        ) : (
-          <div />
-        )}
         {auth.user.username !== null ? (
           <div>
             <SearchAppBar

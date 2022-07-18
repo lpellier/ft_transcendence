@@ -84,9 +84,6 @@ export default function FirstLoginPrompt(props: {user: User | undefined}) {
 		formData,
 		{
 			withCredentials: true,
-			headers: {
-				"Content-Type": "multipart/form-data",
-			}
 		})
 		.then(res => {console.log("Put avatar request success")})
 		.catch(err => {toastThatError('Avatar upload failed')})
@@ -154,37 +151,31 @@ export default function FirstLoginPrompt(props: {user: User | undefined}) {
 	}
 
 	return (
-	<div>
-		{props.user && props.user.username === null ?
-			<Modal open={open} >
-				<Box sx={FirstConnexionModal}>
-					<Stack spacing={3}>
-						<Typography 
-							variant="h5"
-							color='rgb(85, 70, 230)'
-							sx={TitleStyle}
+		<Modal open={open} >
+			<Box sx={FirstConnexionModal}>
+				<Stack spacing={3}>
+					<Typography 
+						variant="h5"
+						color='rgb(85, 70, 230)'
+						sx={TitleStyle}
+					>
+						Hey, First LogIn ?
+					</Typography>
+					<ChooseFirstName setter={setUsername} value={username} />
+					<ChooseFirstAvatar />
+					<Button 
+						onClick={submitNameAndAvatar}
+						variant="contained"
+						sx={{
+							backgroundColor: 'rgb(100, 190, 100)',
+							border: '2px solid black',
+							textShadow: '1px 1px 1px black',
+						}}
 						>
-							Hey, First LogIn ?
-						</Typography>
-						<ChooseFirstName setter={setUsername} value={username} />
-						<ChooseFirstAvatar />
-						<Button 
-							onClick={submitNameAndAvatar}
-							variant="contained"
-							sx={{
-								backgroundColor: 'rgb(100, 190, 100)',
-								border: '2px solid black',
-								textShadow: '1px 1px 1px black',
-							}}
-							>
-							I'm all set !
-						</Button>
-					</Stack>
-				</Box>
-			</Modal>
-				:
-			<div />
-		}
-		</div>
+						I'm all set !
+					</Button>
+				</Stack>
+			</Box>
+		</Modal>
 	)
 }
