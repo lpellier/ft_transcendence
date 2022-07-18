@@ -19,9 +19,6 @@ interface CreateMessageDto {
 function InputBox(props: {canWrite: boolean, mutedUsers: {userId: number, date: Date}[], user: User, currentRoom: Room}) {
 
 	let muted: {userId: number, date: Date} | undefined = props.mutedUsers.find(user => user.userId === props.user.id);
-	console.log(" now = ",new Date());
-	if (muted)
-		console.log("then = ",new Date(muted.date));
 	let mutedDate = muted ? new Date(muted.date).getTime() : 0;
 	function handleSubmit(e: any) {
 		e.preventDefault();
@@ -81,14 +78,13 @@ function Messages(props : {user: User, users: User[], currentRoom: Room, canWrit
 	}, [])
 
 	useEffect(() => {
-		const handler = (data: {userId: number, date: Date}[]) => {setMutedUsers(data);};
+		const handler = (data: {userId: number, date: Date}[]) => {setMutedUsers(data); console.log("muted users = ",data);};
 		socket.on('get muted users', handler);
 		return () => {
 			socket.off('get muted users');
 		}
 	}, [])
 	
-	console.log("mutedUsers= ",mutedUsers);
     return (
 	<Box sx={{width:'100%'}}>
         <Stack className='chat' spacing={2} justifyContent='space-between'>

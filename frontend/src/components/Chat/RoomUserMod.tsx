@@ -95,13 +95,18 @@ function RoomUserMod(props : {currentUser: User, users: User[], room: Room, room
 			if (roomUsers.find(user => user.username === username))
 			{
 				let userId: any = props.users.find(user => user.username === username)?.id;
+				if (userId === props.room.ownerId)
+						toastThatError("cannot kick owner");
+				else
+				{
 				const removeUser: RoomUserDto = {userId: userId, roomId: props.room.id};
 				socket.emit('remove user from room', removeUser);
 				setKickUserClicked(0);
 				toastIt(username + ' removed from ' + props.room.name);
+				}
 			}
 			else
-			toastThatError('user not in room');
+				toastThatError('user not in room');
 		}
 		else
 		toastThatError('username not found')
@@ -142,10 +147,15 @@ function RoomUserMod(props : {currentUser: User, users: User[], room: Room, room
 				if (props.roomAdmins.find(admin => admin.username === username))
 				{
 					let userId: any = props.users.find(user => user.username === username)?.id;
+					if (userId === props.room.ownerId)
+						toastThatError("cannot remove owner's admin privileges");
+					else
+					{
 					const removeAdmin: RoomUserDto = {userId: userId, roomId: props.room.id};
 					socket.emit('remove admin from room', removeAdmin);
 					setKickAdminClicked(0);
 					toastIt(username + ' removed from administrators in ' + props.room.name);
+					}
 				}
 				else
 					toastThatError('user is not an administrator')
@@ -164,9 +174,14 @@ function RoomUserMod(props : {currentUser: User, users: User[], room: Room, room
 		const scale: string = e.target[2].value;
 		if (props.users.find(user => user.username === username))
 		{
+			
 			if (roomUsers.find(user => user.username === username))
 			{
 				let userId: any = props.users.find(user => user.username === username)?.id;
+				if (userId === props.room.ownerId)
+					toastThatError('cannot mute owner');
+				else
+				{
 				let date: Date = new Date();
 				if (scale=== 'minutes')
 					date.setMinutes(date.getMinutes() + amount);
@@ -178,6 +193,7 @@ function RoomUserMod(props : {currentUser: User, users: User[], room: Room, room
 				socket.emit('add mute to room', muteUser);
 				setMuteUserClicked(0);
 				toastIt(username + ' muted in ' + props.room.name);
+				}
 			}
 			else
 			toastThatError('user not in room');
@@ -312,7 +328,7 @@ function RoomUserMod(props : {currentUser: User, users: User[], room: Room, room
 				handleSubmit={handleKickUserSubmit} 
 				setClicked={setKickUserClicked} 
 				users={props.users} 
-				condition={(item:User) => {return(!(roomUsers.find(user => user.id === item.id) && item.id !== props.currentUser.id))}}
+				condition={(item:User) => {return(!(roomUsers.find(user => user.id === item.id) && item.id !== props.currentUser.id && item.id !== props.room.ownerId))}}
 			/>
 			{props.currentUser.id === props.room.ownerId?
 			<UserModButton
@@ -334,7 +350,7 @@ function RoomUserMod(props : {currentUser: User, users: User[], room: Room, room
 				handleSubmit={handleKickAdminSubmit} 
 				setClicked={setKickAdminClicked} 
 				users={props.roomAdmins} 
-				condition={(item:User) => {return(item.id === props.currentUser.id)}}
+				condition={(item:User) => {return(item.id === props.currentUser.id && item.id !== props.room.ownerId)}}
 			/>
 			:null}
 			<MuteUserButton
@@ -345,7 +361,7 @@ function RoomUserMod(props : {currentUser: User, users: User[], room: Room, room
 				handleSubmit={handleMuteUserSubmit}
 				setClicked={setMuteUserClicked}
 				users={props.users}
-				condition={(item:User) => {return(!(roomUsers.find(user => user.id === item.id) && item.id !== props.currentUser.id))}}
+				condition={(item:User) => {return(!(roomUsers.find(user => user.id === item.id) && item.id !== props.currentUser.id && item.id !== props.room.ownerId))}}
 			/>
 			{props.currentUser.id === props.room.ownerId?
 				<div>
