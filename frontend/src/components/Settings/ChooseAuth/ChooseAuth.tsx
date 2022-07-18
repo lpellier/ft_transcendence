@@ -14,7 +14,6 @@ import {
 } from "../../../styles/tsxStyles/AppBar/PongMenu";
 import { ModalChooseAuth } from "../../../styles/tsxStyles/Settings/Auth";
 import { useAuth } from "components/AuthProvider";
-import { Chip } from "@mui/material";
 
 function GenerateQRCode(props: { url: string; setOpen: any }) {
   function handleClick() {
@@ -41,44 +40,31 @@ function TFAButton(props: { setOpen: any }) {
 
   let auth = useAuth();
 
-  function patchTfaTrue() {
+  function patchTfa(option: boolean) {
     axios
       .patch(
         process.env.REACT_APP_BACK_URL + "/users/me",
-        { tfa: true },
+        { tfa: option },
         { withCredentials: true }
       )
       .then((res) => {
-        console.log("TFA activated");
-        setUrl("otpauth://totp/transcendance_BoopBipBoop?secret=" + res.data);
+        console.log("TFA enabled?", option);
+        if (option) {
+         setUrl("otpauth://totp/transcendance_BoopBipBoop?secret=" + res.data);
+        }
       })
       .catch(function (err) {
         console.log("Setting tfa failed :", err);
       });
   }
 
-  function patchTfaFalse() {
-    axios
-      .patch(
-        process.env.REACT_APP_BACK_URL + "/users/me",
-        { tfa: false },
-        { withCredentials: true }
-      )
-      .then((res) => {
-        console.log("TFA disabled");
-      })
-      .catch(function (err) {
-        console.log("Setting tfa failed :", err);
-      });
-  }
-
-  function showFlashcode() {
-    patchTfaTrue();
+  function enableTfa() {
+    patchTfa(true);
     showedInput(true);
   }
 
   function deactivateTfa() {
-    patchTfaFalse();
+    patchTfa(false);
     props.setOpen(false);
   }
 
@@ -86,7 +72,7 @@ function TFAButton(props: { setOpen: any }) {
     <Stack>
       {auth.user.tfa === false ? (
         <div>
-          <Button onClick={showFlashcode} variant="contained" color="secondary">
+          <Button onClick={enableTfa} variant="contained" color="secondary">
             Activate Two Factor Authentication
           </Button>
           {input && <GenerateQRCode url={url} setOpen={props.setOpen} />}
@@ -117,7 +103,6 @@ export default function ChooseAuth() {
         onClick={handleOpen}
         variant="contained"
         color="secondary"
-        // style={ButtonModalStyle}
       >
         <VpnKeyIcon sx={IconStyle} />
         Choose Authentication

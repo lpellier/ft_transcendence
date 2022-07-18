@@ -59,34 +59,31 @@ function NameInput(props: {username: string, setter: any, setOpen: any}) {
 		<div>
 			<Stack spacing={4}>
 				<TextField
-					type="text"
-					label="New username" 
 					variant="standard"
+					label="New username"
+					error={value.length != 0 && /^[\w]{2,16}$/.test(value) === false}
+					helperText={"Your username may only contain letters, digits or underscore, and must be at least 2 characters long."}
+					inputProps={{maxLength: 16}}
 					onChange={(e) => setValue(e.target.value) } 
 					style={{width: '85%', justifyContent: 'center'}}
-					id='name'
 				/>
-				<form id='ChangeNameForm' style={{width: '100%'}}>
-					<Stack direction="row" spacing={2} sx={{display: 'flex', justifyContent: 'center'}}>
-						<Button
-							onClick={handleSubmit}
-							variant="contained"
-							color="success"
-							// sx={{backgroundColor: 'rgb(70, 195, 150, 0.65)', width: '20vw'}}
-							>
-							Ok I'm done!
-						</Button>
-						<Button
-							onClick={closeModal}
-							variant="contained"
-							color="error"
-
-							// sx={{backgroundColor: 'rgb(195, 60, 40, 0.65)', width: '20vw'}}
-							>
-							Nope!
-						</Button>
+				<Stack direction="row" spacing={2} sx={{ justifyContent: 'center'}}>
+					<Button
+						onClick={handleSubmit}
+						variant="contained"
+						color="success"
+						disabled={/^[\w]{2,16}$/.test(value) === false}
+						>
+						Ok I'm done!
+					</Button>
+					<Button
+						onClick={closeModal}
+						variant="contained"
+						color="error"
+						>
+						Nope!
+					</Button>
 					</Stack>
-				</form>
 				</Stack>
 			</div>
 	);
