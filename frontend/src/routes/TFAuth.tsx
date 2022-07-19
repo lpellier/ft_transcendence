@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import axios from "axios";
 import { client, toastThatError } from "App";
 import { Box, Button, Stack, TextField, Typography } from "@mui/material";
 
@@ -28,8 +27,7 @@ export default function TFAuth() {
     client
       .post(
         "/auth/google-authenticator",
-        {
-          value: pinInput, })
+        { value: pinInput, })
       .then((res) => {
         console.log("Pin Post request success :");
         if (res.data === true) {
