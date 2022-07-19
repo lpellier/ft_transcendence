@@ -40,7 +40,6 @@ function UploadButton(props: { setOpen: any }) {
     } catch {
       toastThatError("Avatar upload failed");
     }
-    client
   }
 
   function closeModal() {
