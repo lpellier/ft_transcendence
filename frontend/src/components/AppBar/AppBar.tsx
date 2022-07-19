@@ -16,7 +16,6 @@ import { useAuth } from "components/AuthProvider";
 import { Container } from '@mui/material';
 import { client } from 'App';
 
-
 function LogOutLink() {
 	let auth = useAuth();
 	let navigate = useNavigate();
