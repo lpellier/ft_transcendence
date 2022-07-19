@@ -31,7 +31,7 @@ function useAuthStatus() {
       try {
         const response = await client.get("/users/me");
         console.log("logged in");
-        auth.update(response.data);
+        auth.signin(response.data, () => null);
         setIsAuthenticated(true);
       } catch {
         console.log("not logged in");
