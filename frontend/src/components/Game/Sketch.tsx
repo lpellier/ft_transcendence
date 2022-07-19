@@ -1833,6 +1833,8 @@ class Vector {
 			) => {
 			game.room_id = r_id;
 			game.score_limit = score_limit;
+			game.spectator = true;
+			
 			errors.set_false();
 
 			if (map === "city") game.map = consts.city_map;
