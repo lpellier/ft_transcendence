@@ -10,10 +10,8 @@ import ListItemText from '@mui/material/ListItemText';
 import { socket } from 'index';
 import PersonIcon from '@mui/icons-material/Person';
 import BlockIcon from '@mui/icons-material/Block';
-import Games from '@mui/icons-material/Games';
 import { Backdrop, ButtonGroup, IconButton, Button, Stack, Alert, Tooltip } from '@mui/material';
 import {Link} from 'react-router-dom';
-import { toastThatError } from 'App';
 
 import { GameInviteButton } from '../FriendBar/FriendBar';
 

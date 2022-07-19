@@ -59,7 +59,7 @@ function NameInput(props: {username: string, setter: any, setOpen: any}) {
 				<TextField
 					variant="standard"
 					label="New username"
-					error={value.length != 0 && /^[\w]{2,16}$/.test(value) === false}
+					error={value.length !== 0 && /^[\w]{2,16}$/.test(value) === false}
 					helperText={"Your username may only contain letters, digits or underscore, and must be at least 2 characters long."}
 					inputProps={{maxLength: 16}}
 					onChange={(e) => setValue(e.target.value) } 
