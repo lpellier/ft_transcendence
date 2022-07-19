@@ -4,10 +4,10 @@ import React, { useState } from "react";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import QRCode from "react-qr-code";
-import axios from "axios";
 import VpnKeyIcon from "@mui/icons-material/VpnKey";
 import { ModalChooseAuth } from "../../../styles/tsxStyles/Settings/Auth";
 import { useAuth } from "components/AuthProvider";
+import { client } from "App";
 
 function GenerateQRCode(props: { url: string }) {
   const [open, setOpen] = useState<boolean>(true);
@@ -37,24 +37,18 @@ export default function ChooseAuth() {
 
   let auth = useAuth();
 
-  function patchTfa(option: boolean) {
-    axios
-      .patch(
-        process.env.REACT_APP_BACK_URL + "/users/me",
-        { tfa: option },
-        { withCredentials: true }
-      )
-      .then((res) => {
-        if (option) {
-          setUrl("otpauth://totp/transcendance_BoopBipBoop?secret=" + res.data);
-        }
-        auth.user.tfa = option;
-        setEnabled(option);
-        setRefresh(!refresh);
-      })
-      .catch(function (err) {
-        console.log("Setting tfa failed :", err);
-      });
+  async function patchTfa(option: boolean) {
+    try {
+      const response = await client.patch("/users/me", { tfa: option });
+      if (option) {
+        setUrl("otpauth://totp/transcendance_BoopBipBoop?secret=" + response.data);
+      }
+      auth.user.tfa = option;
+      setEnabled(option);
+      setRefresh(!refresh);
+    } catch {
+      console.log("Setting tfa failed.");
+    }
   }
 
   return (

@@ -29,7 +29,7 @@ import {
   ThreeWinsTrophy,
   achievements,
 } from "./Trophies";
-import axios from "axios";
+import { client } from "App";
 
 function BoardComponent(props: { icon: any; title: string }) {
   return (
@@ -100,17 +100,16 @@ function LeaderboardBox() {
   const [leaders, setLeaders] = useState<Stats[]>([]);
 
   useEffect(() => {
-    axios
-      .get(process.env.REACT_APP_BACK_URL + "/stats/lead", {
-        withCredentials: true,
-      })
-      .then((res) => {
+    async function getLeaderboard() {
+      try {
+        const response = await client.get("/stats/lead")
         console.log("Get leader success");
-        setLeaders(res.data);
-      })
-      .catch((err) => {
-        console.log("Get leader failed : ", err);
-      });
+        setLeaders(response.data);
+      } catch {
+        console.log("Get leader failed.");
+      }
+    }
+    getLeaderboard();
   }, []);
 
   function LeaderList() {

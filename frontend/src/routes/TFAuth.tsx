@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import axios from "axios";
-import { toastThatError } from "App";
+import { client, toastThatError } from "App";
 import { Box, Button, Stack, TextField, Typography } from "@mui/material";
 
 const BoxStyle = {
@@ -24,29 +23,19 @@ export default function TFAuth() {
   const [pinInput, setPininput] = useState<string>("");
   let navigate = useNavigate();
 
-  function handleSubmit() {
-    axios
-      .post(
-        process.env.REACT_APP_BACK_URL + "/auth/google-authenticator",
-        {
-          value: pinInput,
-        },
-        {
-          withCredentials: true,
-        }
-      )
-      .then((res) => {
-        console.log("Pin Post request success :");
-        if (res.data === true) {
-          navigate("/game");
-        } else {
-          toastThatError("Ho no! That Pin is not valid! :/");
-        }
-      })
-      .catch(function (err) {
-        console.log("Pin Post request failed :", err);
+  async function handleSubmit() {
+    try {
+      const response = await client.post("/auth/google-authenticator", { value: pinInput });
+      console.log("Pin Post request success :");
+      if (response.data === true) {
+        navigate("/game");
+      } else {
         toastThatError("Ho no! That Pin is not valid! :/");
-      });
+      }
+    } catch {
+      console.log("Pin Post request failed.");
+      toastThatError("Ho no! That Pin is not valid! :/");
+    }
   }
 
   return (

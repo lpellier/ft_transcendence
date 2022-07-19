@@ -12,24 +12,22 @@ import GamesIcon from '@mui/icons-material/Games'
 import SettingsIcon from '@mui/icons-material/Settings';
 import Tooltip from '@mui/material/Tooltip'
 import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
-import axios from 'axios';
 import { useAuth } from "components/AuthProvider";
 import { Container } from '@mui/material';
+import { client } from 'App';
 
 function LogOutLink() {
 	let auth = useAuth();
 	let navigate = useNavigate();
 
-	function logout() {
-	  axios.get(process.env.REACT_APP_BACK_URL + '/auth/logout',
-	  { withCredentials: true, })
-	  .then(res => {
-		console.log("Logout ")
-		auth.signout(() => navigate("/login"));
-	})
-	  .catch(function (err) {
-		console.log("Get request failed : ", err)
-	  });
+	async function logout() {
+		try {
+			client.get('/auth/logout');
+			console.log("Logout successful.");
+			auth.signout(() => navigate("/login"));
+		} catch {
+			console.log("Logout failed.")
+		}
 	}
 
 	return (

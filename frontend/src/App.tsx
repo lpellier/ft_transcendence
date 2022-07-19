@@ -16,26 +16,29 @@ import Layout from "./components/Layout";
 import { CssBaseline } from "@mui/material";
 import BaseLayout from "components/BaseLayout";
 
+export const client = axios.create({
+  baseURL: process.env.REACT_APP_BACK_URL,
+  withCredentials: true,
+});
+
 function useAuthStatus() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(null!);
   let auth = useAuth();
 
   console.log("passed by useAuthStatus");
   useEffect(() => {
-    axios
-      .get(process.env.REACT_APP_BACK_URL + "/users/me", {
-        withCredentials: true,
-      })
-      .then((res) => {
-        auth.signin(res.data, () => {
-          console.log("about to login");
-        });
+    async function getUser() {
+      try {
+        const response = await client.get("/users/me");
+        console.log("logged in");
+        auth.signin(response.data, () => null);
         setIsAuthenticated(true);
-      })
-      .catch((err) => {
+      } catch {
         console.log("not logged in");
         setIsAuthenticated(false);
-      });
+      }
+    }
+    getUser();
   }, []);
 
   return isAuthenticated;

@@ -8,8 +8,8 @@ import { PlayerBarStyle } from "../../styles/tsxStyles/Profile";
 import "./../../styles/Other/SkillBar.css";
 import { PlayerAvatar } from "../Avatars";
 import { useNavigate, useParams } from "react-router-dom";
-import axios from "axios";
 import { LinearProgress } from "@mui/material";
+import { client } from "App";
 
 const OverallBoxStyle = {
   paddingTop: "4vh",
@@ -68,29 +68,16 @@ export default function Profile(props: { self: boolean }) {
   let navigate = useNavigate();
 
   useEffect(() => {
-    if (props.self === true && !profile) {
-      axios
-        .get(process.env.REACT_APP_BACK_URL + "/users/me", {
-          withCredentials: true,
-        })
-        .then((res) => {
-          setProfile(res.data);
-        })
-        .catch((err) => {
-          navigate("/login");
-        });
-    } else if (props.self === false && !profile) {
-      axios
-        .get(process.env.REACT_APP_BACK_URL + "/users/" + params.id || "", {
-          withCredentials: true,
-        })
-        .then((res) => {
-          setProfile(res.data);
-        })
-        .catch((err) => {
-          navigate("/login");
-        });
+    async function getProfile() {
+      try {
+        const requestURL = (props.self === true) ?  "/users/me" : "/users/me" + params.id || "";
+        const response = await client.get(requestURL);
+        setProfile(response.data);
+      } catch {
+        navigate("/login");
+      }
     }
+    getProfile();
   }, []);
 
   return (
