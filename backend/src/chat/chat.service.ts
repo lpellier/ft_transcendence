@@ -45,7 +45,43 @@ export class ChatService {
     });
   }
 
-  
+  async addMuteToRoom(userId: number, roomId: number, date: Date) {
+    const mutedRoomtoUser = await this.prisma.mutedRoomtoUser.findFirst({
+      where: {
+        userId: userId,
+        roomId: roomId
+        }
+    });
+    if (mutedRoomtoUser) {
+      await this.prisma.mutedRoomtoUser.update({
+        where: {
+          id: mutedRoomtoUser.id
+        },
+        data: {
+          date: date
+        }
+      })
+    }
+    else
+    { 
+      await this.prisma.mutedRoomtoUser.create({
+      data: {
+        userId: userId,
+        roomId: roomId,
+        date: date
+      }
+      })
+    }
+  }
+
+  async getMutedUsers(roomId: number) {
+    const mutedUsers = await this.prisma.mutedRoomtoUser.findMany({
+      where: {roomId: roomId},
+      select: {userId: true, date: true}
+    })
+    return mutedUsers;
+  }
+
   async removeUserFromRoom(userId: number, roomId: number) {
     const room = await this.prisma.room.update({
       where: {id: roomId},

@@ -7,6 +7,7 @@ import Avatar from '@mui/material/Avatar'
 import '../../styles/Chat/Messages.css';
 
 import {User, Message, Room} from 'interfaces'
+import { Typography } from '@mui/material';
 
 interface CreateMessageDto {
     content: string;
@@ -15,12 +16,13 @@ interface CreateMessageDto {
     type: boolean;
 }
 
-function Messages(props : {user: User, users: User[], currentRoom: Room, canWrite: boolean}) {
-	
-	let [messages, setMessages] = useState<Message[]>([]);
+function InputBox(props: {canWrite: boolean, mutedUsers: {userId: number, date: Date}[], user: User, currentRoom: Room}) {
 
-	const addMessage = (newMessage: Message) => setMessages(state => [...state, {id: newMessage.id, content: newMessage.content, userId: newMessage.userId, roomId: newMessage.roomId ,type: newMessage.type}]);
-
+	let muted: {userId: number, date: Date} | undefined = props.mutedUsers.find(user => user.userId === props.user.id);
+	console.log(" now = ",new Date());
+	if (muted)
+		console.log("then = ",new Date(muted.date));
+	let mutedDate = muted ? new Date(muted.date).getTime() : 0;
 	function handleSubmit(e: any) {
 		e.preventDefault();
 		const message: string = e.target[0].value;
@@ -29,7 +31,34 @@ function Messages(props : {user: User, users: User[], currentRoom: Room, canWrit
 			socket.emit('chat message', messageDto);
 		e.target[0].value = '';
 	}
+	if (props.canWrite)
+	{
+		if (mutedDate >= new Date().getTime())
+			return (<Typography>Sorry, you're currently muted from this channel 🤫</Typography>);
+		else
+		{
+			return (
+			<form className="message-form" id="form" onSubmit={handleSubmit}>
+				<Stack direction='row' spacing={1} justifyContent='space-between' className="message-form">
+					<input className='input' type="text" />
+					<button className='miauw-button'>Miauw</button>
+				</Stack>
+			</form>
+			);
+		}
+	}
+	else
+		return (<Typography>Sorry, you don't have the necessary rights to write in this channel</Typography>);
+}
 
+function Messages(props : {user: User, users: User[], currentRoom: Room, canWrite: boolean}) {
+	
+	let [messages, setMessages] = useState<Message[]>([]);
+	let [mutedUsers, setMutedUsers] = useState<{userId: number, date: Date}[]>([]);
+
+	const addMessage = (newMessage: Message) => setMessages(state => [...state, {id: newMessage.id, content: newMessage.content, userId: newMessage.userId, roomId: newMessage.roomId ,type: newMessage.type}]);
+
+		
 	useEffect(() => {
 		const handler = (newMessage: Message) => {
 			addMessage(newMessage)
@@ -51,8 +80,15 @@ function Messages(props : {user: User, users: User[], currentRoom: Room, canWrit
 		}
 	}, [])
 
-
-
+	useEffect(() => {
+		const handler = (data: {userId: number, date: Date}[]) => {setMutedUsers(data);};
+		socket.on('get muted users', handler);
+		return () => {
+			socket.off('get muted users');
+		}
+	}, [])
+	
+	console.log("mutedUsers= ",mutedUsers);
     return (
 	<Box sx={{width:'100%'}}>
         <Stack className='chat' spacing={2} justifyContent='space-between'>
@@ -89,16 +125,7 @@ function Messages(props : {user: User, users: User[], currentRoom: Room, canWrit
 					</div>
 				))}
 			</ul>
-			{props.canWrite?
-			<form className="message-form" id="form" onSubmit={handleSubmit}>
-				<Stack direction='row' spacing={1} justifyContent='space-between' className="message-form">
-					<input className='input' type="text" />
-					<button className='miauw-button'>Miauw</button>
-				</Stack>
-            </form>
-			:
-			<div/>
-			}
+			<InputBox canWrite={props.canWrite} mutedUsers={mutedUsers} user={props.user} currentRoom={props.currentRoom}/>
         </Stack>
 	</Box>
     )

@@ -24,6 +24,7 @@ model User {
   adminRooms   Room[]    @relation("roomAdmins")
   messages     Message[]
   blockedIds   Int[]
+  muted        MutedRoomtoUser[]
 }
 
 model Stats {
@@ -45,6 +46,15 @@ model Match {
   score    Int[]
 }
 
+model MutedRoomtoUser {
+  id     Int @id @default(autoincrement())
+  roomId Int
+  room   Room @relation(fields: [roomId], references: [id])
+  userId Int
+  date DateTime 
+  user  User @relation(fields: [userId], references: [id])
+}
+
 model Room {
   id         Int       @id @default(autoincrement())
   name       String
@@ -54,7 +64,9 @@ model Room {
   admins     User[]    @relation("roomAdmins")
   visibility String
   password   String
+  muted      MutedRoomtoUser[]
 }
+
 
 model Message {
   id      Int    @id @default(autoincrement())
