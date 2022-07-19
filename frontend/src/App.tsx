@@ -13,7 +13,7 @@ import NotFound from "./routes/NotFound";
 import AuthProvider, { useAuth } from "components/AuthProvider";
 import axios from "axios";
 import Layout from "./components/Layout";
-import { CssBaseline, getListSubheaderUtilityClass } from "@mui/material";
+import { CssBaseline } from "@mui/material";
 import BaseLayout from "components/BaseLayout";
 
 export const client = axios.create({
