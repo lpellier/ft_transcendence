@@ -7,11 +7,8 @@ import { Box, Button, Stack, TextField, Typography } from "@mui/material";
 const BoxStyle = {
   backgroundColor: "rgb(130, 150, 240, 0.96)",
   border: "3px solid black",
-  padding: "50px",
+  padding: "40px",
 
-  display: "flex",
-  justifyContent: "center",
-  VerticalAlign: "center",
   position: "absolute",
   top: "50%",
   left: "50%",
@@ -61,8 +58,6 @@ export default function TFAuth() {
         <TextField
           onInput={(e: any) => setPininput(e.target.value)}
           inputProps={{ maxLength: 6 }}
-          type="text"
-          variant="outlined"
         />
         <Button
           disabled={/^[\d]{6}$/.test(pinInput) === false}

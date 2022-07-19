@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react'
+import {useState} from 'react'
 import axios from 'axios'
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
@@ -18,7 +18,7 @@ const TitleStyle = {
 }
 
 const LittleBoxForInput = {
-	width: '50vw',
+	width: '70vw',
 	padding: 2,
 	border: '4px solid black',
 	backgroundColor: 'rgb(120, 100, 220, 0.95)',
@@ -33,40 +33,11 @@ const FirstConnexionModal = {
 	left: '20%',
 }
 
-function ChooseFirstName(props: {setter: any, value: string}) {
-	const [firstName, setFirstName] = useState<string>("")
-
-	useEffect(() => {
-		props.setter(firstName)
-	}, [firstName, props])
-
-	return (
-		<Box sx={LittleBoxForInput}>
-			<Stack sx={{paddingLeft: '1vw', paddingTop: '1vh'}}>
-				<Typography
-					variant="h6"
-					color='rgb(200, 100, 30)'
-					sx={TitleStyle}
-				>
-					Choose your username:
-				</Typography>
-				<TextField
-					variant="standard"
-					error={/^[\w]{2,16}$/.test(firstName) === false}
-					helperText={"Your username may only contain letters, digits or underscore, and must be at least 2 characters long."}
-					inputProps={{maxLength: 16}}
-					onChange={(e) => setFirstName(e.target.value)}
-					style={{width: '50%', justifyContent: 'center'}}
-				/>
-			</Stack>
-		</Box>
-	)
-}
 
 export default function FirstLoginPrompt(props: {user: User | undefined}) {
+	const [open, setOpen] = useState(true);
 	const [username, setUsername] = useState<string>("")
 	const [selectedFile, setSelectedFile] = useState<any>();
-	const [open, setOpen] = useState(true);
 	
 	function submitNameAndAvatar() {
 		axios.patch(UserAPI, {username: username}, {withCredentials: true})
@@ -105,7 +76,7 @@ export default function FirstLoginPrompt(props: {user: User | undefined}) {
 	
 		return (
 			<Box sx={LittleBoxForInput}>
-				<Stack spacing={5}>
+				<Stack spacing={2}>
 					<Typography
 						variant="h6"
 						color='rgb(200, 100, 30)'
@@ -113,7 +84,7 @@ export default function FirstLoginPrompt(props: {user: User | undefined}) {
 					>
 						Choose your avatar:
 					</Typography>
-					<Stack spacing={5} direction="row">
+					<Stack spacing={5} direction="row" alignItems="flex-start">
 						<Button
 							component="label"
 							variant="contained"
@@ -124,7 +95,7 @@ export default function FirstLoginPrompt(props: {user: User | undefined}) {
 							<input hidden accept="image/*" type="file" onChange={changeHandler} />
 						</Button>
 						{selectedFile ? (
-							<Stack spacing={2} sx={{ margin: "20px" }}>
+							<Stack spacing={2}>
 							<Typography variant="body2">Filename: {selectedFile.name}</Typography>
 							<Typography variant="body2">Filetype: {selectedFile.type}</Typography>
 							<Typography variant="body2">
@@ -132,9 +103,7 @@ export default function FirstLoginPrompt(props: {user: User | undefined}) {
 							</Typography>
 							</Stack>
 						) : (
-							<Stack spacing={2} sx={{ margin: "20px" }}>
 							<Typography variant="body2">No file selected yet</Typography>
-							</Stack>
 						)}
 					</Stack>
 				</Stack>
@@ -142,6 +111,7 @@ export default function FirstLoginPrompt(props: {user: User | undefined}) {
 		  );
 	}
 
+	
 	return (
 		<Modal open={open} >
 			<Box sx={FirstConnexionModal}>
@@ -153,7 +123,21 @@ export default function FirstLoginPrompt(props: {user: User | undefined}) {
 					>
 						Hey, first login?
 					</Typography>
-					<ChooseFirstName setter={setUsername} value={username} />
+					<Box sx={LittleBoxForInput}>
+						<Typography
+							variant="h6"
+							color='rgb(200, 100, 30)'
+							sx={TitleStyle}
+						>
+						Choose your username:
+						</Typography>
+						<TextField
+							error={/^[\w]{0,16}$/.test(username) === false}
+							helperText={"Your username may only contain letters, digits or underscore, and must be at least 2 characters long."}
+							inputProps={{maxLength: 16}}
+							onInput={(e: any) => setUsername(e.target.value)}
+						/>
+					</Box>
 					<ChooseFirstAvatar />
 					<Button 
 						onClick={submitNameAndAvatar}

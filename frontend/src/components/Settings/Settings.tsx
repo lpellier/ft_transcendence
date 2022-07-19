@@ -1,23 +1,14 @@
 import Stack from "@mui/material/Stack";
-import Box from "@mui/material/Box";
-import AvatarList from "./ChooseAvatar/ChooseAvatar";
 import ChooseName from "./ChooseName/ChooseName";
 import ChooseAuth from "./ChooseAuth/ChooseAuth";
-
-const SettingStyle = {
-  marginTop: "20vh",
-  display: "flex",
-  justifyContent: "center",
-};
+import ChooseAvatar from "./ChooseAvatar/ChooseAvatar";
 
 export default function Settings() {
   return (
-    <Box sx={SettingStyle}>
-      <Stack spacing={5}>
-        <AvatarList />
-        <ChooseName />
-        <ChooseAuth />
-      </Stack>
-    </Box>
+    <Stack spacing={5} sx={{padding: "15vh 20vw"}}>
+      <ChooseAvatar />
+      <ChooseName />
+      <ChooseAuth />
+    </Stack>
   );
 }

@@ -1,39 +1,39 @@
 import Stack from "@mui/material/Stack";
 import Modal from "@mui/material/Modal";
-import { useState } from "react";
+import React, { useState } from "react";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import QRCode from "react-qr-code";
 import axios from "axios";
 import VpnKeyIcon from "@mui/icons-material/VpnKey";
-import {
-  IconStyle,
-} from "../../../styles/tsxStyles/AppBar/PongMenu";
 import { ModalChooseAuth } from "../../../styles/tsxStyles/Settings/Auth";
 import { useAuth } from "components/AuthProvider";
 
-function GenerateQRCode(props: { url: string; setOpen: any }) {
-  function handleClick() {
-    props.setOpen(false);
-  }
+function GenerateQRCode(props: { url: string }) {
+  const [open, setOpen] = useState<boolean>(true);
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   return (
-    <Box sx={{ "& > :not(style)": { m: 1 } }}>
-      <Stack spacing={1}>
-        <Box sx={{ display: "flex", justifyContent: "center" }}>
+    <Modal open={open} onClose={handleClose}>
+      <Box sx={ModalChooseAuth}>
+        <Stack spacing={1}>
           <QRCode value={props.url} />
-        </Box>
-        <Button onClick={handleClick} variant="contained" color="secondary">
-          OK I flashed !
-        </Button>
-      </Stack>
-    </Box>
+          <Button onClick={handleClose} variant="contained" color="secondary">
+            OK I flashed !
+          </Button>
+        </Stack>
+      </Box>
+    </Modal>
   );
 }
 
-function TFAButton(props: { setOpen: any }) {
-  const [input, showedInput] = useState(false);
+export default function ChooseAuth() {
+  const [enabled, setEnabled] = useState(false);
   const [url, setUrl] = useState("");
+  const [refresh, setRefresh] = useState(false);
 
   let auth = useAuth();
 
@@ -45,70 +45,40 @@ function TFAButton(props: { setOpen: any }) {
         { withCredentials: true }
       )
       .then((res) => {
-        console.log("TFA enabled?", option);
         if (option) {
-         setUrl("otpauth://totp/transcendance_BoopBipBoop?secret=" + res.data);
+          setUrl("otpauth://totp/transcendance_BoopBipBoop?secret=" + res.data);
         }
+        auth.user.tfa = option;
+        setEnabled(option);
+        setRefresh(!refresh);
       })
       .catch(function (err) {
         console.log("Setting tfa failed :", err);
       });
   }
 
-  function enableTfa() {
-    patchTfa(true);
-    showedInput(true);
-  }
-
-  function deactivateTfa() {
-    patchTfa(false);
-    props.setOpen(false);
-  }
-
   return (
-    <Stack>
+    <React.Fragment>
       {auth.user.tfa === false ? (
-        <div>
-          <Button onClick={enableTfa} variant="contained" color="secondary">
-            Activate Two Factor Authentication
-          </Button>
-          {input && <GenerateQRCode url={url} setOpen={props.setOpen} />}
-        </div>
+        <Button
+          startIcon={<VpnKeyIcon />}
+          onClick={() => patchTfa(true)}
+          variant="contained"
+          color="secondary"
+        >
+          Activate Two Factor Authentication
+        </Button>
       ) : (
-        <Button onClick={deactivateTfa} variant="contained" color="secondary">
+        <Button
+          startIcon={<VpnKeyIcon />}
+          onClick={() => patchTfa(false)}
+          variant="contained"
+          color="secondary"
+        >
           Deactivate Two Factor Authentication
         </Button>
       )}
-    </Stack>
-  );
-}
-
-export default function ChooseAuth() {
-  const [open, setOpen] = useState<boolean>(false);
-
-  const handleOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  return (
-    <Stack direction="row" style={{ justifyContent: "center" }}>
-      <Button
-        onClick={handleOpen}
-        variant="contained"
-        color="secondary"
-      >
-        <VpnKeyIcon sx={IconStyle} />
-        Choose Authentication
-      </Button>
-      <Modal open={open} onClose={handleClose}>
-        <Box sx={ModalChooseAuth}>
-          <TFAButton setOpen={setOpen} />
-        </Box>
-      </Modal>
-    </Stack>
+      {enabled && <GenerateQRCode url={url} />}
+    </React.Fragment>
   );
 }

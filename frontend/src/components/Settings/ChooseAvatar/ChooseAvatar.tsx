@@ -100,7 +100,7 @@ function UploadButton(props: { setOpen: any }) {
   );
 }
 
-export default function AvatarList() {
+export default function ChooseAvatar() {
   const [open, setOpen] = useState<boolean>(false);
 
   const handleOpen = () => {
