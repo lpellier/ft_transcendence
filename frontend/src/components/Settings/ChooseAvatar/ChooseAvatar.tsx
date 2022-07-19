@@ -18,8 +18,13 @@ function UploadButton(props: { setOpen: any }) {
   let auth = useAuth();
 
   const changeHandler = (event: any) => {
-    setSelectedFile(event.target.files[0]);
-  };
+    if (event.target.files[0].size < 1048577 && /^image/.test(event.target.files[0].type)) {
+      setSelectedFile(event.target.files[0]);
+    } else {
+      setSelectedFile(null);
+      toastThatError("Invalid file.")
+    }
+};
 
   function handleSubmit() {
     const formData = new FormData();
@@ -59,7 +64,7 @@ function UploadButton(props: { setOpen: any }) {
         startIcon={<PhotoCamera />}
         color="secondary"
       >
-        Choose file
+        Upload
         <input hidden accept="image/*" type="file" onChange={changeHandler} />
       </Button>
       {selectedFile ? (
@@ -95,7 +100,7 @@ function UploadButton(props: { setOpen: any }) {
   );
 }
 
-export default function AvatarList() {
+export default function ChooseAvatar() {
   const [open, setOpen] = useState<boolean>(false);
 
   const handleOpen = () => {
