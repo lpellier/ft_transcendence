@@ -28,24 +28,19 @@ function UploadButton(props: { setOpen: any }) {
     }
   };
 
-  function handleSubmit() {
+  async function handleSubmit() {
     const formData = new FormData();
     formData.append("avatar", selectedFile);
 
-    if (selectedFile.size > 1048576) {
-      toastThatError("Avatar size too big! Maximum is 1024KB.");
-    } else {
-      client
-        .put("/users/upload-avatar", formData)
-        .then((res) => {
-          console.log("Put avatar request success");
-          props.setOpen(false);
-          auth.updateAvatar();
-        })
-        .catch((err) => {
-          toastThatError("Avatar upload failed");
-        });
+    try {
+      await client.put("/users/upload-avatar", formData)
+      console.log("Put avatar request success");
+      auth.updateAvatar();
+      props.setOpen(false);
+    } catch {
+      toastThatError("Avatar upload failed");
     }
+    client
   }
 
   function closeModal() {

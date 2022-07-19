@@ -23,23 +23,19 @@ export default function TFAuth() {
   const [pinInput, setPininput] = useState<string>("");
   let navigate = useNavigate();
 
-  function handleSubmit() {
-    client
-      .post(
-        "/auth/google-authenticator",
-        { value: pinInput, })
-      .then((res) => {
-        console.log("Pin Post request success :");
-        if (res.data === true) {
-          navigate("/game");
-        } else {
-          toastThatError("Ho no! That Pin is not valid! :/");
-        }
-      })
-      .catch(function (err) {
-        console.log("Pin Post request failed :", err);
+  async function handleSubmit() {
+    try {
+      const response = await client.post("/auth/google-authenticator", { value: pinInput });
+      console.log("Pin Post request success :");
+      if (response.data === true) {
+        navigate("/game");
+      } else {
         toastThatError("Ho no! That Pin is not valid! :/");
-      });
+      }
+    } catch {
+      console.log("Pin Post request failed.");
+      toastThatError("Ho no! That Pin is not valid! :/");
+    }
   }
 
   return (

@@ -21,15 +21,14 @@ function LogOutLink() {
 	let auth = useAuth();
 	let navigate = useNavigate();
 
-	function logout() {
-		client.get('/auth/logout')
-	  .then(res => {
-		console.log("Logout ")
-		auth.signout(() => navigate("/login"));
-	})
-	  .catch(function (err) {
-		console.log("Get request failed : ", err)
-	  });
+	async function logout() {
+		try {
+			client.get('/auth/logout');
+			console.log("Logout successful.");
+			auth.signout(() => navigate("/login"));
+		} catch {
+			console.log("Logout failed.")
+		}
 	}
 
 	return (

@@ -100,15 +100,16 @@ function LeaderboardBox() {
   const [leaders, setLeaders] = useState<Stats[]>([]);
 
   useEffect(() => {
-    client
-      .get("/stats/lead")
-      .then((res) => {
+    async function getLeaderboard() {
+      try {
+        const response = await client.get("/stats/lead")
         console.log("Get leader success");
-        setLeaders(res.data);
-      })
-      .catch((err) => {
-        console.log("Get leader failed : ", err);
-      });
+        setLeaders(response.data);
+      } catch {
+        console.log("Get leader failed.");
+      }
+    }
+    getLeaderboard();
   }, []);
 
   function LeaderList() {

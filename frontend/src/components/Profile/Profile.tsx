@@ -68,25 +68,16 @@ export default function Profile(props: { self: boolean }) {
   let navigate = useNavigate();
 
   useEffect(() => {
-    if (props.self === true && !profile) {
-      client
-        .get("/users/me")
-        .then((res) => {
-          setProfile(res.data);
-        })
-        .catch((err) => {
-          navigate("/login");
-        });
-    } else if (props.self === false && !profile) {
-      client
-        .get("/users/" + params.id || "")
-        .then((res) => {
-          setProfile(res.data);
-        })
-        .catch((err) => {
-          navigate("/login");
-        });
+    async function getProfile() {
+      try {
+        const requestURL = (props.self === true) ?  "/users/me" : "/users/me" + params.id || "";
+        const response = await client.get(requestURL);
+        setProfile(response.data);
+      } catch {
+        navigate("/login");
+      }
     }
+    getProfile();
   }, []);
 
   return (

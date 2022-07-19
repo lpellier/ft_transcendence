@@ -24,25 +24,21 @@ function NameInput(props: { username: string; setter: any; setOpen: any }) {
     PatchRequest();
   }
 
-  function PatchRequest() {
-    client
-      .patch("/users/me", { username: value })
-      .then(async (res) => {
-        console.log("Changing name success : ", props.username);
-        props.setOpen(false);
-        await client
-          .get("/users/me")
-          .then((res) => {
-            auth.update(res.data);
-            console.log("User : ", res.data);
-          })
-          .catch((err) => {
-            console.log("Appbar get request failed : ", err);
-          });
-      })
-      .catch((err) => {
-        toastThatError("invalid username");
-      });
+  async function PatchRequest() {
+    try {
+      await client.patch("/users/me", { username: value });
+      console.log("Changing name success : ", props.username);
+      props.setOpen(false);
+    } catch {
+      toastThatError("invalid username");
+    }
+    try {
+      const response = await client.get("/users/me");
+      auth.update(response.data);
+      console.log("User : ", response.data);
+    } catch {
+      console.log("Appbar get request failed : ");
+    }
   }
 
   return (

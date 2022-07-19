@@ -39,34 +39,27 @@ export default function FirstLoginPrompt(props: {user: User | undefined}) {
 	
 	let auth = useAuth();
 
-	function submitNameAndAvatar() {
-		client.patch("/users/me", {username: username})
-		.then(res => {
-			console.log("Change name success : ", username)
+	async function submitNameAndAvatar() {
+		try {
+			await client.patch("/users/me", {username: username})
 			setOpen(false)
 			if (selectedFile) {
 				const formData = new FormData();
 				formData.append('avatar', selectedFile)
 		
-				client.put(process.env.REACT_APP_BACK_URL + "/users/upload-avatar",
-				formData,
-				{
-					withCredentials: true,
-				})
-				.then(res => {console.log("Put avatar request success")})
-				.catch(err => {toastThatError('Avatar upload failed')})		
-			}	
-			client
-			.get("/users/me")
-			.then((res) => {
-			  auth.update(res.data);
-			})
-			.catch((err) => {
-			  console.log("not logged in");
-			});
-			  })
-		.catch(err => { 
-			toastThatError('Please choose another name')} )
+				await client.put("/users/upload-avatar", formData)
+				console.log("Put avatar request success")
+			}
+		} catch {
+			toastThatError('Choose another name.');		
+		}
+
+		try {
+			const response = await client.get("/users/me");
+			auth.update(response.data);
+		} catch {
+			console.log("not logged in");
+		}
 	}
 
 

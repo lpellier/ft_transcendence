@@ -37,20 +37,18 @@ export default function ChooseAuth() {
 
   let auth = useAuth();
 
-  function patchTfa(option: boolean) {
-    client
-      .patch("/users/me", { tfa: option })
-      .then((res) => {
-        if (option) {
-          setUrl("otpauth://totp/transcendance_BoopBipBoop?secret=" + res.data);
-        }
-        auth.user.tfa = option;
-        setEnabled(option);
-        setRefresh(!refresh);
-      })
-      .catch(function (err) {
-        console.log("Setting tfa failed :", err);
-      });
+  async function patchTfa(option: boolean) {
+    try {
+      const response = await client.patch("/users/me", { tfa: option });
+      if (option) {
+        setUrl("otpauth://totp/transcendance_BoopBipBoop?secret=" + response.data);
+      }
+      auth.user.tfa = option;
+      setEnabled(option);
+      setRefresh(!refresh);
+    } catch {
+      console.log("Setting tfa failed.");
+    }
   }
 
   return (
