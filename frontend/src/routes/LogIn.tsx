@@ -1,7 +1,7 @@
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import LoginIcon from "@mui/icons-material/Login";
-import { Title, ButtonStyle } from "../styles/tsxStyles/LogIn";
+import { Title } from "../styles/tsxStyles/LogIn";
 import { Box, Typography } from "@mui/material";
 
 const AuthAPI = process.env.REACT_APP_BACK_URL + "/auth";
@@ -10,7 +10,6 @@ const MockAuthAPI = process.env.REACT_APP_BACK_URL + "/auth/mock";
 function LoginButton(props: { href: string; text: string }) {
   return (
     <Button
-      // sx={ButtonStyle}
       variant="contained"
       startIcon={<LoginIcon />}
       size="large"

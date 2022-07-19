@@ -4,15 +4,13 @@ import Box from '@mui/material/Box'
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
-import { NameButtonStyle } from '../../../styles/tsxStyles/Settings/Name'
 import axios from 'axios';
 import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline'
 import {ModalChooseName} from '../../../styles/tsxStyles/Settings/Name'
-import {ButtonModalStyle, IconStyle} from '../../../styles/tsxStyles/AppBar/PongMenu'
+import {IconStyle} from '../../../styles/tsxStyles/AppBar/PongMenu'
 import {toastThatError} from '../../../App'
 import { useAuth } from "components/AuthProvider";
 import React from "react";
-import { Chip } from "@mui/material";
 
 
 function NameInput(props: {username: string, setter: any, setOpen: any}) {
