@@ -8,8 +8,8 @@ import { PlayerBarStyle } from "../../styles/tsxStyles/Profile";
 import "./../../styles/Other/SkillBar.css";
 import { PlayerAvatar } from "../Avatars";
 import { useNavigate, useParams } from "react-router-dom";
-import axios from "axios";
 import { LinearProgress } from "@mui/material";
+import { client } from "App";
 
 const OverallBoxStyle = {
   paddingTop: "4vh",
@@ -69,10 +69,8 @@ export default function Profile(props: { self: boolean }) {
 
   useEffect(() => {
     if (props.self === true && !profile) {
-      axios
-        .get(process.env.REACT_APP_BACK_URL + "/users/me", {
-          withCredentials: true,
-        })
+      client
+        .get("/users/me")
         .then((res) => {
           setProfile(res.data);
         })
@@ -80,10 +78,8 @@ export default function Profile(props: { self: boolean }) {
           navigate("/login");
         });
     } else if (props.self === false && !profile) {
-      axios
-        .get(process.env.REACT_APP_BACK_URL + "/users/" + params.id || "", {
-          withCredentials: true,
-        })
+      client
+        .get("/users/" + params.id || "")
         .then((res) => {
           setProfile(res.data);
         })

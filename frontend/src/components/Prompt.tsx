@@ -1,17 +1,14 @@
 import {useState} from 'react'
-import axios from 'axios'
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
-import {toastThatError} from '../App'
+import {client, toastThatError} from '../App'
 import {User} from 'interfaces';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import { useAuth } from './AuthProvider';
-
-const UserAPI = process.env.REACT_APP_BACK_URL + "/users/me"
 
 const TitleStyle = {
 	fontWeight: '800', 
@@ -43,7 +40,7 @@ export default function FirstLoginPrompt(props: {user: User | undefined}) {
 	let auth = useAuth();
 
 	function submitNameAndAvatar() {
-		axios.patch(UserAPI, {username: username}, {withCredentials: true})
+		client.patch("/users/me", {username: username})
 		.then(res => {
 			console.log("Change name success : ", username)
 			setOpen(false)
@@ -51,7 +48,7 @@ export default function FirstLoginPrompt(props: {user: User | undefined}) {
 				const formData = new FormData();
 				formData.append('avatar', selectedFile)
 		
-				axios.put(process.env.REACT_APP_BACK_URL + "/users/upload-avatar",
+				client.put(process.env.REACT_APP_BACK_URL + "/users/upload-avatar",
 				formData,
 				{
 					withCredentials: true,
@@ -59,10 +56,8 @@ export default function FirstLoginPrompt(props: {user: User | undefined}) {
 				.then(res => {console.log("Put avatar request success")})
 				.catch(err => {toastThatError('Avatar upload failed')})		
 			}	
-			axios
-			.get(process.env.REACT_APP_BACK_URL + "/users/me", {
-			  withCredentials: true,
-			})
+			client
+			.get("/users/me")
 			.then((res) => {
 			  auth.update(res.data);
 			})

@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
-import { toastThatError } from "App";
+import { client, toastThatError } from "App";
 import { Box, Button, Stack, TextField, Typography } from "@mui/material";
 
 const BoxStyle = {
@@ -25,16 +25,11 @@ export default function TFAuth() {
   let navigate = useNavigate();
 
   function handleSubmit() {
-    axios
+    client
       .post(
-        process.env.REACT_APP_BACK_URL + "/auth/google-authenticator",
+        "/auth/google-authenticator",
         {
-          value: pinInput,
-        },
-        {
-          withCredentials: true,
-        }
-      )
+          value: pinInput, })
       .then((res) => {
         console.log("Pin Post request success :");
         if (res.data === true) {
