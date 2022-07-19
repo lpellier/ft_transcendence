@@ -9,6 +9,7 @@ import Typography from '@mui/material/Typography'
 import {toastThatError} from '../App'
 import {User} from 'interfaces';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
+import { useAuth } from './AuthProvider';
 
 const UserAPI = process.env.REACT_APP_BACK_URL + "/users/me"
 
@@ -39,6 +40,8 @@ export default function FirstLoginPrompt(props: {user: User | undefined}) {
 	const [username, setUsername] = useState<string>("")
 	const [selectedFile, setSelectedFile] = useState<any>();
 	
+	let auth = useAuth();
+
 	function submitNameAndAvatar() {
 		axios.patch(UserAPI, {username: username}, {withCredentials: true})
 		.then(res => {
@@ -55,9 +58,18 @@ export default function FirstLoginPrompt(props: {user: User | undefined}) {
 				})
 				.then(res => {console.log("Put avatar request success")})
 				.catch(err => {toastThatError('Avatar upload failed')})		
-			}				
-			window.location.reload()
-		})
+			}	
+			axios
+			.get(process.env.REACT_APP_BACK_URL + "/users/me", {
+			  withCredentials: true,
+			})
+			.then((res) => {
+			  auth.update(res.data);
+			})
+			.catch((err) => {
+			  console.log("not logged in");
+			});
+			  })
 		.catch(err => { 
 			toastThatError('Please choose another name')} )
 	}
