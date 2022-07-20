@@ -88,7 +88,6 @@ function Messages(props : {user: User, users: User[], currentRoom: Room, canWrit
 		}
 	}, [])
 	
-	console.log("mutedUsers= ",mutedUsers);
     return (
 	<Box sx={{width:'100%'}}>
         <Stack className='chat' spacing={2} justifyContent='space-between'>

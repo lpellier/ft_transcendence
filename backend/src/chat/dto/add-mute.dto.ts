@@ -1,10 +1,12 @@
-import { IsNumber, IsDate, IsDateString } from "class-validator";
+import { IsNumber, IsDateString, Min, Max } from "class-validator";
 
 export class AddMuteDto {
     @IsNumber()
     userId: number;
 
-    @IsNumber()
+    @IsNumber() 
+	@Min(1)
+	@Max(60)
     roomId: number;
     
     @IsDateString() 

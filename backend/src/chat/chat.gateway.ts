@@ -84,15 +84,15 @@ export class ChatGateway {
 
 	@SubscribeMessage('add mute to room')
 	async handleAddMuteToRoom(@MessageBody() addMuteDto: AddMuteDto) {
-		console.log('add mute to room called', addMuteDto);
 		await this.chatService.addMuteToRoom(addMuteDto.userId, addMuteDto.roomId, addMuteDto.date);
+		let users = await this.chatService.getMutedUsers(addMuteDto.roomId);
+		this.server.to(addMuteDto.roomId.toString()).emit('get muted users',users);
 	}
 
 	@SubscribeMessage('get muted users')
 	async handleGetMutedUsers(@MessageBody() roomId: number) {
 		let users = await this.chatService.getMutedUsers(roomId);
-		console.log('get muted users called', users);
-		this.server.emit('get muted users', users);
+		this.server.to(roomId.toString()).emit('get muted users', users);
 	}
 
 	@SubscribeMessage('remove admin from room')
