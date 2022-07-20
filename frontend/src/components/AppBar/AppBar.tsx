@@ -13,8 +13,14 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import Tooltip from '@mui/material/Tooltip'
 import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
 import { useAuth } from "components/AuthProvider";
-import { Container } from '@mui/material';
-import { client } from 'App';
+import { Container, TextField } from '@mui/material';
+import { client, toastThatError } from 'App';
+import { useState } from 'react';
+import { List, ListItem } from '@mui/material';
+import Avatar from '@mui/material/Avatar'
+import Autocomplete from '@mui/material/Autocomplete';
+
+
 
 function LogOutLink() {
 	let auth = useAuth();
@@ -80,6 +86,31 @@ function ProjectName() {
 	);
 }
 
+
+function ProfileSearch(props : {user: User, users: User[]}) {
+	let navigate = useNavigate();
+
+	function handleOnSubmit(e: any, selectedUser: User | string | null) {
+		if (typeof selectedUser === 'object' && !!selectedUser) {
+			navigate(`/profile/${selectedUser.id}`);
+		} else if (typeof selectedUser === 'string') {
+			if (props.users.find(user => user.username === selectedUser))
+				navigate(`/profile/${props.users.find(user => user.username === selectedUser)?.id}`);
+		}
+	}
+
+	return (
+	<Autocomplete
+		id="search..."
+		freeSolo
+		onChange={handleOnSubmit}
+		options={props.users}
+		getOptionLabel={(option: any) => option?.username || option}
+		renderInput={(params) => <TextField {...params} label="search..." />}
+	/>
+	)
+}
+
 export default function SearchAppBar(props: {user: User, users: User[], statusMap: Map<number, string>, setStatusMap: React.Dispatch<React.SetStateAction<Map<number, string>>>}) {
 
   return (
@@ -92,6 +123,7 @@ export default function SearchAppBar(props: {user: User, users: User[], statusMa
 				<PlayerName name={props.user.username} />
 				<ProjectName />
 				<Stack direction="row" spacing={2}>
+					<ProfileSearch user={props.user} users={props.users} />
 					<FriendBar user={props.user} users={props.users} statusMap={props.statusMap} setStatusMap={props.setStatusMap}/>
 					<AppBarButton link="../game" tooltip={"Game"} icon={<GamesIcon />}/>
 					<AppBarButton link="../chat" tooltip={"Forum"} icon={<ForumIcon />}/>

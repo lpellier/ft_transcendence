@@ -62,15 +62,17 @@ function PlayerInfoBand(props: { user: User }) {
   );
 }
 
-export default function Profile(props: { self: boolean }) {
+export default function Profile() {
   const [profile, setProfile] = useState<User>(null!);
   let params = useParams();
   let navigate = useNavigate();
 
+  console.log(params);
+
   useEffect(() => {
     async function getProfile() {
       try {
-        const requestURL = (props.self === true) ?  "/users/me" : "/users/me" + params.id || "";
+        const requestURL = params.id ? "/users/" + params.id : "/users/me";
         const response = await client.get(requestURL);
         setProfile(response.data);
       } catch {
@@ -78,7 +80,7 @@ export default function Profile(props: { self: boolean }) {
       }
     }
     getProfile();
-  }, []);
+  }, [params]);
 
   return (
     <Box sx={OverallBoxStyle}>

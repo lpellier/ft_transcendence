@@ -144,8 +144,9 @@ export default function App() {
                 </RequireAuth>
               }
             >
-              <Route path="profile" element={<Profile self={true} />} />
-              <Route path="profile/:id" element={<Profile self={false} />} />
+              <Route path="profile" element={<Profile  />} >
+                <Route path=":id" element={<Profile />} />
+              </Route>
               <Route
                 path="chat"
                 element={<Chat users={users} statusMap={statusMap} />}
