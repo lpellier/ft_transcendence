@@ -161,7 +161,7 @@ export default function DirectMessaging(props: {user: User, users: User[], rooms
                     <Stack direction="row" >
                         <Tooltip title="Go to profile">
                             <IconButton size="small">
-                                <Link to={"/users/" + parseUser(props.room.name)?.id}><PersonIcon/></Link>
+                                <Link to={"/profile/" + parseUser(props.room.name)?.id}><PersonIcon/></Link>
                             </IconButton>
                         </Tooltip>
                         <GameInviteButton user={props.user} otherUser={parseUser(props.room.name)} statusMap={props.statusMap}/>
