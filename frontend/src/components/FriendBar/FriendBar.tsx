@@ -13,11 +13,20 @@ import Stack from "@mui/material/Stack";
 import Games from "@mui/icons-material/Games";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import Avatar from '@mui/material/Avatar'
+import DeleteIcon from '@mui/icons-material/Delete';
 
 interface FriendUserDto {
   userId: number;
   friendId: number;
 }
+
+let listItem = {
+	paddingLeft: "0px",
+	paddingRight: "0px",
+	paddingTop: "4px",
+	paddingBottom: "4px",
+}
+
 export function GameInviteButton(props: {user: User, otherUser: User | undefined, statusMap: Map<number, string>}) {
   function inviteForGame(user: User | undefined) {
         socket.emit("invite for game", {
@@ -64,6 +73,8 @@ function UserList(props: {
   users: User[];
   friends: User[];
 }) {
+
+
   return (
     <List className="user-list">
       {props.users.map((item) => (
@@ -72,8 +83,8 @@ function UserList(props: {
             <div />
           ) : (
             <div>
-              <ListItem>
-                <ListItemText primary={item.username} />
+              <ListItem title={item.username} sx={listItem}>
+                <ListItemText primary={item.username} sx={{overflow: "hidden"}}/>
               </ListItem>
             </div>
           )}
@@ -133,7 +144,7 @@ export default function FriendBar(props: {
       socket.off("new gamer");
       socket.off("quit-game");
     };
-  }, [props.statusMap]);
+  }, [props]);
 
   function closeFriendBar() {
     props.setOpen(false);
@@ -185,10 +196,12 @@ export default function FriendBar(props: {
         PaperProps={{
           sx: {
             width: "15vw",
+			minWidth: "100px",
             paddingLeft: "1%",
             paddingRight: "2%",
             paddingTop: "1.5%",
             backgroundColor: "rgb(172, 180, 235)",
+
           },
         }}
       >
@@ -243,33 +256,23 @@ export default function FriendBar(props: {
         <List>
           {friends.map((item) => (
             <div key={item.id}>
-              <ListItem>
+              <ListItem sx={listItem}>
 				<Avatar   sx={{ width: 35, height: 35 }} src={process.env.REACT_APP_BACK_URL + "/avatars/"+item.id.toString()+".png"}/>
-                {props.statusMap.get(item.id) === "online" ? (
-                  <ListItemText primary={item.username} secondary="online" />
-                ) : (
-                  <div>
-                    {props.statusMap.get(item.id) === "in game" ? (
-                      <ListItemText
-                        primary={item.username}
-                        secondary="in game"
-                      />
-                    ) : (
-                      <ListItemText
-                        primary={item.username}
-                        secondary="offline"
-                      />
-                    )}
-                  </div>
-                )}
+					<ListItemText
+					primary={item.username}
+					secondary={props.statusMap.get(item.id) ? props.statusMap.get(item.id) : "offline"}
+					sx={{overflow: "hidden"}}
+					title={item.username}
+					/>
                 <GameInviteButton user={props.user} otherUser={item} statusMap={props.statusMap} />
-                <Button
-                  variant="contained"
-                  color="error"
-                  onClick={() => removeFriend(item)}
+                <IconButton 
+					size="small"
+					color="error"
+					onClick={() => removeFriend(item)}
+					title="remove friend"
                 >
-                  remove
-                </Button>
+                  <DeleteIcon/>
+                </IconButton>
               </ListItem>
             </div>
           ))}
