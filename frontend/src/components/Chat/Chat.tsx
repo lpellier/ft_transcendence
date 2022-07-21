@@ -40,8 +40,23 @@ function Chat(props: { users: User[], statusMap: Map<number, string>}) {
 	let [currentRoom, setCurrentRoom] = useState<Room> ({id: 1, name: "general", ownerId: 60040, visibility: "public", password:""});
 	let [canWrite, setCanWrite] = useState<boolean>(true);
 	let [roomAdmins, setRoomAdmins] = useState<User[]>([]);
+	let [blocked, setBlocked] = useState<User[]>([]);
 
 	let auth = useAuth();
+
+	useEffect(() => {
+        socket.emit('get blocked', auth.user.id);
+    }, [auth.user.id])
+
+
+    useEffect(() => {
+        const handler = (data: User[]) => {setBlocked(data);};
+        socket.on('get blocked', handler);
+        return () => {
+            socket.off('get blocked', handler);
+        }
+    }, [])
+
 	
 	useEffect (() => {
 		const handler = (data: User[]) => { 
@@ -98,9 +113,9 @@ function Chat(props: { users: User[], statusMap: Map<number, string>}) {
 					<Stack direction='row' className='chmsg'>
 						<Stack>
 							{status}
-							<Channels user={auth.user} users={props.users} currentRoom={currentRoom} setCurrentRoom = {setCurrentRoom} setCanWrite = {setCanWrite} roomAdmins={roomAdmins} statusMap={props.statusMap}/>
+							<Channels user={auth.user} users={props.users} currentRoom={currentRoom} setCurrentRoom = {setCurrentRoom} setCanWrite = {setCanWrite} roomAdmins={roomAdmins} statusMap={props.statusMap} blocked={blocked}/>
 						</Stack>
-						<Messages user={auth.user} users={props.users} currentRoom={currentRoom} canWrite = {canWrite} />
+						<Messages user={auth.user} users={props.users} currentRoom={currentRoom} canWrite = {canWrite} blocked={blocked}/>
 					</Stack>
 					:
 					<div/>

@@ -19,9 +19,6 @@ interface CreateMessageDto {
 function InputBox(props: {canWrite: boolean, mutedUsers: {userId: number, date: Date}[], user: User, currentRoom: Room}) {
 
 	let muted: {userId: number, date: Date} | undefined = props.mutedUsers.find(user => user.userId === props.user.id);
-	console.log(" now = ",new Date());
-	if (muted)
-		console.log("then = ",new Date(muted.date));
 	let mutedDate = muted ? new Date(muted.date).getTime() : 0;
 	function handleSubmit(e: any) {
 		e.preventDefault();
@@ -51,7 +48,7 @@ function InputBox(props: {canWrite: boolean, mutedUsers: {userId: number, date: 
 		return (<Typography>Sorry, you don't have the necessary rights to write in this channel</Typography>);
 }
 
-function Messages(props : {user: User, users: User[], currentRoom: Room, canWrite: boolean}) {
+function Messages(props : {user: User, users: User[], currentRoom: Room, canWrite: boolean, blocked: User[]}) {
 	
 	let [messages, setMessages] = useState<Message[]>([]);
 	let [mutedUsers, setMutedUsers] = useState<{userId: number, date: Date}[]>([]);
@@ -81,7 +78,7 @@ function Messages(props : {user: User, users: User[], currentRoom: Room, canWrit
 	}, [])
 
 	useEffect(() => {
-		const handler = (data: {userId: number, date: Date}[]) => {setMutedUsers(data);};
+		const handler = (data: {userId: number, date: Date}[]) => {setMutedUsers(data); console.log("muted users = ",data);};
 		socket.on('get muted users', handler);
 		return () => {
 			socket.off('get muted users');
@@ -94,7 +91,7 @@ function Messages(props : {user: User, users: User[], currentRoom: Room, canWrit
 			<ul className='messages' id='messagebox'>
 				{messages.map(item=> (
 					<div key={item.id}>
-						{item.roomId === props.currentRoom.id ?
+						{item.roomId === props.currentRoom.id && props.blocked.find(user => user.id === item.userId) === undefined?
 								<div className='flexwrapper' >
 									{item.userId === props.user.id ?
 									<div className='message current flex'>

@@ -127,6 +127,7 @@ function RoomUserMod(props : {currentUser: User, users: User[], room: Room, room
 		const scale: string = e.target[2].value;
 		if (props.users.find(user => user.username === username))
 		{
+			
 			if (roomUsers.find(user => user.username === username))
 			{
 				let userId: any = props.users.find(user => user.username === username)?.id;
@@ -306,7 +307,7 @@ function RoomUserMod(props : {currentUser: User, users: User[], room: Room, room
 				handleSubmit={handleMuteUserSubmit}
 				setClicked={setMuteUserClicked}
 				users={props.users}
-				condition={(item:User) => {return(!(roomUsers.find(user => user.id === item.id) && item.id !== props.currentUser.id))}}
+				condition={(item:User) => {return(!(roomUsers.find(user => user.id === item.id) && item.id !== props.currentUser.id && item.id !== props.room.ownerId))}}
 			/>
 			{props.currentUser.id === props.room.ownerId?
 				<div>
