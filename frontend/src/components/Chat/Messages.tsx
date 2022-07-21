@@ -78,7 +78,7 @@ function Messages(props : {user: User, users: User[], currentRoom: Room, canWrit
 	}, [])
 
 	useEffect(() => {
-		const handler = (data: {userId: number, date: Date}[]) => {setMutedUsers(data); console.log("muted users = ",data);};
+		const handler = (data: {userId: number, date: Date}[]) => {setMutedUsers(data);};
 		socket.on('get muted users', handler);
 		return () => {
 			socket.off('get muted users');

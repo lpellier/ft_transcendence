@@ -91,7 +91,6 @@ export default function App() {
       toastThatError(data.message);
     });
     socket.on("new user", (usersData: User[]) => {
-      console.log("usersData = ", usersData);
       setUsers(usersData);
     });
     return () => {
@@ -108,7 +107,6 @@ export default function App() {
       setStatusMap(statusMap.set(userId, "offline"));
     });
     socket.on("status map", (maps: { online: number[]; inGame: number[] }) => {
-      console.log("maps", maps);
       maps.online.forEach((userId) => {
         setStatusMap(statusMap.set(userId, "online"));
       });

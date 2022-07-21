@@ -10,6 +10,7 @@ export const socket = io(process.env.REACT_APP_BACK_URL || "", {
   withCredentials: true,
 });
 
+
 root.render(
   // <React.StrictMode>
     <BrowserRouter>

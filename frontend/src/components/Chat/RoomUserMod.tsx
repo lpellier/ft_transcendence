@@ -125,34 +125,38 @@ function RoomUserMod(props : {currentUser: User, users: User[], room: Room, room
 		const username: string= e.target[0].value;
 		const amount: number = parseInt(e.target[1].value);
 		const scale: string = e.target[2].value;
-		if (props.users.find(user => user.username === username))
+		if (amount <= 0 || (scale === 'minutes' && amount > 60) || (scale === 'hours' && amount > 24))
+			toastThatError('bad time');
+		else
 		{
-			
-			if (roomUsers.find(user => user.username === username))
+			if (props.users.find(user => user.username === username))
 			{
-				let userId: any = props.users.find(user => user.username === username)?.id;
-				if (userId === props.room.ownerId)
-					toastThatError('cannot mute owner');
-				else
+				if (roomUsers.find(user => user.username === username))
 				{
-					let date: Date = new Date();
-					if (scale=== 'minutes')
-						date.setMinutes(date.getMinutes() + amount);
-					else if (scale=== 'hours')
-						date.setHours(date.getHours() + amount);
-					else if (scale=== 'days')
-						date.setDate(date.getDate() + amount);
-					const muteUser: MuteUserDto = {userId: userId, roomId: props.room.id, date: date};
-					socket.emit('add mute to room', muteUser);
-					setMuteUserClicked(0);
-					toastIt(username + ' muted in ' + props.room.name);
+					let userId: any = props.users.find(user => user.username === username)?.id;
+					if (userId === props.room.ownerId)
+						toastThatError('cannot mute owner');
+					else
+					{
+						let date: Date = new Date();
+						if (scale=== 'minutes')
+							date.setMinutes(date.getMinutes() + amount);
+						else if (scale=== 'hours')
+							date.setHours(date.getHours() + amount);
+						else if (scale=== 'days')
+							date.setDate(date.getDate() + amount);
+						const muteUser: MuteUserDto = {userId: userId, roomId: props.room.id, date: date};
+						socket.emit('add mute to room', muteUser);
+						setMuteUserClicked(0);
+						toastIt(username + ' muted in ' + props.room.name);
+					}
 				}
+				else
+				toastThatError('user not in room');
 			}
 			else
-			toastThatError('user not in room');
+				toastThatError('username not found')
 		}
-		else
-		toastThatError('username not found')
 	}
 
 

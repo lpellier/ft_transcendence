@@ -89,7 +89,6 @@ export default function DirectMessaging(props: {user: User, users: User[], rooms
         let roomName: string;
         e.preventDefault();
         const submittedUsername: string = e.target[0].value;
-        console.log('submittedUsername = ', submittedUsername)
         let clickedUser:any = props.users.find(user => user.username === submittedUsername);
         if (clickedUser && clickedUser.id !== props.user.id)
         {

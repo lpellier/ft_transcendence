@@ -61,6 +61,7 @@ function PasswordInput(props: {openPassword: boolean, setOpenPassword: React.Dis
 			{
 				props.setCurrentRoom(props.room);
 				socket.emit('get admins', props.room.id);
+				socket.emit('get muted users', props.room.id);
 				handleClose()
 			}
 			else
@@ -68,7 +69,7 @@ function PasswordInput(props: {openPassword: boolean, setOpenPassword: React.Dis
 		}
 		socket.on('check password', handler);
 		return () => {
-			socket.off('check password', handler);
+			socket.off('check password');
 		}
 	}, [props.room, handleClose]);
 

@@ -187,7 +187,6 @@ function MatchhistoryBox(props: { user: User }) {
 }
 
 export default function StatsBoards(props: { user: User }) {
-  console.log("Rendered statsboards", props.user);
   return (
     <Box>
       <Grid container rowSpacing={3} columnSpacing={{ md: 3 }}>

@@ -225,7 +225,8 @@ export class ChatGateway {
 			if (err) {
 				console.log(err);
 			}
-			client.emit('check password', res);
+			else
+				client.emit('check password', res);
 		});
 	}
 
