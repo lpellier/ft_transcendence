@@ -21,15 +21,10 @@ interface CreateDMRoomDto {
     user2Id: number;
 }
 
-export default function DirectMessaging(props: {user: User, users: User[], rooms: Room[], currentRoom: Room, setCurrentRoom: React.Dispatch<React.SetStateAction<Room>>, statusMap: Map<number, string>}) {
+export default function DirectMessaging(props: {user: User, users: User[], rooms: Room[], currentRoom: Room, setCurrentRoom: React.Dispatch<React.SetStateAction<Room>>, statusMap: Map<number, string>, blocked:User[]}) {
     
     let [showUserList, setShowUserList] = useState<boolean>(false);
     let [search, setSearch] = useState<string>("");
-    let [blocked, setBlocked] = useState<User[]>([]);
-    
-    useEffect(() => {
-        socket.emit('get blocked', props.user.id);
-    }, [props.user.id])
 
     useEffect(() => {
         const handler = () => {socket.emit('get blocked', props.user?.id)}
@@ -39,13 +34,6 @@ export default function DirectMessaging(props: {user: User, users: User[], rooms
         }
     }, [props.user?.id])
 
-    useEffect(() => {
-        const handler = (data: User[]) => {setBlocked(data);};
-        socket.on('get blocked', handler);
-        return () => {
-            socket.off('get blocked', handler);
-        }
-    }, [])
 
     function    parseUser(roomName: string) {
         const user1Id:number = parseInt(roomName.split('-')[0]);
@@ -59,13 +47,13 @@ export default function DirectMessaging(props: {user: User, users: User[], rooms
         return otherUser;
     }
     
-    function UserList(props: {currentUser: User, users: User[], rooms: Room[], setCurrentRoom: React.Dispatch<React.SetStateAction<Room>>, search: string}) {
+    function UserList(props: {currentUser: User, users: User[], rooms: Room[], setCurrentRoom: React.Dispatch<React.SetStateAction<Room>>, search: string, blocked:User[]}) {
     
         return (     
             <List className='user-list'>
                 {props.users.map(user => (
                     <div key={user.id}>
-                    {user.id !== props.currentUser.id && blocked.find(blockedUser => blockedUser.username === user.username) === undefined?
+                    {user.id !== props.currentUser.id && props.blocked.find(blockedUser => blockedUser.username === user.username) === undefined?
                         <div>
                             {user.username.includes(props.search)?
                                 <ListItem >
@@ -206,14 +194,14 @@ export default function DirectMessaging(props: {user: User, users: User[], rooms
 				/>
             </form>
             {showUserList?
-                <UserList currentUser={props.user} users={props.users} rooms={props.rooms} setCurrentRoom={props.setCurrentRoom} search={search}/>
+                <UserList currentUser={props.user} users={props.users} rooms={props.rooms} setCurrentRoom={props.setCurrentRoom} search={search} blocked={props.blocked}/>
             :
                 <div/>
             } 
             <List>
                 {props.rooms.map(room => (
                     <div key={room.id}>
-                        {blocked.find(user => parseUser(room.name)?.username === user.username) === undefined && room.ownerId === 0?
+                        {props.blocked.find(user => parseUser(room.name)?.username === user.username) === undefined && room.ownerId === 0?
                             <div>
                                 { room.id !== props.currentRoom.id ?
 
