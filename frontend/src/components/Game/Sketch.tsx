@@ -2069,7 +2069,7 @@ class Vector {
 	};
 
 	p.setup = () => {
-	socket.emit("my_id", socket.id, user_id.toString(), user_name);
+	socket.emit("my_id", {s_id : socket.id, u_id : user_id.toString(), u_name :user_name});
 	let frames = spritedata.frames;
 	for (let i = 0; i < frames.length; i++) {
 		let pos = frames[i].position;
@@ -2582,13 +2582,13 @@ class Vector {
 
 	function movePlayers() {
 	if (!game.local && !game.spectator) {
-		if (game.players[0].index === 1) {
+		if (game.players.length > 0 && game.players[0].index === 1) {
 		if (p.keyIsDown(87)) {
 			socket.emit("move_up", game.players[0].id);
 		} else if (p.keyIsDown(83)) {
 			socket.emit("move_down", game.players[0].id);
 		} else socket.emit("move_null", game.players[0].id);
-		} else if (game.players[0].index === 2) {
+		} else if (game.players.length > 0 && game.players[0].index === 2) {
 		if (p.keyIsDown(p.UP_ARROW)) {
 			socket.emit("move_up", game.players[0].id);
 		} else if (p.keyIsDown(p.DOWN_ARROW)) {
