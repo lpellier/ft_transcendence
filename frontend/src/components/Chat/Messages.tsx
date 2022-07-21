@@ -48,7 +48,7 @@ function InputBox(props: {canWrite: boolean, mutedUsers: {userId: number, date: 
 		return (<Typography>Sorry, you don't have the necessary rights to write in this channel</Typography>);
 }
 
-function Messages(props : {user: User, users: User[], currentRoom: Room, canWrite: boolean}) {
+function Messages(props : {user: User, users: User[], currentRoom: Room, canWrite: boolean, blocked: User[]}) {
 	
 	let [messages, setMessages] = useState<Message[]>([]);
 	let [mutedUsers, setMutedUsers] = useState<{userId: number, date: Date}[]>([]);
@@ -91,7 +91,7 @@ function Messages(props : {user: User, users: User[], currentRoom: Room, canWrit
 			<ul className='messages' id='messagebox'>
 				{messages.map(item=> (
 					<div key={item.id}>
-						{item.roomId === props.currentRoom.id ?
+						{item.roomId === props.currentRoom.id && props.blocked.find(user => user.id === item.userId) === undefined?
 								<div className='flexwrapper' >
 									{item.userId === props.user.id ?
 									<div className='message current flex'>

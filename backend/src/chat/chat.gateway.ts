@@ -196,10 +196,14 @@ export class ChatGateway {
 
 
 	@SubscribeMessage('add blocked')
-	add(@ConnectedSocket() client:Socket, @MessageBody() blockedUserDto: BlockedUserDto) {
-		this.chatService.add(blockedUserDto.userId, blockedUserDto.blockedId);
-		client.emit('add blocked');
-		console.log('add blocked called -> ', blockedUserDto);
+	async add(@ConnectedSocket() client:Socket, @MessageBody() blockedUserDto: BlockedUserDto) {
+		await this.chatService.add(blockedUserDto.userId, blockedUserDto.blockedId);
+		const blockedIds: number[] = await this.chatService.findAllIds(blockedUserDto.userId);
+		const blocked = await this.chatService.findAll(blockedIds);
+		client.emit('get blocked', blocked);
+		// client.emit('add blocked');
+		// console.log('add blocked called -> ', blockedUserDto);
+
 	}
 	
 	@SubscribeMessage('removeBlocked')
