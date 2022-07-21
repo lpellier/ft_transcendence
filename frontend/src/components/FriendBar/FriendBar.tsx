@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import Drawer from "@mui/material/Drawer";
 import Button from "@mui/material/Button";
-import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import { IconButton, TextField, Tooltip } from "@mui/material";
 import { User } from "interfaces";
 import { socket } from "index";
@@ -89,8 +88,9 @@ export default function FriendBar(props: {
   users: User[];
   statusMap: Map<number, string>;
   setStatusMap: React.Dispatch<React.SetStateAction<Map<number, string>>>;
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-  let [open, setOpen] = useState<boolean>(false);
   let [addFriendClicked, setAddFriendClicked] = useState<boolean>(false);
   let [friends, setFriends] = useState<User[]>([]);
 
@@ -99,7 +99,7 @@ export default function FriendBar(props: {
   };
 
   function toggleFriendBar() {
-    setOpen(true);
+    props.setOpen(true);
   }
 
   useEffect(() => {
@@ -136,7 +136,7 @@ export default function FriendBar(props: {
   }, [props.statusMap]);
 
   function closeFriendBar() {
-    setOpen(false);
+    props.setOpen(false);
   }
 
   function addFriendClick() {
@@ -178,15 +178,9 @@ export default function FriendBar(props: {
 
 
   return (
-    <div>
-      <Tooltip title="Friends">
-        <Button onClick={toggleFriendBar} variant="contained" color="secondary">
-          <PeopleAltIcon />
-        </Button>
-      </Tooltip>
       <Drawer
         anchor="left"
-        open={open}
+        open={props.open}
         onClose={closeFriendBar}
         PaperProps={{
           sx: {
@@ -281,6 +275,5 @@ export default function FriendBar(props: {
           ))}
         </List>
       </Drawer>
-    </div>
   );
 }
