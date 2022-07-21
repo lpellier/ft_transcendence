@@ -95,7 +95,7 @@ function RoomUserMod(props : {currentUser: User, users: User[], room: Room, room
 			if (roomUsers.find(user => user.username === username))
 			{
 				let userId: any = props.users.find(user => user.username === username)?.id;
-				if (userId == props.room.ownerId)
+				if (userId === props.room.ownerId)
 					toastThatError('cannot kick owner');
 				else
 				{
@@ -147,7 +147,7 @@ function RoomUserMod(props : {currentUser: User, users: User[], room: Room, room
 				if (props.roomAdmins.find(admin => admin.username === username))
 				{
 					let userId: any = props.users.find(user => user.username === username)?.id;
-					if (userId == props.room.ownerId)
+					if (userId === props.room.ownerId)
 						toastThatError('cannot remove admin privileges from owner');
 					const removeAdmin: RoomUserDto = {userId: userId, roomId: props.room.id};
 					socket.emit('remove admin from room', removeAdmin);
@@ -174,7 +174,7 @@ function RoomUserMod(props : {currentUser: User, users: User[], room: Room, room
 			if (roomUsers.find(user => user.username === username))
 			{
 				let userId: any = props.users.find(user => user.username === username)?.id;
-				if (userId == props.room.ownerId)
+				if (userId === props.room.ownerId)
 					toastThatError('cannot mute owner');
 				else
 				{
