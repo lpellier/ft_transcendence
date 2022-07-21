@@ -14,11 +14,11 @@ import Tooltip from '@mui/material/Tooltip'
 import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
 import { useAuth } from "components/AuthProvider";
 import { Container, TextField } from '@mui/material';
-import { client, toastThatError } from 'App';
-import { useState } from 'react';
-import { List, ListItem } from '@mui/material';
-import Avatar from '@mui/material/Avatar'
+import { client } from 'App';
 import Autocomplete from '@mui/material/Autocomplete';
+import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
+import {useState} from "react";
+
 
 
 
@@ -90,7 +90,7 @@ function ProjectName() {
 function ProfileSearch(props : {user: User, users: User[]}) {
 	let navigate = useNavigate();
 
-	function handleOnSubmit(e: any, selectedUser: User | string | null) {
+	function handleOnSubmit(e: any, selectedUser: User | null) {
 		if (typeof selectedUser === 'object' && !!selectedUser) {
 			navigate(`/profile/${selectedUser.id}`);
 		} else if (typeof selectedUser === 'string') {
@@ -99,19 +99,21 @@ function ProfileSearch(props : {user: User, users: User[]}) {
 		}
 	}
 
+
 	return (
 	<Autocomplete
 		id="search..."
-		freeSolo
 		onChange={handleOnSubmit}
 		options={props.users}
-		getOptionLabel={(option: any) => option?.username || option}
+		getOptionLabel={(option: any) => option?.username }
 		renderInput={(params) => <TextField {...params} label="search..." />}
+		sx={{ width: '15vw' }}
 	/>
 	)
 }
 
 export default function SearchAppBar(props: {user: User, users: User[], statusMap: Map<number, string>, setStatusMap: React.Dispatch<React.SetStateAction<Map<number, string>>>}) {
+	let [open, setOpen] = useState<boolean>(false);
 
   return (
       <AppBar position="static">
@@ -124,7 +126,12 @@ export default function SearchAppBar(props: {user: User, users: User[], statusMa
 				<ProjectName />
 				<Stack direction="row" spacing={2}>
 					<ProfileSearch user={props.user} users={props.users} />
-					<FriendBar user={props.user} users={props.users} statusMap={props.statusMap} setStatusMap={props.setStatusMap}/>
+					<Tooltip title="Friends">
+						<Button onClick={() => setOpen(true)} variant="contained" color="secondary">
+							<PeopleAltIcon />
+						</Button>
+					</Tooltip>
+					<FriendBar user={props.user} users={props.users} statusMap={props.statusMap} setStatusMap={props.setStatusMap} open={open} setOpen={setOpen}/>
 					<AppBarButton link="../game" tooltip={"Game"} icon={<GamesIcon />}/>
 					<AppBarButton link="../chat" tooltip={"Forum"} icon={<ForumIcon />}/>
 					<AppBarButton link="../settings" tooltip={"Settings"} icon={<SettingsIcon />}/>
