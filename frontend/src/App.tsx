@@ -4,7 +4,7 @@ import TFAuth from "./routes/TFAuth";
 import Profile from "./components/Profile/Profile";
 import React, { useState, useEffect } from "react";
 import { User } from "interfaces";
-import { socket } from "index";
+// import { socket } from "index";
 import Chat from "./components/Chat/Chat";
 import Settings from "./components/Settings/Settings";
 import Game from "./routes/Game";
@@ -15,9 +15,16 @@ import axios from "axios";
 import Layout from "./components/Layout";
 import { CssBaseline } from "@mui/material";
 import BaseLayout from "components/BaseLayout";
+import io from "socket.io-client";
+
 
 export const client = axios.create({
   baseURL: process.env.REACT_APP_BACK_URL,
+  withCredentials: true,
+});
+
+export const socket = io(process.env.REACT_APP_BACK_URL || "", {
+  autoConnect: false,
   withCredentials: true,
 });
 
@@ -91,7 +98,6 @@ export default function App() {
       toastThatError(data.message);
     });
     socket.on("new user", (usersData: User[]) => {
-      console.log("usersData = ", usersData);
       setUsers(usersData);
     });
     return () => {
@@ -108,7 +114,6 @@ export default function App() {
       setStatusMap(statusMap.set(userId, "offline"));
     });
     socket.on("status map", (maps: { online: number[]; inGame: number[] }) => {
-      console.log("maps", maps);
       maps.online.forEach((userId) => {
         setStatusMap(statusMap.set(userId, "online"));
       });

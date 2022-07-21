@@ -5,10 +5,11 @@ import App from "./App";
 
 const root = createRoot(document.getElementById("root")!);
 
-export const socket = io(process.env.REACT_APP_BACK_URL || "", {
-  autoConnect: false, 
-  withCredentials: true,
-});
+// export const socket = io(process.env.REACT_APP_BACK_URL || "", {
+//   autoConnect: false, 
+//   withCredentials: true,
+// });
+
 
 root.render(
   // <React.StrictMode>

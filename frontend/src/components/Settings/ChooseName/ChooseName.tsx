@@ -35,7 +35,6 @@ function NameInput(props: { username: string; setter: any; setOpen: any }) {
     try {
       const response = await client.get("/users/me");
       auth.update(response.data);
-      console.log("User : ", response.data);
     } catch {
       console.log("Appbar get request failed : ");
     }

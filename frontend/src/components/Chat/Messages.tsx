@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react';
-import {socket} from 'index';
+import {socket} from 'App';
 import Stack from '@mui/material/Stack'
 import Box from '@mui/material/Box'
 import Avatar from '@mui/material/Avatar'
@@ -78,7 +78,7 @@ function Messages(props : {user: User, users: User[], currentRoom: Room, canWrit
 	}, [])
 
 	useEffect(() => {
-		const handler = (data: {userId: number, date: Date}[]) => {setMutedUsers(data); console.log("muted users = ",data);};
+		const handler = (data: {userId: number, date: Date}[]) => {setMutedUsers(data);};
 		socket.on('get muted users', handler);
 		return () => {
 			socket.off('get muted users');

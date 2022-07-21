@@ -67,7 +67,6 @@ export default function Profile() {
   let params = useParams();
   let navigate = useNavigate();
 
-  console.log(params);
 
   useEffect(() => {
     async function getProfile() {
