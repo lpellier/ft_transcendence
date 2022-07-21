@@ -1,6 +1,6 @@
 import '../../styles/Chat/Channels.css';
 import TextField from '@mui/material/TextField';
-import {Button, NativeSelect, Tooltip, ListItem} from '@mui/material';
+import {Button, NativeSelect, Tooltip, ListItem, Autocomplete} from '@mui/material';
 import Stack from '@mui/material/Stack';
 import SettingsIcon from '@mui/icons-material/Settings';
 import IconButton from '@mui/material/IconButton';
@@ -67,94 +67,55 @@ function RoomUserMod(props : {currentUser: User, users: User[], room: Room, room
 		setMuteUserClicked(1);
 	}
 
-	function handleUserSubmit(e: any) {
-		e.preventDefault();
-		const username: string= e.target[0].value;
-		if (props.users.find(user => user.username === username))
-		{
-			if (roomUsers.find(user => user.username === username))
-				toastThatError('user already in room');
-			else
-			{
-				let userId: any = props.users.find(user => user.username === username)?.id;
-				const addUser: RoomUserDto = {userId: userId, roomId: props.room.id}
-				socket.emit('add user to room', addUser);
-				setAddUserClicked(0);
-				toastIt(username + ' added to ' + props.room.name);
-			}
+	function handleUserSubmit(e: any, selectedUser: User | null) {
+		if (selectedUser)
+		{	
+			const username = selectedUser?.username;
+			let userId: any = props.users.find(user => user.username === username)?.id;
+			const addUser: RoomUserDto = {userId: userId, roomId: props.room.id}
+			socket.emit('add user to room', addUser);
+			setAddUserClicked(0);
+			toastIt(username + ' added to ' + props.room.name);
 		}
-		else
-			toastThatError('username not found')
 	}
 
-	function handleKickUserSubmit(e: any) {
+	function handleKickUserSubmit(e: any, selectedUser: User | null) {
 		e.preventDefault();
-		const username: string= e.target[0].value;
-		if (props.users.find(user => user.username === username))
-		{
-			if (roomUsers.find(user => user.username === username))
-			{
-				let userId: any = props.users.find(user => user.username === username)?.id;
-				const removeUser: RoomUserDto = {userId: userId, roomId: props.room.id};
-				socket.emit('remove user from room', removeUser);
-				setKickUserClicked(0);
-				toastIt(username + ' removed from ' + props.room.name);
-			}
-			else
-			toastThatError('user not in room');
+		if (selectedUser)
+		{	
+			const username = selectedUser?.username;
+			let userId: any = props.users.find(user => user.username === username)?.id;
+			const removeUser: RoomUserDto = {userId: userId, roomId: props.room.id};
+			socket.emit('remove user from room', removeUser);
+			setKickUserClicked(0);
+			toastIt(username + ' removed from ' + props.room.name);
 		}
-		else
-		toastThatError('username not found')
 	}
 
-	function handleAddAdminSubmit(e: any) {
+	function handleAddAdminSubmit(e: any, selectedUser: User | null) {
 		e.preventDefault();
-		const username: string= e.target[0].value;
-		if (props.users.find(user => user.username === username))
-		{
-			if (roomUsers.find(user => user.username === username))
-			{
-				if (props.roomAdmins.find(admin => admin.username === username))
-					toastThatError('user already has admin privileges');
-				else
-				{
-					let userId: any = props.users.find(user => user.username === username)?.id;
-					const removeUser: RoomUserDto = {userId: userId, roomId: props.room.id};
-					socket.emit('add admin to room', removeUser);
-					setAddAdminClicked(0);
-					toastIt(username + ' given admin privileges ' + props.room.name);
-				}
-			}
-			else
-				toastThatError('user not in room');
+		if (selectedUser)
+		{	
+			const username = selectedUser?.username;
+			let userId: any = props.users.find(user => user.username === username)?.id;
+			const removeUser: RoomUserDto = {userId: userId, roomId: props.room.id};
+			socket.emit('add admin to room', removeUser);
+			setAddAdminClicked(0);
+			toastIt(username + ' given admin privileges ' + props.room.name);
 		}
-		else
-			toastThatError('username not found')
 	}
 
-	function handleKickAdminSubmit(e: any) {
+	function handleKickAdminSubmit(e: any, selectedUser: User | null) {
 		e.preventDefault();
-		const username: string= e.target[0].value;
-		if (props.users.find(user => user.username === username))
-		{
-			if (roomUsers.find(user => user.username === username))
-			{
-				if (props.roomAdmins.find(admin => admin.username === username))
-				{
+		if (selectedUser)
+		{	
+			const username = selectedUser?.username;
 					let userId: any = props.users.find(user => user.username === username)?.id;
 					const removeAdmin: RoomUserDto = {userId: userId, roomId: props.room.id};
 					socket.emit('remove admin from room', removeAdmin);
 					setKickAdminClicked(0);
 					toastIt(username + ' removed from administrators in ' + props.room.name);
-				}
-				else
-					toastThatError('user is not an administrator')
-			}
-			else
-				toastThatError('user not in room');
 		}
-		else
-			toastThatError('username not found')
 	}
 
 	function handleMuteUserSubmit(e: any) {
@@ -205,33 +166,27 @@ function RoomUserMod(props : {currentUser: User, users: User[], room: Room, room
 		);
 	}
 
-	function	UserModButton(props: {clickAction: Function, room:Room, title:string, clicked: number, handleSubmit: React.FormEventHandler<HTMLFormElement>, setClicked:Function, users: User[], condition: Function}) {
+	function	UserModButton(props: {clickAction: Function, room:Room, title:string, clicked: number, handleSubmit: any, setClicked:Function, users: User[]}) {
+
 		return (
-				<div>
-					<Button variant="contained" size="small" style={ButtonStyle} onClick={() => props.clickAction(props.room)}>{props.title}</Button>
-					{props.clicked ?
-						<Stack >
-							<Stack direction="row" >
-								<form onSubmit={props.handleSubmit}>
-									<TextField 
-										type="text"
-										label="username" 
-										variant="standard"
-										size="small"
-										color="warning"
-										style={{width: '80%'}}
-									/>
-								</form>
-								<IconButton title="cancel" onClick={() => props.setClicked(0)} style={{color:"rgb(195, 60, 40)"}}><CloseIcon/></IconButton>
-							</Stack>
-							<UserList users={props.users} condition={props.condition}/>
-						</Stack>
-					:
-					<div/>
-					}
-				</div>
-		);
+			<div>
+				<Button variant="contained" size="small" style={ButtonStyle} onClick={() => props.clickAction(props.room)}>{props.title}</Button>
+				{props.clicked ?
+					<Autocomplete
+						options={props.users}
+						getOptionLabel={(option: User) => option.username}
+						style={{width: '80%'}}
+						renderInput={(params) => <TextField {...params} label="username" variant="standard" size="small" color="warning" />}
+						onChange={props.handleSubmit}
+					/>
+				:
+				null
+				}
+			</div>
+	);
 	}
+
+
 
 	function MuteUserButton(props: {clickAction: Function, room:Room, title:string, clicked: number, handleSubmit: React.FormEventHandler<HTMLFormElement>, setClicked:Function, users: User[], condition: Function})
 	{
@@ -293,6 +248,8 @@ function RoomUserMod(props : {currentUser: User, users: User[], room: Room, room
 	}
 
 
+	
+
 	return (
 		<Stack spacing={0.6} >
 			<UserModButton 
@@ -301,8 +258,7 @@ function RoomUserMod(props : {currentUser: User, users: User[], room: Room, room
 				clicked={addUserClicked} 
 				handleSubmit={handleUserSubmit} 
 				setClicked={setAddUserClicked} 
-				users={props.users} 
-				condition={(item:User) => {return(roomUsers.find(user => user.username === item.username))}}
+				users={props.users.filter(item => !roomUsers.find(user => user.username === item.username))}
 			/>
 			<UserModButton 
 				clickAction={handleKickUserClick} 
@@ -311,8 +267,7 @@ function RoomUserMod(props : {currentUser: User, users: User[], room: Room, room
 				clicked={kickUserClicked} 
 				handleSubmit={handleKickUserSubmit} 
 				setClicked={setKickUserClicked} 
-				users={props.users} 
-				condition={(item:User) => {return(!(roomUsers.find(user => user.id === item.id) && item.id !== props.currentUser.id))}}
+				users={props.users.filter(item => roomUsers.find(user => user.username === item.username) && item.id !== props.room.ownerId)} 
 			/>
 			{props.currentUser.id === props.room.ownerId?
 			<UserModButton
@@ -321,8 +276,8 @@ function RoomUserMod(props : {currentUser: User, users: User[], room: Room, room
 				clicked={addAdminClicked} 
 				handleSubmit={handleAddAdminSubmit} 
 				setClicked={setAddAdminClicked} 
-				users={props.users} 
-				condition={(item:User) => {return(!(roomUsers.find(user => user.id === item.id) && item.id !== props.currentUser.id && props.roomAdmins.find(admin => admin.id === item.id) === undefined))}}/>
+				users={props.users.filter(item=> !props.roomAdmins.find(admin => admin.username === item.username) && roomUsers.find(user => user.id === item.id ))} 
+			/>
 			:
 			null}
 			{props.currentUser.id === props.room.ownerId?
@@ -333,8 +288,7 @@ function RoomUserMod(props : {currentUser: User, users: User[], room: Room, room
 				clicked={kickAdminClicked} 
 				handleSubmit={handleKickAdminSubmit} 
 				setClicked={setKickAdminClicked} 
-				users={props.roomAdmins} 
-				condition={(item:User) => {return(item.id === props.currentUser.id)}}
+				users={props.roomAdmins.filter( item => item.id != props.room.ownerId)} 
 			/>
 			:null}
 			<MuteUserButton

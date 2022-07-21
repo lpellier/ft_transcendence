@@ -132,7 +132,6 @@ export default function SearchAppBar(props: {user: User, users: User[], statusMa
 						</Button>
 					</Tooltip>
 					<FriendBar user={props.user} users={props.users} statusMap={props.statusMap} setStatusMap={props.setStatusMap} open={open} setOpen={setOpen}/>
-					
 					<AppBarButton link="../game" tooltip={"Game"} icon={<GamesIcon />}/>
 					<AppBarButton link="../chat" tooltip={"Forum"} icon={<ForumIcon />}/>
 					<AppBarButton link="../settings" tooltip={"Settings"} icon={<SettingsIcon />}/>
