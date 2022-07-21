@@ -90,7 +90,7 @@ function ProjectName() {
 function ProfileSearch(props : {user: User, users: User[]}) {
 	let navigate = useNavigate();
 
-	function handleOnSubmit(e: any, selectedUser: User | string | null) {
+	function handleOnSubmit(e: any, selectedUser: User | null) {
 		if (typeof selectedUser === 'object' && !!selectedUser) {
 			navigate(`/profile/${selectedUser.id}`);
 		} else if (typeof selectedUser === 'string') {
@@ -99,13 +99,13 @@ function ProfileSearch(props : {user: User, users: User[]}) {
 		}
 	}
 
+
 	return (
 	<Autocomplete
 		id="search..."
-		freeSolo
 		onChange={handleOnSubmit}
 		options={props.users}
-		getOptionLabel={(option: any) => option?.username || option}
+		getOptionLabel={(option: any) => option?.username }
 		renderInput={(params) => <TextField {...params} label="search..." />}
 		sx={{ width: '15vw' }}
 	/>
@@ -132,7 +132,6 @@ export default function SearchAppBar(props: {user: User, users: User[], statusMa
 						</Button>
 					</Tooltip>
 					<FriendBar user={props.user} users={props.users} statusMap={props.statusMap} setStatusMap={props.setStatusMap} open={open} setOpen={setOpen}/>
-					
 					<AppBarButton link="../game" tooltip={"Game"} icon={<GamesIcon />}/>
 					<AppBarButton link="../chat" tooltip={"Forum"} icon={<ForumIcon />}/>
 					<AppBarButton link="../settings" tooltip={"Settings"} icon={<SettingsIcon />}/>

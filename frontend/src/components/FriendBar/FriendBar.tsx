@@ -109,10 +109,6 @@ export default function FriendBar(props: {
     setFriends(data);
   };
 
-  function toggleFriendBar() {
-    props.setOpen(true);
-  }
-
   useEffect(() => {
     socket.emit("get friends", props.user.id, getFriends);
   }, [props.user.id]);
