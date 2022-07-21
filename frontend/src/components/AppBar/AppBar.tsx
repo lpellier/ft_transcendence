@@ -81,7 +81,7 @@ function ProjectName() {
 		  variant="h4"
 		  noWrap
 		  component="div"
-		  sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' }, paddingLeft: '10%', overflow: 'hidden', textOverflow: 'ellipsis'}}
+		  sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' }, overflow: 'hidden', textOverflow: 'ellipsis'}}
 		>The Ponger's Guide to the Galaxy</Typography>
 	);
 }

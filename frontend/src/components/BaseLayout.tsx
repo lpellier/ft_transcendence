@@ -4,7 +4,7 @@ import background from "../images/Background.png"
 
 export default function BaseLayout() {
   return (
-    <Box sx={{ minHeight: "100vh", backgroundImage: `url(${background})`, backgroundSize: 'cover' }}>
+    <Box sx={{ minWidth : '570px' , minHeight: "100vh", backgroundImage: `url(${background})`, backgroundSize: 'cover' }}>
       <Outlet />
     </Box>
   );
