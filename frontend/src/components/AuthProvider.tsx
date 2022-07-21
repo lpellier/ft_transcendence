@@ -5,12 +5,9 @@ import React, { useState } from "react";
 interface AuthContextType {
   user: User;
   imageId: number;
-  // sketch: p5;
-  // checkStatus: () => void;
   signin: (user: User, callback: VoidFunction) => void;
   update: (user: User) => void;
   signout: (callback: VoidFunction) => void;
-  // createSketch: () => void;
   updateAvatar: () => void;
 }
 
@@ -24,9 +21,6 @@ export default function AuthProvider({
   let [user, setUser] = useState<User>(null!);
   let [imageId, setImageId] = useState<number>(1);
 
-  // let [sketch, setSketch] = React.useState<p5>(null!);
-
-  // let createSketch = () => setSketch(new p5(Sketch));
   let updateAvatar = () => {
     setImageId(imageId + 1);
     console.log("image id is now", imageId);

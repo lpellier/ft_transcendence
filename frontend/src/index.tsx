@@ -5,8 +5,7 @@ import App from "./App";
 
 const root = createRoot(document.getElementById("root")!);
 
-const SERVER = process.env.REACT_APP_BACK_URL || "";
-export const socket = io(SERVER, {
+export const socket = io(process.env.REACT_APP_BACK_URL || "", {
   autoConnect: false, 
   withCredentials: true,
 });

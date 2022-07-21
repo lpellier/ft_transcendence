@@ -1,20 +1,13 @@
-import { Navigate } from "react-router-dom";
-import { useState, useEffect } from "react";
-import Box from "@mui/material/Box";
-import Stack from "@mui/material/Stack";
-import TextField from "@mui/material/TextField";
-import axios from "axios";
-import { toastThatError } from "App";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { client, toastThatError } from "App";
+import { Box, Button, Stack, TextField, Typography } from "@mui/material";
 
 const BoxStyle = {
-  width: "30vw",
-  height: "20vh",
   backgroundColor: "rgb(130, 150, 240, 0.96)",
   border: "3px solid black",
+  padding: "40px",
 
-  display: "flex",
-  justifyContent: "center",
-  VerticalAlign: "center",
   position: "absolute",
   top: "50%",
   left: "50%",
@@ -26,67 +19,42 @@ const TitleStyle = {
   textShadow: "1px 1px 2px black",
 };
 
-function PinField(props: {
-  value: string;
-  setPininput: any;
-  setRedirect: any;
-}) {
-  const [hasSubmitted, setHastSubmitted] = useState<boolean>(false);
+export default function TFAuth() {
+  const [pinInput, setPininput] = useState<string>("");
+  let navigate = useNavigate();
 
-  const { setPininput, setRedirect } = props;
-
-  useEffect(() => {
-    if (hasSubmitted === true) {
-      axios
-        .post(
-          process.env.REACT_APP_BACK_URL + "/auth/google-authenticator",
-          props.value,
-          {
-            withCredentials: true,
-          }
-        )
-        .then((res) => {
-          console.log("Pin Post request success :");
-          setRedirect(res.data);
-        })
-        .catch(function (err) {
-          console.log("Pin Post request failed :", err);
-          toastThatError("Ho no! That Pin is not valid! :/");
-        });
-      setHastSubmitted(false);
+  async function handleSubmit() {
+    try {
+      const response = await client.post("/auth/google-authenticator", { value: pinInput });
+      console.log("Pin Post request success :");
+      if (response.data === true) {
+        navigate("/game");
+      } else {
+        toastThatError("Ho no! That Pin is not valid! :/");
+      }
+    } catch {
+      console.log("Pin Post request failed.");
+      toastThatError("Ho no! That Pin is not valid! :/");
     }
-  }, [hasSubmitted, setRedirect, props.value]);
-
-  function handleSubmit(e: any) {
-    e.preventDefault();
-    setPininput({ value: e.target[0].value });
-    e.target[0].value = "";
-    setHastSubmitted(true);
   }
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <TextField type="text" label={"Here !"} variant="standard" />
-      </form>
-    </div>
-  );
-}
-
-export default function TFAuth() {
-  const [pinInput, setPininput] = useState<string>("");
-  const [redirect, setRedirect] = useState<boolean>(false);
-
-  return (
     <Box sx={BoxStyle}>
-      <Stack>
-        <h1 style={TitleStyle}>Hey, insert your Pin !</h1>
-        <PinField
-          value={pinInput}
-          setPininput={setPininput}
-          setRedirect={setRedirect}
+      <Stack spacing={2}>
+        <Typography variant="h4" style={TitleStyle}>
+          Hey, insert your Pin!
+        </Typography>
+        <TextField
+          onInput={(e: any) => setPininput(e.target.value)}
+          inputProps={{ maxLength: 6 }}
         />
-        {redirect === true ? <Navigate to="/game" /> : <div />}
+        <Button
+          disabled={/^[\d]{6}$/.test(pinInput) === false}
+          variant="contained"
+          onClick={handleSubmit}
+        >
+          Send
+        </Button>
       </Stack>
     </Box>
   );

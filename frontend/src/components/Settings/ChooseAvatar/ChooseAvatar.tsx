@@ -7,8 +7,7 @@ import { IconStyle } from "../../../styles/tsxStyles/AppBar/PongMenu";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import { useState } from "react";
 import Button from "@mui/material/Button";
-import axios from "axios";
-import { toastThatError } from "../../../App";
+import { client, toastThatError } from "../../../App";
 import { useAuth } from "components/AuthProvider";
 import React from "react";
 import { Typography } from "@mui/material";
@@ -18,32 +17,28 @@ function UploadButton(props: { setOpen: any }) {
   let auth = useAuth();
 
   const changeHandler = (event: any) => {
-    setSelectedFile(event.target.files[0]);
+    if (
+      event.target.files[0].size < 1048577 &&
+      /^image/.test(event.target.files[0].type)
+    ) {
+      setSelectedFile(event.target.files[0]);
+    } else {
+      setSelectedFile(null);
+      toastThatError("Invalid file.");
+    }
   };
 
-  function handleSubmit() {
+  async function handleSubmit() {
     const formData = new FormData();
     formData.append("avatar", selectedFile);
 
-    if (selectedFile.size > 1048576) {
-      toastThatError("Avatar size too big! Maximum is 1024KB.");
-    } else {
-      axios
-        .put(
-          process.env.REACT_APP_BACK_URL + "/users/upload-avatar",
-          formData,
-          {
-            withCredentials: true,
-          }
-        )
-        .then((res) => {
-          console.log("Put avatar request success");
-          props.setOpen(false);
-          auth.updateAvatar();
-        })
-        .catch((err) => {
-          toastThatError("Avatar upload failed");
-        });
+    try {
+      await client.put("/users/upload-avatar", formData)
+      console.log("Put avatar request success");
+      auth.updateAvatar();
+      props.setOpen(false);
+    } catch {
+      toastThatError("Avatar upload failed");
     }
   }
 
@@ -59,7 +54,7 @@ function UploadButton(props: { setOpen: any }) {
         startIcon={<PhotoCamera />}
         color="secondary"
       >
-        Choose file
+        Upload
         <input hidden accept="image/*" type="file" onChange={changeHandler} />
       </Button>
       {selectedFile ? (
@@ -95,7 +90,7 @@ function UploadButton(props: { setOpen: any }) {
   );
 }
 
-export default function AvatarList() {
+export default function ChooseAvatar() {
   const [open, setOpen] = useState<boolean>(false);
 
   const handleOpen = () => {

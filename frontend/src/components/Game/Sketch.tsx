@@ -1833,6 +1833,8 @@ class Vector {
 			) => {
 			game.room_id = r_id;
 			game.score_limit = score_limit;
+			game.spectator = true;
+			
 			errors.set_false();
 
 			if (map === "city") game.map = consts.city_map;
@@ -2615,7 +2617,7 @@ class Vector {
 		if (pos_diff > 0) game.players[1].moveUp(pos_diff);
 		else if (pos_diff < 0) game.players[1].moveDown(pos_diff);
 		else game.players[1].velocity[1] = 0;
-		} else if (game.map.name != "secret") {
+		} else if (game.map.name !== "secret") {
 		if (p.keyIsDown(p.UP_ARROW)) game.players[1].moveUp(0);
 		else if (p.keyIsDown(p.DOWN_ARROW)) game.players[1].moveDown(0);
 		else game.players[1].velocity[1] = 0;
@@ -3336,7 +3338,7 @@ class Vector {
 		}
 		game.setState("countdown");
 		game.players.push(new Player(1, "first", user_name, 0));
-		if (game.map.name != "secret")
+		if (game.map.name !== "secret")
 			game.players.push(new Player(2, "second", "P2", 0));
 		else {
 			addBreakouts();

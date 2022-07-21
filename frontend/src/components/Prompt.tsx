@@ -1,22 +1,14 @@
-import {useEffect, useState} from 'react'
-import axios from 'axios'
+import {useState} from 'react'
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
-import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
-import {toastThatError} from '../App'
+import {client, toastThatError} from '../App'
 import {User} from 'interfaces';
-import IconButton from '@mui/material/IconButton';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
-
-const UserAPI = process.env.REACT_APP_BACK_URL + "/users/me"
-
-const Input = styled('input')({
-	display: 'none',
-});
+import { useAuth } from './AuthProvider';
 
 const TitleStyle = {
 	fontWeight: '800', 
@@ -24,8 +16,7 @@ const TitleStyle = {
 }
 
 const LittleBoxForInput = {
-	width: '50vw',
-	
+	width: '70vw',
 	padding: 2,
 	border: '4px solid black',
 	backgroundColor: 'rgb(120, 100, 220, 0.95)',
@@ -40,116 +31,87 @@ const FirstConnexionModal = {
 	left: '20%',
 }
 
-function ChooseFirstName(props: {setter: any, value: string}) {
-	const [firstName, setFirstName] = useState<string>("")
 
-	useEffect(() => {
-		props.setter(firstName)
-	}, [firstName, props])
+export default function FirstLoginPrompt(props: {user: User | undefined}) {
+	const [open, setOpen] = useState(true);
+	const [username, setUsername] = useState<string>("")
+	const [selectedFile, setSelectedFile] = useState<any>();
+	
+	let auth = useAuth();
 
-	return (
-		<Box sx={LittleBoxForInput}>
-			<Stack sx={{paddingLeft: '1vw', paddingTop: '1vh'}}>
+	async function submitNameAndAvatar() {
+		try {
+			await client.patch("/users/me", {username: username})
+			setOpen(false)
+			if (selectedFile) {
+				const formData = new FormData();
+				formData.append('avatar', selectedFile)
+		
+				await client.put("/users/upload-avatar", formData)
+				console.log("Put avatar request success")
+			}
+		} catch {
+			toastThatError('Choose another name.');		
+		}
+
+		try {
+			const response = await client.get("/users/me");
+			auth.update(response.data);
+		} catch {
+			console.log("not logged in");
+		}
+	}
+
+
+	function ChooseFirstAvatar() {	
+
+		const changeHandler = (event: any) => {
+			if (event.target.files[0].size < 1048577 && /^image/.test(event.target.files[0].type)) {
+				setSelectedFile(event.target.files[0]);
+			} else {
+				setSelectedFile(null);
+				toastThatError("Invalid file.")
+			}
+		};
+	
+		return (
+			<Box sx={LittleBoxForInput}>
+				<Stack spacing={2}>
 					<Typography
 						variant="h6"
 						color='rgb(200, 100, 30)'
 						sx={TitleStyle}
 					>
-						Choose your nickname :
+						Choose your avatar:
 					</Typography>
-					<TextField
-						color="warning"
-						label="No space, no digit por favor !" 
-						variant="standard"
-						onChange={(e) => setFirstName(e.target.value)}
-						style={{width: '50%', justifyContent: 'center'}}
-					/>
-			</Stack>
-		</Box>
-	)
-}
-
-export default function FirstLoginPrompt(props: {user: User | undefined}) {
-	const [username, setUsername] = useState<string>("")
-	const [selectedFile, setSelectedFile] = useState<any>();
-	const [isSelected, setisSelected] = useState(false);
-	const [open, setOpen] = useState(true);
-	
-	function handleSubmitAvatar() {
-
-		const formData = new FormData();
-		formData.append('avatar', selectedFile)
-
-		axios.put(process.env.REACT_APP_BACK_URL + "/users/upload-avatar",
-		formData,
-		{
-			withCredentials: true,
-		})
-		.then(res => {console.log("Put avatar request success")})
-		.catch(err => {toastThatError('Avatar upload failed')})
-	};
-
-	function submitNameAndAvatar() {
-
-		if (username.length > 0) {
-			axios.patch(UserAPI, {username: username}, {withCredentials: true})
-			.then(res => {
-				console.log("Change name success : ", username)
-				setOpen(false)
-				window.location.reload()
-			})
-			.catch(err => { 
-				toastThatError('Please choose another name')} )
-		
-			if (selectedFile) {
-				handleSubmitAvatar();}
-						
-		}
-		else {
-			toastThatError("Please choose a nickname")
-		}
-	}
-
-	function ChooseFirstAvatar() {
-	
-		const changeHandler = (event: any) => {
-			setSelectedFile(event.target.files[0]);
-			setisSelected(true);
-		};
-	
-		return (
-			<Box sx={LittleBoxForInput}>
-			<Stack sx={{paddingLeft: '1vw', paddingTop: '1vh'}} spacing={10} direction="row">
-				<label htmlFor="icon-button-file">
-					<Button 
-						variant="contained"
-						sx={{
-							backgroundColor: 'rgb(180, 70, 100)',
-							textShadow: '1px 1px 1px black',
-							border: '2px solid black',
-						}}
-					>
-						You can choose a file :
-					</Button>
-					<Input type="file" id="icon-button-file" name="file" onChange={changeHandler} />
-					<IconButton component="span" sx={{color: 'rgb(200, 70, 70)'}}>
-						<PhotoCamera />
-					  </IconButton>
-				</label>
-				{isSelected ? 
-				<div>
-					<Typography>Filename: {selectedFile.name}</Typography>
-					<Typography>Filetype: {selectedFile.type}</Typography>
-					<Typography>Size in bytes: {selectedFile.size}</Typography>
-				</div>
-					:
-					<Typography>No file selected yet</Typography>
-				}
+					<Stack spacing={5} direction="row" alignItems="flex-start">
+						<Button
+							component="label"
+							variant="contained"
+							startIcon={<PhotoCamera />}
+							color="secondary"
+						>
+							Upload
+							<input hidden accept="image/*" type="file" onChange={changeHandler} />
+						</Button>
+						{selectedFile ? (
+							<Stack spacing={2}>
+							<Typography variant="body2">Filename: {selectedFile.name}</Typography>
+							<Typography variant="body2">Filetype: {selectedFile.type}</Typography>
+							<Typography variant="body2">
+								Size: {Math.round(selectedFile.size / 1024)}KB
+							</Typography>
+							</Stack>
+						) : (
+							<Typography variant="body2">No file selected yet</Typography>
+						)}
+					</Stack>
 				</Stack>
 			</Box>
 		  );
 	}
 
+	
 	return (
 		<Modal open={open} >
 			<Box sx={FirstConnexionModal}>
@@ -159,9 +121,23 @@ export default function FirstLoginPrompt(props: {user: User | undefined}) {
 						color='rgb(85, 70, 230)'
 						sx={TitleStyle}
 					>
-						Hey, First LogIn ?
+						Hey, first login?
 					</Typography>
-					<ChooseFirstName setter={setUsername} value={username} />
+					<Box sx={LittleBoxForInput}>
+						<Typography
+							variant="h6"
+							color='rgb(200, 100, 30)'
+							sx={TitleStyle}
+						>
+						Choose your username:
+						</Typography>
+						<TextField
+							error={/^[\w]{0,16}$/.test(username) === false}
+							helperText={"Your username may only contain letters, digits or underscore, and must be at least 2 characters long."}
+							inputProps={{maxLength: 16}}
+							onInput={(e: any) => setUsername(e.target.value)}
+						/>
+					</Box>
 					<ChooseFirstAvatar />
 					<Button 
 						onClick={submitNameAndAvatar}
@@ -171,8 +147,9 @@ export default function FirstLoginPrompt(props: {user: User | undefined}) {
 							border: '2px solid black',
 							textShadow: '1px 1px 1px black',
 						}}
+						disabled={/^[\w]{2,16}$/.test(username) === false}
 						>
-						I'm all set !
+						I'm all set!
 					</Button>
 				</Stack>
 			</Box>

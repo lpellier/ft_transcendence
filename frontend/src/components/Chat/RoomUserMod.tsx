@@ -96,7 +96,7 @@ function RoomUserMod(props : {currentUser: User, users: User[], room: Room, room
 			{
 				let userId: any = props.users.find(user => user.username === username)?.id;
 				if (userId === props.room.ownerId)
-						toastThatError("cannot kick owner");
+					toastThatError('cannot kick owner');
 				else
 				{
 				const removeUser: RoomUserDto = {userId: userId, roomId: props.room.id};
@@ -148,14 +148,12 @@ function RoomUserMod(props : {currentUser: User, users: User[], room: Room, room
 				{
 					let userId: any = props.users.find(user => user.username === username)?.id;
 					if (userId === props.room.ownerId)
-						toastThatError("cannot remove owner's admin privileges");
-					else
-					{
+						toastThatError('cannot remove admin privileges from owner');
 					const removeAdmin: RoomUserDto = {userId: userId, roomId: props.room.id};
 					socket.emit('remove admin from room', removeAdmin);
 					setKickAdminClicked(0);
 					toastIt(username + ' removed from administrators in ' + props.room.name);
-					}
+					
 				}
 				else
 					toastThatError('user is not an administrator')
@@ -182,17 +180,17 @@ function RoomUserMod(props : {currentUser: User, users: User[], room: Room, room
 					toastThatError('cannot mute owner');
 				else
 				{
-				let date: Date = new Date();
-				if (scale=== 'minutes')
-					date.setMinutes(date.getMinutes() + amount);
-				else if (scale=== 'hours')
-					date.setHours(date.getHours() + amount);
-				else if (scale=== 'days')
-					date.setDate(date.getDate() + amount);
-				const muteUser: MuteUserDto = {userId: userId, roomId: props.room.id, date: date};
-				socket.emit('add mute to room', muteUser);
-				setMuteUserClicked(0);
-				toastIt(username + ' muted in ' + props.room.name);
+					let date: Date = new Date();
+					if (scale=== 'minutes')
+						date.setMinutes(date.getMinutes() + amount);
+					else if (scale=== 'hours')
+						date.setHours(date.getHours() + amount);
+					else if (scale=== 'days')
+						date.setDate(date.getDate() + amount);
+					const muteUser: MuteUserDto = {userId: userId, roomId: props.room.id, date: date};
+					socket.emit('add mute to room', muteUser);
+					setMuteUserClicked(0);
+					toastIt(username + ' muted in ' + props.room.name);
 				}
 			}
 			else
