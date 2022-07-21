@@ -295,7 +295,7 @@ function RoomUserMod(props : {currentUser: User, users: User[], room: Room, room
 				clicked={kickAdminClicked} 
 				handleSubmit={handleKickAdminSubmit} 
 				setClicked={setKickAdminClicked} 
-				users={props.roomAdmins.filter( item => item.id != props.room.ownerId)} 
+				users={props.roomAdmins.filter( item => item.id !== props.room.ownerId)} 
 			/>
 			:null}
 			<MuteUserButton
