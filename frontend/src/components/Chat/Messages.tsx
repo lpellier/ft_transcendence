@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react';
-import {socket} from 'index';
+import {socket} from 'App';
 import Stack from '@mui/material/Stack'
 import Box from '@mui/material/Box'
 import Avatar from '@mui/material/Avatar'

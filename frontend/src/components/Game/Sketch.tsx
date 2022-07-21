@@ -1,7 +1,7 @@
 	// ? P to quit game
 	// ? Coding consistency : snake_case for variables | camelCase for functions | PascalCase for classes
 
-	import { socket } from "index";
+	import { socket } from "App";
 	import { audio_files, user_name, user_id } from "routes/Game"
 
 	// TODO ISSUES

@@ -15,7 +15,7 @@ import Dialog from '@mui/material/Dialog';
 import { toastThatError } from '../../App';
 import {useState, useEffect} from 'react'
 import {Room, User} from 'interfaces'
-import {socket} from 'index'
+import {socket} from 'App'
 import RoomUserPopper from './RoomUserMod'
 import FormControl from '@mui/material/FormControl'
 import DirectMessaging from './DirectMessaging';

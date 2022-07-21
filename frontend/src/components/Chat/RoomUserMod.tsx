@@ -8,7 +8,7 @@ import Box from '@mui/material/Box';
 import Popper from '@mui/material/Popper';
 import {useState, useEffect } from 'react'
 import {Room, User} from 'interfaces'
-import {socket} from 'index'
+import {socket} from 'App'
 import { toastIt, toastThatError } from '../../App';
 import {ButtonStyle} from './Channels';
 import CloseIcon from '@mui/icons-material/Close';

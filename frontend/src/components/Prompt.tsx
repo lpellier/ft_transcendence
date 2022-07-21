@@ -9,7 +9,7 @@ import {client, toastThatError} from '../App'
 import {User} from 'interfaces';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import { useAuth } from './AuthProvider';
-import {socket} from 'index';
+import {socket} from 'App';
 
 const TitleStyle = {
 	fontWeight: '800', 
