@@ -15,7 +15,7 @@ import Dialog from '@mui/material/Dialog';
 import { toastThatError } from '../../App';
 import {useState, useEffect} from 'react'
 import {Room, User} from 'interfaces'
-import {socket} from 'index'
+import {socket} from 'App'
 import RoomUserPopper from './RoomUserMod'
 import FormControl from '@mui/material/FormControl'
 import DirectMessaging from './DirectMessaging';
@@ -61,6 +61,7 @@ function PasswordInput(props: {openPassword: boolean, setOpenPassword: React.Dis
 			{
 				props.setCurrentRoom(props.room);
 				socket.emit('get admins', props.room.id);
+				socket.emit('get muted users', props.room.id);
 				handleClose()
 			}
 			else
@@ -68,7 +69,7 @@ function PasswordInput(props: {openPassword: boolean, setOpenPassword: React.Dis
 		}
 		socket.on('check password', handler);
 		return () => {
-			socket.off('check password', handler);
+			socket.off('check password');
 		}
 	}, [props.room, handleClose]);
 

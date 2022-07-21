@@ -1,4 +1,4 @@
-import { socket } from "index";
+import { socket } from "App";
 import { User } from "interfaces";
 import React, { useState } from "react";
 
@@ -31,7 +31,7 @@ export default function AuthProvider({
   let signin = (user: User, callback: VoidFunction) => {
     console.log("auth.signin called");
     socket.connect();
-    socket.emit('new user', user.id)
+    // socket.emit('new user', user.id)
     setUser(user);
     callback();
   };

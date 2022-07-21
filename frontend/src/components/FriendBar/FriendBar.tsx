@@ -3,7 +3,7 @@ import Drawer from "@mui/material/Drawer";
 import Button from "@mui/material/Button";
 import { IconButton, TextField, Tooltip } from "@mui/material";
 import { User } from "interfaces";
-import { socket } from "index";
+import { socket } from "App";
 import { toastThatError, toastIt } from "../../App";
 import "../../styles/Chat/Channels.css";
 import List from "@mui/material/List";
@@ -110,7 +110,9 @@ export default function FriendBar(props: {
   };
 
   useEffect(() => {
+    if (props.user.id !== 0) {
     socket.emit("get friends", props.user.id, getFriends);
+    }
   }, [props.user.id]);
 
   useEffect(() => {

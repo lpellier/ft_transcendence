@@ -5,7 +5,7 @@ import Channels from './Channels';
 import Box from '@mui/material/Box';
 import '../../styles/Chat/Chat.css';
 import {User, Room} from 'interfaces';
-import {socket} from 'index';
+import {socket} from 'App';
 import { useAuth } from "components/AuthProvider";
 
 

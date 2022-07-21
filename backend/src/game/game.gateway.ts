@@ -7,13 +7,6 @@ import { GameService } from "./game.service"
 import { ConfigService } from "@nestjs/config";
 import { UsersService } from "src/users/users.service";
 
-
-// ! async on every function
-// ! console.log in every function to know where it crashes
-// ! unsafe references in while loop ? -> if i'm looping on games and a new game is created, what happens ?
-
-// ! both players invite each other
-
 // ? How to create a game of pong
 // ? First, server sends page to which clients can connect
 // ? clients connected are separeted into rooms, there can only be two clients per room
@@ -37,7 +30,6 @@ import { UsersService } from "src/users/users.service";
  * @returns null otherwise
  */
  function existingEmptyGame(games : Game[], username : string) : Game {
-	console.log("in existingEmptyGame")
 	var ref = games;
 	for (const game of ref) {
 		if (game.spaceAvailable(username) && game.publicity === "public") // should check if game accepts friends and if user is one
@@ -47,7 +39,6 @@ import { UsersService } from "src/users/users.service";
 }
 
 function userInGame(games : Game[], username : string) : boolean {
-	console.log("in userInGame")
 	var ref = games;
 	for (const game of ref) {
 		for (const player of game.players)
@@ -62,7 +53,6 @@ function userInGame(games : Game[], username : string) : boolean {
  */
  async function startGameFullRooms(games : Game[], server : Server) {
 	// starts every game that has 2 players after a connection
-	console.log("in startGameFullRooms")
 	for (const game of games) {
 		if (game.players.length === 2 && game.state === "waiting-player") {
 			game.state = "waiting-readiness";
@@ -93,7 +83,6 @@ export class GameGateway {
 	timestep : number = 15; // ms
 
 	async handleDisconnect(client : Socket) { // ? triggers when user disconnects from the website (either refresh or close tab)
-		console.log("in handleDisconnect")
 		let index = -1;
 		if ((index = this.clients.indexOf(client.id)) !== -1) {
 			this.users.splice(index, 1);
@@ -131,7 +120,6 @@ export class GameGateway {
 
 	@SubscribeMessage("quit-ongoing-game") // ? triggers when player quits by going somewhere else on the website
 	async handleQuitOngoing(@ConnectedSocket() client : Socket, @MessageBody() returnMenu : boolean) {
-		console.log("in handleQuitGoing")
 		let index = this.clients.indexOf(client.id);
 		if (index === -1)
 			return ;
@@ -171,7 +159,6 @@ export class GameGateway {
 	}
 	@SubscribeMessage("quit-own-game") // ? triggers when player hits return button while waiting for player
 	async handleQuitOwn(@ConnectedSocket() client : Socket) {
-		console.log("in handleQuitOwn")
 		for (let game of this.games) {
 			for (let player of game.players) {
 				if (player.id === client.id) {
@@ -191,22 +178,18 @@ export class GameGateway {
 	// ? acts as handleConnection because when calling handleConnection, multiple sockets seem to connect
 	@SubscribeMessage('my_id')
 	async getConnection(@MessageBody() data : {s_id : string, u_id : string, u_name : string}) {
-		console.log("in getConnection")
-		console.trace();
 		this.clients.push(data.s_id);
 		this.users.push([data.u_id, data.u_name, false]);
 	}
 
 	@SubscribeMessage("finished loading")
 	async handleFinishedLoading(@ConnectedSocket() client : Socket) {
-		console.log("in handleFinishedLoading")
 		this.users[this.clients.indexOf(client.id)][2] = true;
 	}
 
 
 	@SubscribeMessage('socket response')
 	async handleSocketResponseInvitation(@ConnectedSocket() client : Socket, @MessageBody() data : any) {
-		console.log("in handleSocketResponse")
 		for (let game of this.games) {
 			if (game.room_id === data.r_id && game.polling === false) {
 				game.polling = true;
@@ -233,13 +216,12 @@ export class GameGateway {
 
 	@SubscribeMessage("spectate game") 
 	async handleSpectateGame(@ConnectedSocket() client : Socket, @MessageBody() name : string) {
-		console.log("in handleSpectate")
 		for (let game of this.games) {
 			for (let player of game.players) {
 				if (player.real_name === name) {
 					client.join(game.room_id);
 					game.addSpectator(client.id);
-					this.server.to(client.id).emit("spectate", game.room_id, game.score_limit, game.map.name, game.state, game.players[0].id, (game.players.length > 1 ? game.players[1].id : "null"), game.players[0].real_name, (game.players.length > 1 ? game.players[1].real_name : "null"), game.players[0].real_id, (game.players.length > 1 ? game.players[1].real_id : 0));
+					client.emit("spectate", game.room_id, game.score_limit, game.map.name, game.state, game.players[0].id, (game.players.length > 1 ? game.players[1].id : "null"), game.players[0].real_name, (game.players.length > 1 ? game.players[1].real_name : "null"), game.players[0].real_id, (game.players.length > 1 ? game.players[1].real_id : 0));
 				}
 			}
 		}
@@ -247,7 +229,6 @@ export class GameGateway {
 
 	@SubscribeMessage('accepted game')
 	async handleInviteCreationGame(@ConnectedSocket() client : Socket, @MessageBody() data : [any, number]) {
-		console.log("in acceptedGame")
 		let user1 = await this.game_service.getUsername(data[0].userId);
 		let user2 = await this.game_service.getUsername(data[1]);
 		for (let game of this.games) {
@@ -270,7 +251,6 @@ export class GameGateway {
 		@ConnectedSocket() client : Socket,
 		@MessageBody() data : [string, boolean, number, string]
 	) {
-		console.log("in matchmaking")
 		if (this.clients.indexOf(client.id) === -1)
 			return ;
 		if (userInGame(this.games, this.users[this.clients.indexOf(client.id)][1]))
@@ -302,7 +282,6 @@ export class GameGateway {
 		@ConnectedSocket() client : Socket,
 		@MessageBody() data : [string, boolean] // room_id, spectator
 	) {
-		console.log("in findGame")
 		let found : boolean = false;
 		for (let game of this.games) {
 			if (game.room_id === data[0]) {
@@ -330,7 +309,6 @@ export class GameGateway {
 	}
 
 	async startCountDown(game : Game) {
-		console.log("in startCountDwon")
 		game.state = "in-game"
 		let test = this.server;
 		test.to(game.room_id).emit("updated_pos",
@@ -401,7 +379,6 @@ export class GameGateway {
 
 	@SubscribeMessage("countdown_start")
 	async handleCountdown(@ConnectedSocket() client : Socket) {
-		console.log("in handleCountdown")
 		for (let game of this.games) {
 			for (const player of game.players) {
 				if (player.id === client.id && game.state === "waiting-readiness") {
@@ -418,7 +395,6 @@ export class GameGateway {
 	async handleSwitchReadiness(
 		@MessageBody() client_id : string
 	) {
-		console.log("in switch readiness")
 		for (const game of this.games) {
 			for (const player of game.players) {
 				if (player.id === client_id && game.players.length === 2) {
@@ -432,7 +408,6 @@ export class GameGateway {
 
 	@SubscribeMessage("move_up")
 	async handleMoveUp(@MessageBody() client_id : string) {
-		console.log("in handleMoveUp")
 		for (const game of this.games) {
 			if (game.players.length === 2 && game.state === "in-game") {
 				for (const player of game.players) {
@@ -447,7 +422,6 @@ export class GameGateway {
 
 	@SubscribeMessage("move_down")
 	async handleMoveDown(@MessageBody() client_id : string) {
-		console.log("in handleMoveDown")
 		for (const game of this.games) {
 			if (game.players.length === 2 && game.state === "in-game") {
 				for (const player of game.players) {
@@ -462,7 +436,6 @@ export class GameGateway {
 
 	@SubscribeMessage("move_null")
 	async handleMoveNull(@MessageBody() client_id : string) {
-		// console.log("in handleMoveNull")
 		for (const game of this.games) {
 			if (game.players.length === 2 && game.state === "in-game") {
 				for (const player of game.players) {
