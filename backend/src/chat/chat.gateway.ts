@@ -86,9 +86,9 @@ export class ChatGateway {
 	}
 
 	@SubscribeMessage('get muted users')
-	async handleGetMutedUsers(@MessageBody() roomId: number) {
+	async handleGetMutedUsers(@ConnectedSocket () client : Socket, @MessageBody() roomId: number) {
 		let users = await this.chatService.getMutedUsers(roomId);
-		this.server.to(roomId.toString()).emit('get muted users', users);
+		client.emit('get muted users', users);
 	}
 
 	@SubscribeMessage('remove admin from room')

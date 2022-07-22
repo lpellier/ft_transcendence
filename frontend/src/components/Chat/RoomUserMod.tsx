@@ -125,7 +125,8 @@ function RoomUserMod(props : {currentUser: User, users: User[], room: Room, room
 		const username: string= e.target[0].value;
 		const amount: number = parseInt(e.target[1].value);
 		const scale: string = e.target[2].value;
-		if (amount <= 0 || (scale === 'minutes' && amount > 60) || (scale === 'hours' && amount > 24))
+		console.log("amount = ",amount)
+		if (!e.target[1].value || amount <= 0 || (scale === 'minutes' && amount > 60) || (scale === 'hours' && amount > 24))
 			toastThatError('bad time');
 		else
 		{
