@@ -6,7 +6,6 @@ import * as utils from "./utils"
 import { GameService } from "./game.service"
 import { ConfigService } from "@nestjs/config";
 import { UsersService } from "src/users/users.service";
-import { listenerCount } from "process";
 
 // ? How to create a game of pong
 // ? First, server sends page to which clients can connect
