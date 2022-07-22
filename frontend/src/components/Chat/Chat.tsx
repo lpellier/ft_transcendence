@@ -53,7 +53,7 @@ function Chat(props: { users: User[], statusMap: Map<number, string>}) {
         const handler = (data: User[]) => {setBlocked(data);};
         socket.on('get blocked', handler);
         return () => {
-            socket.off('get blocked', handler);
+            socket.off('get blocked');
         }
     }, [])
 

@@ -10,7 +10,7 @@ import ListItemText from '@mui/material/ListItemText';
 import { socket } from 'App';
 import PersonIcon from '@mui/icons-material/Person';
 import BlockIcon from '@mui/icons-material/Block';
-import { Backdrop, ButtonGroup, IconButton, Button, Stack, Alert, Tooltip } from '@mui/material';
+import { Backdrop, ButtonGroup, IconButton, Button, Stack, Alert, Tooltip, Autocomplete } from '@mui/material';
 import {Link} from 'react-router-dom';
 
 import { GameInviteButton } from '../FriendBar/FriendBar';
@@ -22,9 +22,6 @@ interface CreateDMRoomDto {
 }
 
 export default function DirectMessaging(props: {user: User, users: User[], rooms: Room[], currentRoom: Room, setCurrentRoom: React.Dispatch<React.SetStateAction<Room>>, statusMap: Map<number, string>, blocked:User[]}) {
-    
-    let [showUserList, setShowUserList] = useState<boolean>(false);
-    let [search, setSearch] = useState<string>("");
 
     useEffect(() => {
         const handler = () => {socket.emit('get blocked', props.user?.id)}
@@ -46,68 +43,32 @@ export default function DirectMessaging(props: {user: User, users: User[], rooms
         const otherUser = props.users.find(user => otherId === user.id);
         return otherUser;
     }
-    
-    function UserList(props: {currentUser: User, users: User[], rooms: Room[], setCurrentRoom: React.Dispatch<React.SetStateAction<Room>>, search: string, blocked:User[]}) {
-    
-        return (     
-            <List className='user-list'>
-                {props.users.map(user => (
-                    <div key={user.id}>
-                    {user.id !== props.currentUser.id && props.blocked.find(blockedUser => blockedUser.username === user.username) === undefined?
-                        <div>
-                            {user.username.includes(props.search)?
-                                <ListItem >
-                                    <ListItemText primary={user.username}/>
-                                </ListItem >
-                            :
-                                <div/>
-                            }
-                        </div>
-                    :
-                        <div/>
-                    }
-                    </div>
-                ))
-            }
-            </List>
-        )
-    }
 
-    function handleFocus(event: any) {
-        setShowUserList(true);
-    }
-
-    function handleBlur() {
-        setShowUserList(false);
-    }
-
-    function handleOnChange(e:any) {
-        setSearch(e.target.value)
-    }
-
-    function handleOnSubmit(e: any) {
+    function handleOnSubmit(e: any, selectedUser: User | null) {
         let roomName: string;
         e.preventDefault();
-        const submittedUsername: string = e.target[0].value;
-        let clickedUser:any = props.users.find(user => user.username === submittedUsername);
-        if (clickedUser && clickedUser.id !== props.user.id)
+        if (selectedUser)
         {
-            if (clickedUser.id < props.user.id)
-                roomName = clickedUser.id.toString() + '-' + props.user.id.toString();
-            else
-                roomName = props.user.id.toString() + '-' + clickedUser.id.toString();
-            if (props.rooms.find(room => room.name === roomName))
+            const submittedUsername: string = selectedUser?.username;
+            let clickedUser:any = props.users.find(user => user.username === submittedUsername);
+            if (clickedUser && clickedUser.id !== props.user.id)
             {
-                let room: any = props.rooms.find(room => room.name === roomName);
-                props.setCurrentRoom(room);
-            }
-            else
-            {
-                const createDMRoomDto: CreateDMRoomDto = {name: roomName, user1Id: clickedUser.id, user2Id: props.user.id}
-                socket.emit('create dm room', createDMRoomDto)
+                if (clickedUser.id < props.user.id)
+                    roomName = clickedUser.id.toString() + '-' + props.user.id.toString();
+                else
+                    roomName = props.user.id.toString() + '-' + clickedUser.id.toString();
+                if (props.rooms.find(room => room.name === roomName))
+                {
+                    let room: any = props.rooms.find(room => room.name === roomName);
+                    props.setCurrentRoom(room);
+                }
+                else
+                {
+                    const createDMRoomDto: CreateDMRoomDto = {name: roomName, user1Id: clickedUser.id, user2Id: props.user.id}
+                    socket.emit('create dm room', createDMRoomDto)
+                }
             }
         }
-        setShowUserList(false);
     }
 
 	useEffect(() => {
@@ -132,7 +93,7 @@ export default function DirectMessaging(props: {user: User, users: User[], rooms
 	}, [props.user.id])
     
     
-    function UserMod(props: {user: User, users: User[], room: Room,  statusMap: Map<number, string>}) {
+    function UserMod(props: {user: User, users: User[], room: Room,  statusMap: Map<number, string>, current: boolean}) {
         
         let [showBackdrop, setShowBackdrop] = useState<boolean>(false);
         
@@ -145,6 +106,7 @@ export default function DirectMessaging(props: {user: User, users: User[], rooms
             <div>
                 <Stack justifyContent="space-between">
                     <ListItemText primary={parseUser(props.room.name)?.username}/>
+                    {props.current ?
                     <Stack direction="row" >
                         <Tooltip title="Go to profile">
                             <IconButton size="small">
@@ -157,7 +119,7 @@ export default function DirectMessaging(props: {user: User, users: User[], rooms
                                 <BlockIcon/>
                             </IconButton>
                         </Tooltip>
-                    </Stack>
+                    </Stack>:null}
                 </Stack>
                 <Backdrop
                     open={showBackdrop}
@@ -182,21 +144,14 @@ export default function DirectMessaging(props: {user: User, users: User[], rooms
 
     return (
         <div>
-            <form onSubmit={handleOnSubmit} >
-				<TextField
-					onChange={handleOnChange}
-					label="search"
-					color="warning"
-					variant="standard"
-                    onFocus={handleFocus}
-                    onBlur={handleBlur}
-				/>
-            </form>
-            {showUserList?
-                <UserList currentUser={props.user} users={props.users} rooms={props.rooms} setCurrentRoom={props.setCurrentRoom} search={search} blocked={props.blocked}/>
-            :
-                <div/>
-            } 
+             <Autocomplete
+              id="search..."
+              onChange={handleOnSubmit}
+              options={props.users.filter(item => item.id !== props.user.id && !props.blocked.find(user => user.id === item.id))}
+              getOptionLabel={(option: any) => option?.username }
+              renderInput={(params: any) => <TextField {...params} label="search..." />}
+              sx={{ width: '15vw' }}
+            />
             <List>
                 {props.rooms.map(room => (
                     <div key={room.id}>
@@ -205,11 +160,11 @@ export default function DirectMessaging(props: {user: User, users: User[], rooms
                                 { room.id !== props.currentRoom.id ?
 
                                     <ListItem button className="MenuItem" onClick={() => props.setCurrentRoom(room) } sx={{ alignContent:"center" }} >
-                                        <UserMod user={props.user} users={props.users} room={room}  statusMap={props.statusMap}/>
+                                        <UserMod user={props.user} users={props.users} room={room}  statusMap={props.statusMap} current={false}/>
                                     </ListItem>
                                 :
                                     <ListItem className="MenuItem" button selected  sx={{ alignContent:"center"}}>
-                                        <UserMod user={props.user} users={props.users} room={room}  statusMap={props.statusMap}/>
+                                        <UserMod user={props.user} users={props.users} room={room}  statusMap={props.statusMap} current={true}/>
                                     </ListItem>
                                 }
                             </div>

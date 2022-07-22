@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Drawer from "@mui/material/Drawer";
 import Button from "@mui/material/Button";
-import { IconButton, TextField, Tooltip } from "@mui/material";
+import { IconButton, TextField, Tooltip, Autocomplete } from "@mui/material";
 import { User } from "interfaces";
 import { socket } from "App";
 import { toastThatError, toastIt } from "../../App";
@@ -14,6 +14,9 @@ import Games from "@mui/icons-material/Games";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import Avatar from '@mui/material/Avatar'
 import DeleteIcon from '@mui/icons-material/Delete';
+import {useNavigate} from 'react-router-dom'
+
+
 
 interface FriendUserDto {
   userId: number;
@@ -28,6 +31,9 @@ let listItem = {
 }
 
 export function GameInviteButton(props: {user: User, otherUser: User | undefined, statusMap: Map<number, string>}) {
+  let navigate = useNavigate();
+
+  
   function inviteForGame(user: User | undefined) {
         socket.emit("invite for game", {
           userId: props.user.id,
@@ -36,6 +42,7 @@ export function GameInviteButton(props: {user: User, otherUser: User | undefined
   }
   function spectate(user: User | undefined) {
     socket.emit("spectate game", user?.username);
+    navigate("/game");
   }
 
   if (props.otherUser === undefined) {
@@ -68,32 +75,6 @@ export function GameInviteButton(props: {user: User, otherUser: User | undefined
 
 }
 
-function UserList(props: {
-  currentUser: User;
-  users: User[];
-  friends: User[];
-}) {
-
-
-  return (
-    <List className="user-list">
-      {props.users.map((item) => (
-        <div key={item.id}>
-          {props.friends.find((friend) => friend.id === item.id) || props.currentUser.id === item.id ? (
-            <div />
-          ) : (
-            <div>
-              <ListItem title={item.username} sx={listItem}>
-                <ListItemText primary={item.username} sx={{overflow: "hidden"}}/>
-              </ListItem>
-            </div>
-          )}
-        </div>
-      ))}
-    </List>
-  );
-}
-
 export default function FriendBar(props: {
   user: User;
   users: User[];
@@ -111,9 +92,17 @@ export default function FriendBar(props: {
 
   useEffect(() => {
     if (props.user.id !== 0) {
-    socket.emit("get friends", props.user.id, getFriends);
+      socket.emit("get friends", props.user.id,);
     }
   }, [props.user.id]);
+
+  useEffect(() => {
+    socket.on('get friends', getFriends);
+    return () => {
+      socket.off('get friends');
+    }
+  }
+  , []);
 
   useEffect(() => {
     socket.on("new connection", () =>
@@ -127,22 +116,6 @@ export default function FriendBar(props: {
       socket.off("new disconnection");
     };
   }, [props.user.id]);
-
-  useEffect(() => {
-    socket.on("new gamer", (userId: number) => {
-      props.setStatusMap(props.statusMap.set(userId, "in game"));
-    });
-
-    socket.on("quit-game", (userId: number) => {
-      props.setStatusMap(props.statusMap.set(userId, "online"));
-      socket.emit("remove gamer", userId);
-    });
-    
-    return () => {
-      socket.off("new gamer");
-      socket.off("quit-game");
-    };
-  }, [props]);
 
   function closeFriendBar() {
     props.setOpen(false);
@@ -167,9 +140,7 @@ export default function FriendBar(props: {
           userId: props.user.id,
           friendId: friendId,
         };
-        socket.emit("add friend", friendUser, () =>
-          socket.emit("get friends", props.user.id, getFriends)
-        );
+        socket.emit("add friend", friendUser);
         setAddFriendClicked(false);
         toastIt(username + " added to your friends list");
       }
@@ -179,10 +150,8 @@ export default function FriendBar(props: {
   function removeFriend(user: User) {
     socket.emit(
       "remove friend",
-      { userId: props.user.id, friendId: user.id },
-      () => socket.emit("get friends", props.user.id, getFriends)
-    );
-  }
+      { userId: props.user.id, friendId: user.id } );
+    }
 
 
 
@@ -217,11 +186,12 @@ export default function FriendBar(props: {
         </Button>
         {addFriendClicked ? (
           <Stack component="form" onSubmit={addFriendSubmit} spacing={1}>
-            <TextField id="roomName" label="friend name" variant="standard" />
-            <UserList
-              currentUser={props.user}
-              users={props.users}
-              friends={friends}
+            <Autocomplete
+              id="search..."
+              options={props.users.filter(item => item.id !== props.user.id && !friends.find(friend => friend.id === item.id))}
+              getOptionLabel={(option: any) => option?.username }
+              renderInput={(params: any) => <TextField {...params} label="search..." />}
+              sx={{ width: '15vw' }}
             />
             <Button
               variant="contained"
@@ -257,10 +227,10 @@ export default function FriendBar(props: {
               <ListItem sx={listItem}>
 				<Avatar   sx={{ width: 35, height: 35 }} src={process.env.REACT_APP_BACK_URL + "/avatars/"+item.id.toString()+".png"}/>
 					<ListItemText
-					primary={item.username}
-					secondary={props.statusMap.get(item.id) ? props.statusMap.get(item.id) : "offline"}
-					sx={{overflow: "hidden"}}
-					title={item.username}
+            primary={item.username}
+            secondary={props.statusMap.get(item.id) ? props.statusMap.get(item.id) : "offline"}
+            sx={{overflow: "hidden"}}
+            title={item.username}
 					/>
                 <GameInviteButton user={props.user} otherUser={item} statusMap={props.statusMap} />
                 <IconButton 
