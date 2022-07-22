@@ -103,10 +103,10 @@ function LeaderboardBox() {
     async function getLeaderboard() {
       try {
         const response = await client.get("/stats/lead")
-        console.log("Get leader success");
+        // console.log("Get leader success");
         setLeaders(response.data);
       } catch {
-        console.log("Get leader failed.");
+        // console.log("Get leader failed.");
       }
     }
     getLeaderboard();

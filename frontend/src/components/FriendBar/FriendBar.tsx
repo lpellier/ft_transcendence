@@ -129,7 +129,7 @@ export default function FriendBar(props: {
     e.preventDefault();
     const username: string = e.target[0].value;
     if (props.users.find((user) => user.username === username)) {
-      console.log("user exists");
+      // console.log("user exists");
       if (friends.find((user) => user.username === username))
         toastThatError("this user is already your friend");
       else {

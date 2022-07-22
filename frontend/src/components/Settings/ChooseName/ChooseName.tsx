@@ -27,7 +27,7 @@ function NameInput(props: { username: string; setter: any; setOpen: any }) {
   async function PatchRequest() {
     try {
       await client.patch("/users/me", { username: value });
-      console.log("Changing name success : ", props.username);
+      // console.log("Changing name success : ", props.username);
       props.setOpen(false);
     } catch {
       toastThatError("invalid username");
@@ -36,7 +36,7 @@ function NameInput(props: { username: string; setter: any; setOpen: any }) {
       const response = await client.get("/users/me");
       auth.update(response.data);
     } catch {
-      console.log("Appbar get request failed : ");
+      // console.log("Appbar get request failed : ");
     }
   }
 

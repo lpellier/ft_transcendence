@@ -32,16 +32,16 @@ function useAuthStatus() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(null!);
   let auth = useAuth();
 
-  console.log("passed by useAuthStatus");
+  // console.log("passed by useAuthStatus");
   useEffect(() => {
     async function getUser() {
       try {
         const response = await client.get("/users/me");
-        console.log("logged in");
+        // console.log("logged in");
         auth.signin(response.data, () => null);
         setIsAuthenticated(true);
       } catch {
-        console.log("not logged in");
+        // console.log("not logged in");
         setIsAuthenticated(false);
       }
     }
@@ -52,12 +52,12 @@ function useAuthStatus() {
 }
 
 function RequireAuth({ children }: { children: JSX.Element }) {
-  console.log("passed by RequireAuth");
+  // console.log("passed by RequireAuth");
   const isAuthenticated = useAuthStatus();
 
-  console.log("isAuthenticated:", isAuthenticated);
+  // console.log("isAuthenticated:", isAuthenticated);
   if (isAuthenticated === null) {
-    console.log("Loading");
+    // console.log("Loading");
     return <div />;
   }
   return isAuthenticated ? children : <Navigate to="/login" />;

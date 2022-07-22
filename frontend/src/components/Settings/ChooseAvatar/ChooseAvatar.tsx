@@ -40,7 +40,7 @@ function UploadButton(props: { setOpen: any }) {
 
     try {
       await client.put("/users/upload-avatar", formData)
-      console.log("Put avatar request success");
+      // console.loglog("Put avatar request success");
       auth.updateAvatar();
       props.setOpen(false);
     } catch {

@@ -35,7 +35,6 @@ export class ChatGateway {
 		let roomId: number
 		const handler = async (err, hashed: string) => {
 			if (err) {
-				console.log(err);
 			} else {
 				roomId = await this.chatService.createRoom({name: createRoomDto.name, userId: createRoomDto.userId, visibility: createRoomDto.visibility, password: hashed});
 				await this.chatService.addUserToRoom(createRoomDto.userId, roomId);
@@ -64,21 +63,18 @@ export class ChatGateway {
 		await this.chatService.addUserToRoom(createDMRoomDto.user1Id, roomId);
 		await this.chatService.addUserToRoom(createDMRoomDto.user2Id, roomId);
 		this.server.emit('create dm room');
-		console.log('create dm room called');
 		// this.server.emit('add user to room');
 	}
 
 	@SubscribeMessage('add user to room')
 	async handleAddUserToRoom(@MessageBody() addUserDto: UserRoomDto) {
 		await this.chatService.addUserToRoom(addUserDto.userId, addUserDto.roomId);
-		// console.log('add user to room called', addUserDto)
 		this.server.emit('add user to room');
 	}
 
 	@SubscribeMessage('add admin to room')
 	async handleAddAdminToRoom(@MessageBody() addAdminDto: UserRoomDto) {
 		await this.chatService.addAdminToRoom(addAdminDto.userId, addAdminDto.roomId);
-		//console.log('add admin to room called', addAdminDto)
 		this.server.to(addAdminDto.roomId.toString()).emit('admin added to room');
 	}
 
@@ -98,21 +94,19 @@ export class ChatGateway {
 	@SubscribeMessage('remove admin from room')
 	async handleKickAdminToRoom(@MessageBody() addAdminDto: UserRoomDto) {
 		await this.chatService.removeAdminFromRoom(addAdminDto.userId, addAdminDto.roomId);
-		//console.log('remove admin from room called', addAdminDto)
+		//// console.log('remove admin from room called', addAdminDto)
 		this.server.to(addAdminDto.roomId.toString()).emit('admin removed from room');
 	}
 
 	@SubscribeMessage('remove user from room')
 	async handleRemoveUserFromRoom(@MessageBody() removeUserDto: UserRoomDto) {
 		await this.chatService.removeUserFromRoom(removeUserDto.userId, removeUserDto.roomId);
-		//console.log('remove user from room called', removeUserDto)
 		this.server.to(removeUserDto.roomId.toString()).emit('remove user from room', removeUserDto);
 	}
 
 	@SubscribeMessage('join room')
 	handleJoinRoom(@ConnectedSocket() client : Socket, @MessageBody() room_id: string ) {
 		client.join(room_id);
-		//console.log('join room called', room_id)
 
 	}
 
@@ -138,7 +132,7 @@ export class ChatGateway {
 	async handleGetRooms(@ConnectedSocket () client : Socket, @MessageBody() id: number){
 		let rooms = await this.chatService.getRoomsForUser(id);
 		client.emit('get rooms', rooms);
-		//console.log('get rooms called', id)
+		//// console.log('get rooms called', id)
 
 	}
 
@@ -146,7 +140,7 @@ export class ChatGateway {
 	async handlePublicRooms() {
 		let publicRooms = await this.chatService.getPublicRooms();
 		this.server.emit('get public rooms', publicRooms);
-		//console.log('get public rooms called')
+		//// console.log('get public rooms called')
 
 	}
 
@@ -154,7 +148,7 @@ export class ChatGateway {
 	async handleGetUsers(@ConnectedSocket () client : Socket, @MessageBody() id: number) {
 		let users = await this.chatService.getUsersInRoom(id);
 		client.emit('get users', users);
-		//console.log('get users called', id)
+		//// console.log('get users called', id)
 
 	}
 
@@ -162,7 +156,7 @@ export class ChatGateway {
 	async handleGetAdmins(@ConnectedSocket () client : Socket, @MessageBody() id: number) {
 		let admins = await this.chatService.getAdminsInRoom(id);
 		client.emit('get admins', admins);
-		//console.log('get admins called', id)
+		//// console.log('get admins called', id)
 		
 	}
 
@@ -170,7 +164,7 @@ export class ChatGateway {
 	async handleGetAllMessages(@ConnectedSocket () client : Socket, @MessageBody() id: number){
 		let messages = await this.chatService.getAllMessagesForUser(id);
 		client.emit('get all messages', messages);
-		//console.log('get all messages called', id)
+		//// console.log('get all messages called', id)
 
 	}
 
@@ -180,7 +174,7 @@ export class ChatGateway {
 		if (updatePasswordDto.password != "") {
 			bcrypt.hash(updatePasswordDto.password, 10, async (err, hash) => {
 				if (err) {
-					console.log(err);
+					// console.log(err);
 				}
 				else
 					await this.chatService.updatePassword(updatePasswordDto.roomId, hash);
@@ -200,7 +194,7 @@ export class ChatGateway {
 		const blocked = await this.chatService.findAll(blockedIds);
 		client.emit('get blocked', blocked);
 		// client.emit('add blocked');
-		// console.log('add blocked called -> ', blockedUserDto);
+		// // console.log('add blocked called -> ', blockedUserDto);
 
 	}
 	
@@ -224,7 +218,7 @@ export class ChatGateway {
 	async checkPassword(@ConnectedSocket() client:Socket ,@MessageBody() checkPasswordDto: CheckPasswordDto) {
 		bcrypt.compare(checkPasswordDto.password, await this.chatService.getPassword(checkPasswordDto.roomId), (err, res) => {
 			if (err) {
-				console.log(err);
+				// console.log(err);
 			}
 			else
 				client.emit('check password', res);

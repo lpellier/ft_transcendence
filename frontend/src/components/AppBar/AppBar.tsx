@@ -29,9 +29,9 @@ function LogOutLink() {
 	async function logout() {
 		try {
 			await client.get('/auth/logout');
-			console.log("Logout successful.");
+			// console.log("Logout successful.");
 		} catch {
-			console.log("Logout failed.")
+			// console.log("Logout failed.")
 		}
 		auth.signout(() => navigate("/login"));
 	}

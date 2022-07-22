@@ -47,7 +47,7 @@ export default function ChooseAuth() {
       setEnabled(option);
       setRefresh(!refresh);
     } catch {
-      console.log("Setting tfa failed.");
+      // console.log("Setting tfa failed.");
     }
   }
 
