@@ -41,8 +41,8 @@ export function GameInviteButton(props: {user: User, otherUser: User | undefined
         });
   }
   function spectate(user: User | undefined) {
+	navigate("/game");
     socket.emit("spectate game", user?.username);
-    navigate("/game");
   }
 
   if (props.otherUser === undefined) {
