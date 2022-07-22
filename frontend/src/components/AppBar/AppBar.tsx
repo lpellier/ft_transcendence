@@ -109,7 +109,7 @@ function ProfileSearch(props : {user: User, users: User[]}) {
 		options={props.users}
 		getOptionLabel={(option: any) => option?.username }
 		renderInput={(params) => <TextField {...params} label="search..." />}
-		sx={{ width: '15vw' }}
+		sx={{ width: '15vw', maxWidth: '200px'}}
 	/>
 	)
 }
