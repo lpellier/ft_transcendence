@@ -49,7 +49,7 @@ export default function FirstLoginPrompt(props: {user: User | undefined}) {
 				formData.append('avatar', selectedFile)
 		
 				await client.put("/users/upload-avatar", formData)
-				console.log("Put avatar request success")
+				// console.log("Put avatar request success")
 			}
 		} catch {
 			toastThatError('Choose another name.');		
@@ -59,7 +59,7 @@ export default function FirstLoginPrompt(props: {user: User | undefined}) {
 			const response = await client.get("/users/me");
 			auth.update(response.data);
 		} catch {
-			console.log("not logged in");
+			// console.log("not logged in");
 		}
 	}
 

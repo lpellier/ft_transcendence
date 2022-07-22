@@ -140,12 +140,12 @@ export class UsersGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   handleConnection(@ConnectedSocket() client: Socket) {
-    console.log('client connected');
+    // console.log('client connected');
   }
 
   handleDisconnect(@ConnectedSocket() client: Socket) {
     this.server.emit('new disconnection', client.data.userId);
-    console.log('client disconnected');
+    // console.log('client disconnected');
   }
 
 }

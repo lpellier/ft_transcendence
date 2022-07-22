@@ -23,13 +23,13 @@ export default function AuthProvider({
 
   let updateAvatar = () => {
     setImageId(imageId + 1);
-    console.log("image id is now", imageId);
+    // console.loglog("image id is now", imageId);
     socket.emit('new user', user.id)
 
   };
 
   let signin = (user: User, callback: VoidFunction) => {
-    console.log("auth.signin called");
+    // console.loglog("auth.signin called");
     socket.connect();
     socket.emit('new connection', user.id);
     setUser(user);
@@ -37,7 +37,7 @@ export default function AuthProvider({
   };
 
   let update = (user: User) => {
-    console.log("auth.signin called");
+    // console.loglog("auth.signin called");
     setUser(user);
     socket.emit('new user', user.id)
   };

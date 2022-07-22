@@ -58,7 +58,7 @@ export class UsersController {
   uploadAvatar(@Req() req, @UploadedFile() file: Express.Multer.File) {
     rename(file.path, 'public/avatars/' + req.user.id + '.png', (err) => {
       if (err) throw err;
-      console.log('Image upload success.');
+      // console.log('Image upload success.');
     });
     this.usersService.addAchievement(req.user.id, 3);
     return true;
