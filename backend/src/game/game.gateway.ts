@@ -238,8 +238,19 @@ export class GameGateway {
 			for (let player of game.players) {
 				if (player.real_name === name) {
 					client.join(game.room_id);
-					game.addSpectator(client.id);
-					this.server.to(client.id).emit("spectate", game.room_id, game.score_limit, game.map.name, game.state, game.players[0].id, (game.players.length > 1 ? game.players[1].id : "null"), game.players[0].real_name, (game.players.length > 1 ? game.players[1].real_name : "null"), game.players[0].real_id, (game.players.length > 1 ? game.players[1].real_id : 0));
+					let inte = setInterval(() => {
+						if (this.clients.indexOf(client.id) != -1 && this.users[this.clients.indexOf(client.id)][2] === true) {
+							this.server.to(client.id).emit("spectate", game.room_id, game.score_limit, game.map.name, game.state, game.players[0].id, (game.players.length > 1 ? game.players[1].id : "null"), game.players[0].real_name, (game.players.length > 1 ? game.players[1].real_name : "null"), game.players[0].real_id, (game.players.length > 1 ? game.players[1].real_id : 0));
+							clearInterval(inte);
+						}
+					}, 500);
+					setTimeout(() => {
+						if (inte) {
+							game.polling = false;
+							clearInterval(inte);
+						}
+					}, 10000)
+					
 				}
 			}
 		}
