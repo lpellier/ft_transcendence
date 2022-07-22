@@ -113,6 +113,14 @@ export default function App() {
     socket.on("new disconnection", (userId: number) => {
       setStatusMap(statusMap.set(userId, "offline"));
     });
+    socket.on("new gamer", (userId: number) => {
+      setStatusMap(statusMap.set(userId, "in game"));
+    });
+
+    socket.on("quit-game", (userId: number) => {
+      setStatusMap(statusMap.set(userId, "online"));
+      socket.emit("remove gamer", userId);
+    });
     socket.on("status map", (maps: { online: number[]; inGame: number[] }) => {
       maps.online.forEach((userId) => {
         setStatusMap(statusMap.set(userId, "online"));
@@ -124,9 +132,11 @@ export default function App() {
     return () => {
       socket.off("new connection");
       socket.off("new disconnection");
+      socket.off("new gamer");
+      socket.off("quit-game");
       socket.off("status map");
     };
-  }, [statusMap]);
+  }, [statusMap, setStatusMap]);
 
   return (
     <React.Fragment>

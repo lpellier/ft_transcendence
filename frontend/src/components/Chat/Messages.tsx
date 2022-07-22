@@ -59,31 +59,37 @@ function Messages(props : {user: User, users: User[], currentRoom: Room, canWrit
 	useEffect(() => {
 		const handler = (newMessage: Message) => {
 			addMessage(newMessage)
-			let objDiv = document.getElementById('messagebox');
-            if (objDiv != null)
-				objDiv.scrollTop = objDiv.scrollHeight;
 		}
 		socket.on('chat message', handler)
 		return () => {
-			socket.off('chat message', handler)
+			socket.off('chat message')
 		}
 	}, [])
+
+	useEffect(() => {
+		let objDiv = document.getElementById('messagebox');
+		if (objDiv != null)
+			objDiv.scrollTop = objDiv.scrollHeight;
+	}, [messages])
 
 	useEffect(() => {
 		const handler = (data: Message[]) => {setMessages(data);};
 		socket.on('get all messages', handler);
 		return () => {
-			socket.off('get all messages', handler);
+			socket.off('get all messages');
 		}
 	}, [])
 
 	useEffect(() => {
 		const handler = (data: {userId: number, date: Date}[]) => {setMutedUsers(data);};
 		socket.on('get muted users', handler);
+		socket.on('add mute to room', () => {
+			socket.emit('get muted users', props.currentRoom.id);
+		});
 		return () => {
 			socket.off('get muted users');
 		}
-	}, [])
+	}, [ props.currentRoom.id])
 	
     return (
 	<Box sx={{width:'100%'}}>

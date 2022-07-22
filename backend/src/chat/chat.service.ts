@@ -210,7 +210,6 @@ export class ChatService {
       where: {id: userId}, 
       select: {blockedIds: true}
     })
-    console.log('blockedIds = ',blockedIds);    
     return(blockedIds);
   }
 

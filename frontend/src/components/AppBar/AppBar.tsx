@@ -64,6 +64,7 @@ function AppBarButton(props: {icon: any, link: string, tooltip: any}) {
 
 function PlayerName(props: {name: string}) {
 	return (
+		<Tooltip title={props.name} placement="bottom">
 		<Typography
 			variant="h6"
 			noWrap
@@ -72,6 +73,7 @@ function PlayerName(props: {name: string}) {
 			>
 			{props.name}
 		</Typography>
+		</Tooltip>
 	);
 }
 
@@ -116,8 +118,8 @@ export default function SearchAppBar(props: {user: User, users: User[], statusMa
 	let [open, setOpen] = useState<boolean>(false);
 
   return (
-      <AppBar position="static">
-		<Container maxWidth="xl">
+      <AppBar position="static" >
+		<Container maxWidth="xl" >
 			<Toolbar disableGutters>
 				<Link to="profile">
 					<PlayerAvatar image={process.env.REACT_APP_BACK_URL + '/avatars/' + props.user.id + '.png'} />

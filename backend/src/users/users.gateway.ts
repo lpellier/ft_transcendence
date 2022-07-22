@@ -38,7 +38,10 @@ export class UsersGateway implements OnGatewayConnection, OnGatewayDisconnect {
       friendUserDto.userId,
       friendUserDto.friendId,
     );
-    return true;
+    const friendsIds: number[] = await this.usersService.findFriendsIds(friendUserDto.userId);
+    const friends = await this.usersService.findFriends(friendsIds);
+    client.emit('get friends', friends)
+    // return true;
   }
 
   @SubscribeMessage('remove friend')
@@ -50,7 +53,9 @@ export class UsersGateway implements OnGatewayConnection, OnGatewayDisconnect {
       friendUserDto.userId,
       friendUserDto.friendId,
     );
-    return true;
+    const friendsIds: number[] = await this.usersService.findFriendsIds(friendUserDto.userId);
+    const friends = await this.usersService.findFriends(friendsIds);
+    client.emit('get friends', friends)  
   }
 
   @SubscribeMessage('get friends')
@@ -60,7 +65,8 @@ export class UsersGateway implements OnGatewayConnection, OnGatewayDisconnect {
   ) {
     const friendsIds: number[] = await this.usersService.findFriendsIds(userId);
     const friends = await this.usersService.findFriends(friendsIds);
-    return friends;
+    // return friends;
+    client.emit('get friends', friends)
   }
 
   @SubscribeMessage('new user')
@@ -68,16 +74,32 @@ export class UsersGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @ConnectedSocket() client: Socket,
     @MessageBody() userId: number,
   ) {
-    client.data.userId = userId;
     await this.chatService.addUserToRoom(userId, 1);
     const allUsers = await this.usersService.getAllUsers();
     this.server.emit('new user', allUsers);
+    client.data.userId = userId;
     this.server.emit('new connection', userId);
     const socks = await this.server.fetchSockets();
     const online = socks.map((c) => c.data.userId);
-    const inGame = socks.filter((c) => c.data.inGame === true);
+    const inGame = socks.filter((c) => c.data.inGame === true).map((c) => c.data.userId);
     client.emit('status map', { online: online, inGame: inGame });
   }
+
+  @SubscribeMessage('new connection')
+  async handleNewConnection(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() userId: number,
+  ) {
+    const allUsers = await this.usersService.getAllUsers();
+    this.server.emit('new user', allUsers);
+    client.data.userId = userId;
+    this.server.emit('new connection', userId);
+    const socks = await this.server.fetchSockets();
+    const online = socks.map((c) => c.data.userId);
+    const inGame = socks.filter((c) => c.data.inGame === true).map((c) => c.data.userId);
+    client.emit('status map', { online: online, inGame: inGame });
+  }
+
 
   @SubscribeMessage('countdown_start')
   countdown_start(

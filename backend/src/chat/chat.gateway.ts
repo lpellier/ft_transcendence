@@ -86,7 +86,7 @@ export class ChatGateway {
 	async handleAddMuteToRoom(@MessageBody() addMuteDto: AddMuteDto) {
 		await this.chatService.addMuteToRoom(addMuteDto.userId, addMuteDto.roomId, addMuteDto.date);
 		let users = await this.chatService.getMutedUsers(addMuteDto.roomId);
-		this.server.to(addMuteDto.roomId.toString()).emit('get muted users',users);
+		this.server.to(addMuteDto.roomId.toString()).emit('add mute to room');
 	}
 
 	@SubscribeMessage('get muted users')
@@ -132,8 +132,6 @@ export class ChatGateway {
 	async handlemessage(@MessageBody() createMessageDto: CreateMessageDto) {
 		let msg = await this.chatService.storeMessage(createMessageDto);
 		this.server.to(createMessageDto.room.toString()).emit('chat message', msg);
-		console.log('chat message called', createMessageDto)
-
 	}
 
 	@SubscribeMessage('get rooms')
@@ -206,9 +204,12 @@ export class ChatGateway {
 
 	}
 	
-	@SubscribeMessage('removeBlocked')
-	remove(@MessageBody() blockedUserDto: BlockedUserDto) {
-		return this.chatService.remove(blockedUserDto.userId, blockedUserDto.blockedId);
+	@SubscribeMessage('remove blocked')
+	async remove(@ConnectedSocket() client:Socket, @MessageBody() blockedUserDto: BlockedUserDto) {
+		await this.chatService.remove(blockedUserDto.userId, blockedUserDto.blockedId);
+		const blockedIds: number[] = await this.chatService.findAllIds(blockedUserDto.userId);
+		const blocked = await this.chatService.findAll(blockedIds);
+		client.emit('get blocked', blocked);
 	}
 
 	@SubscribeMessage('get blocked')
@@ -216,7 +217,7 @@ export class ChatGateway {
 		const blockedIds: number[] = await this.chatService.findAllIds(userId);
 		const blocked = await this.chatService.findAll(blockedIds);
 		client.emit('get blocked', blocked);
-		console.log('get blocked called', blocked)
+
 	}
 
 	@SubscribeMessage('check password')
