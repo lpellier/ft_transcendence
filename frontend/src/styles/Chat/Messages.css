@@ -46,13 +46,10 @@
 }
 
 .messages {
-	height: 75%;
 	width: 96%;
-
 	list-style-type: none;
 	padding-right: 0%;
 	overflow-y: scroll;
-	height:63vh;
 	-ms-overflow-style: none;
     scrollbar-width: none;
 }
