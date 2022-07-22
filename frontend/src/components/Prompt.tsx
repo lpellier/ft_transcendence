@@ -67,11 +67,18 @@ export default function FirstLoginPrompt(props: {user: User | undefined}) {
 	function ChooseFirstAvatar() {	
 
 		const changeHandler = (event: any) => {
-			if (event.target.files[0].size < 1048577 && /^image/.test(event.target.files[0].type)) {
+			if (event.target.files[0].size < 1048577
+				&& event.target.files[0].size !== 0
+				&& /^image/.test(event.target.files[0].type)) {
 				setSelectedFile(event.target.files[0]);
 			} else {
 				setSelectedFile(null);
-				toastThatError("Invalid file.")
+				if (event.target.files[0].size >= 1048577)
+					toastThatError('The image you try to upload is too big!');
+				else if (event.target.files[0].size === 0)
+					toastThatError('The image you try to upload is empty!');
+				else
+					toastThatError("Invalid file.")
 			}
 		};
 	
