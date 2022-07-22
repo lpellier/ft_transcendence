@@ -6,6 +6,7 @@ import * as utils from "./utils"
 import { GameService } from "./game.service"
 import { ConfigService } from "@nestjs/config";
 import { UsersService } from "src/users/users.service";
+import { listenerCount } from "process";
 
 // ? How to create a game of pong
 // ? First, server sends page to which clients can connect
@@ -110,7 +111,15 @@ export class GameGateway {
 						this.server.emit("new disconnection", game.players[game.players.indexOf(player)].real_id);
 						if (game.players.length > 1)
 							this.server.emit("quit-game", game.players[(game.players.indexOf(player) + 1) % 2].real_id);
+						client.leave(game.room_id);
 						this.games.splice(this.games.indexOf(game), 1);
+						return ;
+					}
+				}
+				for (let spectator of game.spectators) {
+					if (spectator === client.id) {
+						game.spectators.splice(game.spectators.indexOf(spectator), 1);
+						client.leave(game.room_id);
 						return ;
 					}
 				}
@@ -151,7 +160,15 @@ export class GameGateway {
 					this.server.emit("quit-game", game.players[0].real_id)
 					if (game.players.length > 1)
 						this.server.emit("quit-game", game.players[1].real_id)
+					client.leave(game.room_id);
 					this.games.splice(this.games.indexOf(game), 1);
+					return ;
+				}
+			}
+			for (let spectator of game.spectators) {
+				if (spectator === client.id) {
+					game.spectators.splice(game.spectators.indexOf(spectator), 1);
+					client.leave(game.room_id);
 					return ;
 				}
 			}
@@ -166,6 +183,7 @@ export class GameGateway {
 						clearInterval(game.update_interval);
 					if (game.countdown_timeout)
 						clearTimeout(game.countdown_timeout);
+					client.leave(game.room_id);
 					if (this.games.indexOf(game) != -1)
 						this.games.splice(this.games.indexOf(game), 1);
 					return ;
